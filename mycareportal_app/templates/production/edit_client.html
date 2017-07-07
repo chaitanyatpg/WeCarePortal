@@ -1,0 +1,1129 @@
+{% extends "production/base.html" %}
+{% block title %} Edit Client {% endblock %}
+{% block headlibs %}
+{% load static %}
+<!-- iCheck -->
+<link href="{% static 'vendors/iCheck/skins/flat/green.css' %}" rel="stylesheet">
+<!-- bootstrap-wysiwyg -->
+<link href="{% static 'vendors/google-code-prettify/bin/prettify.min.css' %}" rel="stylesheet">
+<!-- Switchery -->
+<link href="{% static 'vendors/switchery/dist/switchery.min.css' %}" rel="stylesheet">
+<!-- starrr -->
+<link href="{% static 'vendors/starrr/dist/starrr.css' %}" rel="stylesheet">
+<!-- bootstrap-daterangepicker -->
+<link href="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+<!-- Select2 -->
+<link href="{% static 'vendors/select2/dist/css/select2.min.css' %}" rel="stylesheet">
+{% endblock %}
+{% block pagecontent %}
+    <!-- page content -->
+    <div class="right_col" role="main">
+      <div class="">
+        <div class="page-title">
+          <div class="title_left">
+            <h3>Patient Details</h3>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+
+        <!--Patient Personal Details form-->
+        <div class="clearfix"></div>
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>Patient Personal Details <small>enter personal details</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content"> <br />
+                {% if client_success_msg is not None %}
+                  <div class="alert alert-success">
+                    {{ client_success_msg }}
+                  </div>
+                {% endif %}
+                <form enctype="multipart/form-data" method='post' action="{% url 'edit_client' %}" class="form-horizontal form-label-left">
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">First Name <span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not edit_client_form.first_name.value is None %}
+                        <input type="text" required="required" class="form-control col-md-7 col-xs-12" name="{{edit_client_form.first_name.html_name}}" value="{{edit_client_form.first_name.value}}">
+                      {% else %}
+                        <input type="text" required="required" class="form-control col-md-7 col-xs-12" name="{{edit_client_form.first_name.html_name}}">
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Last Name <span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not edit_client_form.last_name.value is None %}
+                        <input type="text" required="required" class="form-control col-md-7 col-xs-12" name="{{edit_client_form.last_name.html_name}}" value="{{edit_client_form.last_name.value}}">
+                      {% else %}
+                        <input type="text" required="required" class="form-control col-md-7 col-xs-12" name="{{edit_client_form.last_name.html_name}}">
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Middle Name / Initial</label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not edit_client_form.middle_name.value is None %}
+                        <input type="text" required="required" class="form-control col-md-7 col-xs-12" name="{{edit_client_form.middle_name.html_name}}" value="{{edit_client_form.middle_name.value}}">
+                      {% else %}
+                        <input type="text" required="required" class="form-control col-md-7 col-xs-12" name="{{edit_client_form.middle_name.html_name}}">
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Gender</label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                        {% if edit_client_form.gender.value == 'M' %}
+                          <input type="radio" name="{{edit_client_form.gender.html_name}}" value="M" checked="checked">
+                        {% else %}
+                          <input type="radio" name="{{edit_client_form.gender.html_name}}" value="M">
+                        {% endif %}
+                        &nbsp; Male &nbsp; </label>
+                      <label class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                        {% if edit_client_form.gender.value == 'F' %}
+                          <input type="radio" name="{{edit_client_form.gender.html_name}}" value="F" checked="checked">
+                        {% else %}
+                          <input type="radio" name="{{edit_client_form.gender.html_name}}" value="F">
+                        {% endif %}
+                        Female </label>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Date Of Birth <span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not edit_client_form.date_of_birth.value is None %}
+                        <input type="text" id="birthday" class="date-picker form-control col-md-7 col-xs-12" required="required" name={{edit_client_form.date_of_birth.html_name}} value='{{edit_client_form.date_of_birth.value}}'>
+                      {% else %}
+                        <input type="text" id="birthday" class="date-picker form-control col-md-7 col-xs-12" required="required" name={{edit_client_form.date_of_birth.html_name}}>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Phone Number <span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not edit_client_form.phone_number.value is None %}
+                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name={{edit_client_form.phone_number.html_name}} value={{edit_client_form.phone_number.value}}>
+                      {% else %}
+                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name={{edit_client_form.phone_number.html_name}}>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Secondary Phone Number <span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not edit_client_form.secondary_phone_number.value is None %}
+                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name={{edit_client_form.secondary_phone_number.html_name}} value={{edit_client_form.secondary_phone_number.value}}>
+                      {% else %}
+                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name={{edit_client_form.secondary_phone_number.html_name}}>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Email Address<span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not edit_client_form.email.value is None %}
+                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name={{edit_client_form.email.html_name}} value={{edit_client_form.email.value}}>
+                      {% else %}
+                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name={{edit_client_form.email.html_name}}>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="item form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">Address <span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not edit_client_form.address.value is None %}
+                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name="{{edit_client_form.address.html_name}}" value="{{edit_client_form.address.value}}"></textarea>
+                      {% else %}
+                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name="{{edit_client_form.address.html_name}}"></textarea>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">City<span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not edit_client_form.city.value is None %}
+                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name="{{edit_client_form.city.html_name}}" value="{{edit_client_form.city.value}}">
+                      {% else %}
+                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name="{{edit_client_form.city.html_name}}">
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">State<span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not edit_client_form.state.value is None %}
+                      <select class="select2_single form-control" tabindex="-1" name={{edit_client_form.state.html_name}} value={{edit_client_form.state.value}}>
+                            <option selected=selected>{{edit_client_form.state.value}}</option>
+                            <option value="AL">Alabama</option>
+                          	<option value="AK">Alaska</option>
+                          	<option value="AZ">Arizona</option>
+                          	<option value="AR">Arkansas</option>
+                          	<option value="CA">California</option>
+                          	<option value="CO">Colorado</option>
+                          	<option value="CT">Connecticut</option>
+                          	<option value="DE">Delaware</option>
+                          	<option value="DC">District Of Columbia</option>
+                          	<option value="FL">Florida</option>
+                          	<option value="GA">Georgia</option>
+                          	<option value="HI">Hawaii</option>
+                          	<option value="ID">Idaho</option>
+                          	<option value="IL">Illinois</option>
+                          	<option value="IN">Indiana</option>
+                          	<option value="IA">Iowa</option>
+                          	<option value="KS">Kansas</option>
+                          	<option value="KY">Kentucky</option>
+                          	<option value="LA">Louisiana</option>
+                          	<option value="ME">Maine</option>
+                          	<option value="MD">Maryland</option>
+                          	<option value="MA">Massachusetts</option>
+                          	<option value="MI">Michigan</option>
+                          	<option value="MN">Minnesota</option>
+                          	<option value="MS">Mississippi</option>
+                          	<option value="MO">Missouri</option>
+                          	<option value="MT">Montana</option>
+                          	<option value="NE">Nebraska</option>
+                          	<option value="NV">Nevada</option>
+                          	<option value="NH">New Hampshire</option>
+                          	<option value="NJ">New Jersey</option>
+                          	<option value="NM">New Mexico</option>
+                          	<option value="NY">New York</option>
+                          	<option value="NC">North Carolina</option>
+                          	<option value="ND">North Dakota</option>
+                          	<option value="OH">Ohio</option>
+                          	<option value="OK">Oklahoma</option>
+                          	<option value="OR">Oregon</option>
+                          	<option value="PA">Pennsylvania</option>
+                          	<option value="RI">Rhode Island</option>
+                          	<option value="SC">South Carolina</option>
+                          	<option value="SD">South Dakota</option>
+                          	<option value="TN">Tennessee</option>
+                          	<option value="TX">Texas</option>
+                          	<option value="UT">Utah</option>
+                          	<option value="VT">Vermont</option>
+                          	<option value="VA">Virginia</option>
+                          	<option value="WA">Washington</option>
+                          	<option value="WV">West Virginia</option>
+                          	<option value="WI">Wisconsin</option>
+                          	<option value="WY">Wyoming</option>
+                      </select>
+                      {% else %}
+                      <select class="select2_single form-control" tabindex="-1" name={{edit_client_form.state.html_name}}>
+                            <option></option>
+                            <option value="AL">Alabama</option>
+                          	<option value="AK">Alaska</option>
+                          	<option value="AZ">Arizona</option>
+                          	<option value="AR">Arkansas</option>
+                          	<option value="CA">California</option>
+                          	<option value="CO">Colorado</option>
+                          	<option value="CT">Connecticut</option>
+                          	<option value="DE">Delaware</option>
+                          	<option value="DC">District Of Columbia</option>
+                          	<option value="FL">Florida</option>
+                          	<option value="GA">Georgia</option>
+                          	<option value="HI">Hawaii</option>
+                          	<option value="ID">Idaho</option>
+                          	<option value="IL">Illinois</option>
+                          	<option value="IN">Indiana</option>
+                          	<option value="IA">Iowa</option>
+                          	<option value="KS">Kansas</option>
+                          	<option value="KY">Kentucky</option>
+                          	<option value="LA">Louisiana</option>
+                          	<option value="ME">Maine</option>
+                          	<option value="MD">Maryland</option>
+                          	<option value="MA">Massachusetts</option>
+                          	<option value="MI">Michigan</option>
+                          	<option value="MN">Minnesota</option>
+                          	<option value="MS">Mississippi</option>
+                          	<option value="MO">Missouri</option>
+                          	<option value="MT">Montana</option>
+                          	<option value="NE">Nebraska</option>
+                          	<option value="NV">Nevada</option>
+                          	<option value="NH">New Hampshire</option>
+                          	<option value="NJ">New Jersey</option>
+                          	<option value="NM">New Mexico</option>
+                          	<option value="NY">New York</option>
+                          	<option value="NC">North Carolina</option>
+                          	<option value="ND">North Dakota</option>
+                          	<option value="OH">Ohio</option>
+                          	<option value="OK">Oklahoma</option>
+                          	<option value="OR">Oregon</option>
+                          	<option value="PA">Pennsylvania</option>
+                          	<option value="RI">Rhode Island</option>
+                          	<option value="SC">South Carolina</option>
+                          	<option value="SD">South Dakota</option>
+                          	<option value="TN">Tennessee</option>
+                          	<option value="TX">Texas</option>
+                          	<option value="UT">Utah</option>
+                          	<option value="VT">Vermont</option>
+                          	<option value="VA">Virginia</option>
+                          	<option value="WA">Washington</option>
+                          	<option value="WV">West Virginia</option>
+                          	<option value="WI">Wisconsin</option>
+                          	<option value="WY">Wyoming</option>
+                      </select>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">ZIP code<span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not edit_client_form.zip_code.value is None %}
+                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name={{edit_client_form.zip_code.html_name}} value={{edit_client_form.zip_code.value}}>
+                      {% else %}
+                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name={{edit_client_form.zip_code.html_name}}>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Profile Picture</label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{edit_client_form.profile_picture.label_tag}}{{edit_client_form.profile_picture}}
+                      </div>
+                  </div>
+                  <div class="ln_solid"></div>
+                  <div class="form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                      <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--Family contact details-->
+        <div class="clearfix"></div>
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>Family Contact Details <small>enter family account information</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content"> <br />
+                <form enctype="multipart/form-data" method='post' action="{% url 'post_family_details' %}" id ='post_family_details' class="form-horizontal form-label-left">
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">First Name <span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not family_details_form.first_name.value is None %}
+                        <input type="text" id="family_first_name" required="required" class="form-control col-md-7 col-xs-12" name="{{family_details_form.first_name.html_name}}" value="{{family_details_form.first_name.value}}">
+                      {% else %}
+                        <input type="text" id="family_first_name" required="required" class="form-control col-md-7 col-xs-12" name="{{family_details_form.first_name.html_name}}">
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Last Name <span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not family_details_form.last_name.value is None %}
+                        <input type="text" id="family_last_name" required="required" class="form-control col-md-7 col-xs-12" name="{{family_details_form.last_name.html_name}}" value="{{family_details_form.last_name.value}}">
+                      {% else %}
+                        <input type="text" id="family_last_name" required="required" class="form-control col-md-7 col-xs-12" name="{{family_details_form.last_name.html_name}}">
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Relationship<span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not family_details_form.relationship.value is None %}
+                      <select class="select2_single form-control" id="family_relationship" tabindex="-1" name={{family_details_form.relationship.html_name}} value={{family_details_form.relationship.value}}>
+                            <option selected=selected>{{family_details_form.relationship.value}}</option>
+                          	<option value="Child">Child</option>
+                            <option value="Parent">Parent</option>
+                            <option value="Sibling">Sibling</option>
+                            <option value="Spouse">Spouse</option>
+                            <option value="Cousin">Cousin</option>
+                      </select>
+                      {% else %}
+                      <select class="select2_single form-control" id="family_relationship" tabindex="-1" name={{family_details_form.relationship.html_name}}>
+                            <option></option>
+                            <option value="Child">Child</option>
+                            <option value="Parent">Parent</option>
+                            <option value="Sibling">Sibling</option>
+                            <option value="Spouse">Spouse</option>
+                            <option value="Cousin">Cousin</option>
+                      </select>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Phone Number <span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not family_details_form.phone_number.value is None %}
+                        <input type="text" id="family_phone_number" class="form-control col-md-7 col-xs-12" required="required" name={{family_details_form.phone_number.html_name}} value={{family_details_form.phone_number.value}}>
+                      {% else %}
+                        <input type="text" id="family_phone_number" class="form-control col-md-7 col-xs-12" required="required" name={{family_details_form.phone_number.html_name}}>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Email Address<span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not family_details_form.email.value is None %}
+                        <input type="text" id="family_email_address" class="form-control col-md-7 col-xs-12" required="required" name={{family_details_form.email.html_name}} value={{family_details_form.email.value}}>
+                      {% else %}
+                        <input type="text" id="family_email_address" class="form-control col-md-7 col-xs-12" required="required" name={{family_details_form.email.html_name}}>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="item form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">Address <span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not family_details_form.address.value is None %}
+                        <input type="text" id="family_address" class="form-control col-md-7 col-xs-12" required="required" name="{{family_details_form.address.html_name}}" value="{{family_details_form.address.value}}"></textarea>
+                      {% else %}
+                        <input type="text" id="family_address" class="form-control col-md-7 col-xs-12" required="required" name="{{family_details_form.address.html_name}}"></textarea>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">City<span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not family_details_form.city.value is None %}
+                        <input type="text" id="family_city" class="form-control col-md-7 col-xs-12" required="required" name="{{family_details_form.city.html_name}}" value="{{family_details_form.city.value}}">
+                      {% else %}
+                        <input type="text" id="family_city" class="form-control col-md-7 col-xs-12" required="required" name="{{family_details_form.city.html_name}}">
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">State<span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not family_details_form.state.value is None %}
+                      <select class="select2_single form-control" id="family_state" tabindex="-1" name={{family_details_form.state.html_name}} value={{family_details_form.state.value}}>
+                            <option selected=selected>{{family_details_form.state.value}}</option>
+                            <option value="AL">Alabama</option>
+                          	<option value="AK">Alaska</option>
+                          	<option value="AZ">Arizona</option>
+                          	<option value="AR">Arkansas</option>
+                          	<option value="CA">California</option>
+                          	<option value="CO">Colorado</option>
+                          	<option value="CT">Connecticut</option>
+                          	<option value="DE">Delaware</option>
+                          	<option value="DC">District Of Columbia</option>
+                          	<option value="FL">Florida</option>
+                          	<option value="GA">Georgia</option>
+                          	<option value="HI">Hawaii</option>
+                          	<option value="ID">Idaho</option>
+                          	<option value="IL">Illinois</option>
+                          	<option value="IN">Indiana</option>
+                          	<option value="IA">Iowa</option>
+                          	<option value="KS">Kansas</option>
+                          	<option value="KY">Kentucky</option>
+                          	<option value="LA">Louisiana</option>
+                          	<option value="ME">Maine</option>
+                          	<option value="MD">Maryland</option>
+                          	<option value="MA">Massachusetts</option>
+                          	<option value="MI">Michigan</option>
+                          	<option value="MN">Minnesota</option>
+                          	<option value="MS">Mississippi</option>
+                          	<option value="MO">Missouri</option>
+                          	<option value="MT">Montana</option>
+                          	<option value="NE">Nebraska</option>
+                          	<option value="NV">Nevada</option>
+                          	<option value="NH">New Hampshire</option>
+                          	<option value="NJ">New Jersey</option>
+                          	<option value="NM">New Mexico</option>
+                          	<option value="NY">New York</option>
+                          	<option value="NC">North Carolina</option>
+                          	<option value="ND">North Dakota</option>
+                          	<option value="OH">Ohio</option>
+                          	<option value="OK">Oklahoma</option>
+                          	<option value="OR">Oregon</option>
+                          	<option value="PA">Pennsylvania</option>
+                          	<option value="RI">Rhode Island</option>
+                          	<option value="SC">South Carolina</option>
+                          	<option value="SD">South Dakota</option>
+                          	<option value="TN">Tennessee</option>
+                          	<option value="TX">Texas</option>
+                          	<option value="UT">Utah</option>
+                          	<option value="VT">Vermont</option>
+                          	<option value="VA">Virginia</option>
+                          	<option value="WA">Washington</option>
+                          	<option value="WV">West Virginia</option>
+                          	<option value="WI">Wisconsin</option>
+                          	<option value="WY">Wyoming</option>
+                      </select>
+                      {% else %}
+                      <select class="select2_single form-control" id="family_state" tabindex="-1" name={{family_details_form.state.html_name}}>
+                            <option></option>
+                            <option value="AL">Alabama</option>
+                          	<option value="AK">Alaska</option>
+                          	<option value="AZ">Arizona</option>
+                          	<option value="AR">Arkansas</option>
+                          	<option value="CA">California</option>
+                          	<option value="CO">Colorado</option>
+                          	<option value="CT">Connecticut</option>
+                          	<option value="DE">Delaware</option>
+                          	<option value="DC">District Of Columbia</option>
+                          	<option value="FL">Florida</option>
+                          	<option value="GA">Georgia</option>
+                          	<option value="HI">Hawaii</option>
+                          	<option value="ID">Idaho</option>
+                          	<option value="IL">Illinois</option>
+                          	<option value="IN">Indiana</option>
+                          	<option value="IA">Iowa</option>
+                          	<option value="KS">Kansas</option>
+                          	<option value="KY">Kentucky</option>
+                          	<option value="LA">Louisiana</option>
+                          	<option value="ME">Maine</option>
+                          	<option value="MD">Maryland</option>
+                          	<option value="MA">Massachusetts</option>
+                          	<option value="MI">Michigan</option>
+                          	<option value="MN">Minnesota</option>
+                          	<option value="MS">Mississippi</option>
+                          	<option value="MO">Missouri</option>
+                          	<option value="MT">Montana</option>
+                          	<option value="NE">Nebraska</option>
+                          	<option value="NV">Nevada</option>
+                          	<option value="NH">New Hampshire</option>
+                          	<option value="NJ">New Jersey</option>
+                          	<option value="NM">New Mexico</option>
+                          	<option value="NY">New York</option>
+                          	<option value="NC">North Carolina</option>
+                          	<option value="ND">North Dakota</option>
+                          	<option value="OH">Ohio</option>
+                          	<option value="OK">Oklahoma</option>
+                          	<option value="OR">Oregon</option>
+                          	<option value="PA">Pennsylvania</option>
+                          	<option value="RI">Rhode Island</option>
+                          	<option value="SC">South Carolina</option>
+                          	<option value="SD">South Dakota</option>
+                          	<option value="TN">Tennessee</option>
+                          	<option value="TX">Texas</option>
+                          	<option value="UT">Utah</option>
+                          	<option value="VT">Vermont</option>
+                          	<option value="VA">Virginia</option>
+                          	<option value="WA">Washington</option>
+                          	<option value="WV">West Virginia</option>
+                          	<option value="WI">Wisconsin</option>
+                          	<option value="WY">Wyoming</option>
+                      </select>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">ZIP code<span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not family_details_form.zip_code.value is None %}
+                        <input type="text" id="family_zip_code" class="form-control col-md-7 col-xs-12" required="required" name={{family_details_form.zip_code.html_name}} value={{family_details_form.zip_code.value}}>
+                      {% else %}
+                        <input type="text" id="family_zip_code" class="form-control col-md-7 col-xs-12" required="required" name={{family_details_form.zip_code.html_name}}>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Password</label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input type="password" class="form-control" name = "{{family_details_form.password.html_name}}"/>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Repeat Password</label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input type="password" class="form-control" name = "{{family_details_form.confirm_password.html_name}}"/>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Profile Picture</label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{family_details_form.profile_picture.label_tag}}{{family_details_form.profile_picture}}
+                      </div>
+                  </div>
+                  <div class="ln_solid"></div>
+                  <div class="form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                      <input type="hidden" name='{{family_details_form.client_email.html_name}}' value='{{client_email}}'>
+                      <input type="hidden" id="family_details_id" name='{{family_details_form.family_id.html_name}}'>
+                      <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                  </div>
+                </form>
+                <div class="ln_solid"></div>
+                <div class="table-responsive">
+                  <table class="table table-striped jambo_table bulk_action">
+                    <thead>
+                      <tr class="headings">
+                        <th class="column-title">First Name</th>
+                        <th class="column-title">Last Name</th>
+                        <th class="column-title">Email</th>
+                        <th class="column-title">Relationship</th>
+                        <!--<th class="column-title no-link last"><span class="nobr">Edit</span> </th>-->
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for family_detail in family_details %}
+                      <tr class="family_table_details">
+                        <td>{{family_detail.first_name}}</td>
+                        <td>{{family_detail.last_name}}</td>
+                        <td>{{family_detail.email_address}}</td>
+                        <td>{{family_detail.relationship}}</td>
+                        <input type="hidden" class="hidden_family_id" value="{{family_detail.id}}">
+                        <!--<td class="family_view_button"><a href="#">View</a></td>-->
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--Provider Details-->
+        <div class="clearfix"></div>
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>Provider Details <small>enter provider information</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content"> <br />
+                <form enctype="multipart/form-data" method='post' action="{% url 'post_provider_details' %}" id ='post_provider_details' class="form-horizontal form-label-left">
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">First Name <span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not provider_detail_form.first_name.value is None %}
+                        <input type="text" id="provider_first_name" required="required" class="form-control col-md-7 col-xs-12" name="{{provider_details_form.first_name.html_name}}" value="{{provider_details_form.first_name.value}}">
+                      {% else %}
+                        <input type="text" id="provider_first_name" required="required" class="form-control col-md-7 col-xs-12" name="{{provider_details_form.first_name.html_name}}">
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Last Name <span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not provider_detail_form.last_name.value is None %}
+                        <input type="text" id="provider_last_name" required="required" class="form-control col-md-7 col-xs-12" name="{{provider_details_form.last_name.html_name}}" value="{{provider_details_form.last_name.value}}">
+                      {% else %}
+                        <input type="text" id="provider_last_name" required="required" class="form-control col-md-7 col-xs-12" name="{{provider_details_form.last_name.html_name}}">
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Speciality <span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input type="text" id="provider_speciality" required="required" class="form-control col-md-7 col-xs-12" name="{{provider_details_form.speciality.html_name}}">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Phone Number <span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input type="text" id="provider_phone_number" required="required" class="form-control col-md-7 col-xs-12" name="{{provider_details_form.phone_number.html_name}}">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Emergency Phone Number<span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input type="text" id="provider_secondary_phone_number" required="required" class="form-control col-md-7 col-xs-12" name="{{provider_details_form.secondary_phone_number.html_name}}">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Email Address<span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input type="text" id="provider_email_address" class="form-control col-md-7 col-xs-12" required="required" name={{provider_details_form.email.html_name}}>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Password</label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input type="password" class="form-control" name = "{{provider_details_form.password.html_name}}"/>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Repeat Password</label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input type="password" class="form-control" name = "{{provider_details_form.confirm_password.html_name}}"/>
+                    </div>
+                  </div>
+                  <div class="ln_solid"></div>
+                  <div class="form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                      <input type="hidden" name='{{provider_details_form.client_email.html_name}}' value='{{client_email}}'>
+                      <input type="hidden" id="provider_details_id" name='{{provider_details_form.provider_id.html_name}}'>
+                      <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                  </div>
+                </form>
+                <div class="ln_solid"></div>
+                <div class="table-responsive">
+                  <table class="table table-striped jambo_table bulk_action">
+                    <thead>
+                      <tr class="headings">
+                        <th class="column-title">First Name</th>
+                        <th class="column-title">Last Name</th>
+                        <th class="column-title">Email</th>
+                        <th class="column-title">Phone Number</th>
+                        <th class="column-title">Speciality</th>
+                        <!--<th class="column-title no-link last"><span class="nobr">Edit</span> </th>-->
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for provider_detail in provider_details %}
+                      <tr class="provider_table_details">
+                        <td>{{provider_detail.first_name}}</td>
+                        <td>{{provider_detail.last_name}}</td>
+                        <td>{{provider_detail.email_address}}</td>
+                        <td>{{provider_detail.phone_number}}</td>
+                        <td>{{provider_detail.speciality}}</td>
+                        <input type="hidden" class="hidden_provider_id" value="{{provider_detail.id}}">
+                        <!--<td class="family_view_button"><a href="#">View</a></td>-->
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- end row -->
+
+        <!-- Pharmacy Details Primary-->
+        <div class="row">
+          <div class="col-md-12 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>Primary Pharmacy <small>enter primary pharmacy</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content"> <br />
+                <form enctype="multipart/form-data" method='post' action="{% url 'post_pharmacy_details' %}" id ='post_pharmacy_details' class="form-horizontal form-label-left input_mask">
+                  {% csrf_token %}
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" id="pharmacy_name" class="form-control has-feedback-left" placeholder="Name" name={{pharmacy_details_form.pharmacy_name.html_name}}>
+                    <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" id="pharmacy_contact_name" class="form-control" placeholder="Contact Name" name={{pharmacy_details_form.contact_name.html_name}}>
+                    <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" id="pharmacy_phone_number" class="form-control has-feedback-left" placeholder="Phone Number" name={{pharmacy_details_form.phone_number.html_name}}>
+                    <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" id="pharmacy_fax_number" class="form-control" placeholder="Fax Number" name={{pharmacy_details_form.fax_number.html_name}}>
+                    <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" id="pharmacy_email" class="form-control" placeholder="Email Address" name={{pharmacy_details_form.email.html_name}}>
+                    <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span> </div>
+                  <div class="ln_solid"></div>
+                  <div class="form-group">
+                    <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                      <input type="hidden" name='{{pharmacy_details_form.client_email.html_name}}' value='{{client_email}}'>
+                      <input type="hidden" id="pharmacy_details_id" name='{{pharmacy_details_form.pharmacy_id.html_name}}'>
+                      <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                  </div>
+                </form>
+                <div class="ln_solid"></div>
+                <div class="table-responsive">
+                  <table class="table table-striped jambo_table bulk_action">
+                    <thead>
+                      <tr class="headings">
+                        <th class="column-title">Name</th>
+                        <th class="column-title">Contact Name</th>
+                        <th class="column-title">Phone Number</th>
+                        <th class="column-title">Fax Number</th>
+                        <th class="column-title">Email Address</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for pharmacy_detail in pharmacy_details %}
+                      <tr class="pharmacy_table_details">
+                        <td>{{pharmacy_detail.name}}</td>
+                        <td>{{pharmacy_detail.contact_name}}</td>
+                        <td>{{pharmacy_detail.phone_number}}</td>
+                        <td>{{pharmacy_detail.fax_number}}</td>
+                        <td>{{pharmacy_detail.email_address}}</td>
+                        <input type="hidden" class="hidden_pharmacy_id" value="{{pharmacy_detail.id}}">
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Primary payer details-->
+        <div class="row">
+          <div class="col-md-12 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>Primary Payer <small>enter primary payer information</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content"> <br />
+                <form enctype="multipart/form-data" method='post' action="{% url 'post_payer_details' %}" id ='post_payer_details' class="form-horizontal form-label-left input_mask">
+                  {% csrf_token %}
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control has-feedback-left" id="payer_name" name={{payer_details_form.payer_name.html_name}} placeholder="Name">
+                    <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control" id="payer_contact_name" name={{payer_details_form.contact_name.html_name}} placeholder="Contact Name">
+                    <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control has-feedback-left" id="payer_phone_number" name={{payer_details_form.phone_number.html_name}} placeholder="Phone Number">
+                    <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control" id="payer_fax_number" name={{payer_details_form.fax_number.html_name}} placeholder="Fax Number">
+                    <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control" id="payer_email" name={{payer_details_form.email.html_name}} placeholder="Email Address">
+                    <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control" id="payer_start_date" name={{payer_details_form.policy_start_date.html_name}} placeholder="Policy Start Date">
+                    <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control" id="payer_end_date" name={{payer_details_form.policy_end_date.html_name}} placeholder="Policy End Date">
+                    <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control" id="payer_policy_number" name={{payer_details_form.policy_number.html_name}} placeholder="Policy Number">
+                    <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span> </div>
+                  <div class="ln_solid"></div>
+                  <div class="form-group">
+                    <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                      <input type="hidden" name='{{payer_details_form.client_email.html_name}}' value='{{client_email}}'>
+                      <input type="hidden" id="payer_details_id" name='{{payer_details_form.payer_id.html_name}}'>
+                      <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                  </div>
+                </form>
+                <div class="ln_solid"></div>
+                <div class="table-responsive">
+                  <table class="table table-striped jambo_table bulk_action">
+                    <thead>
+                      <tr class="headings">
+                        <th class="column-title">Name</th>
+                        <th class="column-title">Contact Name</th>
+                        <th class="column-title">Phone Number</th>
+                        <th class="column-title">Fax Number</th>
+                        <th class="column-title">Email Address</th>
+                        <th class="column-title">Start Date</th>
+                        <th class="column-title">End Date</th>
+                        <th class="column-title">Policy Number</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for payer_detail in payer_details %}
+                      <tr class="payer_table_details">
+                        <td>{{payer_detail.name}}</td>
+                        <td>{{payer_detail.contact_name}}</td>
+                        <td>{{payer_detail.phone_number}}</td>
+                        <td>{{payer_detail.fax_number}}</td>
+                        <td>{{payer_detail.email_address}}</td>
+                        <td>{{payer_detail.policy_start_date}}</td>
+                        <td>{{payer_detail.policy_end_date}}</td>
+                        <td>{{payer_detail.policy_number}}</td>
+                        <input type="hidden" class="hidden_payer_id" value="{{payer_detail.id}}">
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--End Primary payer Details -->
+        </div>
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>Supporting Documents</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                  <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="#">Settings 1</a> </li>
+                      <li><a href="#">Settings 2</a> </li>
+                    </ul>
+                  </li>
+                  <li><a class="close-link"><i class="fa fa-close"></i></a> </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+                <p>Drag multiple files to the box below or click to select files</p>
+                <form action="form_upload.html" class="dropzone">
+                </form>
+                <br />
+                <br />
+                <br />
+                <br />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /page content -->
+    {% endblock %}
+
+{% block footlibs %}
+<!-- bootstrap-daterangepicker -->
+<script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
+<script src="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+<!-- Dropzone.js -->
+<script src="{% static 'vendors/dropzone/dist/min/dropzone.min.js' %}"></script>
+{% endblock %}
+
+{% block scripts %}
+<!-- get family details from table -->
+<script type="text/javascript">
+  $(".family_table_details").click(function(){
+    var family_id = $(this).children(':hidden').val();
+    $.ajax({
+      type: "GET",
+      url: '{% url "get_family_with_id" %}',
+      data: { family_id: family_id },
+      dataType: "json",
+      contentType: "application/json",
+      success: function(family_data){
+        $('#family_first_name').val(family_data.first_name);
+        $('#family_last_name').val(family_data.last_name);
+        $('#family_relationship').val(family_data.relationship);
+        $('#family_phone_number').val(family_data.phone_number);
+        $('#family_email_address').val(family_data.email_address);
+        $('#family_address').val(family_data.address);
+        $('#family_city').val(family_data.city);
+        $('#family_state').val(family_data.state);
+        $('#family_zip_code').val(family_data.zip_code);
+        $('#family_details_id').val(family_data.family_id);
+        //$('#client_detail_img').html('<img src=' + client_data.profile_picture + ' class="img-circle img-responsive">');
+      },
+      failure: function(client_data){
+        alert('error fetching client data');
+      }
+    });
+  });
+</script>
+<!-- end -->
+<!-- post family details ajax -->
+<script type="text/javascript">
+  var post_family_form = $('#post_family_details');
+  post_family_form.submit(function(){
+    $.ajax({
+      type: post_family_form.attr('method'),
+      url: post_family_form.attr('action'),
+      data: post_family_form.serialize(),
+      success: function(family_contacts){
+        console.log(family_contacts[0].first_name);
+      },
+      error: function(family_contacts){
+        console.log("FAILURE");
+      }
+    });
+    return false;
+  });
+</script>
+<!-- end -->
+<!-- get provider details from table -->
+<script type="text/javascript">
+  $(".provider_table_details").click(function(){
+    var provider_id = $(this).children(':hidden').val();
+    $.ajax({
+      type: "GET",
+      url: '{% url "get_provider_with_id" %}',
+      data: { provider_id: provider_id },
+      dataType: "json",
+      contentType: "application/json",
+      success: function(provider_data){
+        $('#provider_first_name').val(provider_data.first_name);
+        $('#provider_last_name').val(provider_data.last_name);
+        $('#provider_speciality').val(provider_data.speciality);
+        $('#provider_phone_number').val(provider_data.phone_number);
+        $('#provider_secondary_phone_number').val(provider_data.secondary_phone_number);
+        $('#provider_email_address').val(provider_data.email_address);
+        $('#provider_details_id').val(provider_data.provider_id);
+      },
+      failure: function(provider_data){
+        alert('error fetching data');
+      }
+    });
+  });
+</script>
+<!-- end -->
+<!-- post provider details ajax -->
+<script type="text/javascript">
+  var post_provider_form = $('#post_provider_details');
+  post_provider_form.submit(function(){
+    $.ajax({
+      type: post_provider_form.attr('method'),
+      url: post_provider_form.attr('action'),
+      data: post_provider_form.serialize(),
+      success: function(provider_details){
+        console.log(provider_details[0].first_name);
+      },
+      error: function(provider_details){
+        console.log("FAILURE");
+      }
+    });
+    return false;
+  });
+</script>
+<!-- end -->
+<!-- get pharmacy details from table -->
+<script type="text/javascript">
+  $(".pharmacy_table_details").click(function(){
+    var pharmacy_id = $(this).children(':hidden').val();
+    $.ajax({
+      type: "GET",
+      url: '{% url "get_pharmacy_with_id" %}',
+      data: { pharmacy_id: pharmacy_id },
+      dataType: "json",
+      contentType: "application/json",
+      success: function(pharmacy_data){
+        $('#pharmacy_name').val(pharmacy_data.name);
+        $('#pharmacy_contact_name').val(pharmacy_data.contact_name);
+        $('#pharmacy_phone_number').val(pharmacy_data.phone_number);
+        $('#pharmacy_fax_number').val(pharmacy_data.fax_number);
+        $('#pharmacy_email').val(pharmacy_data.email);
+        $('#pharmacy_details_id').val(pharmacy_data.pharmacy_id);
+        /*$('#provider_first_name').val(provider_data.first_name);
+        $('#provider_last_name').val(provider_data.last_name);
+        $('#provider_speciality').val(provider_data.speciality);
+        $('#provider_phone_number').val(provider_data.phone_number);
+        $('#provider_secondary_phone_number').val(provider_data.secondary_phone_number);
+        $('#provider_email_address').val(provider_data.email_address);
+        $('#provider_details_id').val(provider_data.provider_id);*/
+      },
+      failure: function(pharmacy_data){
+        alert('error fetching data');
+      }
+    });
+  });
+</script>
+<!-- end -->
+<!-- post pharmacy details ajax -->
+<script type="text/javascript">
+  var post_pharmacy_form = $('#post_pharmacy_details');
+  post_pharmacy_form.submit(function(){
+    $.ajax({
+      type: post_pharmacy_form.attr('method'),
+      url: post_pharmacy_form.attr('action'),
+      data: post_pharmacy_form.serialize(),
+      success: function(pharmacy_details){
+        console.log(pharmacy_details[0].first_name);
+      },
+      error: function(pharmacy_details){
+        console.log("FAILURE");
+      }
+    });
+    return false;
+  });
+</script>
+<!-- end -->
+<!-- get payer details from table -->
+<script type="text/javascript">
+  $(".payer_table_details").click(function(){
+    var payer_id = $(this).children(':hidden').val();
+    $.ajax({
+      type: "GET",
+      url: '{% url "get_payer_with_id" %}',
+      data: { payer_id: payer_id },
+      dataType: "json",
+      contentType: "application/json",
+      success: function(payer_data){
+        $('#payer_name').val(payer_data.name);
+        $('#payer_contact_name').val(payer_data.contact_name);
+        $('#payer_phone_number').val(payer_data.phone_number);
+        $('#payer_fax_number').val(payer_data.fax_number);
+        $('#payer_email').val(payer_data.email);
+        $('#payer_start_date').val(payer_data.policy_start_date);
+        $('#payer_end_date').val(payer_data.policy_end_date);
+        $('#payer_policy_number').val(payer_data.policy_number);
+        $('#payer_details_id').val(payer_data.payer_id);
+        /*$('#provider_first_name').val(provider_data.first_name);
+        $('#provider_last_name').val(provider_data.last_name);
+        $('#provider_speciality').val(provider_data.speciality);
+        $('#provider_phone_number').val(provider_data.phone_number);
+        $('#provider_secondary_phone_number').val(provider_data.secondary_phone_number);
+        $('#provider_email_address').val(provider_data.email_address);
+        $('#provider_details_id').val(provider_data.provider_id);*/
+      },
+      failure: function(payer_data){
+        alert('error fetching data');
+      }
+    });
+  });
+</script>
+<!-- end -->
+<!-- post payer details ajax -->
+<script type="text/javascript">
+  var post_payer_form = $('#post_payer_details');
+  post_payer_form.submit(function(){
+    $.ajax({
+      type: post_payer_form.attr('method'),
+      url: post_payer_form.attr('action'),
+      data: post_payer_form.serialize(),
+      success: function(payer_details){
+        console.log(payer_details[0].first_name);
+      },
+      error: function(payer_details){
+        console.log("FAILURE");
+      }
+    });
+    return false;
+  });
+</script>
+<!-- end -->
+
+<!-- bootstrap-daterangepicker -->
+    <script>
+      $(document).ready(function() {
+        $('#birthday').daterangepicker({
+          singleDatePicker: true,
+          calender_style: "picker_4"
+        }, function(start, end, label) {
+          console.log(start.toISOString(), end.toISOString(), label);
+        });
+      });
+    </script>
+
+    <script>
+      $(document).ready(function() {
+        $('#payer_start_date').daterangepicker({
+          singleDatePicker: true,
+          calender_style: "picker_4"
+        }, function(start, end, label) {
+          console.log(start.toISOString(), end.toISOString(), label);
+        });
+      });
+    </script>
+
+    <script>
+      $(document).ready(function() {
+        $('#payer_end_date').daterangepicker({
+          singleDatePicker: true,
+          calender_style: "picker_4"
+        }, function(start, end, label) {
+          console.log(start.toISOString(), end.toISOString(), label);
+        });
+      });
+    </script>
+<!-- /bootstrap-daterangepicker -->
+{% endblock %}

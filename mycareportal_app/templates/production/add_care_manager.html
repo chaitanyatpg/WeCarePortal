@@ -1,0 +1,149 @@
+{% extends "production/base.html" %}
+{% block title %} Add Care Manager {% endblock %}
+{% block headlibs %}
+{% load static %}
+<!-- iCheck -->
+<link href="{% static 'vendors/iCheck/skins/flat/green.css' %}" rel="stylesheet">
+<!-- bootstrap-wysiwyg -->
+<link href="{% static 'vendors/google-code-prettify/bin/prettify.min.css' %}" rel="stylesheet">
+<!-- Switchery -->
+<link href="{% static 'vendors/switchery/dist/switchery.min.css' %}" rel="stylesheet">
+<!-- starrr -->
+<link href="{% static 'vendors/starrr/dist/starrr.css' %}" rel="stylesheet">
+<!-- bootstrap-daterangepicker -->
+<link href="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+<!-- Select2 -->
+<link href="{% static 'vendors/select2/dist/css/select2.min.css' %}" rel="stylesheet">
+{% endblock %}
+{% block pagecontent %}
+    <!-- page content -->
+    <div class="right_col" role="main">
+      <div class="">
+        <div class="page-title">
+          <div class="title_left">
+            <h3>Care Manager Details</h3>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+
+        <!--Patient Personal Details form-->
+        <div class="clearfix"></div>
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>Care manager<small>enter general information</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content"> <br />
+                <form method='post' action="{% url 'add_care_manager' %}" class="form-horizontal form-label-left">
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">First Name <span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not add_care_manager_form.first_name.value is None %}
+                        <input type="text" required="required" class="form-control col-md-7 col-xs-12" name="{{add_care_manager_form.first_name.html_name}}" value="{{add_care_manager_form.first_name.value}}">
+                      {% else %}
+                        <input type="text" required="required" class="form-control col-md-7 col-xs-12" name="{{add_care_manager_form.first_name.html_name}}">
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Last Name <span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not add_care_manager_form.last_name.value is None %}
+                        <input type="text" required="required" class="form-control col-md-7 col-xs-12" name="{{add_care_manager_form.last_name.html_name}}" value="{{add_care_manager_form.last_name.value}}">
+                      {% else %}
+                        <input type="text" required="required" class="form-control col-md-7 col-xs-12" name="{{add_care_manager_form.last_name.html_name}}">
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Email Address<span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not add_care_manager_form.email.value is None %}
+                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name={{add_care_manager_form.email.html_name}} value={{add_care_manager_form.email.value}}>
+                      {% else %}
+                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name={{add_care_manager_form.email.html_name}}>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Password<span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input type="password" class="form-control" name = "{{add_care_manager_form.password.html_name}}" required="required" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Repeat Password<span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input type="password" class="form-control" name = "{{add_care_manager_form.confirm_password.html_name}}" required="required" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Can Add other Care Managers</label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input type="checkbox" class="form-control" name = "{{add_care_manager_form.can_add.html_name}}"/>
+                    </div>
+                  </div>
+
+                  <div class="ln_solid"></div>
+                  <div class="form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                      <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /page content -->
+    {% endblock %}
+
+{% block footlibs %}
+<!-- bootstrap-daterangepicker -->
+<script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
+<script src="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+<!-- Dropzone.js -->
+<script src="{% static 'vendors/dropzone/dist/min/dropzone.min.js' %}"></script>
+<!-- Select2 -->
+<script src="{% static 'vendors/select2/dist/js/select2.full.min.js' %}"></script>
+{% endblock %}
+
+{% block scripts %}
+<!-- Select2 -->
+<script>
+      $(document).ready(function() {
+        $(".select2_single").select2({
+          placeholder: "Select a state",
+          allowClear: true
+        });
+        $(".select2_group").select2({});
+        $(".select2_multiple").select2({
+          maximumSelectionLength: 5,
+          placeholder: "With Max Selection limit 5",
+          allowClear: true
+        });
+      });
+    </script>
+<!-- /Select2 -->
+
+<!-- bootstrap-daterangepicker -->
+    <script>
+      $(document).ready(function() {
+        $('#birthday').daterangepicker({
+          singleDatePicker: true,
+          calender_style: "picker_4"
+        }, function(start, end, label) {
+          console.log(start.toISOString(), end.toISOString(), label);
+        });
+      });
+    </script>
+<!-- /bootstrap-daterangepicker -->
+{% endblock %}

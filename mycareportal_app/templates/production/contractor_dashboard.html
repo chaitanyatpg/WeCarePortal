@@ -1,0 +1,381 @@
+{% extends "production/base.html" %}
+{% block title %} Contractor Dashboard {% endblock %}
+{% load static %}
+{% block headlibs %}
+{% load static %}
+    <!-- bootstrap-daterangepicker -->
+    <link href="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+{% endblock %}
+{% block pagecontent %}
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>Contractor Portal</h3>
+              </div>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
+                      <div class="profile_img">
+                        <div id="crop-avatar">
+                          <!-- Current avatar -->
+                          <img class="img-responsive avatar-view" src="images/img.png" alt="Avatar" title="Change the avatar">
+                        </div>
+                      </div>
+                      <h3>Contractor Picture</h3>
+
+                      <ul class="list-unstyled user_data">
+                        <li><i class="fa fa-phone user-profile-icon"></i> 732-540-4335
+                        </li>
+
+                        <li><i class="fa fa-map-marker user-profile-icon"></i> Somerville, New Jersey, USA
+                        </li>
+
+                        <li class="m-top-xs">
+                          <i class="fa fa-external-link user-profile-icon"></i>
+                          <a href="http://www.wecareportal.com" target="_blank">www.wecare.com</a>
+                        </li>
+                      </ul>
+                      <br />
+
+                      <!-- start skills -->
+                      <h4>Skills</h4>
+                      <ul class="list-unstyled user_data">
+                        <li>
+                          <p>Home Exterior</p>
+                          <div class="progress progress_sm">
+                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="50"></div>
+                          </div>
+                        </li>
+                        <li>
+                          <p>Windows</p>
+                          <div class="progress progress_sm">
+                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="70"></div>
+                          </div>
+                        </li>
+                        <li>
+                          <p>Ramps</p>
+                          <div class="progress progress_sm">
+                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="100"></div>
+                          </div>
+                        </li>
+                        <li>
+                          <p>Entry</p>
+                          <div class="progress progress_sm">
+                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="50"></div>
+                          </div>
+                        </li>
+                      </ul>
+                      <!-- end of skills -->
+
+                    </div>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+
+                      <div class="row">
+                      <div class="col-md-12">
+                        <div class="x_panel">
+                          <div class="x_title">
+                            <h2>Home Exterior<small>Low-Maintenance exterior(vinyl, brick) </small></h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                              </li>
+                              <li><a class="close-link"><i class="fa fa-close"></i></a>
+                              </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                          </div>
+                          <div class="x_content">
+
+                            <div class="col-md-12 col-lg-12 col-sm-12">
+                              <!-- blockquote -->
+                              <blockquote>
+                                <p>Current plywood home exterior is not maintainable and prone to degradation. Should be replaced
+                                with brick.</p>
+                              </blockquote>
+                              <label>Difficulty:</label>
+                              <div class="progress">
+                                <div class="progress-bar progress-bar-danger" data-transitiongoal="80"></div>
+                              </div>
+                              <div>
+                                <div class="form-group col-md-4 col-lg-4 col-sm-12">
+                                  <label class="control-label">Start Date<span class="required">*</span>
+                                  </label>
+                                  <input id="project_date" class="date-picker form-control" required="required" type="text">
+                                </div>
+                                <div class="form-group col-md-4 col-lg-4 col-sm-12">
+                                  <label class="control-label">End Date<span class="required">*</span>
+                                  </label>
+                                  <input id="project_date" class="date-picker form-control" required="required" type="text">
+                                </div>
+                                <div class="form-group col-md-4 col-lg-4 col-sm-12">
+                                  <label class="control-label">Cost<span class="required">*</span>
+                                  </label>
+                                  <input type="text" class="form-control" required="required">
+                                </div>
+                              </div>
+                              <button type="button" class="btn btn-success">Place Bid</button>
+                              <button type="button" class="btn btn-danger">Ignore</button>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="x_panel">
+                          <div class="x_title">
+                            <h2>Windows<small>Easy to operate hardware </small></h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                              </li>
+                              <li><a class="close-link"><i class="fa fa-close"></i></a>
+                              </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                          </div>
+                          <div class="x_content">
+
+                            <div class="col-md-12 col-lg-12 col-sm-12">
+                              <!-- blockquote -->
+                              <blockquote>
+                                <p>Current windows are impossible to open! Additionally, the crank for opening and closing the blinds
+                                are unintuitive. Should be replaced with a more modern installation. </p>
+                              </blockquote>
+                            </div>
+                            <label>Difficulty:</label>
+                            <div class="progress">
+                              <div class="progress-bar progress-bar-info" data-transitiongoal="35"></div>
+                            </div>
+                            <div>
+                                <div class="form-group col-md-4 col-lg-4 col-sm-12">
+                                  <label class="control-label">Start Date<span class="required">*</span>
+                                  </label>
+                                  <input id="project_date" class="date-picker form-control" required="required" type="text">
+                                </div>
+                                <div class="form-group col-md-4 col-lg-4 col-sm-12">
+                                  <label class="control-label">End Date<span class="required">*</span>
+                                  </label>
+                                  <input id="project_date" class="date-picker form-control" required="required" type="text">
+                                </div>
+                                <div class="form-group col-md-4 col-lg-4 col-sm-12">
+                                  <label class="control-label">Cost<span class="required">*</span>
+                                  </label>
+                                  <input type="text" class="form-control" required="required">
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-success">Place Bid</button>
+                            <button type="button" class="btn btn-danger">Ignore</button>
+                            <div class="clearfix"></div>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="x_panel">
+                          <div class="x_title">
+                            <h2>Entry<small>At least one no-step entry with a cover </small></h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                              </li>
+                              <li><a class="close-link"><i class="fa fa-close"></i></a>
+                              </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                          </div>
+                          <div class="x_content">
+
+                            <div class="col-md-12 col-lg-12 col-sm-12">
+                              <!-- blockquote -->
+                              <blockquote>
+                                <p>There are currently no entries without steps. Need to build a ramp to the left of the main
+                                entrance with handrails on the sides. </p>
+                              </blockquote>
+                            </div>
+                            <label>Difficulty:</label>
+                              <div class="progress">
+                                <div class="progress-bar progress-bar-warning" data-transitiongoal="65"></div>
+                              </div>
+                              <div>
+                                <div class="form-group col-md-4 col-lg-4 col-sm-12">
+                                  <label class="control-label">Start Date<span class="required">*</span>
+                                  </label>
+                                  <input id="project_date" class="date-picker form-control" required="required" type="text">
+                                </div>
+                                <div class="form-group col-md-4 col-lg-4 col-sm-12">
+                                  <label class="control-label">End Date<span class="required">*</span>
+                                  </label>
+                                  <input id="project_date" class="date-picker form-control" required="required" type="text">
+                                </div>
+                                <div class="form-group col-md-4 col-lg-4 col-sm-12">
+                                  <label class="control-label">Cost<span class="required">*</span>
+                                  </label>
+                                  <input type="text" class="form-control" required="required">
+                                </div>
+                            </div>
+                              <button type="button" class="btn btn-success">Place Bid</button>
+                              <button type="button" class="btn btn-danger">Ignore</button>
+                            <div class="clearfix"></div>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="x_panel">
+                          <div class="x_title">
+                            <h2>Appliances<small>Microwave oven at counter height or in wall</small></h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                              </li>
+                              <li><a class="close-link"><i class="fa fa-close"></i></a>
+                              </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                          </div>
+                          <div class="x_content">
+
+                            <div class="col-md-12 col-lg-12 col-sm-12">
+                              <!-- blockquote -->
+                              <blockquote>
+                                <p>The microwave is currently located 17 meters above the ground. Needs to be lowered to a more
+                                manageable level, ideally on the counter next to the refridgerator.
+                              </blockquote>
+                            </div>
+                            <label>Difficulty:</label>
+                              <div class="progress">
+                                <div class="progress-bar progress-bar-success" data-transitiongoal="15"></div>
+                              </div>
+                              <div>
+                                <div class="form-group col-md-4 col-lg-4 col-sm-12">
+                                  <label class="control-label">Start Date<span class="required">*</span>
+                                  </label>
+                                  <input id="project_date" class="date-picker form-control" required="required" type="text">
+                                </div>
+                                <div class="form-group col-md-4 col-lg-4 col-sm-12">
+                                  <label class="control-label">End Date<span class="required">*</span>
+                                  </label>
+                                  <input id="project_date" class="date-picker form-control" required="required" type="text">
+                                </div>
+                                <div class="form-group col-md-4 col-lg-4 col-sm-12">
+                                  <label class="control-label">Cost<span class="required">*</span>
+                                  </label>
+                                  <input type="text" class="form-control" required="required">
+                                </div>
+                            </div>
+                              <button type="button" class="btn btn-success">Place Bid</button>
+                              <button type="button" class="btn btn-danger">Ignore</button>
+                            <div class="clearfix"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="x_panel">
+                          <div class="x_title">
+                            <h2>Stairways, Lifts, and Elevators<small>Residential elevator or lift </small></h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                              </li>
+                              <li><a class="close-link"><i class="fa fa-close"></i></a>
+                              </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                          </div>
+                          <div class="x_content">
+                            <div class="col-md-12 col-lg-12 col-sm-12">
+                              <!-- blockquote -->
+                              <blockquote>
+                                <p>The client's house has 6 floors and, as he is confined to his wheelchair, traversing the floors has become
+                                odious. A resedential elevator is to be installed in the main foyer adjacent to the main staircase. </p>
+                              </blockquote>
+                            </div>
+                            <label>Difficulty:</label>
+                              <div class="progress">
+                                <div class="progress-bar progress-bar-danger" data-transitiongoal="95"></div>
+                              </div>
+                              <div>
+                                <div class="form-group col-md-4 col-lg-4 col-sm-12">
+                                  <label class="control-label">Start Date<span class="required">*</span>
+                                  </label>
+                                  <input id="project_date" class="date-picker form-control" required="required" type="text">
+                                </div>
+                                <div class="form-group col-md-4 col-lg-4 col-sm-12">
+                                  <label class="control-label">End Date<span class="required">*</span>
+                                  </label>
+                                  <input id="project_date" class="date-picker form-control" required="required" type="text">
+                                </div>
+                                <div class="form-group col-md-4 col-lg-4 col-sm-12">
+                                  <label class="control-label">Cost<span class="required">*</span>
+                                  </label>
+                                  <input type="text" class="form-control" required="required">
+                                </div>
+                            </div>
+                              <button type="button" class="btn btn-success">Place Bid</button>
+                              <button type="button" class="btn btn-danger">Ignore</button>
+                            <div class="clearfix"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /page content -->
+{% endblock %}
+{% block footlibs %}
+    <!-- morris.js -->
+    <script src="{% static 'vendors/raphael/raphael.min.js' %}"></script>
+    <script src="{% static 'vendors/morris.js/morris.min.js' %}"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="{% static 'vendors/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+{% endblock %}
+{% block scripts %}
+    <!-- bootstrap-daterangepicker -->
+    <script>
+      $(document).ready(function() {
+        $('[id^=project_date]').daterangepicker({
+          singleDatePicker: true,
+          calender_style: "picker_4"
+        }, function(start, end, label) {
+          console.log(start.toISOString(), end.toISOString(), label);
+        });
+      });
+    </script>
+    <!-- /bootstrap-daterangepicker -->
+{% endblock %}

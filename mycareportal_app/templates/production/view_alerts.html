@@ -1,0 +1,361 @@
+{% extends "production/base.html" %}
+{% block title %} View Alerts {% endblock %}
+{% block headlibs %}
+{% load static %}
+{% endblock %}
+{% block pagecontent %}
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>Alerts</h3>
+              </div>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Relocation<small></small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <div class="row">
+                      <div class="form-group">
+                        <blockquote>
+                          <p>Based on the results from the home assessment form and other indicators, we have determined that
+                          relocating to a new location should be considered. Would you like to proceed?</p>
+                        </blockquote>
+                        </div>
+                      </div>
+                      <label></label>
+                      <br />
+                      <form action="move_management_wizard.html" style="float: left">
+                        <button type="submit" class="btn btn-success">Start Relocation</button>
+                      </form>
+                      <button type="button" class="btn btn-danger">Ignore</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Enter New Alert<small>Select a Category and a job</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <div class="row">
+                      <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">Choose an Existing Task</label>
+                          <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select class="select2_group form-control">
+                              <option disabled selected value> -- select an option -- </option>
+                              <optgroup label="Home Exterior">
+                                <option>Low-Maintenance exterior(vinyl, brick) </option>
+                                <option>Low-Maintenance shrubs and plants </option>
+                                <option>Deck, patio, or balcony surfaces are no more than 1/2 inch below interior floor level if made of wood </option>
+                              </optgroup>
+                              <optgroup label="Overall Floor Plan">
+                                <option>Main living on a single story, including full bath</option>
+                                <option>No steps between rooms/areas on the same level</option>
+                                <option>5-foor by 5-foor clean/turn space in living area, kitchen, a bedroom and a bathroom</option>
+                              </optgroup>
+                              <optgroup label="Garage or Carport">
+                                <option>Covered carports anbd boarding spaces</option>
+                                <option>Wider than average carports to accommodate lifts on vans</option>
+                                <option>Door heights may need to be nine feet to accommodate some raised roof vans</option>
+                                <option>Five-foot minimum access aisle between accessible van and car in garage</option>
+                                <option>If code required floor to be several inches below entrace to house for fume protection, can slope entire floor from front to back to eliminate need for ramp or step</option>
+                                <option>Ramp to doorway if needed</option>
+                                <option>Haidrail (If steps)</option>
+                              </optgroup>
+                              <optgroup label="Windows">
+                                <option>Plenty of windows for natural light</option>
+                                <option>Lowered windows or taller windows with lower sill height</option>
+                                <option>Low maintenance exterior and interior finishes</option>
+                                <option>Easy to operate hardware</option>
+                              </optgroup>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <label></label>
+                      <div class="row">
+                        <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">Choose Existing/Create new category</label>
+                          <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" name="category" id="autocomplete-custom-append" class="form-control col-md-10"/>
+                          </div>
+                        </div>
+                      </div>
+                      <label></label>
+                      <div class="row">
+                        <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">Create New Task</label>
+                          <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control col-md-10"/>
+                          </div>
+                        </div>
+                      </div>
+                      <label></label>
+                      <div class="row">
+                        <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">Set Difficulty</label>
+                          <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control col-md-10"/>
+                          </div>
+                        </div>
+                      </div>
+                      <br />
+                      <form action="enter_alert.html">
+                        <div class="form-group">
+                          <button type="submit" class="btn btn-info">Add Description</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Home Exterior<small>Low-Maintenance exterior(vinyl, brick) </small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <div class="col-md-12 col-lg-12 col-sm-12">
+                      <!-- blockquote -->
+                      <blockquote>
+                        <p>Current plywood home exterior is not maintainable and prone to degradation. Should be replaced
+                        with brick.</p>
+                      </blockquote>
+                      <label>Difficulty:</label>
+                      <div class="progress">
+                        <div class="progress-bar progress-bar-danger" data-transitiongoal="80"></div>
+                      </div>
+                      <div class="form-group">
+                        <form action="contractor_tables.html" style="float: left;">
+                          <button type="submit" class="btn btn-success">Choose Contractor</button>
+                        </form>
+                        <form action="enter_alert.html" style="float: left;">
+                          <button type="submit" class="btn btn-info">Edit Description</button>
+                        </form>
+                        <form action="view_bids.html" style="float: left;">
+                          <button type="submit" class="btn btn-warning">View Bids</button>
+                        </form>
+                        <button type="submit" class="btn btn-danger">Ignore</button>
+                      </div>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Windows<small>Easy to operate hardware </small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <div class="col-md-12 col-lg-12 col-sm-12">
+                      <!-- blockquote -->
+                      <blockquote>
+                        <p>Current windows are impossible to open! Additionally, the crank for opening and closing the blinds
+                        are unintuitive. Should be replaced with a more modern installation. </p>
+                      </blockquote>
+                    </div>
+                    <label>Difficulty:</label>
+                      <div class="progress">
+                        <div class="progress-bar progress-bar-info" data-transitiongoal="35"></div>
+                      </div>
+                      <button type="button" class="btn btn-success">Choose Contractor</button>
+                      <button type="button" class="btn btn-info">Edit Description</button>
+                      <button type="button" class="btn btn-warning">View Bids</button>
+                      <button type="button" class="btn btn-danger">Ignore</button>
+                    <div class="clearfix"></div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Entry<small>At least one no-step entry with a cover </small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <div class="col-md-12 col-lg-12 col-sm-12">
+                      <!-- blockquote -->
+                      <blockquote>
+                        <p>There are currently no entries without steps. Need to build a ramp to the left of the main
+                        entrance with handrails on the sides. </p>
+                      </blockquote>
+                    </div>
+                    <label>Difficulty:</label>
+                      <div class="progress">
+                        <div class="progress-bar progress-bar-warning" data-transitiongoal="65"></div>
+                      </div>
+                      <button type="button" class="btn btn-success">Choose Contractor</button>
+                      <button type="button" class="btn btn-info">Edit Description</button>
+                      <button type="button" class="btn btn-warning">View Bids</button>
+                      <button type="button" class="btn btn-danger">Ignore</button>
+                    <div class="clearfix"></div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Appliances<small>Microwave oven at counter height or in wall</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <div class="col-md-12 col-lg-12 col-sm-12">
+                      <!-- blockquote -->
+                      <blockquote>
+                        <p>The microwave is currently located 17 meters above the ground. Needs to be lowered to a more
+                        manageable level, ideally on the counter next to the refridgerator.
+                      </blockquote>
+                    </div>
+                    <label>Difficulty:</label>
+                      <div class="progress">
+                        <div class="progress-bar progress-bar-success" data-transitiongoal="15"></div>
+                      </div>
+                      <button type="button" class="btn btn-success">Choose Contractor</button>
+                      <button type="button" class="btn btn-info">Edit Description</button>
+                      <button type="button" class="btn btn-warning">View Bids</button>
+                      <button type="button" class="btn btn-danger">Ignore</button>
+                    <div class="clearfix"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Stairways, Lifts, and Elevators<small>Residential elevator or lift </small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <div class="col-md-12 col-lg-12 col-sm-12">
+                      <!-- blockquote -->
+                      <blockquote>
+                        <p>The client's house has 6 floors and, as he is confined to his wheelchair, traversing the floors has become
+                        odious. A resedential elevator is to be installed in the main foyer adjacent to the main staircase. </p>
+                      </blockquote>
+                    </div>
+                    <label>Difficulty:</label>
+                      <div class="progress">
+                        <div class="progress-bar progress-bar-danger" data-transitiongoal="95"></div>
+                      </div>
+                      <button type="button" class="btn btn-success">Choose Contractor</button>
+                      <button type="button" class="btn btn-info">Edit Description</button>
+                      <button type="button" class="btn btn-warning">View Bids</button>
+                      <button type="button" class="btn btn-danger">Ignore</button>
+                    <div class="clearfix"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /page content -->
+{% endblock %}
+{% block footlibs %}
+    <!-- bootstrap-progressbar -->
+    <script src="{% static 'vendors/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
+    <!-- jQuery autocomplete -->
+    <script src="{% static 'vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js' %}"></script>
+{% endblock %}
+{% block scripts %}
+     <!-- jQuery autocomplete -->
+    <script>
+      $(document).ready(function() {
+        var categories = { home_exterior:"Home Exterior",floor_plan:"Overall Floot Plan",garage_or_carport:"Garage or Carport",windows:"Windows", thresholds: "Thresholds", entry: "Entry", ramps: "Ramps", hallways: "Hallways", stairways: "Stariways, Lifts, and Elevators", interior_doors: "Interior Doors", kitchen:"Kitchen and Laundry Counters", appliances: "Appliances", miscellaneous: "Miscellaneous", faucets: "Faucets", bathroom: "Bathroom", storage: "Storage", flooring: "Flooring", electrical: "Electrical, Lighting, Safety, and Secutiry", heating: "Heating, Ventilation, and Air Conditioning", energy: "Energy-Efiicient Features", reduced_maintenance: "Reduced Maintenance/Convenience Features"};
+
+        var categoriesArray = $.map(categories, function(value, key) {
+          return {
+            value: value,
+            data: key
+          };
+        });
+
+        // initialize autocomplete with custom appendTo
+        $('[id^=autocomplete-custom-append]').autocomplete({
+          lookup: categoriesArray
+        });
+      });
+    </script>
+    <!-- /jQuery autocomplete -->
+{% endblock %}

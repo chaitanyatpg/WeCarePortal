@@ -1,0 +1,1 @@
+web: gunicorn mycareportal.wsgi --log-file -

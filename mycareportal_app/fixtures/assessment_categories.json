@@ -1,0 +1,149 @@
+[
+	{
+		"model": "mycareportal_app.assessmentcategories",
+		"pk": 1,
+		"fields": {
+			"category": "Home Exterior"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmentcategories",
+		"pk": 2,
+		"fields": {
+			"category": "Overall Floor Plan"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmentcategories",
+		"pk": 3,
+		"fields": {
+			"category": "Garage or Carport"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmentcategories",
+		"pk": 4,
+		"fields": {
+			"category": "Windows"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmentcategories",
+		"pk": 5,
+		"fields": {
+			"category": "Thresholds"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmentcategories",
+		"pk": 6,
+		"fields": {
+			"category": "Entry"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmentcategories",
+		"pk": 7,
+		"fields": {
+			"category": "Ramps"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmentcategories",
+		"pk": 8,
+		"fields": {
+			"category": "Hallways"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmentcategories",
+		"pk": 9,
+		"fields": {
+			"category": "Stairways, Lifts, and Elevators"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmentcategories",
+		"pk": 10,
+		"fields": {
+			"category": "Interior Doors"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmentcategories",
+		"pk": 11,
+		"fields": {
+			"category": "Kitchen and Laundry Counters"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmentcategories",
+		"pk": 12,
+		"fields": {
+			"category": "Appliances"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmentcategories",
+		"pk": 13,
+		"fields": {
+			"category": "Miscellaneous"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmentcategories",
+		"pk": 14,
+		"fields": {
+			"category": "Faucets"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmentcategories",
+		"pk": 15,
+		"fields": {
+			"category": "Bathroom"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmentcategories",
+		"pk": 16,
+		"fields": {
+			"category": "Storage"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmentcategories",
+		"pk": 17,
+		"fields": {
+			"category": "Flooring"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmentcategories",
+		"pk": 18,
+		"fields": {
+			"category": "Electrical, Lighting, Safety, and Security"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmentcategories",
+		"pk": 19,
+		"fields": {
+			"category": "Heating, Ventilation, and Air Conditioning"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmentcategories",
+		"pk": 20,
+		"fields": {
+			"category": "Energy-Efficiant Features"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmentcategories",
+		"pk": 21,
+		"fields": {
+			"category": "Reduced Maintenance/Convenience Features"
+		}
+	}
+]

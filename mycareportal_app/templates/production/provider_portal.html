@@ -1,0 +1,636 @@
+{% extends "production/base.html" %}
+{% block title %} Provider Dashboard {% endblock %}
+{% load static %}
+{% block headlibs %}
+{% load static %}
+    <!-- bootstrap-daterangepicker -->
+    <link href="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+{% endblock %}
+{% block pagecontent %}
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>Provider Portal</h3>
+              </div>
+
+              <div class="title_right">
+                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                  <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search for...">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="button">Go!</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Client Details</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
+                      <div class="profile_img">
+                        <div id="crop-avatar">
+                          <!-- Current avatar -->
+                          <img class="img-responsive avatar-view" src="images/img.png" alt="Avatar" title="Change the avatar">
+                        </div>
+                      </div>
+                      <h3>Client Name</h3>
+
+                      <ul class="list-unstyled user_data">
+                        <li><i class="fa fa-map-marker user-profile-icon"></i> Somerville, New Jersey, USA
+                        </li>
+
+                        <li>
+                          <i class="fa fa-briefcase user-profile-icon"></i> Primary Caregiver: Caregiver Name
+                        </li>
+
+						<li>
+							<i class="fa fa-calendar user-profile-icon"></i> Last Appointment: 12/02/2016
+						</li>
+
+                      </ul>
+                      <br />
+
+                    </div>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+
+                      <div class="profile_title">
+                        <div class="col-md-6">
+                          <h2>Hours of Care</h2>
+                        </div>
+                        <div class="col-md-6">
+                          <div id="reportrange" class="pull-right" style="margin-top: 5px; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #E6E9ED">
+                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                            <span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- start of user-activity-graph -->
+                      <div id="graph_bar" style="width:100%; height:280px;"></div>
+                      <!-- end of user-activity-graph -->
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+			<!--End of Client Details -->
+			<div class="row">
+				<div class="col-md-6 col-sm-6 col-xs-12">
+					<div class="x_panel">
+					  <div class="x_title">
+						<h2>Incident Report</h2>
+						<ul class="nav navbar-right panel_toolbox">
+						  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+						  </li>
+						  <li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+							<ul class="dropdown-menu" role="menu">
+							  <li><a href="#">Settings 1</a>
+							  </li>
+							  <li><a href="#">Settings 2</a>
+							  </li>
+							</ul>
+						  </li>
+						  <li><a class="close-link"><i class="fa fa-close"></i></a>
+						  </li>
+						</ul>
+						<div class="clearfix"></div>
+					  </div>
+					  <div class="x_content">
+
+						<div id="echart_line" style="height:370px;"></div>
+
+					  </div>
+					</div>
+              </div>
+			  <div class="col-md-6 col-sm-6 col-xs-12">
+				<div class="x_panel">
+                  <div class="x_title">
+                    <h2>Nutrition Information</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <div id="echart_pyramid" style="height:370px;"></div>
+                  </div>
+                </div>
+			  </div>
+			</div>
+          </div>
+        </div>
+        <!-- /page content -->
+{% endblock %}
+{% block footlibs %}
+    <!-- morris.js -->
+    <script src="{% static 'vendors/raphael/raphael.min.js' %}"></script>
+    <script src="{% static 'vendors/morris.js/morris.min.js' %}"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="{% static 'vendors/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+    <!-- ECharts -->
+    <script src="{% static 'vendors/echarts/dist/echarts.min.js' %}"></script>
+    <script src="{% static 'vendors/echarts/map/js/world.js' %}"></script>
+{% endblock %}
+{% block scripts %}
+    <script>
+      $(function() {
+        Morris.Bar({
+          element: 'graph_bar',
+          data: [
+            { "period": "Monday", "Hours worked": 6 },
+            { "period": "Tuesday", "Hours worked": 7 },
+            { "period": "Wednesday", "Hours worked": 5 },
+            { "period": "Thursday", "Hours worked": 8 },
+            { "period": "Friday", "Hours worked": 8 },
+            { "period": "Saturday", "Hours worked": 5 },
+            { "period": "Sunday", "Hours worked": 5 }
+          ],
+          xkey: 'period',
+          hideHover: 'auto',
+          barColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
+          ykeys: ['Hours worked', 'sorned'],
+          labels: ['Hours worked', 'SORN'],
+          xLabelAngle: 60,
+          resize: true
+        });
+
+        $MENU_TOGGLE.on('click', function() {
+          $(window).resize();
+        });
+      });
+    </script>
+
+    <!-- datepicker -->
+    <script type="text/javascript">
+      $(document).ready(function() {
+
+        var cb = function(start, end, label) {
+          console.log(start.toISOString(), end.toISOString(), label);
+          $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+          //alert("Callback has fired: [" + start.format('MMMM D, YYYY') + " to " + end.format('MMMM D, YYYY') + ", label = " + label + "]");
+        }
+
+        var optionSet1 = {
+          startDate: moment().subtract(29, 'days'),
+          endDate: moment(),
+          minDate: '01/01/2012',
+          maxDate: '12/31/2015',
+          dateLimit: {
+            days: 60
+          },
+          showDropdowns: true,
+          showWeekNumbers: true,
+          timePicker: false,
+          timePickerIncrement: 1,
+          timePicker12Hour: true,
+          ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+          },
+          opens: 'left',
+          buttonClasses: ['btn btn-default'],
+          applyClass: 'btn-small btn-primary',
+          cancelClass: 'btn-small',
+          format: 'MM/DD/YYYY',
+          separator: ' to ',
+          locale: {
+            applyLabel: 'Submit',
+            cancelLabel: 'Clear',
+            fromLabel: 'From',
+            toLabel: 'To',
+            customRangeLabel: 'Custom',
+            daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+            monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            firstDay: 1
+          }
+        };
+        $('#reportrange span').html(moment().subtract(29, 'days').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+        $('#reportrange').daterangepicker(optionSet1, cb);
+        $('#reportrange').on('show.daterangepicker', function() {
+          console.log("show event fired");
+        });
+        $('#reportrange').on('hide.daterangepicker', function() {
+          console.log("hide event fired");
+        });
+        $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
+          console.log("apply event fired, start/end dates are " + picker.startDate.format('MMMM D, YYYY') + " to " + picker.endDate.format('MMMM D, YYYY'));
+        });
+        $('#reportrange').on('cancel.daterangepicker', function(ev, picker) {
+          console.log("cancel event fired");
+        });
+        $('#options1').click(function() {
+          $('#reportrange').data('daterangepicker').setOptions(optionSet1, cb);
+        });
+        $('#options2').click(function() {
+          $('#reportrange').data('daterangepicker').setOptions(optionSet2, cb);
+        });
+        $('#destroy').click(function() {
+          $('#reportrange').data('daterangepicker').remove();
+        });
+      });
+    </script>
+    <!-- /datepicker -->
+
+	<!-- charts -->
+	<script>
+      var theme = {
+          color: [
+              '#26B99A', '#34495E', '#BDC3C7', '#3498DB',
+              '#9B59B6', '#8abb6f', '#759c6a', '#bfd3b7'
+          ],
+
+          title: {
+              itemGap: 8,
+              textStyle: {
+                  fontWeight: 'normal',
+                  color: '#408829'
+              }
+          },
+
+          dataRange: {
+              color: ['#1f610a', '#97b58d']
+          },
+
+          toolbox: {
+              color: ['#408829', '#408829', '#408829', '#408829']
+          },
+
+          tooltip: {
+              backgroundColor: 'rgba(0,0,0,0.5)',
+              axisPointer: {
+                  type: 'line',
+                  lineStyle: {
+                      color: '#408829',
+                      type: 'dashed'
+                  },
+                  crossStyle: {
+                      color: '#408829'
+                  },
+                  shadowStyle: {
+                      color: 'rgba(200,200,200,0.3)'
+                  }
+              }
+          },
+
+          dataZoom: {
+              dataBackgroundColor: '#eee',
+              fillerColor: 'rgba(64,136,41,0.2)',
+              handleColor: '#408829'
+          },
+          grid: {
+              borderWidth: 0
+          },
+
+          categoryAxis: {
+              axisLine: {
+                  lineStyle: {
+                      color: '#408829'
+                  }
+              },
+              splitLine: {
+                  lineStyle: {
+                      color: ['#eee']
+                  }
+              }
+          },
+
+          valueAxis: {
+              axisLine: {
+                  lineStyle: {
+                      color: '#408829'
+                  }
+              },
+              splitArea: {
+                  show: true,
+                  areaStyle: {
+                      color: ['rgba(250,250,250,0.1)', 'rgba(200,200,200,0.1)']
+                  }
+              },
+              splitLine: {
+                  lineStyle: {
+                      color: ['#eee']
+                  }
+              }
+          },
+          timeline: {
+              lineStyle: {
+                  color: '#408829'
+              },
+              controlStyle: {
+                  normal: {color: '#408829'},
+                  emphasis: {color: '#408829'}
+              }
+          },
+
+          k: {
+              itemStyle: {
+                  normal: {
+                      color: '#68a54a',
+                      color0: '#a9cba2',
+                      lineStyle: {
+                          width: 1,
+                          color: '#408829',
+                          color0: '#86b379'
+                      }
+                  }
+              }
+          },
+          map: {
+              itemStyle: {
+                  normal: {
+                      areaStyle: {
+                          color: '#ddd'
+                      },
+                      label: {
+                          textStyle: {
+                              color: '#c12e34'
+                          }
+                      }
+                  },
+                  emphasis: {
+                      areaStyle: {
+                          color: '#99d2dd'
+                      },
+                      label: {
+                          textStyle: {
+                              color: '#c12e34'
+                          }
+                      }
+                  }
+              }
+          },
+          force: {
+              itemStyle: {
+                  normal: {
+                      linkStyle: {
+                          strokeColor: '#408829'
+                      }
+                  }
+              }
+          },
+          chord: {
+              padding: 4,
+              itemStyle: {
+                  normal: {
+                      lineStyle: {
+                          width: 1,
+                          color: 'rgba(128, 128, 128, 0.5)'
+                      },
+                      chordStyle: {
+                          lineStyle: {
+                              width: 1,
+                              color: 'rgba(128, 128, 128, 0.5)'
+                          }
+                      }
+                  },
+                  emphasis: {
+                      lineStyle: {
+                          width: 1,
+                          color: 'rgba(128, 128, 128, 0.5)'
+                      },
+                      chordStyle: {
+                          lineStyle: {
+                              width: 1,
+                              color: 'rgba(128, 128, 128, 0.5)'
+                          }
+                      }
+                  }
+              }
+          },
+          gauge: {
+              startAngle: 225,
+              endAngle: -45,
+              axisLine: {
+                  show: true,
+                  lineStyle: {
+                      color: [[0.2, '#86b379'], [0.8, '#68a54a'], [1, '#408829']],
+                      width: 8
+                  }
+              },
+              axisTick: {
+                  splitNumber: 10,
+                  length: 12,
+                  lineStyle: {
+                      color: 'auto'
+                  }
+              },
+              axisLabel: {
+                  textStyle: {
+                      color: 'auto'
+                  }
+              },
+              splitLine: {
+                  length: 18,
+                  lineStyle: {
+                      color: 'auto'
+                  }
+              },
+              pointer: {
+                  length: '90%',
+                  color: 'auto'
+              },
+              title: {
+                  textStyle: {
+                      color: '#333'
+                  }
+              },
+              detail: {
+                  textStyle: {
+                      color: 'auto'
+                  }
+              }
+          },
+          textStyle: {
+              fontFamily: 'Arial, Verdana, sans-serif'
+          }
+      };
+
+      var echartLine = echarts.init(document.getElementById('echart_line'), theme);
+
+      echartLine.setOption({
+        title: {
+          text: '',
+          subtext: ''
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        legend: {
+          x: 50,
+          y: 30,
+          data: ['Incidents', 'Tasks Missed', 'Doctors Appointments']
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            magicType: {
+              show: true,
+              title: {
+                line: 'Line',
+                bar: 'Bar',
+                stack: 'Stack',
+                tiled: 'Tiled'
+              },
+              type: ['line', 'bar', 'stack']
+            },
+            restore: {
+              show: true,
+              title: "Restore"
+            },
+            saveAsImage: {
+              show: true,
+              title: "Save Image"
+            }
+          }
+        },
+        calculable: true,
+        xAxis: [{
+          type: 'category',
+          boundaryGap: false,
+          data: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+        }],
+        yAxis: [{
+          type: 'value'
+        }],
+        series: [{
+          name: 'Doctors Appointments',
+          type: 'line',
+          smooth: true,
+          itemStyle: {
+            normal: {
+              areaStyle: {
+                type: 'default'
+              }
+            }
+          },
+          data: [10, 12, 21, 54, 26, 83, 71, 60, 70, 80, 90, 13]
+        }, {
+          name: 'Tasks Missed',
+          type: 'line',
+          smooth: true,
+          itemStyle: {
+            normal: {
+              areaStyle: {
+                type: 'default'
+              }
+            }
+          },
+          data: [30, 18, 43, 71, 39, 30, 10, 45, 34, 23, 11, 10]
+        }, {
+          name: 'Incidents',
+          type: 'line',
+          smooth: true,
+          itemStyle: {
+            normal: {
+              areaStyle: {
+                type: 'default'
+              }
+            }
+          },
+          data: [10, 12, 61, 23, 12, 9, 2, 9, 12, 33, 12, 43]
+        }]
+      });
+
+	  var echartFunnel = echarts.init(document.getElementById('echart_pyramid'), theme);
+
+      echartFunnel.setOption({
+        title: {
+          text: 'Nutrition by Food Group',
+          subtext: ''
+        },
+        tooltip: {
+          trigger: 'item',
+          formatter: "{a} <br/>{b} : {c}%"
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            restore: {
+              show: true,
+              title: "Restore"
+            },
+            saveAsImage: {
+              show: true,
+              title: "Save Image"
+            }
+          }
+        },
+        legend: {
+          data: ['Grains', 'Protein', 'Vegetables', 'Fruits', 'Dairy'],
+          orient: 'vertical',
+          x: 'left',
+          y: 'bottom'
+        },
+        calculable: true,
+        series: [{
+          name: '漏斗图',
+          type: 'funnel',
+          width: '40%',
+          data: [{
+            value: 100,
+            name: 'Grains'
+          }, {
+            value: 80,
+            name: 'Protein'
+          }, {
+            value: 70,
+            name: 'Vegetables'
+          }, {
+            value: 50,
+            name: 'Fruits'
+          }, {
+            value: 20,
+            name: 'Dairy'
+          }]
+        }]
+      });
+
+    </script>
+	<!-- end charts -->
+{% endblock %}

@@ -1,0 +1,193 @@
+{% extends "production/base.html" %}
+{% block title %} Update Projects {% endblock %}
+{% load static %}
+{% block headlibs %}
+{% load static %}
+    <!-- iCheck -->
+    <link href="{% static 'vendors/iCheck/skins/flat/green.css' %}" rel="stylesheet">
+{% endblock %}
+{% block pagecontent %}
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>Ongoing Projects <small></small></h3>
+              </div>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Projects</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <!-- start project list -->
+                    <table class="table table-striped projects">
+                      <thead>
+                        <tr>
+                          <th style="width: 20%">Project Category</th>
+                          <th>Description</th>
+                          <th>Progress</th>
+                          <th>Status</th>
+                          <th style="width: 10%">Edit</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <a>Home Exterior</a>
+                            <br />
+                            <small>Low-Maintenance exterior(vinyl, brick)</small>
+                            <br />
+                            <small>Started 01.01.2015</small>
+                          </td>
+                          <td>
+                            <p>
+                              Current plywood home exterior is not maintainable and prone to degradation. Should be replaced with brick.
+                            </p>
+                          </td>
+                          <td class="project_progress">
+                            <div class="progress progress_sm">
+                              <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="57"></div>
+                            </div>
+                            <small>57% Complete</small>
+                          </td>
+                          <td>
+                            <button type="button" class="btn btn-info btn-xs">Ongoing</button>
+                          </td>
+                          <td>
+                            <a href="project_view.html" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <a>Windows</a>
+                            <br />
+                            <small>Easy to operate hardware</small>
+                            <br />
+                            <small>Started 01.01.2015</small>
+                          </td>
+                          <td>
+                            <p>
+                            Current windows are impossible to open! Additionally, the crank for opening and closing the blinds are unintuitive. Should be replaced with a more modern installation.
+                            </p>
+                          </td>
+                          <td class="project_progress">
+                            <div class="progress progress_sm">
+                              <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="47"></div>
+                            </div>
+                            <small>47% Complete</small>
+                          </td>
+                          <td>
+                            <button type="button" class="btn btn-danger btn-xs">Canceled</button>
+                          </td>
+                          <td>
+                            <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <a>Entry</a>
+                            <br />
+                            <small>At least one no-step entry with a cover</small>
+                            <br />
+                            <small>Started 01.01.2015</small>
+                          </td>
+                          <td>
+                            <p>
+                            There are currently no entries without steps. Need to build a ramp to the left of the main entrance with handrails on the sides.
+                            </p>
+                          </td>
+                          <td class="project_progress">
+                            <div class="progress progress_sm">
+                              <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="77"></div>
+                            </div>
+                            <small>77% Complete</small>
+                          </td>
+                          <td>
+                            <button type="button" class="btn btn-warning btn-xs">On Hold</button>
+                          </td>
+                          <td>
+                            <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <a>Appliances</a>
+                            <br />
+                            <small>Microwave oven at counter height or in wall</small>
+                            <br />
+                            <small>Started 01.01.2015</small>
+                          </td>
+                          <td>
+                            <p>
+                            The microwave is currently located 17 meters above the ground. Needs to be lowered to a more manageable level, ideally on the counter next to the refridgerator.
+                            </p>
+                          </td>
+                          <td class="project_progress">
+                            <div class="progress progress_sm">
+                              <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="60"></div>
+                            </div>
+                            <small>60% Complete</small>
+                          </td>
+                          <td>
+                            <button type="button" class="btn btn-info btn-xs">Ongoing</button>
+                          </td>
+                          <td>
+                            <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <a>Stairways, Lifts, and Elevators</a>
+                            <br />
+                            <small>Residential elevator or lift</small>
+                            <br />
+                            <small>Started 01.01.2015</small>
+                          </td>
+                          <td>
+                            <p>
+                            The client's house has 6 floors and, as he is confined to his wheelchair, traversing the floors has become odious. A resedential elevator is to be installed in the main foyer adjacent to the main staircase.
+                            </p>
+                          </td>
+                          <td class="project_progress">
+                            <div class="progress progress_sm">
+                              <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="100"></div>
+                            </div>
+                            <small>100% Complete</small>
+                          </td>
+                          <td>
+                            <button type="button" class="btn btn-success btn-xs">Success</button>
+                          </td>
+                          <td>
+                            <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <!-- end project list -->
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /page content -->
+{% endblock %}
+{% block footlibs %}
+    <!-- bootstrap-progressbar -->
+    <script src="{% static 'vendors/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
+{% endblock %}
+{% block scripts %}
+{% endblock %}

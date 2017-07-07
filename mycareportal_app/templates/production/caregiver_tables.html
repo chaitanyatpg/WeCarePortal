@@ -1,0 +1,199 @@
+{% extends "production/base.html" %}
+{% block title %} Select Caregiver {% endblock %}
+{% load mycareportal_app_extras%}
+{% block headlibs %}
+{% load static %}
+    <!-- iCheck -->
+    <link href="{% static 'vendors/iCheck/skins/flat/green.css' %}" rel="stylesheet">
+    <!-- Datatables -->
+    <link href="{% static 'vendors/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css' %}" rel="stylesheet">
+{% endblock %}
+{% block pagecontent %}
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>Caregivers</h3>
+              </div>
+            </div>
+
+            <div class="clearfix"></div>
+
+
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Caregiver Table</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <table id="datatable" class="table table-striped table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Number</th>
+                          <th>Email</th>
+                          <th>Rating</th>
+                          <th>Assign</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <!--<tr>
+                          <td>Tiger Nixon</td>
+                          <td>732-123-4567</td>
+                          <td>info@wecareportal.com</td>
+                          <td>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star-o"></span>
+                          </td>
+                          <td><a href="#">Assign</a></td>
+                        </tr>-->
+
+                        {% for caregiver in all_caregivers %}
+                          <form method="post" action="{% url 'choose_caregiver' %}">
+                            {% csrf_token %}
+                            <tr>
+                              <input type="hidden" name="{{assign_caregiver_form.client_email.html_name}}" value={{client_email}}>
+                              <td>{{caregiver.user.first_name|addstr_space:caregiver.user.last_name}}</td>
+                              <td>{{caregiver.phone_number}}</td>
+                              <td>
+                                <input type="hidden" name="{{assign_caregiver_form.caregiver_email.html_name}}" value="{{caregiver.email_address}}">
+                                {{caregiver.email_address}}
+                              </td>
+                              <td>
+                                {% for star in caregiver.rating|num_loop %}
+                                  <span class="fa fa-star"></span>
+                                {% endfor %}
+                              </td>
+                              <!--<td><a href="#">Assign</a></td>-->
+                              <!--<td><button type="submit" class="btn btn-success">Assign</button></td>-->
+                              {% if caregiver in assigned_caregivers %}
+                                <input type="hidden" name="{{assign_caregiver_form.is_unassign.html_name}}" value="True">
+                                <td><input class="btn-danger" type="submit" value="Unassign"></td>
+                              {% else %}
+                                <input type="hidden" name="{{assign_caregiver_form.is_unassign.html_name}}" value="False">
+                                <td><input type="submit" value="Assign"></td>
+                              {% endif %}
+                            </tr>
+                          </form>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /page content -->
+{% endblock %}
+{% block footlibs %}
+    <!-- iCheck -->
+    <script src="{% static 'vendors/iCheck/icheck.min.js' %}"></script>
+    <!-- Datatables -->
+    <script src="{% static 'vendors/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-buttons/js/buttons.flash.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-buttons/js/buttons.html5.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-buttons/js/buttons.print.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-keytable/js/dataTables.keyTable.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-scroller/js/datatables.scroller.min.js' %}"></script>
+    <script src="{% static 'vendors/jszip/dist/jszip.min.js' %}"></script>
+    <script src="{% static 'vendors/pdfmake/build/pdfmake.min.js' %}"></script>
+    <script src="{% static 'vendors/pdfmake/build/vfs_fonts.js' %}"></script>
+{% endblock %}
+{% block scripts %}
+    <script>
+      $(document).read(function(){
+        $('#datatable').DataTable();
+      });
+    </script>
+
+    <!-- Datatables -->
+    <!--<script>
+      $(document).ready(function() {
+        var handleDataTableButtons = function() {
+          if ($("#datatable-buttons").length) {
+            $("#datatable-buttons").DataTable({
+              dom: "Bfrtip",
+              buttons: [
+                {
+                  extend: "copy",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "csv",
+                  className: "btn-sm"
+                }
+              ],
+              responsive: true
+            });
+          }
+        };
+
+        TableManageButtons = function() {
+          "use strict";
+          return {
+            init: function() {
+              handleDataTableButtons();
+            }
+          };
+        }();
+
+        $('#datatable').dataTable();
+
+        $('#datatable-keytable').DataTable({
+          keys: true
+        });
+
+        $('#datatable-responsive').DataTable();
+
+        $('#datatable-scroller').DataTable({
+          ajax: "js/datatables/json/scroller-demo.json",
+          deferRender: true,
+          scrollY: 380,
+          scrollCollapse: true,
+          scroller: true
+        });
+
+        $('#datatable-fixed-header').DataTable({
+          fixedHeader: true
+        });
+
+        var $datatable = $('#datatable-checkbox');
+
+        $datatable.dataTable({
+          'order': [[ 1, 'asc' ]],
+          'columnDefs': [
+            { orderable: false, targets: [0] }
+          ]
+        });
+        $datatable.on('draw.dt', function() {
+          $('input').iCheck({
+            checkboxClass: 'icheckbox_flat-green'
+          });
+        });
+
+        TableManageButtons.init();
+      });
+    </script>-->
+    <!-- /Datatables -->
+{% endblock %}

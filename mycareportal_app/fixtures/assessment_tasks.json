@@ -1,0 +1,1028 @@
+[
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 1,
+		"fields": {
+			"assessment_category": "1",
+			"assessment_task": "Low-Maintenance exterior (vinyl, brick)",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 2,
+		"fields": {
+			"assessment_category": "1",
+			"assessment_task": "Low-Maintenance shrubs and plants",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 3,
+		"fields": {
+			"assessment_category": "1",
+			"assessment_task": "Deck, patio, or balcony surfaces are no more than 1/2 inch below interior floor level if made of wood",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 4,
+		"fields": {
+			"assessment_category": "2",
+			"assessment_task": "Main living on a single story, including full bath",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 5,
+		"fields": {
+			"assessment_category": "2",
+			"assessment_task": "No steps between rooms/areas on the same level",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 6,
+		"fields": {
+			"assessment_category": "2",
+			"assessment_task": "5-foot by 5-foot clean/turn space in living area, kitchen, a bedroom, and a bathroom",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 7,
+		"fields": {
+			"assessment_category": "3",
+			"assessment_task": "Covered carports and boarding spaces",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 8,
+		"fields": {
+			"assessment_category": "3",
+			"assessment_task": "Wider than average carports to accommodate lifts on vans",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 9,
+		"fields": {
+			"assessment_category": "3",
+			"assessment_task": "Door heights may need to be nine feet to accommodate some raised roof vans",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 10,
+		"fields": {
+			"assessment_category": "3",
+			"assessment_task": "Five-foot minimum access aisle between accessible van and car in garage",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 11,
+		"fields": {
+			"assessment_category": "3",
+			"assessment_task": "If code requires floor to be several inches below entrace to house for fume protection, can slope entire floor from front to back to eliminate need for ramp or step",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 12,
+		"fields": {
+			"assessment_category": "3",
+			"assessment_task": "Ramp to doorway if needed",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 13,
+		"fields": {
+			"assessment_category": "3",
+			"assessment_task": "Handrail (if steps)",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 14,
+		"fields": {
+			"assessment_category": "4",
+			"assessment_task": "Plenty of windows for natural light",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 15,
+		"fields": {
+			"assessment_category": "4",
+			"assessment_task": "Lowered windows or taller windows with lower sill height",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 16,
+		"fields": {
+			"assessment_category": "4",
+			"assessment_task": "Low maintenance exterior and interior finishes",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 17,
+		"fields": {
+			"assessment_category": "4",
+			"assessment_task": "Easy to operate hardware",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 18,
+		"fields": {
+			"assessment_category": "5",
+			"assessment_task": "Flush to the ground",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 19,
+		"fields": {
+			"assessment_category": "5",
+			"assessment_task": "Exterior maximum of 1/2 inch beveled",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 20,
+		"fields": {
+			"assessment_category": "5",
+			"assessment_task": "Interior maximum of 1/4 inch",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 21,
+		"fields": {
+			"assessment_category": "6",
+			"assessment_task": "Accessible path of travel to the home",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 22,
+		"fields": {
+			"assessment_category": "6",
+			"assessment_task": "At least one no-step entry with a cover",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 23,
+		"fields": {
+			"assessment_category": "6",
+			"assessment_task": "Sensor light at exterior no-step entry focusing on the frnot-door lock",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 24,
+		"fields": {
+			"assessment_category": "6",
+			"assessment_task": "32 inches of clear width (which requires a 36-inch door)",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 25,
+		"fields": {
+			"assessment_category": "6",
+			"assessment_task": "Non-slip flooring in foyer",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 26,
+		"fields": {
+			"assessment_category": "6",
+			"assessment_task": "Entry door sidelight or high/low peep hole viewer; sidelight should provide both privacy and safety",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 27,
+		"fields": {
+			"assessment_category": "6",
+			"assessment_task": "Doorbell in accessible location",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 28,
+		"fields": {
+			"assessment_category": "6",
+			"assessment_task": "Surface to place packages on when opening door",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 29,
+		"fields": {
+			"assessment_category": "7",
+			"assessment_task": "Slope no greater than one inch rise for each 23 inches in length, adequate handrails",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 30,
+		"fields": {
+			"assessment_category": "7",
+			"assessment_task": "Five-foot landing provided at entrance",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 31,
+		"fields": {
+			"assessment_category": "7",
+			"assessment_task": "Two-inch curbs for safety",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 32,
+		"fields": {
+			"assessment_category": "8",
+			"assessment_task": "Minimum of 36 inches wide",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 33,
+		"fields": {
+			"assessment_category": "8",
+			"assessment_task": "Well lit",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 34,
+		"fields": {
+			"assessment_category": "9",
+			"assessment_task": "Adequate hand rails on both sides of stairway, 1 1/4-inch diameter",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 35,
+		"fields": {
+			"assessment_category": "9",
+			"assessment_task": "Increased visibility of stairs through contrast strip on top and bottom stairs, color contrast between treads and risers on stairs and use of lighting",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 36,
+		"fields": {
+			"assessment_category": "9",
+			"assessment_task": "Multi-story homes may provide either pre-framed shaft (ie. stacked closets) for future elevator, or stairway width must be minimum of 4 feet to allow space to lift",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 37,
+		"fields": {
+			"assessment_category": "9",
+			"assessment_task": "Resedential elevator or lift",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 38,
+		"fields": {
+			"assessment_category": "10",
+			"assessment_task": "32 inches of clear width (which requires a 35-inch door)",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 39,
+		"fields": {
+			"assessment_category": "10",
+			"assessment_task": "Levered door hardware",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 40,
+		"fields": {
+			"assessment_category": "11",
+			"assessment_task": "Wall support and provision for adjustable and/or varied height counters and removable base cabinets",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 41,
+		"fields": {
+			"assessment_category": "11",
+			"assessment_task": "Upper wall cabinetry three inches lower than conventional height",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 42,
+		"fields": {
+			"assessment_category": "11",
+			"assessment_task": "Accented stripes on edge of countertops to provide visual orientation to the workspace",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 43,
+		"fields": {
+			"assessment_category": "11",
+			"assessment_task": "Counter space for dish landing adjacent to or opposite all appliances",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 44,
+		"fields": {
+			"assessment_category": "11",
+			"assessment_task": "Base cabinet with roll out trays and lazy susans",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 45,
+		"fields": {
+			"assessment_category": "11",
+			"assessment_task": "Pull-down shelving",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 46,
+		"fields": {
+			"assessment_category": "11",
+			"assessment_task": "Glass-front cabinet doors",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 47,
+		"fields": {
+			"assessment_category": "11",
+			"assessment_task": "Open shelving for easy access to frequently used items",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 48,
+		"fields": {
+			"assessment_category": "12",
+			"assessment_task": "Easy to read controls",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 49,
+		"fields": {
+			"assessment_category": "12",
+			"assessment_task": "Washing machine and dryer raised 12 to 15 inches above floor",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 50,
+		"fields": {
+			"assessment_category": "12",
+			"assessment_task": "Front loading laundry machines",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 51,
+		"fields": {
+			"assessment_category": "12",
+			"assessment_task": "Microwave oven at counter height or in wall",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 52,
+		"fields": {
+			"assessment_category": "12",
+			"assessment_task": "Side-by-side refridgerator/freezer",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 53,
+		"fields": {
+			"assessment_category": "12",
+			"assessment_task": "Side-swing or wall oven",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 54,
+		"fields": {
+			"assessment_category": "12",
+			"assessment_task": "Raised dishwasher with pushbutton controls",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 55,
+		"fields": {
+			"assessment_category": "12",
+			"assessment_task": "Electric cook top with level burners for safety in transferring between the burners, front controls and downdraft feature to pull heat away from user; light to indicate when surface is hot",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 56,
+		"fields": {
+			"assessment_category": "13",
+			"assessment_task": "30-inch by 48-inch clear space at appliances or 60-inch diameter clear space for turns",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 57,
+		"fields": {
+			"assessment_category": "13",
+			"assessment_task": "Multi-level work areas to accommodate cooks of different heights",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 58,
+		"fields": {
+			"assessment_category": "13",
+			"assessment_task": "Open under-counter seated work areas",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 59,
+		"fields": {
+			"assessment_category": "13",
+			"assessment_task": "Placement of task lighting in appropriate work areas",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 60,
+		"fields": {
+			"assessment_category": "13",
+			"assessment_task": "Loop handles for easy grip and pull",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 61,
+		"fields": {
+			"assessment_category": "13",
+			"assessment_task": "Pull-out spray faucet; levered handles",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 62,
+		"fields": {
+			"assessment_category": "13",
+			"assessment_task": "In multi-story homes, laundry chute or laundry facilities in master bedroom",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 63,
+		"fields": {
+			"assessment_category": "14",
+			"assessment_task": "Lever handles or pedal-controlled",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 64,
+		"fields": {
+			"assessment_category": "14",
+			"assessment_task": "Thermostatic or anti-scald controls",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 65,
+		"fields": {
+			"assessment_category": "14",
+			"assessment_task": "Pressure balanced faucets",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 66,
+		"fields": {
+			"assessment_category": "15",
+			"assessment_task": "Wall support and provision for adjustable and/or varied height counters and removable base cabinets",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 67,
+		"fields": {
+			"assessment_category": "15",
+			"assessment_task": "Contrasting color edge border at countertops",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 68,
+		"fields": {
+			"assessment_category": "15",
+			"assessment_task": "At least one wheelchair maneuverable bath on main level with 60-inch turning radius or acceptable T-turn space and 36-inch by 36-inch or 30-inch by 48-inch clear space",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 69,
+		"fields": {
+			"assessment_category": "15",
+			"assessment_task": "Bracing in walls around tub, shower, shower seat, and toilet for installation of grab bars ato support 250-300 pounds",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 70,
+		"fields": {
+			"assessment_category": "15",
+			"assessment_task": "If stand-up shower is used in main bath, it is curbless and minimum of 36 inches wide",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 71,
+		"fields": {
+			"assessment_category": "15",
+			"assessment_task": "Bathtub - lower for easier access",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 72,
+		"fields": {
+			"assessment_category": "15",
+			"assessment_task": "Fold down seat in the shower",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 73,
+		"fields": {
+			"assessment_category": "15",
+			"assessment_task": "Adjustable/handheld showerheads, 6-foot hose",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 74,
+		"fields": {
+			"assessment_category": "15",
+			"assessment_task": "Tub/Shower controls offset from center",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 75,
+		"fields": {
+			"assessment_category": "15",
+			"assessment_task": "Shower stall with built-in antibacterial protection",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 76,
+		"fields": {
+			"assessment_category": "15",
+			"assessment_task": "Light in shower stall",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 77,
+		"fields": {
+			"assessment_category": "15",
+			"assessment_task": "Toilet 2 1/2 inches higher than standard toilet (17 to 19 inches) or height-adjustable",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 78,
+		"fields": {
+			"assessment_category": "15",
+			"assessment_task": "Design of the toilet paper holder allows rolls to be changed with one hand",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 79,
+		"fields": {
+			"assessment_category": "15",
+			"assessment_task": "Wall-hung sink with knee space and panel to protect user from pipes",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 80,
+		"fields": {
+			"assessment_category": "15",
+			"assessment_task": "Slip-resistant flooring in bathroom and shower",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 81,
+		"fields": {
+			"assessment_category": "16",
+			"assessment_task": "Adjustable closet rods and shelves",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 82,
+		"fields": {
+			"assessment_category": "16",
+			"assessment_task": "Lighting in closets",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 83,
+		"fields": {
+			"assessment_category": "16",
+			"assessment_task": "Easy open doors that do not obstruct access",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 84,
+		"fields": {
+			"assessment_category": "17",
+			"assessment_task": "Smooth, non-glare, slip-resistant surface, interior and exterior",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 85,
+		"fields": {
+			"assessment_category": "17",
+			"assessment_task": "If carpeted, use low (less than 1/2 inch high pile) density, with firm pad",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 86,
+		"fields": {
+			"assessment_category": "17",
+			"assessment_task": "Color/texture contrast to indicate change in surface levels",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 87,
+		"fields": {
+			"assessment_category": "18",
+			"assessment_task": "Light switches by each entrace to halls and rooms",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 88,
+		"fields": {
+			"assessment_category": "18",
+			"assessment_task": "Light receptacles with at least two bulbs in vital places (exits, bathrooms)",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 89,
+		"fields": {
+			"assessment_category": "18",
+			"assessment_task": "Light switches, thermostats, and other environmental controls placed in accessible locations no higher than 48 inches from floor",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 90,
+		"fields": {
+			"assessment_category": "18",
+			"assessment_task": "Electrical outlets 15 inches on center from floor; may need to be closer than 12 feet apart",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 91,
+		"fields": {
+			"assessment_category": "18",
+			"assessment_task": "Clear access space of 30 inches by 48 incehs in front of switches and controls",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 92,
+		"fields": {
+			"assessment_category": "18",
+			"assessment_task": "Rocker or touch light switches",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 93,
+		"fields": {
+			"assessment_category": "18",
+			"assessment_task": "Audible and visual strobe light system to indicate when the doorbell, telephone, smoke or CO2 detectors have been activated",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 94,
+		"fields": {
+			"assessment_category": "18",
+			"assessment_task": "High-tech security/intercom system that can be monitored, with the heating, air conditioning, and lighting, from any TV in the house",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 95,
+		"fields": {
+			"assessment_category": "18",
+			"assessment_task": "Easy-to-see and read thermostats",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 96,
+		"fields": {
+			"assessment_category": "18",
+			"assessment_task": "Pre-programmed thermostats",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 97,
+		"fields": {
+			"assessment_category": "18",
+			"assessment_task": "Flashing porch light or 911 switch",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 98,
+		"fields": {
+			"assessment_category": "18",
+			"assessment_task": "Direct wired to police, fire, and EMS (as option)",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 99,
+		"fields": {
+			"assessment_category": "18",
+			"assessment_task": "Home wired for security",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 100,
+		"fields": {
+			"assessment_category": "18",
+			"assessment_task": "Home wired for computers",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 101,
+		"fields": {
+			"assessment_category": "19",
+			"assessment_task": "HVAC should be designed so filters are easily accessible",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 102,
+		"fields": {
+			"assessment_category": "19",
+			"assessment_task": "Energy-efficient units",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 103,
+		"fields": {
+			"assessment_category": "19",
+			"assessment_task": "Windows that can be opened for cross ventilation, fresh air",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 104,
+		"fields": {
+			"assessment_category": "20",
+			"assessment_task": "In-line framing with two by six studs spaced 24-inch on center",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 105,
+		"fields": {
+			"assessment_category": "20",
+			"assessment_task": "Air-barrier installation and sealing of duct work with mastic",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 106,
+		"fields": {
+			"assessment_category": "20",
+			"assessment_task": "Reduced-size air conditioning units with gas furnaces",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 107,
+		"fields": {
+			"assessment_category": "20",
+			"assessment_task": "Mechanical fresh air ventilation, installation of air returns in all bedrooms and use of carbon monoxide detectors",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 108,
+		"fields": {
+			"assessment_category": "20",
+			"assessment_task": "Installation of energy efficient windows with Low-E glass",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 109,
+		"fields": {
+			"assessment_category": "21",
+			"assessment_task": "Easy to clean surfaces",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 110,
+		"fields": {
+			"assessment_category": "21",
+			"assessment_task": "Central vacuum",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 111,
+		"fields": {
+			"assessment_category": "21",
+			"assessment_task": "Built-in pet feeding system",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 112,
+		"fields": {
+			"assessment_category": "21",
+			"assessment_task": "Built-in recycling system",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 113,
+		"fields": {
+			"assessment_category": "21",
+			"assessment_task": "Video phones",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.assessmenttask",
+		"pk": 114,
+		"fields": {
+			"assessment_category": "21",
+			"assessment_task": "Intercom system",
+			"is_default": "True"
+		}
+	}
+]

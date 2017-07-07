@@ -1,0 +1,487 @@
+{% extends "production/base.html" %}
+{% block title %} Caregiver Dashboard {% endblock %}
+{% load mycareportal_app_extras%}
+{% block headlibs %}
+{% load static %}
+    <!-- bootstrap-wysiwyg -->
+    <link href="{% static 'vendors/google-code-prettify/bin/prettify.min.css' %}" rel="stylesheet">
+    <!-- Select2 -->
+    <link href="{% static 'vendors/select2/dist/css/select2.min.css' %}" rel="stylesheet">
+    <!-- Switchery -->
+    <link href="{% static 'vendors/switchery/dist/switchery.min.css' %}" rel="stylesheet">
+    <!-- starrr -->
+    <link href="{% static 'vendors/starrr/dist/starrr.css' %}" rel="stylesheet">
+    <!-- bootstrap-daterangepicker -->
+    <link href="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+{% endblock %}
+{% block pagecontent %}
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>Dashboard</h3>
+              </div>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Daily Report</h2>
+                    <!--<ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                    </ul>-->
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
+                      <div class="profile_img">
+                        <div id="crop-avatar">
+                          <!-- Current avatar -->
+                          <img class="img-responsive avatar-view" src="{{caregiver_data.profile_picture}}" alt="Avatar" title="Change the avatar">
+                        </div>
+                      </div>
+                      <h3>{{caregiver_data.name}}</h3>
+
+                      <ul class="list-unstyled user_data">
+                        <li><i class="fa fa-map-marker user-profile-icon"></i> {{caregiver_data.address}}
+                        </li>
+                        <li><i class="fa fa-mobile-phone user-profile-icon"></i> {{caregiver_data.phone_number}}
+                        </li>
+                        <li><i class="fa fa-calendar user-profile-icon"></i> {{caregiver_data.date_of_birth}}
+                        </li>
+                        <li><i class="fa fa-male user-profile-icon"></i><i class="fa fa-female user-profile-icon"></i> {{caregiver_data.gender}}
+                        </li>
+                        <!--<li>
+                          <i class="fa fa-briefcase user-profile-icon"></i> Nurse
+                        </li>
+
+                        <li class="m-top-xs">
+                          <i class="fa fa-external-link user-profile-icon"></i>
+                          <a href="http://www.wecareportal.com" target="_blank">www.wecare.com</a>
+                        </li>-->
+                      </ul>
+                      <br />
+
+                      <!-- start skills -->
+                      <!--<h4>Skills</h4>
+                      <ul class="list-unstyled user_data">
+                        <li>
+                          <p>Web Applications</p>
+                          <div class="progress progress_sm">
+                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="50"></div>
+                          </div>
+                        </li>
+                        <li>
+                          <p>Website Design</p>
+                          <div class="progress progress_sm">
+                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="70"></div>
+                          </div>
+                        </li>
+                        <li>
+                          <p>Python</p>
+                          <div class="progress progress_sm">
+                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="100"></div>
+                          </div>
+                        </li>
+                        <li>
+                          <p>UI / UX</p>
+                          <div class="progress progress_sm">
+                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="50"></div>
+                          </div>
+                        </li>
+                      </ul>-->
+                      <!-- end of skills -->
+
+                    </div>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+
+                      <!--<div class="profile_title">
+                        <div class="col-md-6">
+                          <h2>Hours Worked</h2>
+                        </div>
+                        <div class="col-md-6">
+                          <div id="reportrange" class="pull-right" style="margin-top: 5px; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #E6E9ED">
+                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                            <span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>
+                          </div>
+                        </div>
+                      </div>-->
+                      <!-- start of user-activity-graph -->
+                      <!--<div id="graph_bar" style="width:100%; height:280px;"></div>-->
+                      <!-- end of user-activity-graph -->
+
+                      <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                        <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                          <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Today's Tasks</a>
+                          </li>
+                          <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Ongoing Tasks</a>
+                          </li>
+                          <li role="presentation" class=""><a href="#tab_content3" role="tab" id="profile-tab2" data-toggle="tab" aria-expanded="false">Notes</a>
+                          </li>
+                        </ul>
+                        <div id="myTabContent" class="tab-content">
+                          <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+
+                            <!-- start recent activity -->
+                            <ul class="messages">
+                              {% for client, tasks in client_tasks.items %}
+                                <h3> {{client.first_name|addstr_space:client.last_name}} </h3>
+                                {% for task in tasks %}
+                                <li>
+                                  <img class="avatar" src="{{client.profile_picture.url}}">
+
+                                  <div class="message_date">
+                                    <h5 class="date text-info">{{task.start_time|addstr_space:'-'|addstr_space:task.end_time}}</h5>
+                                  </div>
+                                  <div class="message_wrapper">
+                                    <h4 class="heading">{{task.activity_task}}</h4>
+                                    <blockquote class="message">{{task.description}}</blockquote>
+                                    <br />
+                                    <p class="url">
+                                      <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
+                                      {% if task.attachment %}
+                                        <a href="{{task.attachment.url}}"><i class="fa fa-paperclip"></i>{{task.attachment|trunc_path}}</a>
+                                      {% endif %}
+                                    </p>
+                                    <p class="url">
+                                      <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
+                                      {% if task.link %}
+                                        <a href="{{task.link}}"><i class="fa fa-external-link"></i>{{task.link}}</a>
+                                      {% endif %}
+                                    </p>
+                                    <form method="post" role="form" action="{% url 'caregiver_dashboard' %}">
+                                      {% csrf_token %}
+                                      <p>
+                                        <label>Comment</label>
+                                        <textarea class="form-control" style="height:55px;" id="task_comment" name="{{update_task_form.comment.html_name}}">{{task.comment}}</textarea>
+                                      </p>
+                                      <div class="row">
+                                        <div class="col-md-3">
+                                          <label>
+                                            {% if task.pending %}
+                                              <input type="radio" checked="checked" value="pending" name="{{update_task_form.status.html_name}}"> Pending
+                                              <span class="fa fa-spinner fa-pulse fa-1x fa-fw" style="color:#808080"></span>
+                                            {% else %}
+                                              <input type="radio" value="pending" name="{{update_task_form.status.html_name}}"> Pending
+                                            {% endif %}
+                                          </label>
+                                        </div>
+                                        <div class="col-md-3">
+                                          <label>
+                                            {% if task.complete %}
+                                              <input type="radio" checked="checked" value="complete" name="{{update_task_form.status.html_name}}"> Complete
+                                              <span class="fa fa-check" style="color:#3CB371"></span>
+                                            {% else %}
+                                              <input type="radio" value="complete" name="{{update_task_form.status.html_name}}"> Complete
+                                            {% endif %}
+                                          </label>
+                                        </div>
+                                        <div class="col-md-3">
+                                          <label>
+                                            {% if task.in_progress %}
+                                              <input type="radio" checked="checked" value="in_progress" name="{{update_task_form.status.html_name}}"> In Progress
+                                              <span class="fa fa-spinner fa-pulse fa-1x fa-fw" style="color:#baf2f5"></span>
+                                            {% else %}
+                                              <input type="radio" value="in_progress" name="{{update_task_form.status.html_name}}"> In Progress
+                                            {% endif %}
+                                          </label>
+                                        </div>
+                                        <div class="col-md-3">
+                                          <label>
+                                            {% if task.cancelled %}
+                                              <input type="radio" checked="checked" value="cancelled" name="{{update_task_form.status.html_name}}"> Cancelled
+                                              <span class="fa fa-close" style="color:#ff0000"></span>
+                                            {% else %}
+                                              <input type="radio" value="cancelled" name="{{update_task_form.status.html_name}}"> Cancelled
+                                            {% endif %}
+                                          </label>
+                                        </div>
+                                      </div>
+                                      <div>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                          <input type="hidden" value={{task.id}} name={{update_task_form.task_id.html_name}}>
+                                          <input type="hidden" value={{client.id}} name={{update_task_form.client_id.html_name}}>
+                                          <button type="submit" class="btn btn-success">Update Task</button>
+                                        </div>
+                                      </div>
+                                    </form>
+                                </li>
+                                {% endfor %}
+                              {% endfor %}
+                              <!--{% for client in client_tasks %}
+                                <h3> {{client.first_name|addstr_space:client.last_name}} </h3>
+                                  <li>
+                                    <img class="avatar" src="{{client.profile_picture.url}}">
+
+                                    <div class="message_date">
+                                      <h3 class="date text-info">7:00 - 8:00</h3>
+                                    </div>
+                                    <div class="message_wrapper">
+                                      <h4 class="heading">{{client_tasks.client.items}}</h4>
+                                      <blockquote class="message">Refer to the attached list for specifics</blockquote>
+                                      <br />
+                                      <p class="url">
+                                        <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
+                                        <a href="#"><i class="fa fa-paperclip"></i> grocery_list.txt </a>
+                                      </p>
+                                    </div>
+                                  </li>
+                                {% endfor %}-->
+
+                              <!--<li>
+                                <img src="images/img.svg" class="avatar" alt="Avatar">
+                                <div class="message_date">
+                                  <h3 class="date text-info">7:00 - 8:00</h3>
+                                </div>
+                                <div class="message_wrapper">
+                                  <h4 class="heading">Buy Groceries</h4>
+                                  <blockquote class="message">Refer to the attached list for specifics</blockquote>
+                                  <br />
+                                  <p class="url">
+                                    <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
+                                    <a href="#"><i class="fa fa-paperclip"></i> grocery_list.txt </a>
+                                  </p>
+                                </div>
+                              </li>
+                              <li>
+                                <img src="images/img.svg" class="avatar" alt="Avatar">
+                                <div class="message_date">
+                                  <h3 class="date text-error">9:00 - 9:30</h3>
+                                </div>
+                                <div class="message_wrapper">
+                                  <h4 class="heading">Make Breakfast</h4>
+                                  <blockquote class="message">Make breakfast, using ingredients in the fridge. Note: Patient is
+                                  allergic to peanuts. </blockquote>
+                                  <br />
+                                </div>
+                              </li>
+                              <li>
+                                <img src="images/img.svg" class="avatar" alt="Avatar">
+                                <div class="message_date">
+                                  <h3 class="date text-info">10:30 - 1:00</h3>
+                                </div>
+                                <div class="message_wrapper">
+                                  <h4 class="heading">Drive Patient to Grandchildrens House</h4>
+                                  <blockquote class="message">Refer to linked google maps page for directions.</blockquote>
+                                  <br />
+                                  <p class="url">
+                                    <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
+                                    <a href="https://www.google.com/maps/dir/Googleplex,+1600+Amphitheatre+Parkway,+Mountain+View,+CA+94043/Empire+State+Building,+350+5th+Ave,+New+York,+NY+10118/@41.1285171,-111.1550885,5z/data=!4m13!4m12!1m5!1m1!1s0x808fba02425dad8f:0x6c296c66619367e0!2m2!1d-122.0840575!2d37.4219999!1m5!1m1!1s0x89c259a9b3117469:0xd134e199a405a163!2m2!1d-73.9856644!2d40.7484405"><i class="fa fa-map-marker user-profile-icon"></i> directions </a>
+                                  </p>
+                                </div>
+                              </li>
+                              <li>
+                                <img src="images/img.svg" class="avatar" alt="Avatar">
+                                <div class="message_date">
+                                  <h3 class="date text-error">5:00 - 7:30</h3>
+                                </div>
+                                <div class="message_wrapper">
+                                  <h4 class="heading">Drive Patient back from Grandchildrens House</h4>
+                                  <blockquote class="message">Refer to linked google maps page for directions.</blockquote>
+                                  <br />
+                                  <p class="url">
+                                    <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
+                                    <a href="https://www.google.com/maps/dir/Googleplex,+1600+Amphitheatre+Parkway,+Mountain+View,+CA+94043/Empire+State+Building,+350+5th+Ave,+New+York,+NY+10118/@41.1285171,-111.1550885,5z/data=!4m13!4m12!1m5!1m1!1s0x808fba02425dad8f:0x6c296c66619367e0!2m2!1d-122.0840575!2d37.4219999!1m5!1m1!1s0x89c259a9b3117469:0xd134e199a405a163!2m2!1d-73.9856644!2d40.7484405"><i class="fa fa-map-marker user-profile-icon"></i> directions </a>
+                                  </p>
+                                </div>
+                              </li>-->
+
+                            </ul>
+                            <!-- end recent activity -->
+
+                          </div>
+                          <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
+
+                            <!-- start user projects -->
+                            <table class="data table table-striped no-margin">
+                              <thead>
+                                <tr>
+                                  <th>#</th>
+                                  <th>Project Name</th>
+                                  <!--<th>Client Company</th>-->
+                                  <th class="hidden-phone">Hours Spent</th>
+                                  <th>Progress</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>1</td>
+                                  <td>Bathroom Renovation</td>
+                                  <td class="hidden-phone">18</td>
+                                  <td class="vertical-align-mid">
+                                    <div class="progress">
+                                      <div class="progress-bar progress-bar-success" data-transitiongoal="35"></div>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>2</td>
+                                  <td>Living Room Renovation</td>
+                                  <td class="hidden-phone">13</td>
+                                  <td class="vertical-align-mid">
+                                    <div class="progress">
+                                      <div class="progress-bar progress-bar-danger" data-transitiongoal="15"></div>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>3</td>
+                                  <td>Cable Installation</td>
+                                  <td class="hidden-phone">30</td>
+                                  <td class="vertical-align-mid">
+                                    <div class="progress">
+                                      <div class="progress-bar progress-bar-success" data-transitiongoal="45"></div>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>4</td>
+                                  <td>Something</td>
+                                  <td class="hidden-phone">28</td>
+                                  <td class="vertical-align-mid">
+                                    <div class="progress">
+                                      <div class="progress-bar progress-bar-success" data-transitiongoal="75"></div>
+                                    </div>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <!-- end user projects -->
+
+                          </div>
+                          <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="profile-tab">
+                            <p>Have not implemented yet</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /page content -->
+{% endblock %}
+{% block footlibs %}
+
+    <!-- morris.js -->
+    <script src="{% static 'vendors/raphael/raphael.min.js' %}"></script>
+    <script src="{% static 'vendors/morris.js/morris.min.js' %}"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="{% static 'vendors/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+    <!-- Select2 -->
+    <script src="{% static 'vendors/select2/dist/js/select2.full.min.js' %}"></script>
+
+{% endblock %}
+{% block scripts %}
+    <script>
+      $(function() {
+        Morris.Bar({
+          element: 'graph_bar',
+          data: [
+            { "period": "Monday", "Hours worked": 6 },
+            { "period": "Tuesday", "Hours worked": 7 },
+            { "period": "Wednesday", "Hours worked": 5 },
+            { "period": "Thursday", "Hours worked": 8 },
+            { "period": "Friday", "Hours worked": 8 },
+            { "period": "Saturday", "Hours worked": 5 },
+            { "period": "Sunday", "Hours worked": 5 }
+          ],
+          xkey: 'period',
+          hideHover: 'auto',
+          barColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
+          ykeys: ['Hours worked', 'sorned'],
+          labels: ['Hours worked', 'SORN'],
+          xLabelAngle: 60,
+          resize: true
+        });
+
+        $MENU_TOGGLE.on('click', function() {
+          $(window).resize();
+        });
+      });
+    </script>
+
+    <!-- datepicker -->
+    <script type="text/javascript">
+      $(document).ready(function() {
+
+        var cb = function(start, end, label) {
+          console.log(start.toISOString(), end.toISOString(), label);
+          $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+          //alert("Callback has fired: [" + start.format('MMMM D, YYYY') + " to " + end.format('MMMM D, YYYY') + ", label = " + label + "]");
+        }
+
+        var optionSet1 = {
+          startDate: moment().subtract(29, 'days'),
+          endDate: moment(),
+          minDate: '01/01/2012',
+          maxDate: '12/31/2015',
+          dateLimit: {
+            days: 60
+          },
+          showDropdowns: true,
+          showWeekNumbers: true,
+          timePicker: false,
+          timePickerIncrement: 1,
+          timePicker12Hour: true,
+          ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+          },
+          opens: 'left',
+          buttonClasses: ['btn btn-default'],
+          applyClass: 'btn-small btn-primary',
+          cancelClass: 'btn-small',
+          format: 'MM/DD/YYYY',
+          separator: ' to ',
+          locale: {
+            applyLabel: 'Submit',
+            cancelLabel: 'Clear',
+            fromLabel: 'From',
+            toLabel: 'To',
+            customRangeLabel: 'Custom',
+            daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+            monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            firstDay: 1
+          }
+        };
+        $('#reportrange span').html(moment().subtract(29, 'days').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+        $('#reportrange').daterangepicker(optionSet1, cb);
+        $('#reportrange').on('show.daterangepicker', function() {
+          console.log("show event fired");
+        });
+        $('#reportrange').on('hide.daterangepicker', function() {
+          console.log("hide event fired");
+        });
+        $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
+          console.log("apply event fired, start/end dates are " + picker.startDate.format('MMMM D, YYYY') + " to " + picker.endDate.format('MMMM D, YYYY'));
+        });
+        $('#reportrange').on('cancel.daterangepicker', function(ev, picker) {
+          console.log("cancel event fired");
+        });
+        $('#options1').click(function() {
+          $('#reportrange').data('daterangepicker').setOptions(optionSet1, cb);
+        });
+        $('#options2').click(function() {
+          $('#reportrange').data('daterangepicker').setOptions(optionSet2, cb);
+        });
+        $('#destroy').click(function() {
+          $('#reportrange').data('daterangepicker').remove();
+        });
+      });
+    </script>
+    <!-- /datepicker -->
+{% endblock %}

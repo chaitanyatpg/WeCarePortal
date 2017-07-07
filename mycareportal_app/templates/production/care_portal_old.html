@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- Meta, title, CSS, favicons, etc. -->
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Care Portal |</title>
+{% load static %}
+<!-- Bootstrap -->
+<link href="{% static 'vendors/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+<!-- Font Awesome -->
+<link href="{% static 'vendors/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+<!-- NProgress -->
+<link href="{% static 'vendors/nprogress/nprogress.css' %}" rel="stylesheet">
+<!-- iCheck -->
+<link href="{% static 'vendors/iCheck/skins/flat/green.css' %}" rel="stylesheet">
+<!-- bootstrap-wysiwyg -->
+<link href="{% static 'vendors/google-code-prettify/bin/prettify.min.css' %}" rel="stylesheet">
+<!-- Select2 -->
+<link href="{% static 'vendors/select2/dist/css/select2.min.css' %}" rel="stylesheet">
+<!-- Switchery -->
+<link href="{% static 'vendors/switchery/dist/switchery.min.css' %}" rel="stylesheet">
+<!-- starrr -->
+<link href="{% static 'vendors/starrr/dist/starrr.css' %}" rel="stylesheet">
+<!-- bootstrap-daterangepicker -->
+<link href="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+
+<!-- Custom Theme Style -->
+<link href="{% static 'build/css/custom.min.css' %}" rel="stylesheet">
+</head>
+
+<body class="nav-md">
+  <div class="container body">
+    <div class="main_container">
+      <div class="col-md-3 left_col">
+        <div class="left_col scroll-view">
+          <div class="navbar nav_title" style="border: 0;"> <a href="#" class="site_title"><i class="fa fa-laptop"></i> <span>Mycareportal</span></a> </div>
+          <div class="clearfix"></div>
+
+          <!-- menu profile quick info -->
+          <div class="profile">
+            <div class="profile_pic"> <img src="images/img.png" alt="..." class="img-circle profile_img"> </div>
+            <div class="profile_info"> <span>Welcome,</span>
+              <h2>Dhruv Ranjan</h2>
+            </div>
+          </div>
+          <!-- /menu profile quick info -->
+
+          <br />
+
+          <!-- sidebar menu -->
+          <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+            <div class="menu_section">
+              <h3>Modules</h3>
+              <ul class="nav side-menu">
+                <li><a><i class="fa fa-home"></i>Dashboards<span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu">
+                    <li><a href={% url 'dashboard' %}>Admin Dashboard</a></li>
+                  </ul>
+                </li>
+                <li><a><i class="fa fa-home"></i>Client Portal<span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu">
+                    <li><a href={% url 'add_client' %}>Patient Personal Details</a></li>
+                    <li><a href={% url 'find_caregiver' %}>Find Caregiver</a></li>
+                  </ul>
+                </li>
+                <li><a><i class="fa fa-edit"></i>Caregiver Portal<span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu">
+                  <li><a href={% url 'add_caregiver' %}>Caregiver Onboarding </a></li>
+                    <li><a href={% url 'caregiver_dashboard' %}>Caregiver Dashboard </a></li>
+                    <li><a href={% url 'calendar' %}>Calendar</a></li>
+                  </ul>
+                </li>
+                <li><a><i class="fa fa-desktop"></i>Family Portal<span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu">
+                    <li><a href={% url 'family_dashboard' %}>Family Dashboard</a></li>
+                  </ul>
+                </li>
+                <li><a><i class="fa fa-table"></i>Provider Portal<span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu">
+                    <li><a href={% url 'provider_dashboard' %}>Provider Dashboard</a></li>
+                  </ul>
+                </li>
+                <li><a><i class="fa fa-bar-chart-o"></i>Home Assessment<span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu">
+                    <li><a href={% url 'assessment_tool' %}>Assessment Tool</a></li>
+                    <li><a href={% url 'view_alerts' %}>View Alerts</a></li>
+                  </ul>
+                </li>
+                <li><a><i class="fa fa-clone"></i>Home Modification<span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu">
+                    <li><a href={% url 'contractor_dashboard' %}>Contractor Dashboard</a></li>
+                    <li><a href={% url 'view_projects' %}>View All Projects</a></li>
+                    <li><a href={% url 'view_bids' %}>View Bids</a></li>
+                  </ul>
+                </li>
+                <li><a><i class="fa fa-clone"></i>Move Management<span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu">
+                    <li><a href={% url 'move_manager_dashboard' %}>Move Manager Dashboard</a></li>
+                    <li><a href={% url 'view_move_projects' %}>View all Move Projects</a></li>
+                    <li><a href={% url 'view_move_bids' %}>View Move Bids</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!-- /sidebar menu -->
+
+          <!-- /menu footer buttons -->
+          <div class="sidebar-footer hidden-small"> <a data-toggle="tooltip" data-placement="top" title="Settings"> <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> </a> <a data-toggle="tooltip" data-placement="top" title="FullScreen"> <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span> </a> <a data-toggle="tooltip" data-placement="top" title="Lock"> <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span> </a> <a data-toggle="tooltip" data-placement="top" title="Logout"> <span class="glyphicon glyphicon-off" aria-hidden="true"></span> </a> </div>
+          <!-- /menu footer buttons -->
+        </div>
+      </div>
+
+      <!-- top navigation -->
+      <div class="top_nav">
+        <div class="nav_menu">
+          <nav>
+            <div class="nav toggle"> <a id="menu_toggle"><i class="fa fa-bars"></i></a> </div>
+            <ul class="nav navbar-nav navbar-right">
+              <li class=""> <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> <img src="images/img.svg" alt="">Dhruv Ranjan <span class=" fa fa-angle-down"></span> </a>
+                <ul class="dropdown-menu dropdown-usermenu pull-right">
+                  <li><a href="caregiver_dashboard.html"> Profile</a></li>
+                  <li> <a href="javascript:;"> <span class="badge bg-red pull-right">50%</span> <span>Settings</span> </a> </li>
+                  <li><a href="javascript:;">Help</a></li>
+                  <li><a href="wecare_login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                </ul>
+              </li>
+              <li role="presentation" class="dropdown"> <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false"> <i class="fa fa-envelope-o"></i> <span class="badge bg-green">6</span> </a>
+                <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                  <li> <a> <span class="image"><img src="images/img.svg" alt="Profile Image" /></span> <span> <span>Dhruv Ranjan</span> <span class="time">3 mins ago</span> </span> <span class="message"> Website crashed. Fix pls. </span> </a> </li>
+                  <li> <a> <span class="image"><img src="images/img.svg" alt="Profile Image" /></span> <span> <span>Dhruv Ranjan</span> <span class="time">3 mins ago</span> </span> <span class="message"> New module due tomorrow. </span> </a> </li>
+                  <li> <a> <span class="image"><img src="images/img.svg" alt="Profile Image" /></span> <span> <span>Dhruv Ranjan</span> <span class="time">3 mins ago</span> </span> <span class="message"> DEADLINE: Final draft of prototype shader due in 4 hours. </span> </a> </li>
+                  <li> <a> <span class="image"><img src="images/img.svg" alt="Profile Image" /></span> <span> <span>Dhruv Ranjan</span> <span class="time">3 mins ago</span> </span> <span class="message"> Finish iOS conversion by next week. </span> </a> </li>
+                  <li>
+                    <div class="text-center"> <a> <strong>See All Alerts</strong> <i class="fa fa-angle-right"></i> </a> </div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+      <!-- /top navigation -->
+
+    <!-- page content -->
+    <div class="right_col" role="main">
+      <div class="">
+        <div class="page-title">
+          <div class="title_left">
+            <h3>Patient Details</h3>
+          </div>
+          <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for...">
+                <span class="input-group-btn">
+                <button class="btn btn-default" type="button">Go!</button>
+                </span> </div>
+            </div>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+
+        <!--Patient Personal Details form-->
+        <div class="clearfix"></div>
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>Patient Personal Details <small>enter personal details</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                  <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="#">Settings 1</a> </li>
+                      <li><a href="#">Settings 2</a> </li>
+                    </ul>
+                  </li>
+                  <li><a class="close-link"><i class="fa fa-close"></i></a> </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content"> <br />
+                <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">First Name <span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Last Name <span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input type="text" id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Middle Name / Initial</label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text" name="middle-name">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Gender</label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <div id="gender" class="btn-group" data-toggle="buttons">
+                        <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                          <input type="radio" name="gender" value="male">
+                          &nbsp; Male &nbsp; </label>
+                        <label class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                          <input type="radio" name="gender" value="female">
+                          Female </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Date Of Birth <span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input id="birthday" class="date-picker form-control col-md-7 col-xs-12" required="required" type="text">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Phone Number <span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input type="text" id="phone-number" required="required" class="form-control col-md-7 col-xs-12">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Secondary Phone Number <span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input type="text" id="second-phone-number" required="required" class="form-control col-md-7 col-xs-12">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Email Address<span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input type="text" id="email-address" required="required" class="form-control col-md-7 col-xs-12">
+                    </div>
+                  </div>
+                  <div class="item form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">Address <span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <textarea id="address" required name="address" class="form-control col-md-7 col-xs-12"></textarea>
+                    </div>
+                  </div>
+                  <div class="ln_solid"></div>
+                  <div class="form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                      <button type="submit" class="btn btn-primary">Cancel</button>
+                      <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--Emergency contact details-->
+        <div class="clearfix"></div>
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>Emergency Contact Details <small>enter emergency contact information</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                  <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="#">Settings 1</a> </li>
+                      <li><a href="#">Settings 2</a> </li>
+                    </ul>
+                  </li>
+                  <li><a class="close-link"><i class="fa fa-close"></i></a> </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content"> <br />
+                <form id="demo-form3" data-parsley-validate class="form-horizontal form-label-left">
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Contact Name<span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input type="text" id="first-name2" required="required" class="form-control col-md-7 col-xs-12">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Relationship<span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input type="text" id="last-name2" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Phone Number <span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input type="text" id="phone-number2" required="required" class="form-control col-md-7 col-xs-12">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Secondary Phone Number <span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input type="text" id="second-phone-number2" required="required" class="form-control col-md-7 col-xs-12">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Email Address<span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input type="text" id="email-address2" required="required" class="form-control col-md-7 col-xs-12">
+                    </div>
+                  </div>
+                  <div class="item form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">Address <span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <textarea id="address2" required name="address" class="form-control col-md-7 col-xs-12"></textarea>
+                    </div>
+                  </div>
+                  <div class="ln_solid"></div>
+                  <div class="form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                      <button type="submit" class="btn btn-primary">Cancel</button>
+                      <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--Provider Details-->
+        <div class="clearfix"></div>
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>Provider Details <small>enter provider information</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                  <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="#">Settings 1</a> </li>
+                      <li><a href="#">Settings 2</a> </li>
+                    </ul>
+                  </li>
+                  <li><a class="close-link"><i class="fa fa-close"></i></a> </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content"> <br />
+                <form id="demo-form4" data-parsley-validate class="form-horizontal form-label-left">
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Provider Name<span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input type="text" id="first-name3" required="required" class="form-control col-md-7 col-xs-12">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Type<span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input type="text" id="last-name3" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Speciality <span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input type="text" id="phone-number3" required="required" class="form-control col-md-7 col-xs-12">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Phone Number <span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input type="text" id="second-phone-number3" required="required" class="form-control col-md-7 col-xs-12">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Emergency Phone Number<span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input type="text" id="email-address3" required="required" class="form-control col-md-7 col-xs-12">
+                    </div>
+                  </div>
+                  <div class="item form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">Email Address <span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <textarea id="address3" required name="address" class="form-control col-md-7 col-xs-12"></textarea>
+                    </div>
+                  </div>
+                  <div class="ln_solid"></div>
+                  <div class="form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                      <button type="submit" class="btn btn-primary">Cancel</button>
+                      <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- end row -->
+
+        <!-- Pharmacy Details Primary-->
+        <div class="row">
+          <div class="col-md-6 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>Primary Pharmacy <small>enter primary pharmacy</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                  <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="#">Settings 1</a> </li>
+                      <li><a href="#">Settings 2</a> </li>
+                    </ul>
+                  </li>
+                  <li><a class="close-link"><i class="fa fa-close"></i></a> </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content"> <br />
+                <form class="form-horizontal form-label-left input_mask">
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control has-feedback-left" id="inputSuccess2" placeholder="Name">
+                    <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control" id="inputSuccess3" placeholder="Contact Name">
+                    <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control has-feedback-left" id="inputSuccess4" placeholder="Phone Number">
+                    <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control" id="inputSuccess5" placeholder="Fax Number">
+                    <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control" id="inputSuccess6" placeholder="Email Address">
+                    <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                    <select class="select2_single form-control" tabindex="-1" placeholder="Mode">
+                      <option> Mode</option>
+                      <option value="AK">Alaska</option>
+                      <option value="HI">Hawaii</option>
+                      <option value="CA">California</option>
+                      <option value="NV">Nevada</option>
+                      <option value="OR">Oregon</option>
+                      <option value="WA">Washington</option>
+                      <option value="AZ">Arizona</option>
+                      <option value="CO">Colorado</option>
+                      <option value="ID">Idaho</option>
+                      <option value="MT">Montana</option>
+                      <option value="NE">Nebraska</option>
+                      <option value="NM">New Mexico</option>
+                      <option value="ND">North Dakota</option>
+                      <option value="UT">Utah</option>
+                      <option value="WY">Wyoming</option>
+                      <option value="AR">Arkansas</option>
+                      <option value="IL">Illinois</option>
+                      <option value="IA">Iowa</option>
+                      <option value="KS">Kansas</option>
+                      <option value="KY">Kentucky</option>
+                      <option value="LA">Louisiana</option>
+                      <option value="MN">Minnesota</option>
+                      <option value="MS">Mississippi</option>
+                      <option value="MO">Missouri</option>
+                      <option value="OK">Oklahoma</option>
+                      <option value="SD">South Dakota</option>
+                      <option value="TX">Texas</option>
+                    </select>
+                  </div>
+                  <div class="ln_solid"></div>
+                  <div class="form-group">
+                    <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                      <button type="submit" class="btn btn-primary">Cancel</button>
+                      <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <!--End Primary Pharmacy Details -->
+          <!--Start Pharmacy table-->
+          <div class="col-md-6 col-xs-12">
+            <div class="x_content">
+              <div class="table-responsive">
+                <table class="table table-striped jambo_table bulk_action">
+                  <thead>
+                    <tr class="headings">
+                      <th> <input type="checkbox" id="check-all" class="flat">
+                      </th>
+                      <th class="column-title">Name</th>
+                      <th class="column-title">Contact Name</th>
+                      <th class="column-title">Phone Number</th>
+                      <th class="column-title">Fax Number</th>
+                      <th class="column-title">Email Address</th>
+                      <th class="column-title">Mode</th>
+                      <th class="column-title no-link last"><span class="nobr">Open</span> </th>
+                      <th class="bulk-actions" colspan="7"> <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a> </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="even pointer">
+                      <td class="a-center "><input type="checkbox" class="flat" name="table_records"></td>
+                      <td class=" ">Walgreens</td>
+                      <td class=" ">Robert</td>
+                      <td class=" ">7329103342</td>
+                      <td class=" ">7329103342</td>
+                      <td class=" ">walgreens@walgreens.com</td>
+                      <td class=" ">1</td>
+                      <td class=" last"><a href="#">View</a></td>
+                    </tr>
+                    <tr class="odd pointer">
+                      <td class="a-center "><input type="checkbox" class="flat" name="table_records"></td>
+                      <td class=" ">CVS</td>
+                      <td class=" ">Steve</td>
+                      <td class=" ">7329113322</td>
+                      <td class=" ">7329113322</td>
+                      <td class=" ">cvs@cvs.com</td>
+                      <td class=" ">2</td>
+                      <td class=" last"><a href="#">View</a></td>
+                    </tr>
+                    <tr class="even pointer">
+                      <td class="a-center "><input type="checkbox" class="flat" name="table_records"></td>
+                      <td class=" ">Walmart</td>
+                      <td class=" ">Henry</td>
+                      <td class=" ">7320091822</td>
+                      <td class=" ">7320091822</td>
+                      <td class=" ">walmart@walmart.com</td>
+                      <td class=" ">3</td>
+                      <td class=" last"><a href="#">View</a></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- End pharmacy table -->
+          <!-- Pharmacy Details Secondary-->
+          <!--<div class="col-md-6 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>Secondary Pharmacy <small>enter secondary pharmacy</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                  <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="#">Settings 1</a> </li>
+                      <li><a href="#">Settings 2</a> </li>
+                    </ul>
+                  </li>
+                  <li><a class="close-link"><i class="fa fa-close"></i></a> </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content"> <br />
+                <form class="form-horizontal form-label-left input_mask">
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control has-feedback-left" id="inputSuccess7" placeholder="Name">
+                    <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control" id="inputSuccess8" placeholder="Contact Name">
+                    <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control has-feedback-left" id="inputSuccess9" placeholder="Phone Number">
+                    <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control" id="inputSuccess10" placeholder="Fax Number">
+                    <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control" id="inputSuccess11" placeholder="Email Address">
+                    <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                    <select class="select2_single form-control" tabindex="-1" placeholder="Mode">
+                      <option> Mode</option>
+                      <option value="AK">Alaska</option>
+                      <option value="HI">Hawaii</option>
+                      <option value="CA">California</option>
+                      <option value="NV">Nevada</option>
+                      <option value="OR">Oregon</option>
+                      <option value="WA">Washington</option>
+                      <option value="AZ">Arizona</option>
+                      <option value="CO">Colorado</option>
+                      <option value="ID">Idaho</option>
+                      <option value="MT">Montana</option>
+                      <option value="NE">Nebraska</option>
+                      <option value="NM">New Mexico</option>
+                      <option value="ND">North Dakota</option>
+                      <option value="UT">Utah</option>
+                      <option value="WY">Wyoming</option>
+                      <option value="AR">Arkansas</option>
+                      <option value="IL">Illinois</option>
+                      <option value="IA">Iowa</option>
+                      <option value="KS">Kansas</option>
+                      <option value="KY">Kentucky</option>
+                      <option value="LA">Louisiana</option>
+                      <option value="MN">Minnesota</option>
+                      <option value="MS">Mississippi</option>
+                      <option value="MO">Missouri</option>
+                      <option value="OK">Oklahoma</option>
+                      <option value="SD">South Dakota</option>
+                      <option value="TX">Texas</option>
+                    </select>
+                  </div>
+                  <div class="ln_solid"></div>
+                  <div class="form-group">
+                    <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                      <button type="submit" class="btn btn-primary">Cancel</button>
+                      <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          End pharmacy details secondary -->
+        </div>
+
+        <!-- Primary payer details-->
+        <div class="row">
+          <div class="col-md-6 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>Primary Payer <small>enter primary payer information</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                  <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="#">Settings 1</a> </li>
+                      <li><a href="#">Settings 2</a> </li>
+                    </ul>
+                  </li>
+                  <li><a class="close-link"><i class="fa fa-close"></i></a> </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content"> <br />
+                <form class="form-horizontal form-label-left input_mask">
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control has-feedback-left" id="inputSuccess17" placeholder="Name">
+                    <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control" id="inputSuccess18" placeholder="Contact Name">
+                    <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control has-feedback-left" id="inputSuccess19" placeholder="Phone Number">
+                    <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control" id="inputSuccess20" placeholder="Fax Number">
+                    <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control" id="inputSuccess21" placeholder="Email Address">
+                    <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                    <select class="select2_single form-control" tabindex="-1" placeholder="Mode">
+                      <option> Mode</option>
+                      <option value="AK">Alaska</option>
+                      <option value="HI">Hawaii</option>
+                      <option value="CA">California</option>
+                      <option value="NV">Nevada</option>
+                      <option value="OR">Oregon</option>
+                      <option value="WA">Washington</option>
+                      <option value="AZ">Arizona</option>
+                      <option value="CO">Colorado</option>
+                      <option value="ID">Idaho</option>
+                      <option value="MT">Montana</option>
+                      <option value="NE">Nebraska</option>
+                      <option value="NM">New Mexico</option>
+                      <option value="ND">North Dakota</option>
+                      <option value="UT">Utah</option>
+                      <option value="WY">Wyoming</option>
+                      <option value="AR">Arkansas</option>
+                      <option value="IL">Illinois</option>
+                      <option value="IA">Iowa</option>
+                      <option value="KS">Kansas</option>
+                      <option value="KY">Kentucky</option>
+                      <option value="LA">Louisiana</option>
+                      <option value="MN">Minnesota</option>
+                      <option value="MS">Mississippi</option>
+                      <option value="MO">Missouri</option>
+                      <option value="OK">Oklahoma</option>
+                      <option value="SD">South Dakota</option>
+                      <option value="TX">Texas</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control" id="inputSuccess23" placeholder="Policy Start Date">
+                    <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control" id="inputSuccess24" placeholder="Policy End Date">
+                    <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span> </div>
+                  <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control" id="inputSuccess22" placeholder="Policy Number">
+                    <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span> </div>
+                  <div class="ln_solid"></div>
+                  <div class="form-group">
+                    <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                      <button type="submit" class="btn btn-primary">Cancel</button>
+                      <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <!--End Primary payer Details -->
+          <!--Start Pharmacy table-->
+          <div class="col-md-6 col-xs-12">
+            <div class="x_content">
+              <div class="table-responsive">
+                <table class="table table-striped jambo_table bulk_action">
+                  <thead>
+                    <tr class="headings">
+                      <th> <input type="checkbox" id="check-all2" class="flat">
+                      </th>
+                      <th class="column-title">Name</th>
+                      <th class="column-title">Contact Name</th>
+                      <th class="column-title">Phone Number</th>
+                      <th class="column-title">Fax Number</th>
+                      <th class="column-title">Email Address</th>
+                      <th class="column-title">Mode</th>
+                      <th class="column-title">Start Date</th>
+                      <th class="column-title">End Date</th>
+                      <th class="column-title">Policy Number</th>
+                      <th class="column-title no-link last"><span class="nobr">Open</span> </th>
+                      <th class="bulk-actions" colspan="7"> <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a> </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="even pointer">
+                      <td class="a-center "><input type="checkbox" class="flat" name="table_records"></td>
+                      <td class=" ">Alliance</td>
+                      <td class=" ">Ben</td>
+                      <td class=" ">7326647588</td>
+                      <td class=" ">7456647890</td>
+                      <td class=" ">alliance@alliance.com</td>
+                      <td class="a-right a-right ">1</td>
+                      <td class=" ">10/13/2017</td>
+                      <td class=" ">10/14/2018</td>
+                      <td class=" ">123456789</td>
+                      <td class=" last"><a href="#">View</a></td>
+                    </tr>
+                    <tr class="odd pointer">
+                      <td class="a-center "><input type="checkbox" class="flat" name="table_records"></td>
+                      <td class=" ">Anthem</td>
+                      <td class=" ">Wilbert</td>
+                      <td class=" ">7329807855</td>
+                      <td class=" ">9082235466</td>
+                      <td class=" ">anthem@anthem.com</td>
+                      <td class="a-right a-right ">2</td>
+                      <td class=" ">11/13/2017</td>
+                      <td class=" ">11/14/2017</td>
+                      <td class=" ">335266778</td>
+                      <td class=" last"><a href="#">View</a></td>
+                    </tr>
+                    <tr class="even pointer">
+                      <td class="a-center "><input type="checkbox" class="flat" name="table_records"></td>
+                      <td class=" ">Blue Cross</td>
+                      <td class=" ">Guggenheim</td>
+                      <td class=" ">7321453367</td>
+                      <td class=" ">7034778869</td>
+                      <td class=" ">bluecross@bluecross.com</td>
+                      <td class="a-right a-right ">3</td>
+                      <td class=" ">12/13/2017</td>
+                      <td class=" ">12/14/2017</td>
+                      <td class=" ">758894632</td>
+                      <td class=" last"><a href="#">View</a></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- End pharmacy table -->
+          <!-- payer Details Secondary-->
+          <!--<div class="col-md-6 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>Secondary Payer <small>enter secondary payer</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                  <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="#">Settings 1</a> </li>
+                      <li><a href="#">Settings 2</a> </li>
+                    </ul>
+                  </li>
+                  <li><a class="close-link"><i class="fa fa-close"></i></a> </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content"> <br />
+                <form class="form-horizontal form-label-left input_mask">
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control has-feedback-left" id="inputSuccess12" placeholder="Name">
+                    <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control" id="inputSuccess13" placeholder="Contact Name">
+                    <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control has-feedback-left" id="inputSuccess14" placeholder="Phone Number">
+                    <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control" id="inputSuccess15" placeholder="Fax Number">
+                    <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control" id="inputSuccess16" placeholder="Email Address">
+                    <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                    <select class="select2_single form-control" tabindex="-1" placeholder="Mode">
+                      <option> Mode</option>
+                      <option value="AK">Alaska</option>
+                      <option value="HI">Hawaii</option>
+                      <option value="CA">California</option>
+                      <option value="NV">Nevada</option>
+                      <option value="OR">Oregon</option>
+                      <option value="WA">Washington</option>
+                      <option value="AZ">Arizona</option>
+                      <option value="CO">Colorado</option>
+                      <option value="ID">Idaho</option>
+                      <option value="MT">Montana</option>
+                      <option value="NE">Nebraska</option>
+                      <option value="NM">New Mexico</option>
+                      <option value="ND">North Dakota</option>
+                      <option value="UT">Utah</option>
+                      <option value="WY">Wyoming</option>
+                      <option value="AR">Arkansas</option>
+                      <option value="IL">Illinois</option>
+                      <option value="IA">Iowa</option>
+                      <option value="KS">Kansas</option>
+                      <option value="KY">Kentucky</option>
+                      <option value="LA">Louisiana</option>
+                      <option value="MN">Minnesota</option>
+                      <option value="MS">Mississippi</option>
+                      <option value="MO">Missouri</option>
+                      <option value="OK">Oklahoma</option>
+                      <option value="SD">South Dakota</option>
+                      <option value="TX">Texas</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control" id="inputSuccess25" placeholder="Policy Start Date">
+                    <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control" id="inputSuccess26" placeholder="Policy End Date">
+                    <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span> </div>
+                  <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control" id="inputSuccess27" placeholder="Policy Number">
+                    <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span> </div>
+                  <div class="ln_solid"></div>
+                  <div class="form-group">
+                    <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                      <button type="submit" class="btn btn-primary">Cancel</button>
+                      <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          End payer details secondary -->
+        </div>
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>Supporting Documents</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                  <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="#">Settings 1</a> </li>
+                      <li><a href="#">Settings 2</a> </li>
+                    </ul>
+                  </li>
+                  <li><a class="close-link"><i class="fa fa-close"></i></a> </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+                <p>Drag multiple files to the box below or click to select files</p>
+                <form action="form_upload.html" class="dropzone">
+                </form>
+                <br />
+                <br />
+                <br />
+                <br />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /page content -->
+
+    <!-- footer content -->
+    <footer>
+      <div class="pull-right"> WeCare Careportal </div>
+      <div class="clearfix"></div>
+    </footer>
+    <!-- /footer content -->
+  </div>
+</div>
+
+<!-- jQuery -->
+<script src="{% static 'vendors/jquery/dist/jquery.min.js' %}"></script>
+<!-- Bootstrap -->
+<script src="{% static 'vendors/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+<!-- FastClick -->
+<script src="{% static 'vendors/fastclick/lib/fastclick.js' %}"></script>
+<!-- NProgress -->
+<script src="{% static 'vendors/nprogress/nprogress.js' %}"></script>
+<!-- Dropzone.js -->
+<script src="{% static 'vendors/dropzone/dist/min/dropzone.min.js' %}"></script>
+<!-- Custom Theme Scripts -->
+<script src="{% static 'build/js/custom.min.js' %}"></script>
+
+<!-- Select2 -->
+<script>
+      $(document).ready(function() {
+        $(".select2_single").select2({
+          placeholder: "Select a state",
+          allowClear: true
+        });
+        $(".select2_group").select2({});
+        $(".select2_multiple").select2({
+          maximumSelectionLength: 4,
+          placeholder: "With Max Selection limit 4",
+          allowClear: true
+        });
+      });
+    </script>
+<!-- /Select2 -->
+
+</body>
+</html>

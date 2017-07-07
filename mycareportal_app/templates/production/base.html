@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- Meta, title, CSS, favicons, etc. -->
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title> {% block title %} MyCarePortal {% endblock %}</title>
+{% load static %}
+<!-- Bootstrap -->
+<link href="{% static 'vendors/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+<!-- Font Awesome -->
+<link href="{% static 'vendors/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+<!-- NProgress -->
+<link href="{% static 'vendors/nprogress/nprogress.css' %}" rel="stylesheet">
+<!-- Custom Theme Style -->
+<link href="{% static 'build/css/custom.min.css' %}" rel="stylesheet">
+{% block headlibs %}{% endblock %}
+</head>
+
+<body class="nav-md">
+  <div class="container body">
+    <div class="main_container">
+      <div class="col-md-3 left_col">
+        <div class="left_col scroll-view">
+          <div class="navbar nav_title" style="border: 0;"> <a href="#" class="site_title"><i class="fa fa-laptop"></i> <span>Mycareportal</span></a> </div>
+          <div class="clearfix"></div>
+
+          <!-- menu profile quick info -->
+          <div class="profile">
+            <div class="profile_pic"> <img src="{{current_user_info.profile_picture.url}}" onerror="this.src='mycareportal_app/media/pictures/img.png'" class="img-circle profile_img"> </div>
+            <div class="profile_info"> <span>{% block greeting %}Welcome{% endblock %},</span>
+              <h2>{% block username %}{{ user.first_name }}{% endblock %}</h2>
+            </div>
+          </div>
+          <!-- /menu profile quick info -->
+
+          <br />
+
+          <!-- sidebar menu -->
+          <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+            <div class="menu_section">
+              <h3>Modules</h3>
+              <ul class="nav side-menu">
+                <li><a><i class="fa fa-home"></i>Dashboards<span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu">
+                    {% if module_dict.DASHBOARD.ADMINDASHBOARD %}
+                      <li><a href={% url 'dashboard' %}>Admin Dashboard</a></li>
+                    {% endif %}
+                    {% if module_dict.DASHBOARD.ADDCAREMANAGER %}
+                      <li><a href={% url 'add_care_manager' %}>Add Care Manager</a></li>
+                    {% endif %}
+                  </ul>
+                </li>
+                <li><a><i class="fa fa-home"></i>Client Portal<span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu">
+                    {% if module_dict.CLIENTPORTAL.CLIENTONBOARDING %}
+                      <li><a href={% url 'add_client' %}>Client Onboarding</a></li>
+                    {% endif %}
+                    {% if module_dict.CLIENTPORTAL.EDITCLIENT %}
+                      <li><a href={% url 'edit_choose_client' %}>Edit Client</a></li>
+                    {% endif %}
+                    {% if module_dict.CLIENTPORTAL.FINDCAREGIVER %}
+                      <li><a href={% url 'find_caregiver' %}>Find Caregiver</a></li>
+                    {% endif %}
+                    {% if module_dict.CLIENTPORTAL.CREATE_TASKS %}
+                      <li><a href={% url 'create_tasks' %}>Create Tasks</a></li>
+                    {% endif %}
+                    {% if module_dict.CLIENTPORTAL.ASSIGN_TASKS %}
+                      <li><a href={% url 'assign_choose_client' %}>Assign Tasks</a></li>
+                    {% endif %}
+                  </ul>
+                </li>
+                <li><a><i class="fa fa-edit"></i>Caregiver Portal<span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu">
+                    {%if module_dict.CAREGIVERPORTAL.CAREGIVERONBOARDING %}
+                      <li><a href={% url 'add_caregiver' %}>Caregiver Onboarding </a></li>
+                    {% endif %}
+                    {%if module_dict.CAREGIVERPORTAL.CAREGIVEREDIT %}
+                      <li><a href={% url 'edit_choose_caregiver' %}>Edit Caregiver </a></li>
+                    {% endif %}
+                    {% if module_dict.CAREGIVERPORTAL.CAREGIVERDASHBOARD %}
+                      <li><a href={% url 'caregiver_dashboard' %}>Caregiver Dashboard </a></li>
+                    {% endif %}
+                    {% if module_dict.CAREGIVERPORTAL.CALENDAR %}
+                      <li><a href={% url 'calendar' %}>Calendar</a></li>
+                    {% endif %}
+                  </ul>
+                </li>
+                <li><a><i class="fa fa-desktop"></i>Family Portal<span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu">
+                    {% if module_dict.FAMILYPORTAL.FAMILYDASHBOARD %}
+                      <li><a href={% url 'family_dashboard' %}>Family Dashboard</a></li>
+                    {% endif %}
+                  </ul>
+                </li>
+                <li><a><i class="fa fa-table"></i>Provider Portal<span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu">
+                    {% if module_dict.PROVIDERPORTAL.PROVIDERDASHBOARD %}
+                      <li><a href={% url 'provider_dashboard' %}>Provider Dashboard</a></li>
+                    {% endif %}
+                  </ul>
+                </li>
+                <li><a><i class="fa fa-bar-chart-o"></i>Home Assessment<span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu">
+                    {% if module_dict.HOMEASSESSMENTPORTAL.ASSESSMENTTOOL %}
+                      <li><a href={% url 'assessment_choose_client' %}>Assessment Tool</a></li>
+                    {% endif %}
+                    {% if module_dict.HOMEASSESSMENTPORTAL.VIEWALERTS %}
+                      <li><a href={% url 'view_alerts' %}>View Alerts</a></li>
+                    {% endif %}
+                  </ul>
+                </li>
+                <li><a><i class="fa fa-clone"></i>Home Modification<span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu">
+                    {% if module_dict.HOMEMODIFICATIONPORTAL.CONTRACTORDASHBOARD %}
+                      <li><a href={% url 'contractor_dashboard' %}>Contractor Dashboard</a></li>
+                    {% endif %}
+                    {% if module_dict.HOMEMODIFICATIONPORTAL.VIEWALLPROJECTS %}
+                      <li><a href={% url 'view_projects' %}>View All Projects</a></li>
+                    {% endif %}
+                    {% if module_dict.HOMEMODIFICATIONPORTAL.VIEWBIDS %}
+                      <li><a href={% url 'view_bids' %}>View Bids</a></li>
+                    {% endif %}
+                  </ul>
+                </li>
+                <li><a><i class="fa fa-clone"></i>Move Management<span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu">
+                    {% if module_dict.MOVEMANAGEMENTPORTAL.MOVEMANAGERDASHBOARD %}
+                      <li><a href={% url 'move_manager_dashboard' %}>Move Manager Dashboard</a></li>
+                    {% endif %}
+                    {% if module_dict.MOVEMANAGEMENTPORTAL.VIEWMOVEPROJECTS %}
+                      <li><a href={% url 'view_move_projects' %}>View all Move Projects</a></li>
+                    {% endif %}
+                    {% if module_dict.MOVEMANAGEMENTPORTAL.VIEWMOVEBIDS %}
+                      <li><a href={% url 'view_move_bids' %}>View Move Bids</a></li>
+                    {% endif %}
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!-- /sidebar menu -->
+
+          <!-- /menu footer buttons -->
+          <div class="sidebar-footer hidden-small"> <a data-toggle="tooltip" data-placement="top" title="Settings"> <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> </a> <a data-toggle="tooltip" data-placement="top" title="FullScreen"> <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span> </a> <a data-toggle="tooltip" data-placement="top" title="Lock"> <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span> </a> <a data-toggle="tooltip" data-placement="top" title="Logout"> <span class="glyphicon glyphicon-off" aria-hidden="true"></span> </a> </div>
+          <!-- /menu footer buttons -->
+        </div>
+      </div>
+
+      <!-- top navigation -->
+      <div class="top_nav">
+        <div class="nav_menu">
+          <nav>
+            <div class="nav toggle"> <a id="menu_toggle"><i class="fa fa-bars"></i></a> </div>
+            <ul class="nav navbar-nav navbar-right">
+              <li class=""> <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> <img src="{{current_user_info.profile_picture.url}}" onerror="this.src='mycareportal_app/media/pictures/img.png'">{{ user.first_name }} <span class=" fa fa-angle-down"></span> </a>
+                <ul class="dropdown-menu dropdown-usermenu pull-right">
+                  <li><a href={% url 'caregiver_dashboard' %}> Profile</a></li>
+                  <!--<li> <a href="javascript:;"> <span class="badge bg-red pull-right">50%</span> <span>Settings</span> </a> </li>
+                  <li><a href="javascript:;">Help</a></li>-->
+                  <li><a href="{% url 'logout' %}"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                </ul>
+              </li>
+              <!--<li role="presentation" class="dropdown"> <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false"> <i class="fa fa-envelope-o"></i> <span class="badge bg-green">6</span> </a>
+                <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                  <li> <a> <span class="image"><img src="images/img.svg" alt="Profile Image" /></span> <span> <span>Dhruv Ranjan</span> <span class="time">3 mins ago</span> </span> <span class="message"> Website crashed. Fix pls. </span> </a> </li>
+                  <li> <a> <span class="image"><img src="images/img.svg" alt="Profile Image" /></span> <span> <span>Dhruv Ranjan</span> <span class="time">3 mins ago</span> </span> <span class="message"> New module due tomorrow. </span> </a> </li>
+                  <li> <a> <span class="image"><img src="images/img.svg" alt="Profile Image" /></span> <span> <span>Dhruv Ranjan</span> <span class="time">3 mins ago</span> </span> <span class="message"> DEADLINE: Final draft of prototype shader due in 4 hours. </span> </a> </li>
+                  <li> <a> <span class="image"><img src="images/img.svg" alt="Profile Image" /></span> <span> <span>Dhruv Ranjan</span> <span class="time">3 mins ago</span> </span> <span class="message"> Finish iOS conversion by next week. </span> </a> </li>
+                  <li>
+                    <div class="text-center"> <a> <strong>See All Alerts</strong> <i class="fa fa-angle-right"></i> </a> </div>
+                  </li>
+                </ul>
+              </li>-->
+            </ul>
+          </nav>
+        </div>
+      </div>
+      <!-- /top navigation -->
+
+    <!-- page content -->
+    {% block pagecontent %}
+    {% endblock %}
+    <!-- /page content -->
+
+    <!-- footer content -->
+    <footer>
+      <div class="pull-right"> WeCare Careportal </div>
+      <div class="clearfix"></div>
+    </footer>
+    <!-- /footer content -->
+  </div>
+</div>
+
+<!-- jQuery -->
+<script src="{% static 'vendors/jquery/dist/jquery.min.js' %}"></script>
+<!-- Bootstrap -->
+<script src="{% static 'vendors/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+<!-- FastClick -->
+<script src="{% static 'vendors/fastclick/lib/fastclick.js' %}"></script>
+<!-- NProgress -->
+<script src="{% static 'vendors/nprogress/nprogress.js' %}"></script>
+<!-- Custom Theme Scripts -->
+<script src="{% static 'build/js/custom.min.js' %}"></script>
+{% block footlibs %}{% endblock %}
+{% block scripts %}{% endblock %}
+
+
+</body>
+</html>

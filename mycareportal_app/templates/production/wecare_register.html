@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Register</title>
+    {% load static %}
+    <!-- Bootstrap -->
+    <link href="{% static 'vendors/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="{% static 'vendors/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="{% static 'vendors/nprogress/nprogress.css' %}" rel="stylesheet">
+    <!-- Animate.css -->
+    <link href="{% static 'vendors/animate.css/animate.min.css' %}" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="{% static 'build/css/custom.min.css' %}" rel="stylesheet">
+  </head>
+
+  <body class="login">
+    <div>
+      <div class="login_wrapper">
+        {% if form.errors %}
+          {% for field in form %}
+            {% for error in field.errors %}
+              <div class="alert alert-danger">
+                <strong>{{error}}</strong>
+              </div>
+            {% endfor %}
+          {% endfor %}
+          {% for error in form.non_field_errors %}
+            <div class="alert alert-danger">
+                <string>{{error}}</strong>
+            </div>
+          {% endfor %}
+        {% endif %}
+          <section class="login_content">
+            <form method="post" action="{% url 'register' %}">
+              {% csrf_token %}
+              <h1>Create Account</h1>
+              <div>
+                {% if not form.company_name.value is None %}
+                  <input type="text" class="form-control" placeholder="Company Name" name="{{form.company_name.html_name}}" value="{{form.company_name.value}}" required="" />
+                {% else %}
+                  <input type="text" class="form-control" placeholder="Company Name" name="{{form.company_name.html_name}}" required="" />
+                {% endif %}
+              </div>
+              <div>
+                {% if not form.contact_number.value is None %}
+                  <input type="text" class="form-control" placeholder="Contact Number" name="{{form.contact_number.html_name}}" value="{{form.contact_number.value}}" required="" />
+                {% else %}
+                  <input type="text" class="form-control" placeholder="Contact Number" name="{{form.contact_number.html_name}}" required="" />
+                {% endif %}
+              </div>
+              <div>
+                {% if not form.company_name.value is None %}
+                  <input type="text" class="form-control" placeholder="Address" name = "{{form.address.html_name}}" value = "{{form.address.value}}" required="" />
+                {% else %}
+                  <input type="text" class="form-control" placeholder="Address" name = "{{form.address.html_name}}" required="" />
+                {% endif %}
+              </div>
+              <div>
+                {% if not form.company_name.value is None %}
+                  <input type="text" class="form-control" placeholder="First Name" name = "{{form.first_name.html_name}}" value = "{{form.first_name.value}}" required="" />
+                {% else %}
+                  <input type="text" class="form-control" placeholder="First Name" name = "{{form.first_name.html_name}}" required="" />
+                {% endif %}
+              </div>
+              <div>
+                {% if not form.company_name.value is None %}
+                  <input type="text" class="form-control" placeholder="Last Name" name = "{{form.last_name.html_name}}" value = "{{form.last_name.value}}" required="" />
+                {% else %}
+                  <input type="text" class="form-control" placeholder="Last Name" name = "{{form.last_name.html_name}}" required="" />
+                {% endif %}
+              </div>
+              <div>
+                {% if not form.company_name.value is None %}
+                  <input type="email" class="form-control" placeholder="Email" name = "{{form.email.html_name}}" value = "{{form.email.value}}" required="" />
+                {% else %}
+                  <input type="email" class="form-control" placeholder="Email" name = "{{form.email.html_name}}" required="" />
+                {% endif %}
+              </div>
+              <div>
+                <input type="password" class="form-control" placeholder="Password" name = "{{form.password.html_name}}" required="" />
+              </div>
+              <div>
+                <input type="password" class="form-control" placeholder="Repeat Password" name = "{{form.confirm_password.html_name}}" required="" />
+              </div>
+              <div style="text-align: center;">
+                <input input type="submit" class="form-control btn btn-success submit" value="Register" style="margin: 0 auto;"></input>
+              </div>
+            </form>
+            <div class="clearfix"></div>
+
+            <div class="separator">
+              <p class="change_link">Already a member?
+                <a href="{% url 'login' %}" class="to_register"> Log in </a>
+              </p>
+
+              <div class="clearfix"></div>
+              <br />
+            </div>
+
+          </section>
+      </div>
+    </div>
+  </body>
+</html>

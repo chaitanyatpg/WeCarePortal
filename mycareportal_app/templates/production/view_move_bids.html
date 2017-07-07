@@ -1,0 +1,243 @@
+{% extends "production/base.html" %}
+{% block title %} View Move Bids {% endblock %}
+{% block headlibs %}
+{% load static %}
+    <!-- bootstrap-daterangepicker -->
+    <link href="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+{% endblock %}
+{% block pagecontent %}
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>View Move Offers</h3>
+              </div>
+            </div>
+
+            <div class="clearfix"></div>
+
+
+
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <div class="row">
+                      <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
+                        <div class="profile_img">
+                          <div id="crop-avatar">
+                            <!-- Current avatar -->
+                            <img class="img-responsive avatar-view" src="images/img.png" alt="Avatar">
+                          </div>
+                        </div>
+                        <h3>Moving Company Name</h3>
+
+                        <ul class="list-unstyled user_data">
+                          <li><i class="fa fa-phone user-profile-icon"></i> 732-540-4335
+                          </li>
+
+                          <li><i class="fa fa-map-marker user-profile-icon"></i> Somerville, New Jersey, USA
+                          </li>
+
+                          <li class="m-top-xs">
+                            <i class="fa fa-external-link user-profile-icon"></i>
+                            <a href="http://www.wecareportal.com" target="_blank">www.wecare.com</a>
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        <div>
+                          <div class="form-group col-md-12 col-lg-12 col-sm-12">
+                            <label class="control-label">Start Date<span class="required">*</span>
+                            </label>
+                            <input id="project_date" class="date-picker form-control" required="required" type="text">
+                          </div>
+                          <div class="form-group col-md-12 col-lg-12 col-sm-12">
+                            <label class="control-label">End Date<span class="required">*</span>
+                            </label>
+                            <input id="project_date" class="date-picker form-control" required="required" type="text">
+                          </div>
+                          <div class="form-group col-md-12 col-lg-12 col-sm-12">
+                            <label class="control-label">Cost<span class="required">*</span>
+                            </label>
+                            <input type="text" value="$20,000" class="form-control" required="required">
+                          </div>
+                        </div>
+                        <button type="button" class="btn btn-success">Accept</button>
+                        <button type="button" class="btn btn-warning">Modify</button>
+                        <button type="button" class="btn btn-danger">Reject</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <div class="row">
+                      <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
+                        <div class="profile_img">
+                          <div id="crop-avatar">
+                            <!-- Current avatar -->
+                            <img class="img-responsive avatar-view" src="images/img.png" alt="Avatar">
+                          </div>
+                        </div>
+                        <h3>Moving Company Name</h3>
+
+                        <ul class="list-unstyled user_data">
+                          <li><i class="fa fa-phone user-profile-icon"></i> 732-540-4335
+                          </li>
+
+                          <li><i class="fa fa-map-marker user-profile-icon"></i> Somerville, New Jersey, USA
+                          </li>
+
+                          <li class="m-top-xs">
+                            <i class="fa fa-external-link user-profile-icon"></i>
+                            <a href="http://www.wecareportal.com" target="_blank">www.wecare.com</a>
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        <div>
+                          <div class="form-group col-md-12 col-lg-12 col-sm-12">
+                            <label class="control-label">Start Date<span class="required">*</span>
+                            </label>
+                            <input id="project_date" class="date-picker form-control" required="required" type="text">
+                          </div>
+                          <div class="form-group col-md-12 col-lg-12 col-sm-12">
+                            <label class="control-label">End Date<span class="required">*</span>
+                            </label>
+                            <input id="project_date" class="date-picker form-control" required="required" type="text">
+                          </div>
+                          <div class="form-group col-md-12 col-lg-12 col-sm-12">
+                            <label class="control-label">Cost<span class="required">*</span>
+                            </label>
+                            <input type="text" value="$18,000" class="form-control" required="required">
+                          </div>
+                        </div>
+                        <button type="button" class="btn btn-success">Accept</button>
+                        <button type="button" class="btn btn-warning">Modify</button>
+                        <button type="button" class="btn btn-danger">Reject</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <div class="row">
+                      <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
+                        <div class="profile_img">
+                          <div id="crop-avatar">
+                            <!-- Current avatar -->
+                            <img class="img-responsive avatar-view" src="images/img.png" alt="Avatar">
+                          </div>
+                        </div>
+                        <h3>Moving Company Name</h3>
+
+                        <ul class="list-unstyled user_data">
+                          <li><i class="fa fa-phone user-profile-icon"></i> 732-540-4335
+                          </li>
+
+                          <li><i class="fa fa-map-marker user-profile-icon"></i> Somerville, New Jersey, USA
+                          </li>
+
+                          <li class="m-top-xs">
+                            <i class="fa fa-external-link user-profile-icon"></i>
+                            <a href="http://www.wecareportal.com" target="_blank">www.wecare.com</a>
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        <div>
+                          <div class="form-group col-md-12 col-lg-12 col-sm-12">
+                            <label class="control-label">Start Date<span class="required">*</span>
+                            </label>
+                            <input id="project_date" class="date-picker form-control" required="required" type="text">
+                          </div>
+                          <div class="form-group col-md-12 col-lg-12 col-sm-12">
+                            <label class="control-label">End Date<span class="required">*</span>
+                            </label>
+                            <input id="project_date" class="date-picker form-control" required="required" type="text">
+                          </div>
+                          <div class="form-group col-md-12 col-lg-12 col-sm-12">
+                            <label class="control-label">Cost<span class="required">*</span>
+                            </label>
+                            <input type="text" value="$24,000" class="form-control" required="required">
+                          </div>
+                        </div>
+                        <button type="button" class="btn btn-success">Accept</button>
+                        <button type="button" class="btn btn-warning">Modify</button>
+                        <button type="button" class="btn btn-danger">Reject</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+          </div>
+        </div>
+        <!-- /page content -->
+{% endblock %}
+{% block footlibs %}
+    <!-- morris.js -->
+    <script src="{% static 'vendors/raphael/raphael.min.js' %}"></script>
+    <script src="{% static 'vendors/morris.js/morris.min.js' %}"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="{% static 'vendors/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+{% endblock %}
+{% block scripts %}
+    <!-- bootstrap-daterangepicker -->
+    <script>
+      $(document).ready(function() {
+        $('[id^=project_date]').daterangepicker({
+          singleDatePicker: true,
+          calender_style: "picker_4"
+        }, function(start, end, label) {
+          console.log(start.toISOString(), end.toISOString(), label);
+        });
+      });
+    </script>
+    <!-- /bootstrap-daterangepicker -->
+{% endblock %}
