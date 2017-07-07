@@ -26,7 +26,7 @@ SECRET_KEY = 'ylwi3hn#79&v2(%#k&por1szkfssgih4nn)13t4q9v0sz47*eg'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['mycareportal.herokuapp.com']
 #'192.168.2.77'
 
 # Application definition
