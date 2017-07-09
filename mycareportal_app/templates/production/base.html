@@ -55,6 +55,9 @@
                 </li>
                 <li><a><i class="fa fa-home"></i>Client Portal<span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu">
+                    {% if module_dict.CLIENTPORTAL.REGISTERTABLETCLIENT %}
+                      <li id='register_tablet_li_id'><a href={% url 'activate_tablet_choose_client' %}>Register Tablet</a></li>
+                    {% endif %}
                     {% if module_dict.CLIENTPORTAL.CLIENTONBOARDING %}
                       <li><a href={% url 'add_client' %}>Client Onboarding</a></li>
                     {% endif %}
@@ -206,6 +209,17 @@
 <script src="{% static 'build/js/custom.min.js' %}"></script>
 {% block footlibs %}{% endblock %}
 {% block scripts %}{% endblock %}
+<script type="text/javascript">
+$(document).ready(function(){
+    if(window.Android){
+      $('#register_tablet_li_id').show();
+    }
+    else{
+      $('#register_tablet_li_id').hide();
+    }
+    //alert(Android.returnID());
+  });
+</script>
 
 
 </body>

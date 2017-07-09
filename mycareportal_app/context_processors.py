@@ -16,7 +16,7 @@ def add_roles_to_context(request):
                     'HOMEMODIFICATIONPORTAL',
                     'MOVEMANAGEMENTPORTAL']
         module_tabs = [['ADMINDASHBOARD','ADDCAREMANAGER'],
-                    ['CLIENTONBOARDING','FINDCAREGIVER','ASSIGN_TASKS','CREATE_TASKS'],
+                    ['CLIENTONBOARDING','FINDCAREGIVER','ASSIGN_TASKS','CREATE_TASKS','REGISTERTABLETCLIENT'],
                     ['CAREGIVERONBOARDING','EDIT_CAREGIVER','CAREGIVERDASHBOARD','CALENDAR'],
                     ['FAMILYDASHBOARD'],
                     ['PROVIDERDASHBOARD'],
@@ -36,6 +36,7 @@ def add_roles_to_context(request):
             if care_manager.can_add:
                 module_dict['DASHBOARD']['ADDCAREMANAGER']=True
             module_dict['CLIENTPORTAL']['CLIENTONBOARDING']=True
+            module_dict['CLIENTPORTAL']['REGISTERTABLETCLIENT']=True
             module_dict['CLIENTPORTAL']['EDITCLIENT']=True
             module_dict['CLIENTPORTAL']['FINDCAREGIVER']=True
             module_dict['CLIENTPORTAL']['ASSIGN_TASKS']=True

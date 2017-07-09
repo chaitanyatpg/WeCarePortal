@@ -19,6 +19,18 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 def add_client(request):
     return render(request, 'production/care_portal.html')
 
+class ActivateTabletClient(LoginRequiredMixin, View):
+
+    def get(self,request):
+        context = {}
+        return render(request,'production/care_portal.html', context) #placeholder
+
+class ActivateTabletChooseClient(LoginRequiredMixin, View):
+
+    def get(self,request):
+        context = {}
+        return render(request,'production/care_portal.html', context) #placeholder
+
 class AddClient(LoginRequiredMixin, View):
 
     def get(self, request):
