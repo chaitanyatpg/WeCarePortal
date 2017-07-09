@@ -23,13 +23,23 @@ class ActivateTabletClient(LoginRequiredMixin, View):
 
     def get(self,request):
         context = {}
-        return render(request,'production/care_portal.html', context) #placeholder
+        current_company = request.user.company
+        find_client_form = FindClientForm(request.GET,request.FILES)
+        if find_client_form.is_valid():
+            client_email = find_client_form.cleaned_data['client_email']
+            client = Client.objects.get(company=current_company, email_address=client_email)
+            return render(request,'production/activate_tablet_client.html',context)
 
 class ActivateTabletChooseClient(LoginRequiredMixin, View):
 
     def get(self,request):
         context = {}
-        return render(request,'production/care_portal.html', context) #placeholder
+        current_company = request.user.company
+        #context['add_client_form'] = ClientRegistrationForm()
+        all_clients = Client.objects.filter(company=current_company).order_by('last_name')
+        context['all_clients'] = all_clients
+        context['find_client_form'] = FindClientForm()
+        return render(request,'production/activate_tablet_choose_client.html', context) #placeholder
 
 class AddClient(LoginRequiredMixin, View):
 

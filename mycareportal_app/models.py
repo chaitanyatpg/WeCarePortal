@@ -249,3 +249,9 @@ class ClientAssessmentMap(models.Model):
     assessment_category = models.ForeignKey(AssessmentCategories)
     assessment_task = models.ForeignKey(AssessmentTask)
     status = models.CharField(max_length=2)
+
+class ClientTabletRegister(models.Model):
+
+    company = models.ForeignKey(Company)
+    client = models.OneToOneField(Client)
+    device_id = models.IntegerField(unique=True)

@@ -209,6 +209,7 @@
 <script src="{% static 'build/js/custom.min.js' %}"></script>
 {% block footlibs %}{% endblock %}
 {% block scripts %}{% endblock %}
+<!-- Only show li for register tablet if Android interface exists -->
 <script type="text/javascript">
 $(document).ready(function(){
     if(window.Android){
@@ -220,7 +221,19 @@ $(document).ready(function(){
     //alert(Android.returnID());
   });
 </script>
+<!-- end -->
 
+<!-- Get Android Tablet ID if Android interface exists -->
+<script type="text/javascript">
+  function get_android_tablet_id(){
+    if(window.Android){
+      return Android.returnID();
+    }
+    else{
+      return null;
+    }
+  }
+</script>
 
 </body>
 </html>
