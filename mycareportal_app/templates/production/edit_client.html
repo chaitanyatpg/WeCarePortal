@@ -70,9 +70,9 @@
                     <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Middle Name / Initial</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not edit_client_form.middle_name.value is None %}
-                        <input type="text" required="required" class="form-control col-md-7 col-xs-12" name="{{edit_client_form.middle_name.html_name}}" value="{{edit_client_form.middle_name.value}}">
+                        <input type="text" class="form-control col-md-7 col-xs-12" name="{{edit_client_form.middle_name.html_name}}" value="{{edit_client_form.middle_name.value}}">
                       {% else %}
-                        <input type="text" required="required" class="form-control col-md-7 col-xs-12" name="{{edit_client_form.middle_name.html_name}}">
+                        <input type="text" class="form-control col-md-7 col-xs-12" name="{{edit_client_form.middle_name.html_name}}">
                       {% endif %}
                     </div>
                   </div>

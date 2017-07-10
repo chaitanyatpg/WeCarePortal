@@ -40,11 +40,13 @@
                   <div class="x_content">
                     <br />
                     <div class="row">
-                      <form method="GET" action="{% url 'assessment_tool' %}">
+                      <form method="POST" action="{% url 'activate_tablet_client' %}">
+                        {% csrf_token %}
           	              <div class="form-group">
-          	                <div class="col-md-12 col-sm-12 col-xs-12">
-                              <input type="hidden" id="client_email_hidden" name="{{find_client_form.client_email.html_name}}">
-          	                  <button type="submit" class="btn btn-success">Register</button>
+          	                <div class="col-md-12 col-sm-12 col-xs-12" style="text-align: center">
+                              <input type="hidden" id="client_email_hidden" name="{{register_client_tablet_form.client_id.html_name}}" value={{current_client.id}}>
+                              <input type="hidden" id="android_tablet_id" name="{{register_client_tablet_form.tablet_id.html_name}}">
+                              <button type="submit" class="btn btn-success">Register</button>
           	                </div>
           	              </div>
         	            </form>
@@ -53,8 +55,6 @@
                 </div>
               </div>
             </div>
-
-
           </div>
         </div>
         <!-- /page content -->
@@ -87,8 +87,14 @@
     <script src="{% static 'vendors/starrr/dist/starrr.js' %}"></script>
 {% endblock %}
 {% block scripts %}
-
-
+    <!-- assign tablet id -->
+    <script>
+      $(document).ready(function() {
+        var android_tablet_id = get_android_tablet_id();
+        $('#android_tablet_id').val(android_tablet_id);
+      })
+    </script>
+    <!-- end -->
 
     <!-- bootstrap-daterangepicker -->
     <script>

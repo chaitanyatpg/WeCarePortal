@@ -245,3 +245,12 @@ class DeleteTaskForm(forms.Form):
     def clean(self):
         cleaned_data = super(DeleteTaskForm, self).clean()
         return cleaned_data
+
+class RegisterClientTabletForm(forms.Form):
+
+    client_id = forms.IntegerField()
+    tablet_id = forms.CharField(max_length=100)
+
+    def clean(self):
+        cleaned_data = super(RegisterClientTabletForm, self).clean()
+        return cleaned_data

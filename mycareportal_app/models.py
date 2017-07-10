@@ -254,4 +254,4 @@ class ClientTabletRegister(models.Model):
 
     company = models.ForeignKey(Company)
     client = models.OneToOneField(Client)
-    device_id = models.IntegerField(unique=True)
+    device_id = models.CharField(max_length=100,unique=True)

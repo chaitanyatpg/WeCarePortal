@@ -147,34 +147,34 @@ class EditCaregiver(LoginRequiredMixin, View):
             profile_picture = edit_caregiver_form.cleaned_data['profile_picture']
             #Get current caregiver
             caregiver = Caregiver.objects.get(email_address=email)
-            if arg_diff(caregiver.first_name, first_name):
+            if self.arg_diff(caregiver.first_name, first_name):
                 caregiver.first_name = first_name
-            if arg_diff(caregiver.last_name, last_name):
+            if self.arg_diff(caregiver.last_name, last_name):
                 caregiver.last_name = last_name
-            if arg_diff(caregiver.middle_name, middle_name):
+            if self.arg_diff(caregiver.middle_name, middle_name):
                 caregiver.middle_name = middle_name
-            if arg_diff(caregiver.gender, gender):
+            if self.arg_diff(caregiver.gender, gender):
                 caregiver.gender = gender
-            if arg_diff(caregiver.address, address):
+            if self.arg_diff(caregiver.address, address):
                 caregiver.address = address
-            if arg_diff(caregiver.city, city):
+            if self.arg_diff(caregiver.city, city):
                 caregiver.city = city
-            if arg_diff(caregiver.state, state):
+            if self.arg_diff(caregiver.state, state):
                 caregiver.state = state
-            if arg_diff(caregiver.zip_code, zip_code):
+            if self.arg_diff(caregiver.zip_code, zip_code):
                 caregiver.zip_code = zip_code
             #caregiver.date_of_birth = date_of_birth
-            if arg_diff(caregiver.phone_number, phone_number):
+            if self.arg_diff(caregiver.phone_number, phone_number):
                 caregiver.phone_number = phone_number
-            if arg_diff(caregiver.secondary_phone_number, secondary_phone_number):
+            if self.arg_diff(caregiver.secondary_phone_number, secondary_phone_number):
                 caregiver.secondary_phone_number = secondary_phone_number
-            if arg_diff(caregiver.ssn, ssn):
+            if self.arg_diff(caregiver.ssn, ssn):
                 caregiver.ssn = ssn
-            if arg_diff(caregiver.referrer, referrer):
+            if self.arg_diff(caregiver.referrer, referrer):
                 caregiver.referrer = referrer
-            if arg_diff(caregiver.profile_picture, profile_picture):
+            if self.arg_diff(caregiver.profile_picture, profile_picture):
                 caregiver.profile_picture = profile_picture
-            if arg_diff(caregiver.email_address, email):
+            if self.arg_diff(caregiver.email_address, email):
                 caregiver.email_address = email
                 caregiver_auth = User.objects.get(email=email)
                 caregiver_auth.email = email
@@ -182,7 +182,7 @@ class EditCaregiver(LoginRequiredMixin, View):
             caregiver.save()
         return redirect('edit_choose_caregiver')
 
-    def arg_diff(old,new):
+    def arg_diff(self,old,new):
         return (new != None and old != new)
 
     def parse_date(self,caregiver_birthday):
@@ -204,15 +204,15 @@ def get_caregiver_with_email(request):
         phone_number = caregiver.phone_number
         raw_dob = caregiver.date_of_birth
         date_of_birth = '{0}/{1}/{2}'.format(raw_dob.month,raw_dob.day,raw_dob.year)
-        profile_picture = caregiver.profile_picture.url
         gender = caregiver.gender
         caregiver_data = {'name': name,
                         'address': address,
                         'phone_number': phone_number,
                         'date_of_birth': date_of_birth,
                         'gender': gender,
-                        'email_address': email,
-                        'profile_picture': profile_picture}
+                        'email_address': email}
+        if caregiver.profile_picture:
+            caregiver_data['profile_picture'] = caregiver.profile_picture.url
         context["caregiver_data"] = caregiver_data
         #return JsonResponse(caregiver_data)
         return HttpResponse(json.dumps(caregiver_data), content_type="application/json")
@@ -257,7 +257,6 @@ class CaregiverDashboard(LoginRequiredMixin, View):
     def post(self, request):
         context = {}
         update_task_form = UpdateTaskForm(request.POST)
-        print("adf")
         if update_task_form.is_valid():
             current_company = request.user.company
             comment = update_task_form.cleaned_data["comment"]

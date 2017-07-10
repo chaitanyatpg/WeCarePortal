@@ -28,7 +28,35 @@ class ActivateTabletClient(LoginRequiredMixin, View):
         if find_client_form.is_valid():
             client_email = find_client_form.cleaned_data['client_email']
             client = Client.objects.get(company=current_company, email_address=client_email)
+            #reg_status = ClientTabletRegister.objects.get(company=current_company, client=client)
+            context["current_client"] = client
+            context["register_client_tablet_form"] = RegisterClientTabletForm()
             return render(request,'production/activate_tablet_client.html',context)
+
+    def post(self,request):
+        context = {}
+        current_company = request.user.company
+        register_client_tablet_form = RegisterClientTabletForm(request.POST)
+        if register_client_tablet_form.is_valid():
+            client_id = register_client_tablet_form.cleaned_data['client_id']
+            client = Client.objects.get(company=current_company,id=client_id)
+            tablet_id = register_client_tablet_form.cleaned_data['tablet_id']
+            print(client_id)
+            print(tablet_id)
+            client_tablet_register = ClientTabletRegister(company=current_company,
+                                                            client=client,
+                                                            device_id=tablet_id)
+            #get row and delete with same client if exists
+            if ClientTabletRegister.objects.filter(company=current_company,client=client).exists():
+                existing_register = ClientTabletRegister.objects.get(company=current_company,client=client)
+                existing_register.delete()
+            #get row and delete with same tablet_id if exists
+            if ClientTabletRegister.objects.filter(device_id=tablet_id).exists():
+                existing_register = ClientTabletRegister.objects.get(device_id=tablet_id)
+                existing_register.delete()
+            client_tablet_register.save()
+            print("SAVED")
+        return redirect('activate_tablet_choose_client')
 
 class ActivateTabletChooseClient(LoginRequiredMixin, View):
 
@@ -566,15 +594,15 @@ def get_client_with_email(request):
         phone_number = client.phone_number
         raw_dob = client.date_of_birth
         date_of_birth = '{0}/{1}/{2}'.format(raw_dob.month,raw_dob.day,raw_dob.year)
-        profile_picture = client.profile_picture.url
         gender = client.gender
         client_data = {'name': name,
                         'address': address,
                         'phone_number': phone_number,
                         'date_of_birth': date_of_birth,
                         'gender': gender,
-                        'email_address': email,
-                        'profile_picture': profile_picture}
+                        'email_address': email}
+        if client.profile_picture:
+            client_data['profile_picture'] = client.profile_picture.url
         context["client_data"] = client_data
         return HttpResponse(json.dumps(client_data), content_type="application/json")
 

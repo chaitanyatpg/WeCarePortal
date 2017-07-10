@@ -7,7 +7,7 @@ class CaregiverRegistrationForm(forms.Form):
 
     first_name = forms.CharField(max_length=100)
     last_name = forms.CharField(max_length=100)
-    middle_name = forms.CharField(max_length=100)
+    middle_name = forms.CharField(max_length=100, required=False)
     gender = forms.CharField(max_length=1)
     address = forms.CharField(max_length=400)
     city = forms.CharField(max_length=100)
@@ -15,13 +15,13 @@ class CaregiverRegistrationForm(forms.Form):
     zip_code = forms.CharField(max_length=10)
     date_of_birth = forms.DateTimeField()
     phone_number = forms.CharField(max_length=20)
-    secondary_phone_number = forms.CharField(max_length=20)
+    secondary_phone_number = forms.CharField(max_length=20, required=False)
     email = forms.CharField(max_length=200)
     password = forms.CharField(max_length=30)
     confirm_password = forms.CharField(max_length=30)
     ssn = forms.IntegerField()
-    referrer = forms.CharField(max_length=100)
-    profile_picture = forms.ImageField(label='Select file', required=True)
+    referrer = forms.CharField(max_length=100, required=False)
+    profile_picture = forms.ImageField(label='Select file', required=False)
 
     def clean_picture(self):
         picture = self.cleaned_data['profile_picture']
