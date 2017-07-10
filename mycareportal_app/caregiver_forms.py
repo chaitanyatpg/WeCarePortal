@@ -85,7 +85,7 @@ class FindCaregiverForm(forms.Form):
 
 class UpdateTaskForm(forms.Form):
 
-    comment = forms.CharField(max_length=500)
+    comment = forms.CharField(max_length=500, required=False)
     status = forms.CharField(max_length=50)
     task_id = forms.IntegerField()
     client_id = forms.IntegerField()

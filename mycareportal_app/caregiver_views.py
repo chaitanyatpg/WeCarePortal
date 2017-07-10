@@ -244,10 +244,11 @@ class CaregiverDashboard(LoginRequiredMixin, View):
         client_tasks = {}
         current_date = datetime.date.today()
         for client_data in assigned_clients:
-            current_client_tasks = self.get_client_tasks(client_data)
-            print(str(client_data.email_address))
-            #client_name = '{0} {1}'.format(client_data.first_name, client_data.last_name)
-            client_tasks[client_data] = list(current_client_tasks)
+            current_client_tasks = self.get_client_tasks(client_data, request)
+            if current_client_tasks != None:
+                print(str(client_data.email_address))
+                #client_name = '{0} {1}'.format(client_data.first_name, client_data.last_name)
+                client_tasks[client_data] = list(current_client_tasks)
         #print(current_date)
         context["client_tasks"] = client_tasks
         #Get Update Form
@@ -288,10 +289,19 @@ class CaregiverDashboard(LoginRequiredMixin, View):
             task.save()
         return redirect('caregiver_dashboard')
 
-    def get_client_tasks(self, client_data):
+    def get_client_tasks(self, client_data, request):
         current_date = datetime.date.today()
-        client_tasks = TaskSchedule.objects.filter(client=client_data,date=current_date)
-        return client_tasks
+        if "tablet_id" in request.session:
+            tablet_id = request.session["tablet_id"]
+            tablet_client = ClientTabletRegister.objects.get(company=request.user.company,device_id=tablet_id)
+            if tablet_client.client == client_data:
+                client_tasks = TaskSchedule.objects.filter(client=client_data,date=current_date)
+                return client_tasks
+            else:
+                return None
+        else:
+            client_tasks = TaskSchedule.objects.filter(client=client_data,date=current_date)
+            return client_tasks
 
 @login_required
 def caregiver_dashboard(request):

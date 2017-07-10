@@ -160,7 +160,6 @@
             <ul class="nav navbar-nav navbar-right">
               <li class=""> <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> <img src="{{current_user_info.profile_picture.url}}" onerror="this.src='mycareportal_app/media/pictures/img.png'">{{ user.first_name }} <span class=" fa fa-angle-down"></span> </a>
                 <ul class="dropdown-menu dropdown-usermenu pull-right">
-                  <li><a href={% url 'caregiver_dashboard' %}> Profile</a></li>
                   <!--<li> <a href="javascript:;"> <span class="badge bg-red pull-right">50%</span> <span>Settings</span> </a> </li>
                   <li><a href="javascript:;">Help</a></li>-->
                   <li><a href="{% url 'logout' %}"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
@@ -231,6 +230,44 @@ $(document).ready(function(){
     }
     //alert(Android.returnID());
   });
+</script>
+<!-- end -->
+<!--get cookie -->
+  <script>
+  function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+  }
+</script>
+<!-- end -->
+<!-- set tablet id in session -->
+<script type="text/javascript">
+$(document).ready(function(){
+  if(window.Android){
+    var tablet_id = get_android_tablet_id();
+    $.ajax({
+      type: "GET",
+      url: '{% url "set_tablet_id_session" %}',
+      data: { tablet_id: tablet_id },
+      contentType: "application/json",
+      success: function(out_msg){
+      },
+      failure: function(out_msg){
+      }
+    });
+  }
+});
 </script>
 <!-- end -->
 {% block scripts %}{% endblock %}

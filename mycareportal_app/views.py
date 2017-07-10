@@ -14,6 +14,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 
+@login_required
 def home(request):
     context = {}
     current_company = request.user.company
@@ -128,3 +129,9 @@ class AddCareManager(LoginRequiredMixin, View):
             new_role.save()
         context['add_care_manager_form'] = CareManagerRegistrationForm();
         return render(request, 'production/add_care_manager.html', context)
+
+def set_tablet_id_session(request):
+    if request.method == 'GET':
+        tablet_id = request.GET.get('tablet_id')
+        request.session["tablet_id"] = tablet_id
+        return HttpResponse("Set Tablet ID")

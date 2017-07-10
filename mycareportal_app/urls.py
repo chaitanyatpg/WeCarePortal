@@ -20,12 +20,13 @@ from django.contrib.auth import views as auth_views
 ]
 """
 urlpatterns = [
-    url(r'^$',views.dashboard,name='dashboard'),
+    url(r'^$',views.home,name='home'),
     url(r'^home$', views.home,name='home'),
     url(r'^login$', auth_views.LoginView.as_view(template_name='production/wecare_login.html'),name='login'),
     url(r'^logout$', views.logout_view,name='logout'),
     url(r'^register',views.register,name='register'),
     url(r'^dashboard',views.dashboard,name='dashboard'),
+    url(r'^set_tablet_id_session',views.set_tablet_id_session,name='set_tablet_id_session'),
     url(r'^add_care_manager',views.AddCareManager.as_view(),name='add_care_manager'),
     url(r'^activate_tablet_choose_client',client_views.ActivateTabletChooseClient.as_view(),name='activate_tablet_choose_client'),
     url(r'^activate_tablet_client',client_views.ActivateTabletClient.as_view(),name='activate_tablet_client'),
