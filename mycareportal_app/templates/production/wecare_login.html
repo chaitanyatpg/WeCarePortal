@@ -47,13 +47,13 @@
               <div>
                 <input type="submit" class="btn btn-default submit" value="Login"></input>
                 <input type="hidden" name="next" value="{% url 'home' %}"></input>
-                <a class="reset_pass" href="#">Forgot your password?</a>
+                <!--<a class="reset_pass" href="#">Forgot your password?</a>-->
               </div>
 
               <div class="clearfix"></div>
 
               <div class="separator">
-                <p class="change_link">New to site?
+                <p class="change_link">New to the site?
                   <a href="{% url 'register' %}" class="to_register"> Create Account </a>
                 </p>
 
@@ -66,5 +66,62 @@
         </div>
       </div>
     </div>
+
+    <!-- jQuery -->
+    <script src="{% static 'vendors/jquery/dist/jquery.min.js' %}"></script>
+
+    <!-- Get Android Tablet ID if Android interface exists -->
+    <script type="text/javascript">
+      function get_android_tablet_id(){
+        if(window.Android){
+          return Android.returnID();
+        }
+        else{
+          return -1;
+        }
+      }
+    </script>
+    <!-- end -->
+
+    <!--get cookie -->
+      <script>
+      function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+      }
+    </script>
+    <!-- end -->
+    <!-- set tablet id in session -->
+    <script type="text/javascript">
+    $(document).ready(function(){
+      if(window.Android){
+        var tablet_id = get_android_tablet_id();
+        $.ajax({
+          type: "GET",
+          url: '{% url "set_tablet_id_session" %}',
+          data: { tablet_id: tablet_id },
+          contentType: "application/json",
+          success: function(out_msg){
+          },
+          failure: function(out_msg){
+          }
+        });
+      }
+    });
+    </script>
+    <!-- end -->
+
+
   </body>
 </html>
