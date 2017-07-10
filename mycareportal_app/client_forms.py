@@ -6,7 +6,7 @@ class ClientRegistrationForm(forms.Form):
 
     first_name = forms.CharField(max_length=100)
     last_name = forms.CharField(max_length=100)
-    middle_name = forms.CharField(max_length=100)
+    middle_name = forms.CharField(max_length=100, required=False)
     gender = forms.CharField(max_length=1)
     date_of_birth = forms.DateTimeField()
     phone_number = forms.CharField(max_length=20)

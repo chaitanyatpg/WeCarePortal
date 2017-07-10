@@ -88,7 +88,7 @@
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Gender<span class="required">*</span></label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                      <div class="btn-group" data-toggle="buttons">
+                      <div>
                         <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
                           <input type="radio" name="{{add_caregiver_form.gender.html_name}}" value="M" required="required">
                           &nbsp; Male &nbsp; </label>
@@ -122,8 +122,8 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">State<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not add_caregiver_form.state_value is None %}
-                      <select class="select2_single form-control" tabindex="-1" name={{add_caregiver_form.state.html_name}} value={{add_caregiver_form.state.value}}>
-                            <option></option>
+                      <select required class="select2_single form-control" tabindex="-1" name={{add_caregiver_form.state.html_name}} value={{add_caregiver_form.state.value}}>
+                            <option value="" disabled selected>Select State</option>
                             <option value="AL">Alabama</option>
                           	<option value="AK">Alaska</option>
                           	<option value="AZ">Arizona</option>
@@ -177,8 +177,8 @@
                           	<option value="WY">Wyoming</option>
                       </select>
                       {% else %}
-                      <select class="select2_single form-control" tabindex="-1" name={{add_caregiver_form.state.html_name}}>
-                            <option></option>
+                      <select required class="select2_single form-control" tabindex="-1" name={{add_caregiver_form.state.html_name}}>
+                            <option value="" disabled selected>Select State</option>
                             <option value="AL">Alabama</option>
                           	<option value="AK">Alaska</option>
                           	<option value="AZ">Arizona</option>
@@ -322,7 +322,7 @@
                         {{add_caregiver_form.profile_picture.label_tag}}{{add_caregiver_form.profile_picture}}
                       </div>
                   </div>
-                  <div class="form-group">
+                  <!--<div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Location</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
                       <select class="select2_multiple form-control" multiple="multiple">
@@ -349,7 +349,7 @@
                         <option>Option six</option>
                       </select>
                     </div>
-                  </div>
+                  </div>-->
                   <div class="ln_solid"></div>
                   <div class="form-group">
                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">

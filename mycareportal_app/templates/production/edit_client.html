@@ -81,16 +81,16 @@
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
                         {% if edit_client_form.gender.value == 'M' %}
-                          <input type="radio" name="{{edit_client_form.gender.html_name}}" value="M" checked="checked">
+                          <input type="radio" name="{{edit_client_form.gender.html_name}}" value="M" checked="checked" required="required">
                         {% else %}
-                          <input type="radio" name="{{edit_client_form.gender.html_name}}" value="M">
+                          <input type="radio" name="{{edit_client_form.gender.html_name}}" value="M" required="required">
                         {% endif %}
                         &nbsp; Male &nbsp; </label>
                       <label class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
                         {% if edit_client_form.gender.value == 'F' %}
-                          <input type="radio" name="{{edit_client_form.gender.html_name}}" value="F" checked="checked">
+                          <input type="radio" name="{{edit_client_form.gender.html_name}}" value="F" checked="checked" required="required">
                         {% else %}
-                          <input type="radio" name="{{edit_client_form.gender.html_name}}" value="F">
+                          <input type="radio" name="{{edit_client_form.gender.html_name}}" value="F" required="required">
                         {% endif %}
                         Female </label>
                     </div>
@@ -159,7 +159,7 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">State<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not edit_client_form.state.value is None %}
-                      <select class="select2_single form-control" tabindex="-1" name={{edit_client_form.state.html_name}} value={{edit_client_form.state.value}}>
+                      <select required class="select2_single form-control" tabindex="-1" name={{edit_client_form.state.html_name}} value={{edit_client_form.state.value}}>
                             <option selected=selected>{{edit_client_form.state.value}}</option>
                             <option value="AL">Alabama</option>
                           	<option value="AK">Alaska</option>
@@ -214,7 +214,7 @@
                           	<option value="WY">Wyoming</option>
                       </select>
                       {% else %}
-                      <select class="select2_single form-control" tabindex="-1" name={{edit_client_form.state.html_name}}>
+                      <select required class="select2_single form-control" tabindex="-1" name={{edit_client_form.state.html_name}}>
                             <option></option>
                             <option value="AL">Alabama</option>
                           	<option value="AK">Alaska</option>
@@ -338,7 +338,7 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Relationship<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not family_details_form.relationship.value is None %}
-                      <select class="select2_single form-control" id="family_relationship" tabindex="-1" name={{family_details_form.relationship.html_name}} value={{family_details_form.relationship.value}}>
+                      <select required class="select2_single form-control" id="family_relationship" tabindex="-1" name={{family_details_form.relationship.html_name}} value={{family_details_form.relationship.value}}>
                             <option selected=selected>{{family_details_form.relationship.value}}</option>
                           	<option value="Child">Child</option>
                             <option value="Parent">Parent</option>
@@ -347,7 +347,7 @@
                             <option value="Cousin">Cousin</option>
                       </select>
                       {% else %}
-                      <select class="select2_single form-control" id="family_relationship" tabindex="-1" name={{family_details_form.relationship.html_name}}>
+                      <select required class="select2_single form-control" id="family_relationship" tabindex="-1" name={{family_details_form.relationship.html_name}}>
                             <option></option>
                             <option value="Child">Child</option>
                             <option value="Parent">Parent</option>
@@ -402,7 +402,7 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">State<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not family_details_form.state.value is None %}
-                      <select class="select2_single form-control" id="family_state" tabindex="-1" name={{family_details_form.state.html_name}} value={{family_details_form.state.value}}>
+                      <select required class="select2_single form-control" id="family_state" tabindex="-1" name={{family_details_form.state.html_name}} value={{family_details_form.state.value}}>
                             <option selected=selected>{{family_details_form.state.value}}</option>
                             <option value="AL">Alabama</option>
                           	<option value="AK">Alaska</option>
@@ -457,7 +457,7 @@
                           	<option value="WY">Wyoming</option>
                       </select>
                       {% else %}
-                      <select class="select2_single form-control" id="family_state" tabindex="-1" name={{family_details_form.state.html_name}}>
+                      <select required class="select2_single form-control" id="family_state" tabindex="-1" name={{family_details_form.state.html_name}}>
                             <option></option>
                             <option value="AL">Alabama</option>
                           	<option value="AK">Alaska</option>

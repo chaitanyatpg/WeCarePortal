@@ -63,8 +63,8 @@
                       <div class="row">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Task<span class="required">*</span> </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <select id="master_dropdown" class="select2_single" tabindex="-1" name="{{assign_task_form.task.html_name}}">
-                            <option></option>
+                          <select required id="master_dropdown" class="select2_single" tabindex="-1" name="{{assign_task_form.task.html_name}}">
+                            <option value="" selected></option>
                             {% for task in all_tasks %}
                             <option value="{{ task.activity_task }}">{{task.activity_task}}</option>
                             {% endfor %}
@@ -211,19 +211,19 @@
                       </div>
                     </div>
                     <div class="form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12">Description(optional)</label>
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">Description</label>
                       <div class="col-md-6 col-sm-6 col-xs-12">
                           <textarea class="form-control col-md-7 col-xs-12" name="{{assign_task_form.description.html_name}}"></textarea>
                       </div>
                     </div>
                     <div class="form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12">Link(optional)</label>
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">Link</label>
                       <div class="col-md-6 col-sm-6 col-xs-12">
                           <input type="text" class="form-control col-md-7 col-xs-12" name="{{assign_task_form.link.html_name}}">
                       </div>
                     </div>
                     <div class="form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12">Attachment(optional)</label>
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">Attachment</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           {{assign_task_form.attachment.label_tag}}{{assign_task_form.attachment}}
                         </div>
@@ -341,7 +341,7 @@
               <div class="modal-footer">
                 <input type="hidden" id="task_id_edit" name="task_id">
                 <button type="button" class="btn btn-default antoclose2" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success edit_calendar_submit">Save changes</button>
+                <!--<button type="button" class="btn btn-success edit_calendar_submit">Save changes</button>-->
               </form>
               <form id="delete_task_details" enctype="multipart/form-data" action="{% url 'delete_task_with_id' %}" method="post" class="form-horizontal" role="form">
                 {% csrf_token %}
