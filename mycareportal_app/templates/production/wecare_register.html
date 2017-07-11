@@ -20,6 +20,8 @@
 
     <!-- Custom Theme Style -->
     <link href="{% static 'build/css/custom.min.css' %}" rel="stylesheet">
+    <!-- favicon -->
+    <link rel="shortcut icon" href="{% static 'pictures/logo_32_32.png' %}" />
   </head>
 
   <body class="login">
@@ -39,6 +41,7 @@
             </div>
           {% endfor %}
         {% endif %}
+        <img src="{% static 'pictures/wecare_logo.png' %}" height="100" width="100" style="display: block; margin-left: auto; margin-right: auto;"/>
           <section class="login_content">
             <form method="post" action="{% url 'register' %}">
               {% csrf_token %}

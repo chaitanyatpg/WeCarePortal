@@ -20,14 +20,17 @@
 
     <!-- Custom Theme Style -->
     <link href="{% static 'build/css/custom.min.css' %}" rel="stylesheet">
+    <!-- favicon -->
+    <link rel="shortcut icon" href="{% static 'pictures/logo_32_32.png' %}" />
   </head>
 
   <body class="login">
     <div>
       <a class="hiddenanchor" id="signup"></a>
       <a class="hiddenanchor" id="signin"></a>
-
+      <img src="{% static 'pictures/wecare_logo.png' %}" height="100" width="100" style="display: block; margin-left: auto; margin-right: auto;"/>
       <div class="login_wrapper">
+
         <div class="login_form">
           <section class="login_content">
             <form method="post" action="{% url 'login' %}">
