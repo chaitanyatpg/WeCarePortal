@@ -89,7 +89,43 @@ def register(request):
 
 @login_required
 def dashboard(request):
-    return render(request, 'production/admin_dashboard.html')
+    context = {}
+    current_company = request.user.company
+    total_clients = Client.objects.filter(company=current_company).count()
+    total_caregivers = Caregiver.objects.filter(company=current_company).count()
+    total_family_users = FamilyContact.objects.filter(company=current_company).count()
+    total_providers = Provider.objects.filter(company=current_company).count()
+    total_care_managers = CareManager.objects.filter(company=current_company).count()
+    registered_tablets = ClientTabletRegister.objects.filter(company=current_company).count()
+    default_tasks = DefaultTasks.objects.count()
+    custom_tasks = Tasks.objects.filter(company=current_company).count()
+    total_scheduled_tasks = TaskSchedule.objects.filter(company=current_company).count()
+    total_pending_tasks = TaskSchedule.objects.filter(company=current_company,pending=True).count()
+    total_in_progress_tasks = TaskSchedule.objects.filter(company=current_company,in_progress=True).count()
+    total_completed_tasks = TaskSchedule.objects.filter(company=current_company,complete=True).count()
+    total_cancelled_tass = TaskSchedule.objects.filter(company=current_company,cancelled=True).count()
+    company_details = {
+        'company_name' : current_company.company_name,
+        'contact_number' : current_company.contact_number,
+        'address' : current_company.address
+    }
+    #Add totals to context
+    context['total_clients'] = total_clients
+    context['total_caregivers'] = total_caregivers
+    context['total_family_users'] = total_family_users
+    context['total_providers'] = total_providers
+    context['total_care_managers'] = total_care_managers
+    context['registered_tablets'] = registered_tablets
+    context['default_tasks'] = default_tasks
+    context['custom_tasks'] = custom_tasks
+    context['total_scheduled_tasks'] = total_scheduled_tasks
+    context['total_pending_tasks'] = total_pending_tasks
+    context['total_in_progress_tasks'] = total_in_progress_tasks
+    context['total_completed_tasks'] = total_completed_tasks
+    context['total_cancelled_tass'] = total_cancelled_tass
+    #Add company details to context
+    context['company_details'] = company_details
+    return render(request, 'production/admin_dashboard.html', context)
 
 class AddCareManager(LoginRequiredMixin, View):
 
