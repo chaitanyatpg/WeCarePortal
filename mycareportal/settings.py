@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['192.168.2.77','mycareportal.herokuapp.com','localhost','www.we
 AWS_STORAGE_BUCKET_NAME = 'wecare-media'
 AWS_ACCESS_KEY_ID = 'AKIAI2SFPXGFAAHZ5XCQ'
 AWS_SECRET_ACCESS_KEY = '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'
+AWS_S3_FILE_OVERWRITE = False
 
 # Tell django-storages that when coming up with the URL for an item in S3 storage, keep
     # it simple - just use this domain plus the path. (If this isn't set, things get complicated).

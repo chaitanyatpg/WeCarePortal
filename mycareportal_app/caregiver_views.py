@@ -231,15 +231,16 @@ class CaregiverDashboard(LoginRequiredMixin, View):
         phone_number = caregiver.phone_number
         raw_dob = caregiver.date_of_birth
         date_of_birth = '{0}/{1}/{2}'.format(raw_dob.month,raw_dob.day,raw_dob.year)
-        profile_picture = caregiver.profile_picture.url
+
         gender = caregiver.gender
         caregiver_data = {'name': name,
                         'address': address,
                         'phone_number': phone_number,
                         'date_of_birth': date_of_birth,
-                        'gender': gender,
-                        'profile_picture': profile_picture}
+                        'gender': gender}
         context["caregiver_data"] = caregiver_data
+        if caregiver.profile_picture:
+            caregiver_data['profile_picture'] = caregiver.profile_picture.url
         #Get Tasks for assigned clients for the current day
         client_tasks = {}
         current_date = datetime.date.today()
