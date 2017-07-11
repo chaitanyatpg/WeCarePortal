@@ -43,22 +43,22 @@ def add_roles_to_context(request):
             module_dict['CLIENTPORTAL']['CREATE_TASKS']=True
             module_dict['CAREGIVERPORTAL']['CAREGIVERONBOARDING']=True
             module_dict['CAREGIVERPORTAL']['CAREGIVEREDIT']=True
-            module_dict['CAREGIVERPORTAL']['CAREGIVERDASHBOARD']=True
-            module_dict['CAREGIVERPORTAL']['CALENDAR']=True
-            module_dict['FAMILYPORTAL']['FAMILYDASHBOARD']=True
-            module_dict['PROVIDERPORTAL']['PROVIDERDASHBOARD']=True
+            #module_dict['CAREGIVERPORTAL']['CAREGIVERDASHBOARD']=True
+            #module_dict['CAREGIVERPORTAL']['CALENDAR']=True
+            #module_dict['FAMILYPORTAL']['FAMILYDASHBOARD']=True
+            #module_dict['PROVIDERPORTAL']['PROVIDERDASHBOARD']=True
             module_dict['HOMEASSESSMENTPORTAL']['ASSESSMENTTOOL']=True
-            module_dict['HOMEASSESSMENTPORTAL']['VIEWALERTS']=True
-            module_dict['HOMEMODIFICATIONPORTAL']['CONTRACTORDASHBOARD']=True
-            module_dict['HOMEMODIFICATIONPORTAL']['VIEWALLPROJECTS']=True
-            module_dict['HOMEMODIFICATIONPORTAL']['VIEWBIDS']=True
-            module_dict['MOVEMANAGEMENTPORTAL']['MOVEMANAGERDASHBOARD']=True
-            module_dict['MOVEMANAGEMENTPORTAL']['VIEWMOVEPROJECTS']=True
-            module_dict['MOVEMANAGEMENTPORTAL']['VIEWMOVEBIDS']=True
+            #module_dict['HOMEASSESSMENTPORTAL']['VIEWALERTS']=True
+            #module_dict['HOMEMODIFICATIONPORTAL']['CONTRACTORDASHBOARD']=True
+            #module_dict['HOMEMODIFICATIONPORTAL']['VIEWALLPROJECTS']=True
+            #module_dict['HOMEMODIFICATIONPORTAL']['VIEWBIDS']=True
+            #module_dict['MOVEMANAGEMENTPORTAL']['MOVEMANAGERDASHBOARD']=True
+            #module_dict['MOVEMANAGEMENTPORTAL']['VIEWMOVEPROJECTS']=True
+            #module_dict['MOVEMANAGEMENTPORTAL']['VIEWMOVEBIDS']=True
         #CAREGIVER PERMISSIONS
         if 'CAREGIVER' in user_roles:
             module_dict['CAREGIVERPORTAL']['CAREGIVERDASHBOARD']=True
-            module_dict['CAREGIVERPORTAL']['CALENDAR']=True
+            #module_dict['CAREGIVERPORTAL']['CALENDAR']=True
         if 'FAMILYUSER' in user_roles:
             module_dict['FAMILYPORTAL']['FAMILYDASHBOARD']=True
         context['user_roles'] = user_roles
