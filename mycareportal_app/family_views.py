@@ -32,12 +32,12 @@ class FamilyDashboard(View):
         address = '{0}, {1} {2} {3}'.format(family_contact.address, family_contact.city, family_contact.state, family_contact.zip_code)
         phone_number = family_contact.phone_number
         relationship = family_contact.relationship
-        profile_picture = family_contact.profile_picture.url
         family_contact_data = {'name': name,
                         'address': address,
                         'phone_number': phone_number,
-                        'relationship': relationship,
-                        'profile_picture': profile_picture}
+                        'relationship': relationship}
+        if family_contact.profile_picture:
+            family_contact_data['profile_picture'] = family_contact.profile_picture.url
         context["family_contact_data"] = family_contact_data
         #Get Tasks for related clients for the current day
         client_tasks = {}

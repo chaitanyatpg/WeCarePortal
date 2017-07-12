@@ -31,7 +31,7 @@
 
           <!-- menu profile quick info -->
           <div class="profile">
-            {% if current_user_info.profile_picture.url %}
+            {% if current_user_info.profile_picture %}
               <div class="profile_pic"> <img src="{{current_user_info.profile_picture.url}}" class="img-circle profile_img"> </div>
             {% else %}
               <div class="profile_pic"> <img src="{% static 'pictures/img.png' %}" class="img-circle profile_img"> </div>
@@ -164,7 +164,7 @@
           <nav>
             <div class="nav toggle"> <a id="menu_toggle"><i class="fa fa-bars"></i></a> </div>
             <ul class="nav navbar-nav navbar-right">
-              {% if current_user_info.profile_picture.url %}
+              {% if current_user_info.profile_picture %}
                 <li class=""> <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> <img src="{{current_user_info.profile_picture.url}}"/> {{ user.first_name }} <span class=" fa fa-angle-down"></span> </a>
               {% else %}
                 <li class=""> <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> <img src="{% static 'pictures/img.png' %}"/> {{ user.first_name }} <span class=" fa fa-angle-down"></span> </a>

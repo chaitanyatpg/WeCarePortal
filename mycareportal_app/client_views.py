@@ -952,9 +952,10 @@ def get_family_with_id(request):
             'city': family_member.city,
             'state': family_member.state,
             'zip_code': family_member.zip_code,
-            'profile_picture': family_member.profile_picture.url,
             'family_id': family_member.id
         }
+        if family_member.profile_picture:
+            family_member_data['profile_picture'] = family_member.profile_picture.url
         print(family_id)
         return HttpResponse(json.dumps(family_member_data), content_type="application/json")
 

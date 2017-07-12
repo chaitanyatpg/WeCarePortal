@@ -76,7 +76,7 @@ class Caregiver(models.Model):
     ssn = models.IntegerField()
     referrer = models.CharField(max_length=100,blank=True)
     rating = models.IntegerField(default=0)
-    profile_picture = models.ImageField(upload_to="pictures/profile_pictures", default = "pictures/img.png")
+    profile_picture = models.ImageField(upload_to="pictures/profile_pictures")
     #add location
     #add tags
 
@@ -114,7 +114,7 @@ class FamilyContact(models.Model):
     city = models.CharField(max_length=100)
     state = models.CharField(max_length=2)
     zip_code = models.CharField(max_length=10)
-    profile_picture = models.ImageField(upload_to="pictures/profile_pictures", default = "pictures/profile_pictures/img.png")
+    profile_picture = models.ImageField(upload_to="pictures/profile_pictures")
 
 class Provider(models.Model):
 
@@ -164,7 +164,7 @@ class Client(models.Model):
     city = models.CharField(max_length=100)
     state = models.CharField(max_length=2)
     zip_code = models.CharField(max_length=10)
-    profile_picture = models.ImageField(upload_to="pictures/profile_pictures", default = "pictures/img.png")
+    profile_picture = models.ImageField(upload_to="pictures/profile_pictures")
 
     caregiver = models.ManyToManyField(Caregiver, blank=True)
     family_contacts = models.ManyToManyField(FamilyContact, blank=True)

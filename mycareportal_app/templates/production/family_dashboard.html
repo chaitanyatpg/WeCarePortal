@@ -45,7 +45,11 @@
                       <div class="profile_img">
                         <div id="crop-avatar">
                           <!-- Current avatar -->
-                          <img class="img-responsive avatar-view" src="{{family_contact_data.profile_picture}}" alt="Avatar" title="Change the avatar">
+                          {% if family_contact_data.profile_picture %}
+                            <img class="img-responsive avatar-view" src="{{family_contact_data.profile_picture}}" alt="Avatar" title="Change the avatar">
+                          {% else %}
+                            <img class="img-responsive avatar-view" src="{% static 'pictures/img.png' %}" alt="Avatar" title="Change the avatar">
+                          {% endif %}
                         </div>
                       </div>
                       <h3>{{family_contact_data.name}}</h3>

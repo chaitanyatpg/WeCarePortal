@@ -231,7 +231,6 @@ class CaregiverDashboard(LoginRequiredMixin, View):
         phone_number = caregiver.phone_number
         raw_dob = caregiver.date_of_birth
         date_of_birth = '{0}/{1}/{2}'.format(raw_dob.month,raw_dob.day,raw_dob.year)
-
         gender = caregiver.gender
         caregiver_data = {'name': name,
                         'address': address,
@@ -247,7 +246,6 @@ class CaregiverDashboard(LoginRequiredMixin, View):
         for client_data in assigned_clients:
             current_client_tasks = self.get_client_tasks(client_data, request)
             if current_client_tasks != None:
-                print(str(client_data.email_address))
                 #client_name = '{0} {1}'.format(client_data.first_name, client_data.last_name)
                 client_tasks[client_data] = list(current_client_tasks)
         #print(current_date)
@@ -296,12 +294,12 @@ class CaregiverDashboard(LoginRequiredMixin, View):
             tablet_id = request.session["tablet_id"]
             tablet_client = ClientTabletRegister.objects.get(company=request.user.company,device_id=tablet_id)
             if tablet_client.client == client_data:
-                client_tasks = TaskSchedule.objects.filter(client=client_data,date=current_date)
+                client_tasks = TaskSchedule.objects.filter(client=client_data,date=current_date).order_by('complete','cancelled','pending','in_progress')
                 return client_tasks
             else:
                 return None
         else:
-            client_tasks = TaskSchedule.objects.filter(client=client_data,date=current_date)
+            client_tasks = TaskSchedule.objects.filter(client=client_data,date=current_date).order_by('complete','cancelled','pending','in_progress')
             return client_tasks
 
 @login_required

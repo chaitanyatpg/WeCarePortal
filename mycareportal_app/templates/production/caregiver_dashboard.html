@@ -41,7 +41,7 @@
                       <div class="profile_img">
                         <div id="crop-avatar">
                           <!-- Current avatar -->
-                          {% if caregiver_data.profile_picture.url %}
+                          {% if caregiver_data.profile_picture %}
                             <img class="img-responsive avatar-view" src="{{caregiver_data.profile_picture}}" alt="Avatar" title="Change the avatar">
                           {% else %}
                             <img class="img-responsive avatar-view" src="{% static 'pictures/img.png' %}" alt="Avatar" title="Change the avatar">
