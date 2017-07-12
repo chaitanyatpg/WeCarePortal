@@ -22,6 +22,7 @@ class AddCaregiver(LoginRequiredMixin, View):
         context['add_caregiver_form'] = CaregiverRegistrationForm()
         return render(request,'production/add_caregiver.html', context)
 
+    @transaction.atomic
     def post(self, request):
         context = {}
         add_caregiver_form = CaregiverRegistrationForm(request.POST,request.FILES)

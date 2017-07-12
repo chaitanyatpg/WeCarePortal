@@ -33,6 +33,7 @@ class ActivateTabletClient(LoginRequiredMixin, View):
             context["register_client_tablet_form"] = RegisterClientTabletForm()
             return render(request,'production/activate_tablet_client.html',context)
 
+    @transaction.atomic
     def post(self,request):
         context = {}
         current_company = request.user.company
@@ -399,6 +400,7 @@ class AssignTasks(LoginRequiredMixin, View):
         else:
             return redirect('assign_choose_client')
 
+    @transaction.atomic
     def post(self, request):
         context = {}
         current_company = request.user.company
@@ -653,6 +655,7 @@ def delete_task_with_id(request):
         return HttpResponse("Delete Successful")
 
 @login_required
+@transaction.atomic
 def post_family_details(request):
     if request.method == 'POST':
         context = {}
@@ -735,6 +738,7 @@ def post_family_details(request):
         family_contacts = serializers.serialize('json',family_contacts)
         return HttpResponse(json.dumps(family_contacts),content_type="application/json")
 
+@login_required
 @transaction.atomic
 def post_provider_details(request):
 
@@ -805,6 +809,7 @@ def post_provider_details(request):
         providers = serializers.serialize('json',providers)
         return HttpResponse(json.dumps(providers),content_type="application/json")
 
+@login_required
 @transaction.atomic
 def post_pharmacy_details(request):
 
@@ -852,6 +857,7 @@ def post_pharmacy_details(request):
         pharmacies = serializers.serialize('json',pharmacies)
         return HttpResponse(json.dumps(pharmacies),content_type="application/json")
 
+@login_required
 @transaction.atomic
 def post_payer_details(request):
 
