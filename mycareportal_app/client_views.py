@@ -359,7 +359,7 @@ class ChooseCaregiver(LoginRequiredMixin, View):
             all_caregivers = Caregiver.objects.filter(company=current_company).order_by('last_name')
             context['all_caregivers'] = all_caregivers
             context["client_email"] = client_email
-            client = Client.objects.get(email_address=client_email)
+            client = Client.objects.get(company=current_company,email_address=client_email)
             context["client_details"] = client
             context["assign_caregiver_form"] = AssignCaregiverForm()
             #Find which caregivers are already assigned
@@ -584,7 +584,8 @@ def get_client_with_email(request):
     if request.method == 'GET':
         context = {}
         email = request.GET.get('email_data')
-        client = Client.objects.get(email_address = email)
+        current_company = request.user.company
+        client = Client.objects.get(company=current_company,email_address = email)
         name = '{0} {1}'.format(client.first_name, client.last_name)
         address = '{0}, {1} {2} {3}'.format(client.address, client.city, client.state, client.zip_code)
         phone_number = client.phone_number
@@ -607,7 +608,8 @@ def get_task_with_id(request):
     if request.method == 'GET':
         context = {}
         task_id = request.GET.get('task_id')
-        current_task = TaskSchedule.objects.get(id = task_id)
+        current_company = request.user.company
+        current_task = TaskSchedule.objects.get(company=current_company,id = task_id)
         task_name = current_task.activity_task
         start_time = current_task.start_time
         end_time = current_task.end_time
@@ -710,7 +712,7 @@ def post_family_details(request):
                 assigned_client.family_contacts.add(family_contact)
                 assigned_client.save()
             else:
-                existing_family_member = FamilyContact.objects.get(id=family_id)
+                existing_family_member = FamilyContact.objects.get(company=request.user.company,id=family_id)
                 existing_user = existing_family_member.user
                 #update User Auth object
                 existing_user.username=email
@@ -785,7 +787,7 @@ def post_provider_details(request):
                 assigned_client.provider.add(provider_user)
                 assigned_client.save()
             else:
-                existing_provider = Provider.objects.get(id=provider_id)
+                existing_provider = Provider.objects.get(company=request.user.company,id=provider_id)
                 existing_user = existing_provider.user
                 #update User Auth object
                 existing_user.username=email
@@ -804,7 +806,7 @@ def post_provider_details(request):
         else:
             print(provider_details_form.errors)
         client_email = request.POST.get('client_email')
-        assigned_client = Client.objects.get(email_address=client_email)
+        assigned_client = Client.objects.get(company=request.user.company,email_address=client_email)
         providers = assigned_client.provider.all()
         providers = serializers.serialize('json',providers)
         return HttpResponse(json.dumps(providers),content_type="application/json")
@@ -841,7 +843,7 @@ def post_pharmacy_details(request):
                 assigned_client.pharmacy.add(pharmacy)
                 assigned_client.save()
             else:
-                existing_pharmacy = Pharmacy.objects.get(id=pharmacy_id)
+                existing_pharmacy = Pharmacy.objects.get(company=request.user.company,id=pharmacy_id)
                 #update Provider object
                 existing_pharmacy.email_address = email
                 existing_pharmacy.name = pharmacy_name
@@ -852,7 +854,7 @@ def post_pharmacy_details(request):
         else:
             print(pharmacy_details_form.errors)
         client_email = request.POST.get('client_email')
-        assigned_client = Client.objects.get(email_address=client_email)
+        assigned_client = Client.objects.get(company=request.user.company,email_address=client_email)
         pharmacies = assigned_client.provider.all()
         pharmacies = serializers.serialize('json',pharmacies)
         return HttpResponse(json.dumps(pharmacies),content_type="application/json")
@@ -895,7 +897,7 @@ def post_payer_details(request):
                 assigned_client.payer.add(payer)
                 assigned_client.save()
             else:
-                existing_payer = Payer.objects.get(id=payer_id)
+                existing_payer = Payer.objects.get(company=request.user.company,id=payer_id)
                 #update Provider object
                 existing_payer.email_address = email
                 existing_payer.name = payer_name
@@ -909,7 +911,7 @@ def post_payer_details(request):
         else:
             print(payer_details_form.errors)
         client_email = request.POST.get('client_email')
-        assigned_client = Client.objects.get(email_address=client_email)
+        assigned_client = Client.objects.get(company=request.user.company,email_address=client_email)
         payers = assigned_client.payer.all()
         payers = serializers.serialize('json',payers)
         return HttpResponse(json.dumps(payers),content_type="application/json")

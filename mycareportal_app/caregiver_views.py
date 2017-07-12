@@ -101,9 +101,10 @@ class EditCaregiver(LoginRequiredMixin, View):
     def get(self, request):
         context = {}
         find_caregiver_form = FindCaregiverForm(request.GET)
+        current_company = request.user.company
         if find_caregiver_form.is_valid():
             caregiver_email = find_caregiver_form.cleaned_data['caregiver_email']
-            caregiver = Caregiver.objects.get(email_address=caregiver_email)
+            caregiver = Caregiver.objects.get(company=current_company,email_address=caregiver_email)
             caregiver_birthday = self.parse_date(caregiver.date_of_birth)
             edit_caregiver_form = CaregiverEditForm(initial=
             {
@@ -128,6 +129,7 @@ class EditCaregiver(LoginRequiredMixin, View):
 
     def post(self, request):
         context = {}
+        current_company = request.user.company
         edit_caregiver_form = CaregiverEditForm(request.POST,request.FILES)
         context['edit_caregiver_form'] = edit_caregiver_form
         if edit_caregiver_form.is_valid():
@@ -147,7 +149,7 @@ class EditCaregiver(LoginRequiredMixin, View):
             referrer = edit_caregiver_form.cleaned_data['referrer']
             profile_picture = edit_caregiver_form.cleaned_data['profile_picture']
             #Get current caregiver
-            caregiver = Caregiver.objects.get(email_address=email)
+            caregiver = Caregiver.objects.get(company=current_company,email_address=email)
             if self.arg_diff(caregiver.first_name, first_name):
                 caregiver.first_name = first_name
             if self.arg_diff(caregiver.last_name, last_name):
@@ -177,7 +179,7 @@ class EditCaregiver(LoginRequiredMixin, View):
                 caregiver.profile_picture = profile_picture
             if self.arg_diff(caregiver.email_address, email):
                 caregiver.email_address = email
-                caregiver_auth = User.objects.get(email=email)
+                caregiver_auth = User.objects.get(company=current_company,email=email)
                 caregiver_auth.email = email
                 caregiver_auth.save()
             caregiver.save()
@@ -199,7 +201,8 @@ def get_caregiver_with_email(request):
     if request.method == 'GET':
         context = {}
         email = request.GET.get('email_data')
-        caregiver = Caregiver.objects.get(email_address = email)
+        current_company = request.user.company
+        caregiver = Caregiver.objects.get(company=current_company,email_address = email)
         name = '{0} {1}'.format(caregiver.first_name, caregiver.last_name)
         address = '{0}, {1} {2} {3}'.format(caregiver.address, caregiver.city, caregiver.state, caregiver.zip_code)
         phone_number = caregiver.phone_number
