@@ -41,8 +41,6 @@ class ActivateTabletClient(LoginRequiredMixin, View):
             client_id = register_client_tablet_form.cleaned_data['client_id']
             client = Client.objects.get(company=current_company,id=client_id)
             tablet_id = register_client_tablet_form.cleaned_data['tablet_id']
-            print(client_id)
-            print(tablet_id)
             client_tablet_register = ClientTabletRegister(company=current_company,
                                                             client=client,
                                                             device_id=tablet_id)
@@ -55,7 +53,6 @@ class ActivateTabletClient(LoginRequiredMixin, View):
                 existing_register = ClientTabletRegister.objects.get(device_id=tablet_id)
                 existing_register.delete()
             client_tablet_register.save()
-            print("SAVED")
         return redirect('activate_tablet_choose_client')
 
 class ActivateTabletChooseClient(LoginRequiredMixin, View):
@@ -340,7 +337,6 @@ class ChooseCaregiver(LoginRequiredMixin, View):
             #Find which caregivers are already assigned
             assigned_caregivers = client.caregiver.all()
             context["assigned_caregivers"] = assigned_caregivers
-            print(assigned_caregivers)
         return render(request,'production/caregiver_tables.html',context)
 
     def post(self, request):
@@ -351,7 +347,6 @@ class ChooseCaregiver(LoginRequiredMixin, View):
             caregiver_email = assign_caregiver_form.cleaned_data['caregiver_email']
             client_email = assign_caregiver_form.cleaned_data['client_email']
             is_unassign = assign_caregiver_form.cleaned_data['is_unassign']
-            print(is_unassign)
             assigned_caregiver = Caregiver.objects.get(company=current_company, email_address=caregiver_email)
             assigned_client = Client.objects.get(company=current_company, email_address=client_email)
             if is_unassign == "True":
@@ -371,7 +366,6 @@ class ChooseCaregiver(LoginRequiredMixin, View):
             context["assigned_caregivers"] = assigned_caregivers
             return render(request,'production/caregiver_tables.html',context)
         else:
-            print(assign_caregiver_form.errors)
             return redirect('find_caregiver')
 
 class AssignTasks(LoginRequiredMixin, View):
@@ -677,7 +671,6 @@ def post_family_details(request):
             profile_picture = family_details_form.cleaned_data['profile_picture']
             password = family_details_form.cleaned_data['password']
             family_id = family_details_form.cleaned_data['family_id']
-            print(family_id)
             #Create family user auth model and save
             if(family_id==None):
                 new_user = User.objects.create_user(username=email,
@@ -735,7 +728,6 @@ def post_family_details(request):
                 if profile_picture is not None:
                     existing_family_member.profile_picture = profile_picture
                 existing_family_member.save()
-                print("SAVED")
         #even if form is invalid, client_email still retrieved
         client_email = request.POST.get('client_email')
         assigned_client = Client.objects.get(email_address=client_email)
@@ -750,9 +742,7 @@ def post_provider_details(request):
         context = {}
         company = request.user.company
         provider_details_form = ProviderDetailsForm(request.POST,request.FILES)
-        print("ENTERED")
         if provider_details_form.is_valid():
-            print("VALID")
             first_name = provider_details_form.cleaned_data['first_name']
             last_name = provider_details_form.cleaned_data['last_name']
             speciality = provider_details_form.cleaned_data['speciality']
@@ -762,7 +752,6 @@ def post_provider_details(request):
             password = provider_details_form.cleaned_data['password']
             provider_id = provider_details_form.cleaned_data['provider_id']
             if(provider_id is None):
-                print("MAKE USER")
                 new_user = User.objects.create_user(username=email,
                                                     email=email,
                                                     first_name=first_name,
@@ -771,7 +760,6 @@ def post_provider_details(request):
                                                     company=company)
                 new_user.save()
                 #Create family object and save
-                print("MAKE PROVIDER")
                 provider_user = Provider(user = new_user,
                                           company=company,
                                           email_address = email,
@@ -783,7 +771,6 @@ def post_provider_details(request):
                                           )
                 provider_user.save()
                 #Add new user to UserRoles with CAREGIVER Role
-                print("MAKE ROLE")
                 new_role = UserRoles(company=company,
                                         user=new_user,
                                         role='PROVIDERUSER')
@@ -793,7 +780,6 @@ def post_provider_details(request):
                 assigned_client = Client.objects.get(company=company,email_address=client_email)
                 assigned_client.provider.add(provider_user)
                 assigned_client.save()
-                print("ADD TO CLIENT")
             else:
                 existing_provider = Provider.objects.get(id=provider_id)
                 existing_user = existing_provider.user
@@ -811,7 +797,6 @@ def post_provider_details(request):
                 existing_provider.phone_number = phone_number
                 existing_provider.secondary_phone_number = secondary_phone_number
                 existing_provider.save()
-                print("SAVED")
         else:
             print(provider_details_form.errors)
         client_email = request.POST.get('client_email')
@@ -827,21 +812,16 @@ def post_pharmacy_details(request):
         context = {}
         company = request.user.company
         pharmacy_details_form = PharmacyDetailsForm(request.POST,request.FILES)
-        print("ENTERED")
         if pharmacy_details_form.is_valid():
-            print("VALID")
             pharmacy_name = pharmacy_details_form.cleaned_data['pharmacy_name']
             contact_name = pharmacy_details_form.cleaned_data['contact_name']
             phone_number = pharmacy_details_form.cleaned_data['phone_number']
             fax_number = pharmacy_details_form.cleaned_data['fax_number']
             email = pharmacy_details_form.cleaned_data['email']
             pharmacy_id = pharmacy_details_form.cleaned_data['pharmacy_id']
-            print("PHARMACY ID")
-            print(pharmacy_id)
             client_email = pharmacy_details_form.cleaned_data['client_email']
             if(pharmacy_id is None):
                 #Create family object and save
-                print("MAKE PHARMACY")
                 pharmacy = Pharmacy(company=company,
                                       email_address = email,
                                       name = pharmacy_name,
@@ -855,7 +835,6 @@ def post_pharmacy_details(request):
                 assigned_client = Client.objects.get(company=company,email_address=client_email)
                 assigned_client.pharmacy.add(pharmacy)
                 assigned_client.save()
-                print("ADD TO CLIENT")
             else:
                 existing_pharmacy = Pharmacy.objects.get(id=pharmacy_id)
                 #update Provider object
@@ -865,7 +844,6 @@ def post_pharmacy_details(request):
                 existing_pharmacy.phone_number = phone_number
                 existing_pharmacy.fax_number = fax_number
                 existing_pharmacy.save()
-                print("SAVED")
         else:
             print(pharmacy_details_form.errors)
         client_email = request.POST.get('client_email')
@@ -881,9 +859,7 @@ def post_payer_details(request):
         context = {}
         company = request.user.company
         payer_details_form = PayerDetailsForm(request.POST,request.FILES)
-        print("ENTERED")
         if payer_details_form.is_valid():
-            print("VALID")
             payer_name = payer_details_form.cleaned_data['payer_name']
             contact_name = payer_details_form.cleaned_data['contact_name']
             phone_number = payer_details_form.cleaned_data['phone_number']
@@ -896,7 +872,6 @@ def post_payer_details(request):
             client_email = payer_details_form.cleaned_data['client_email']
             if(payer_id is None):
                 #Create family object and save
-                print("MAKE PAYER")
                 payer = Payer(company=company,
                               email_address = email,
                               name = payer_name,
@@ -913,7 +888,6 @@ def post_payer_details(request):
                 assigned_client = Client.objects.get(company=company,email_address=client_email)
                 assigned_client.payer.add(payer)
                 assigned_client.save()
-                print("ADD TO CLIENT")
             else:
                 existing_payer = Payer.objects.get(id=payer_id)
                 #update Provider object
@@ -926,7 +900,6 @@ def post_payer_details(request):
                 existing_payer.policy_end_date = policy_end_date
                 existing_payer.policy_number = policy_number
                 existing_payer.save()
-                print("SAVED")
         else:
             print(payer_details_form.errors)
         client_email = request.POST.get('client_email')
@@ -956,7 +929,6 @@ def get_family_with_id(request):
         }
         if family_member.profile_picture:
             family_member_data['profile_picture'] = family_member.profile_picture.url
-        print(family_id)
         return HttpResponse(json.dumps(family_member_data), content_type="application/json")
 
 @login_required
@@ -1000,9 +972,7 @@ def get_payer_with_id(request):
         context = {}
         current_company = request.user.company
         payer_id = request.GET.get('payer_id')
-        print("PAYER ID: " + str(payer_id))
         payer = Payer.objects.get(company=current_company,id=payer_id)
-        print(str(payer.policy_start_date))
         payer_data = {
             'email': payer.email_address,
             'name': payer.name,

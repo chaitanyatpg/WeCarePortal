@@ -44,11 +44,8 @@ class FamilyDashboard(View):
         current_date = datetime.date.today()
         for client_data in related_clients:
             current_client_tasks = self.get_client_tasks(client_data)
-            print(str(client_data.email_address))
             #client_name = '{0} {1}'.format(client_data.first_name, client_data.last_name)
             client_tasks[client_data] = list(current_client_tasks)
-        #print(current_date)
-        print(client_tasks[client_data])
         context["client_tasks"] = client_tasks
         #Get Update Form
         #context["update_task_form"] = UpdateTaskForm()
@@ -56,7 +53,5 @@ class FamilyDashboard(View):
 
     def get_client_tasks(self, client_data):
         current_date = datetime.date.today()
-        print(current_date)
         client_tasks = TaskSchedule.objects.filter(client=client_data,date=current_date)
-        print(len(client_tasks))
         return client_tasks
