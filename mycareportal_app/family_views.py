@@ -19,7 +19,7 @@ def family_dashboard(request):
 
     return render(request, 'production/family_dashboard.html')
 
-class FamilyDashboard(View):
+class FamilyDashboard(LoginRequiredMixin, View):
 
     def get(self, request):
         context = {}
