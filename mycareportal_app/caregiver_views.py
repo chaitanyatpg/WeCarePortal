@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.views.generic import View
 import datetime
+import pytz
+import django.utils.timezone as timezone
 import json
 from collections import defaultdict
 from django.contrib.auth.decorators import login_required
@@ -293,7 +295,9 @@ class CaregiverDashboard(LoginRequiredMixin, View):
         return redirect('caregiver_dashboard')
 
     def get_client_tasks(self, client_data, request):
-        current_date = datetime.date.today()
+        client_timezone = pytz.timezone(client_data.time_zone)
+        #current_date = datetime.date.today()
+        current_date = (timezone.now().astimezone(client_timezone)).date()
         if "tablet_id" in request.session:
             tablet_id = request.session["tablet_id"]
             tablet_client = ClientTabletRegister.objects.get(company=request.user.company,device_id=tablet_id)

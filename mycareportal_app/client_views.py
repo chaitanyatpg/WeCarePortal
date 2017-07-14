@@ -12,6 +12,7 @@ from collections import defaultdict
 from dateutil import relativedelta
 import datetime
 import json
+import pytz
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -72,6 +73,7 @@ class AddClient(LoginRequiredMixin, View):
     def get(self, request):
         context = {}
         context['add_client_form'] = ClientRegistrationForm()
+        context['all_timezones'] = pytz.all_timezones
         return render(request,'production/care_portal.html', context)
 
     def post(self, request):
@@ -93,6 +95,7 @@ class AddClient(LoginRequiredMixin, View):
             city = add_client_form.cleaned_data['city']
             state = add_client_form.cleaned_data['state']
             zip_code = add_client_form.cleaned_data['zip_code']
+            time_zone = add_client_form.cleaned_data['time_zone']
             profile_picture = add_client_form.cleaned_data['profile_picture']
             company = request.user.company
             #Create Client object and save
@@ -114,6 +117,7 @@ class AddClient(LoginRequiredMixin, View):
                                     city = city,
                                     state = state,
                                     zip_code = zip_code,
+                                    time_zone = time_zone,
                                     profile_picture = profile_picture)
                 new_client.save()
                 context['client_success_msg'] = "Client successfully added. Add additional Details Below."
@@ -134,6 +138,7 @@ class AddClient(LoginRequiredMixin, View):
                     'city': client.city,
                     'state': client.state,
                     'zip_code': client.zip_code,
+                    'time_zone': client.time_zone,
                     'profile_picture': client.profile_picture
                 })
                 context['edit_client_form'] = edit_client_form
@@ -165,6 +170,7 @@ class EditClient(LoginRequiredMixin, View):
         context = {}
         current_company = request.user.company
         find_client_form = FindClientForm(request.GET,request.FILES)
+        context['all_timezones'] = pytz.all_timezones
         if find_client_form.is_valid():
             client_email = find_client_form.cleaned_data['client_email']
             client = Client.objects.get(company=current_company, email_address=client_email)
@@ -183,6 +189,7 @@ class EditClient(LoginRequiredMixin, View):
                 'city': client.city,
                 'state': client.state,
                 'zip_code': client.zip_code,
+                'time_zone': client.time_zone,
                 'profile_picture': client.profile_picture
             })
             context['edit_client_form'] = edit_client_form
@@ -208,6 +215,7 @@ class EditClient(LoginRequiredMixin, View):
         current_company = request.user.company
         edit_client_form = EditClientDetailsForm(request.POST, request.FILES)
         client_email = edit_client_form.data['email']
+        context['all_timezones'] = pytz.all_timezones
         if edit_client_form.is_valid():
             client_email = edit_client_form.cleaned_data['email']
             client = Client.objects.get(company=current_company, email_address=client_email)
@@ -223,6 +231,7 @@ class EditClient(LoginRequiredMixin, View):
             client.city = edit_client_form.cleaned_data['city']
             client.state = edit_client_form.cleaned_data['state']
             client.zip_code = edit_client_form.cleaned_data['zip_code']
+            client.time_zone = edit_client_form.cleaned_data['time_zone']
             if edit_client_form.cleaned_data['profile_picture'] != None and client.profile_picture != edit_client_form.cleaned_data['profile_picture']:
                 client.profile_picture = edit_client_form.cleaned_data['profile_picture']
             client.save()
@@ -242,6 +251,7 @@ class EditClient(LoginRequiredMixin, View):
             'city': client.city,
             'state': client.state,
             'zip_code': client.zip_code,
+            'time_zone': client.time_zone,
             'profile_picture': client.profile_picture
         })
         context['edit_client_form'] = edit_client_form

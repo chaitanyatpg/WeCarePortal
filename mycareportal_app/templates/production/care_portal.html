@@ -290,6 +290,17 @@
                     </div>
                   </div>
                   <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Time Zone<span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <select required class="select2_single form-control" tabindex="-1" name={{add_client_form.time_zone.html_name}}>
+                        <option></option>
+                        {% for timezone in all_timezones %}
+                          <option value='{{timezone}}'>{{timezone}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Profile Picture</label>
                       <div class="col-md-6 col-sm-6 col-xs-12">
                         {{add_client_form.profile_picture.label_tag}}{{add_client_form.profile_picture}}

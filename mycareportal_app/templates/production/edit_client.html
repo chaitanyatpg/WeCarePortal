@@ -282,6 +282,26 @@
                     </div>
                   </div>
                   <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Time Zone<span class="required">*</span> </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not edit_client_form.time_zone.value is None %}
+                        <select required class="select2_single form-control" tabindex="-1" name={{edit_client_form.time_zone.html_name}} value={{edit_client_form.time_zone.value}}>
+                          <option selected=selected>{{edit_client_form.time_zone.value}}</option>
+                          {% for timezone in all_timezones %}
+                            <option value='{{timezone}}'>{{timezone}}</option>
+                          {% endfor %}
+                        </select>
+                      {% else %}
+                      <select required class="select2_single form-control" tabindex="-1" name={{edit_client_form.time_zone.html_name}}>
+                        <option></option>
+                        {% for timezone in all_timezones %}
+                          <option value='{{timezone}}'>{{timezone}}</option>
+                        {% endfor %}
+                      </select>
+                    {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Profile Picture</label>
                       <div class="col-md-6 col-sm-6 col-xs-12">
                         {{edit_client_form.profile_picture.label_tag}}{{edit_client_form.profile_picture}}
