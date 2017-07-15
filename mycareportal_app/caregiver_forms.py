@@ -19,7 +19,7 @@ class CaregiverRegistrationForm(forms.Form):
     email = forms.CharField(max_length=200)
     password = forms.CharField(max_length=30)
     confirm_password = forms.CharField(max_length=30)
-    ssn = forms.IntegerField()
+    ssn = forms.CharField(max_length=20)
     referrer = forms.CharField(max_length=100, required=False)
     profile_picture = forms.ImageField(label='Select file', required=False)
 
