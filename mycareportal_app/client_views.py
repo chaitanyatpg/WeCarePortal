@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from django.db import transaction
 from django.core.urlresolvers import reverse
 from django.core import serializers
@@ -169,7 +170,7 @@ class EditClient(LoginRequiredMixin, View):
     def get(self, request):
         context = {}
         current_company = request.user.company
-        find_client_form = FindClientForm(request.GET,request.FILES)
+        find_client_form = FindClientForm(request.GET)
         context['all_timezones'] = pytz.all_timezones
         if find_client_form.is_valid():
             client_email = find_client_form.cleaned_data['client_email']
@@ -194,7 +195,7 @@ class EditClient(LoginRequiredMixin, View):
             })
             context['edit_client_form'] = edit_client_form
             #initialize family contact forms
-            family_details = client.family_contacts.all()
+            family_details = client.family_contacts.filter(is_active=True)
             provider_details = client.provider.all()
             pharmacy_details = client.pharmacy.all()
             payer_details = client.payer.all()
@@ -204,6 +205,7 @@ class EditClient(LoginRequiredMixin, View):
             context["pharmacy_details"] = pharmacy_details
             context["payer_details"] = payer_details
             context["family_details_form"] = FamilyDetailsForm()
+            context["delete_family_details_form"] = DeleteFamilyDetailsForm()
             context["provider_details_form"] = ProviderDetailsForm()
             context["pharmacy_details_form"] = PharmacyDetailsForm()
             context["payer_details_form"] = PayerDetailsForm()
@@ -953,6 +955,22 @@ def get_family_with_id(request):
         if family_member.profile_picture:
             family_member_data['profile_picture'] = family_member.profile_picture.url
         return HttpResponse(json.dumps(family_member_data), content_type="application/json")
+
+@login_required
+@transaction.atomic
+def delete_family_member(request):
+    if request.method == 'POST':
+        current_company = request.user.company
+        family_id = request.POST.get('family_id')
+        client_email = request.POST.get('client_email')
+        if family_id != "" and client_email != "":
+            family_member = FamilyContact.objects.get(company=current_company, id=family_id)
+            family_member.is_active=False
+            family_user = family_member.user
+            family_user.is_active=False
+            family_member.save()
+            family_user.save()
+        return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client_email)
 
 @login_required
 def get_provider_with_id(request):

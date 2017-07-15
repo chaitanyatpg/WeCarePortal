@@ -117,6 +117,15 @@ class FamilyDetailsForm(forms.Form):
                             params={'value': 'Passwords do not match'})
         return cleaned_data
 
+class DeleteFamilyDetailsForm(forms.Form):
+
+    family_id = forms.IntegerField()
+    client_email = forms.CharField(max_length=200)
+
+    def clean(self):
+        cleaned_data = super(DeleteFamilyDetailsForm, self).clean()
+        return cleaned_data
+
 class ProviderDetailsForm(forms.Form):
 
     first_name = forms.CharField(max_length=100)
