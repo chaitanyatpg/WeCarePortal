@@ -116,12 +116,12 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Secondary Phone Number <span class="required">*</span> </label>
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Secondary Phone Number</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not edit_client_form.secondary_phone_number.value is None %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name={{edit_client_form.secondary_phone_number.html_name}} value={{edit_client_form.secondary_phone_number.value}}>
+                        <input type="text" class="form-control col-md-7 col-xs-12" name={{edit_client_form.secondary_phone_number.html_name}} value={{edit_client_form.secondary_phone_number.value}}>
                       {% else %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name={{edit_client_form.secondary_phone_number.html_name}}>
+                        <input type="text" class="form-control col-md-7 col-xs-12" name={{edit_client_form.secondary_phone_number.html_name}}>
                       {% endif %}
                     </div>
                   </div>
@@ -545,6 +545,16 @@
                     </div>
                   </div>
                   <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Power of Attorney</label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not family_details_form.power_of_attorney.value is None %}
+                        <input type="checkbox" id="family_power_of_attorney" class="form-control" name = "{{family_details_form.power_of_attorney.html_name}}" value={{family_details_form.power_of_attorney.value}}/>
+                      {% else %}
+                        <input type="checkbox" id="family_power_of_attorney" class="form-control" name = "{{family_details_form.power_of_attorney.html_name}}"/>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Password</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       <input type="password" class="form-control" name = "{{family_details_form.password.html_name}}"/>
@@ -650,9 +660,9 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Emergency Phone Number<span class="required">*</span> </label>
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Emergency Phone Number</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                      <input type="text" id="provider_secondary_phone_number" required="required" class="form-control col-md-7 col-xs-12" name="{{provider_details_form.secondary_phone_number.html_name}}">
+                      <input type="text" id="provider_secondary_phone_number" class="form-control col-md-7 col-xs-12" name="{{provider_details_form.secondary_phone_number.html_name}}">
                     </div>
                   </div>
                   <div class="form-group">
@@ -933,6 +943,13 @@
         $('#family_city').val(family_data.city);
         $('#family_state').val(family_data.state);
         $('#family_zip_code').val(family_data.zip_code);
+        if(family_data.power_of_attorney)
+        {
+          $('#family_power_of_attorney').prop('checked',true);
+        }
+        else {
+          $('#family_power_of_attorney').prop('checked',false);
+        }
         $('#family_details_id').val(family_data.family_id);
         //$('#client_detail_img').html('<img src=' + client_data.profile_picture + ' class="img-circle img-responsive">');
       },

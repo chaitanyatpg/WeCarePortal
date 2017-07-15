@@ -683,9 +683,11 @@ def post_family_details(request):
             city = family_details_form.cleaned_data['city']
             state = family_details_form.cleaned_data['state']
             zip_code = family_details_form.cleaned_data['zip_code']
+            power_of_attorney = family_details_form.cleaned_data['power_of_attorney']
             profile_picture = family_details_form.cleaned_data['profile_picture']
             password = family_details_form.cleaned_data['password']
             family_id = family_details_form.cleaned_data['family_id']
+            print(power_of_attorney)
             #Create family user auth model and save
             if(family_id==None):
                 new_user = User.objects.create_user(username=email,
@@ -706,7 +708,8 @@ def post_family_details(request):
                                           address = address,
                                           city = city,
                                           state = state,
-                                          zip_code = zip_code
+                                          zip_code = zip_code,
+                                          power_of_attorney = power_of_attorney
                                           )
                 if profile_picture is not None:
                     family_contact.profile_picture = profile_picture
@@ -740,6 +743,7 @@ def post_family_details(request):
                 existing_family_member.city = city
                 existing_family_member.state = state
                 existing_family_member.zip_code = zip_code
+                existing_family_member.power_of_attorney = power_of_attorney
                 if profile_picture is not None:
                     existing_family_member.profile_picture = profile_picture
                 existing_family_member.save()
@@ -943,6 +947,7 @@ def get_family_with_id(request):
             'city': family_member.city,
             'state': family_member.state,
             'zip_code': family_member.zip_code,
+            'power_of_attorney': family_member.power_of_attorney,
             'family_id': family_member.id
         }
         if family_member.profile_picture:

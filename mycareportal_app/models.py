@@ -72,7 +72,7 @@ class Caregiver(models.Model):
     zip_code = models.CharField(max_length=10)
     date_of_birth = models.DateTimeField()
     phone_number = models.CharField(max_length=40)
-    secondary_phone_number = models.CharField(max_length=40)
+    secondary_phone_number = models.CharField(max_length=40, blank=True)
     ssn = models.CharField(max_length=20)
     referrer = models.CharField(max_length=100,blank=True)
     rating = models.IntegerField(default=0)
@@ -114,6 +114,8 @@ class FamilyContact(models.Model):
     city = models.CharField(max_length=100)
     state = models.CharField(max_length=2)
     zip_code = models.CharField(max_length=10)
+    power_of_attorney = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     profile_picture = models.ImageField(upload_to="pictures/profile_pictures")
 
 class Provider(models.Model):
@@ -127,6 +129,7 @@ class Provider(models.Model):
     speciality = models.CharField(max_length=100, blank=True)
     phone_number = models.CharField(max_length=40)
     secondary_phone_number = models.CharField(max_length=40, blank=True)
+    is_active = models.BooleanField(default=True)
 
 class Pharmacy(models.Model):
 
@@ -136,6 +139,7 @@ class Pharmacy(models.Model):
     contact_name = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=40)
     fax_number = models.CharField(max_length=40)
+    is_active = models.BooleanField(default=True)
 
 class Payer(models.Model):
 
@@ -147,7 +151,8 @@ class Payer(models.Model):
     fax_number = models.CharField(max_length=40)
     policy_start_date = models.DateField()
     policy_end_date = models.DateField()
-    policy_number = models.IntegerField()
+    policy_number = models.CharField(max_length=40)
+    is_active = models.BooleanField(default=True)
 
 class Client(models.Model):
 

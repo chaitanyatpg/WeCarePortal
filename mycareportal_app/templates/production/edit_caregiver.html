@@ -275,12 +275,12 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Secondary Phone Number <span class="required">*</span> </label>
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Secondary Phone Number</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not edit_caregiver_form.secondary_phone_number.value is None %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name={{edit_caregiver_form.secondary_phone_number.html_name}} value={{edit_caregiver_form.secondary_phone_number.value}}>
+                        <input type="text" class="form-control col-md-7 col-xs-12" name={{edit_caregiver_form.secondary_phone_number.html_name}} value={{edit_caregiver_form.secondary_phone_number.value}}>
                       {% else %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name={{edit_caregiver_form.secondary_phone_number.html_name}}>
+                        <input type="text" class="form-control col-md-7 col-xs-12" name={{edit_caregiver_form.secondary_phone_number.html_name}}>
                       {% endif %}
                     </div>
                   </div>
