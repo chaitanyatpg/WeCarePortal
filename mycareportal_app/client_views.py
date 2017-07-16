@@ -196,19 +196,24 @@ class EditClient(LoginRequiredMixin, View):
             context['edit_client_form'] = edit_client_form
             #initialize family contact forms
             family_details = client.family_contacts.filter(is_active=True)
-            provider_details = client.provider.all()
-            pharmacy_details = client.pharmacy.all()
-            payer_details = client.payer.all()
+            provider_details = client.provider.filter(is_active=True)
+            pharmacy_details = client.pharmacy.filter(is_active=True)
+            payer_details = client.payer.filter(is_active=True)
             context["client_email"] = client_email
             context["family_details"] = family_details
             context["provider_details"] = provider_details
             context["pharmacy_details"] = pharmacy_details
             context["payer_details"] = payer_details
+            #Details forms
             context["family_details_form"] = FamilyDetailsForm()
             context["delete_family_details_form"] = DeleteFamilyDetailsForm()
             context["provider_details_form"] = ProviderDetailsForm()
             context["pharmacy_details_form"] = PharmacyDetailsForm()
+            #Deletion forms
             context["payer_details_form"] = PayerDetailsForm()
+            context["delete_provider_details_form"] = DeleteProviderDetailsForm()
+            context["delete_pharmacy_details_form"] = DeletePharmacyDetailsForm()
+            context["delete_payer_details_form"] = DeletePayerDetailsForm()
 
         return render(request,'production/edit_client.html', context)
 
@@ -991,6 +996,22 @@ def get_provider_with_id(request):
         return HttpResponse(json.dumps(provider_data),content_type="application/json")
 
 @login_required
+@transaction.atomic
+def delete_provider(request):
+    if request.method == 'POST':
+        current_company = request.user.company
+        provider_id = request.POST.get('provider_id')
+        client_email = request.POST.get('client_email')
+        if provider_id != "" and client_email != "":
+            provider = Provider.objects.get(company=current_company, id=provider_id)
+            provider.is_active=False
+            provider_user = provider.user
+            provider.is_active=False
+            provider.save()
+            provider_user.save()
+        return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client_email)
+
+@login_required
 def get_pharmacy_with_id(request):
     if request.method == 'GET':
         context = {}
@@ -1006,6 +1027,19 @@ def get_pharmacy_with_id(request):
             'pharmacy_id': pharmacy.id
         }
         return HttpResponse(json.dumps(pharmacy_data),content_type="application/json")
+
+
+@login_required
+def delete_pharmacy(request):
+    if request.method == 'POST':
+        current_company = request.user.company
+        pharmacy_id = request.POST.get('pharmacy_id')
+        client_email = request.POST.get('client_email')
+        if pharmacy_id != "" and client_email != "":
+            pharmacy = Pharmacy.objects.get(company=current_company, id=pharmacy_id)
+            pharmacy.is_active=False
+            pharmacy.save()
+        return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client_email)
 
 @login_required
 def get_payer_with_id(request):
@@ -1026,6 +1060,18 @@ def get_payer_with_id(request):
             'payer_id': payer.id
         }
         return HttpResponse(json.dumps(payer_data),content_type="application/json")
+
+@login_required
+def delete_payer(request):
+    if request.method == 'POST':
+        current_company = request.user.company
+        payer_id = request.POST.get('payer_id')
+        client_email = request.POST.get('client_email')
+        if payer_id != "" and client_email != "":
+            payer = Payer.objects.get(company=current_company, id=payer_id)
+            payer.is_active=False
+            payer.save()
+        return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client_email)
 
 @login_required
 def get_sub_categories(request):

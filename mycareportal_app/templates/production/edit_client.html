@@ -690,7 +690,7 @@
                       <input type="hidden" name='{{provider_details_form.client_email.html_name}}' value='{{client_email}}'>
                       <input type="hidden" id="provider_details_id" name='{{provider_details_form.provider_id.html_name}}'>
                       <button type="submit" class="btn btn-success">Submit</button>
-                      <button type="submit" class="btn btn-danger">Delete</button>
+                      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_provider_modal">Delete</button>
                     </div>
                   </div>
                 </form>
@@ -763,7 +763,7 @@
                       <input type="hidden" name='{{pharmacy_details_form.client_email.html_name}}' value='{{client_email}}'>
                       <input type="hidden" id="pharmacy_details_id" name='{{pharmacy_details_form.pharmacy_id.html_name}}'>
                       <button type="submit" class="btn btn-success">Submit</button>
-                      <button type="submit" class="btn btn-danger">Delete</button>
+                      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_pharmacy_modal">Delete</button>
                     </div>
                   </div>
                 </form>
@@ -842,7 +842,7 @@
                       <input type="hidden" name='{{payer_details_form.client_email.html_name}}' value='{{client_email}}'>
                       <input type="hidden" id="payer_details_id" name='{{payer_details_form.payer_id.html_name}}'>
                       <button type="submit" class="btn btn-success">Submit</button>
-                      <button type="submit" class="btn btn-danger">Delete</button>
+                      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_payer_modal">Delete</button>
                     </div>
                   </div>
                 </form>
@@ -913,6 +913,8 @@
             </div>
           </div>
         </div>-->
+
+        <!-- delete family modal -->
         <div id="delete_family_modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
@@ -935,6 +937,83 @@
             </div>
           </div>
         </div>
+        <!-- end delete family modal -->
+
+        <!-- delete Provider modal -->
+        <div id="delete_provider_modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Delete Provider</h4>
+              </div>
+              <div class="modal-body">
+                <h5>Are you sure you want to delete this provider?</h5>
+              </div>
+              <div class="modal-footer">
+                <form id="delete_provider" enctype="multipart/form-data" action="{% url 'delete_provider' %}" method="post" class="form-horizontal" role="form">
+                  <button type="button" class="btn btn-default antoclose2" data-dismiss="modal">Cancel</button>
+                  {% csrf_token %}
+                  <input type="hidden" id="delete_provider_details_id" name="{{delete_provider_details_form.provider_id.html_name}}">
+                  <input type="hidden" name="{{delete_provider_details_form.client_email.html_name}}" value='{{client_email}}'>
+                  <button type="submit" class="btn btn-danger edit_calendar_submit">Delete Provider</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- end delete provider modal -->
+
+        <!-- delete Pharmacy modal -->
+        <div id="delete_pharmacy_modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Delete Pharmacy</h4>
+              </div>
+              <div class="modal-body">
+                <h5>Are you sure you want to delete this Pharmacy?</h5>
+              </div>
+              <div class="modal-footer">
+                <form id="delete_pharmacy" enctype="multipart/form-data" action="{% url 'delete_pharmacy' %}" method="post" class="form-horizontal" role="form">
+                  <button type="button" class="btn btn-default antoclose2" data-dismiss="modal">Cancel</button>
+                  {% csrf_token %}
+                  <input type="hidden" id="delete_pharmacy_details_id" name="{{delete_pharmacy_details_form.pharmacy_id.html_name}}">
+                  <input type="hidden" name="{{delete_pharmacy_details_form.client_email.html_name}}" value='{{client_email}}'>
+                  <button type="submit" class="btn btn-danger edit_calendar_submit">Delete Pharmacy</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- end delete pharmacy modal -->
+
+        <!-- delete Payer modal -->
+        <div id="delete_payer_modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Delete Payer</h4>
+              </div>
+              <div class="modal-body">
+                <h5>Are you sure you want to delete this Payer?</h5>
+              </div>
+              <div class="modal-footer">
+                <form id="delete_payer" enctype="multipart/form-data" action="{% url 'delete_payer' %}" method="post" class="form-horizontal" role="form">
+                  <button type="button" class="btn btn-default antoclose2" data-dismiss="modal">Cancel</button>
+                  {% csrf_token %}
+                  <input type="hidden" id="delete_payer_details_id" name="{{delete_payer_details_form.payer_id.html_name}}">
+                  <input type="hidden" name="{{delete_payer_details_form.client_email.html_name}}" value='{{client_email}}'>
+                  <button type="submit" class="btn btn-danger edit_calendar_submit">Delete Payer</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- end delete payer modal -->
+
       </div>
     </div>
     <!-- /page content -->
@@ -1023,6 +1102,7 @@
         $('#provider_secondary_phone_number').val(provider_data.secondary_phone_number);
         $('#provider_email_address').val(provider_data.email_address);
         $('#provider_details_id').val(provider_data.provider_id);
+        $('#delete_provider_details_id').val(provider_data.provider_id);
       },
       failure: function(provider_data){
         alert('error fetching data');
@@ -1067,6 +1147,7 @@
         $('#pharmacy_fax_number').val(pharmacy_data.fax_number);
         $('#pharmacy_email').val(pharmacy_data.email);
         $('#pharmacy_details_id').val(pharmacy_data.pharmacy_id);
+        $('#delete_pharmacy_details_id').val(pharmacy_data.pharmacy_id);
         /*$('#provider_first_name').val(provider_data.first_name);
         $('#provider_last_name').val(provider_data.last_name);
         $('#provider_speciality').val(provider_data.speciality);
@@ -1121,6 +1202,7 @@
         $('#payer_end_date').val(payer_data.policy_end_date);
         $('#payer_policy_number').val(payer_data.policy_number);
         $('#payer_details_id').val(payer_data.payer_id);
+        $('#delete_payer_details_id').val(payer_data.payer_id);
         /*$('#provider_first_name').val(provider_data.first_name);
         $('#provider_last_name').val(provider_data.last_name);
         $('#provider_speciality').val(provider_data.speciality);

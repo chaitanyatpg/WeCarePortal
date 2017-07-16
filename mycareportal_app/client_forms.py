@@ -151,6 +151,15 @@ class ProviderDetailsForm(forms.Form):
                             params={'value': 'Passwords do not match'})
         return cleaned_data
 
+class DeleteProviderDetailsForm(forms.Form):
+
+    provider_id = forms.IntegerField()
+    client_email = forms.CharField(max_length=200)
+
+    def clean(self):
+        cleaned_data = super(DeleteProviderDetailsForm, self).clean()
+        return cleaned_data
+
 class PharmacyDetailsForm(forms.Form):
 
     pharmacy_name = forms.CharField(max_length=100)
@@ -163,6 +172,15 @@ class PharmacyDetailsForm(forms.Form):
 
     def clean(self):
         cleaned_data = super(PharmacyDetailsForm, self).clean()
+        return cleaned_data
+
+class DeletePharmacyDetailsForm(forms.Form):
+
+    pharmacy_id = forms.IntegerField()
+    client_email = forms.CharField(max_length=200)
+
+    def clean(self):
+        cleaned_data = super(DeletePharmacyDetailsForm, self).clean()
         return cleaned_data
 
 class PayerDetailsForm(forms.Form):
@@ -180,6 +198,15 @@ class PayerDetailsForm(forms.Form):
 
     def clean(self):
         cleaned_data = super(PayerDetailsForm, self).clean()
+        return cleaned_data
+
+class DeletePayerDetailsForm(forms.Form):
+
+    payer_id = forms.IntegerField()
+    client_email = forms.CharField(max_length=200)
+
+    def clean(self):
+        cleaned_data = super(DeletePayerDetailsForm, self).clean()
         return cleaned_data
 
 class FindCaregiverForm(forms.Form):
