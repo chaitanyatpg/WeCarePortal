@@ -332,7 +332,7 @@
                 <div class="clearfix"></div>
               </div>
               <div class="x_content"> <br />
-                <form enctype="multipart/form-data" method='post' action="{% url 'post_family_details' %}" id ='post_family_details' class="form-horizontal form-label-left">
+                <form enctype="multipart/form-data" method='post' action="{% url 'post_family_details' %}" class="form-horizontal form-label-left">
                   {% csrf_token %}
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">First Name <span class="required">*</span> </label>
@@ -626,7 +626,7 @@
                 <div class="clearfix"></div>
               </div>
               <div class="x_content"> <br />
-                <form enctype="multipart/form-data" method='post' action="{% url 'post_provider_details' %}" id ='post_provider_details' class="form-horizontal form-label-left">
+                <form enctype="multipart/form-data" method='post' action="{% url 'post_provider_details' %}" class="form-horizontal form-label-left">
                   {% csrf_token %}
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">First Name <span class="required">*</span> </label>
@@ -740,7 +740,7 @@
                 <div class="clearfix"></div>
               </div>
               <div class="x_content"> <br />
-                <form enctype="multipart/form-data" method='post' action="{% url 'post_pharmacy_details' %}" id ='post_pharmacy_details' class="form-horizontal form-label-left input_mask">
+                <form enctype="multipart/form-data" method='post' action="{% url 'post_pharmacy_details' %}" class="form-horizontal form-label-left input_mask">
                   {% csrf_token %}
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                     <input type="text" id="pharmacy_name" class="form-control has-feedback-left" placeholder="Name" name={{pharmacy_details_form.pharmacy_name.html_name}}>
@@ -810,7 +810,7 @@
                 <div class="clearfix"></div>
               </div>
               <div class="x_content"> <br />
-                <form enctype="multipart/form-data" method='post' action="{% url 'post_payer_details' %}" id ='post_payer_details' class="form-horizontal form-label-left input_mask">
+                <form enctype="multipart/form-data" method='post' action="{% url 'post_payer_details' %}" class="form-horizontal form-label-left input_mask">
                   {% csrf_token %}
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                     <input type="text" class="form-control has-feedback-left" id="payer_name" name={{payer_details_form.payer_name.html_name}} placeholder="Name">

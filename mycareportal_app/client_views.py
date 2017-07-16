@@ -756,10 +756,13 @@ def post_family_details(request):
                 existing_family_member.save()
         #even if form is invalid, client_email still retrieved
         client_email = request.POST.get('client_email')
-        assigned_client = Client.objects.get(email_address=client_email)
-        family_contacts = assigned_client.family_contacts.all()
-        family_contacts = serializers.serialize('json',family_contacts)
-        return HttpResponse(json.dumps(family_contacts),content_type="application/json")
+        #next 4 lines used for AJAX version
+        #assigned_client = Client.objects.get(email_address=client_email)
+        #family_contacts = assigned_client.family_contacts.all()
+        #family_contacts = serializers.serialize('json',family_contacts)
+        #return HttpResponse(json.dumps(family_contacts),content_type="application/json")
+        return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client_email)
+
 
 @login_required
 @transaction.atomic
@@ -827,10 +830,12 @@ def post_provider_details(request):
         else:
             print(provider_details_form.errors)
         client_email = request.POST.get('client_email')
-        assigned_client = Client.objects.get(company=request.user.company,email_address=client_email)
-        providers = assigned_client.provider.all()
-        providers = serializers.serialize('json',providers)
-        return HttpResponse(json.dumps(providers),content_type="application/json")
+        #BELOW: AJAX
+        #assigned_client = Client.objects.get(company=request.user.company,email_address=client_email)
+        #providers = assigned_client.provider.all()
+        #providers = serializers.serialize('json',providers)
+        #return HttpResponse(json.dumps(providers),content_type="application/json")
+        return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client_email)
 
 @login_required
 @transaction.atomic
@@ -875,10 +880,12 @@ def post_pharmacy_details(request):
         else:
             print(pharmacy_details_form.errors)
         client_email = request.POST.get('client_email')
-        assigned_client = Client.objects.get(company=request.user.company,email_address=client_email)
-        pharmacies = assigned_client.provider.all()
-        pharmacies = serializers.serialize('json',pharmacies)
-        return HttpResponse(json.dumps(pharmacies),content_type="application/json")
+        #BELOW: AJAX
+        #assigned_client = Client.objects.get(company=request.user.company,email_address=client_email)
+        #pharmacies = assigned_client.provider.all()
+        #pharmacies = serializers.serialize('json',pharmacies)
+        #return HttpResponse(json.dumps(pharmacies),content_type="application/json")
+        return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client_email)
 
 @login_required
 @transaction.atomic
@@ -932,10 +939,12 @@ def post_payer_details(request):
         else:
             print(payer_details_form.errors)
         client_email = request.POST.get('client_email')
-        assigned_client = Client.objects.get(company=request.user.company,email_address=client_email)
-        payers = assigned_client.payer.all()
-        payers = serializers.serialize('json',payers)
-        return HttpResponse(json.dumps(payers),content_type="application/json")
+        #BELOW: AJAX
+        #assigned_client = Client.objects.get(company=request.user.company,email_address=client_email)
+        #payers = assigned_client.payer.all()
+        #payers = serializers.serialize('json',payers)
+        #return HttpResponse(json.dumps(payers),content_type="application/json")
+        return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client_email)
 
 @login_required
 def get_family_with_id(request):
