@@ -1062,7 +1062,7 @@ def delete_provider(request):
                 provider_user.save()
                 messages.success(request, "Deleted provider contact {0} {1}".format(provider.first_name,provider.last_name))
             else:
-                messagess.warning(request, "Did not find provider to delete.")
+                messages.warning(request, "Did not find provider to delete.")
         except ObjectDoesNotExist as e:
             messages.error(request, "Did not find provider to delete.")
         return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client_email)
