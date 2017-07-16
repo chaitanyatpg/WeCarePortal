@@ -157,7 +157,7 @@ class Payer(models.Model):
 class Client(models.Model):
 
     company = models.ForeignKey(Company)
-    email_address = models.CharField(max_length=100)
+    email_address = models.CharField(max_length=100, unique=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     middle_name = models.CharField(max_length=100, blank=True)
@@ -230,6 +230,15 @@ class TaskSchedule(models.Model):
     link = models.CharField(max_length=500, blank=True)
     attachment = models.FileField(upload_to="files/tasks", blank=True)
     comment = models.CharField(max_length=500, blank=True)
+
+class TaskComment(models.Model):
+
+    company = models.ForeignKey(Company)
+    client = models.ForeignKey(Client)
+    caregiver = models.ForeignKey(Caregiver)
+    task_schedule = models.ForeignKey(TaskSchedule)
+    created = models.DateTimeField(auto_now_add=True)
+    comment = models.CharField(max_length=500)
 
 class AssessmentCategories(models.Model):
 

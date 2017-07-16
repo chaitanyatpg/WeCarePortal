@@ -12,6 +12,9 @@ from django.shortcuts import redirect
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+from django.contrib import messages
+from django.db import IntegrityError
+
 # Create your views here.
 
 @login_required
@@ -57,34 +60,50 @@ def register(request):
         username = form.cleaned_data['email']
         email = form.cleaned_data['email']
         password = form.cleaned_data['password']
+        exception_flag = False
         #Create company object and save
-        new_company = Company(company_name=company_name,
-                                    contact_number=contact_number,
-                                    address=address)
-        new_company.save()
-        #Create care manager user auth object and save
-        new_user = User.objects.create_user(username=username,
-                                            email=email,
-                                            first_name=first_name,
-                                            last_name=last_name,
-                                            password=password,
-                                            company=new_company)
-        new_user.save()
-        #Create care manager object and save
-        new_care_manager = CareManager(user=new_user,
-                                       company=new_company,
-                                       email_address=email)
-        new_care_manager.save()
-        #Add new user to UserRoles with CAREMANAGER role
-        new_role = UserRoles(company=new_company,
-                                user=new_user,
-                                role='CAREMANAGER')
-        new_role.save()
-        #Authenticate new user and log in
-        new_user = authenticate(username=username,
-                                password=password)
-        auth_login(request, new_user)
-        return redirect('home')
+        try:
+            new_company = Company(company_name=company_name,
+                                        contact_number=contact_number,
+                                        address=address)
+            new_company.save()
+        except IntegrityError as e:
+            exception_flag = True
+            messages.error(request, "Company has already been registered. Please enter a new company name.")
+        if not exception_flag:
+            try:
+                #Create care manager user auth object and save
+                new_user = User.objects.create_user(username=username,
+                                                    email=email,
+                                                    first_name=first_name,
+                                                    last_name=last_name,
+                                                    password=password,
+                                                    company=new_company)
+                new_user.save()
+            except IntegrityError as e:
+                exception_flag = True
+                messages.error(request, "User has already been registered. Please enter a new email address.")
+        if not exception_flag:
+            try:
+                #Create care manager object and save
+                new_care_manager = CareManager(user=new_user,
+                                               company=new_company,
+                                               email_address=email)
+                new_care_manager.save()
+            except IntegrityError as e:
+                exception_flag = True
+                messages.error(request, "User has already been registered. Please enter a new email address.")
+        if not exception_flag:
+            #Add new user to UserRoles with CAREMANAGER role
+            new_role = UserRoles(company=new_company,
+                                    user=new_user,
+                                    role='CAREMANAGER')
+            new_role.save()
+            #Authenticate new user and log in
+            new_user = authenticate(username=username,
+                                    password=password)
+            auth_login(request, new_user)
+            return redirect('home')
     return render(request, 'production/wecare_register.html', context)
 
 @login_required

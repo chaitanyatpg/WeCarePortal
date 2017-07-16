@@ -14,6 +14,9 @@ from collections import defaultdict
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+from django.contrib import messages
+from django.db import IntegrityError
+
 def add_caregiver(request):
     return render(request, 'production/add_caregiver.html')
 
@@ -24,7 +27,6 @@ class AddCaregiver(LoginRequiredMixin, View):
         context['add_caregiver_form'] = CaregiverRegistrationForm()
         return render(request,'production/add_caregiver.html', context)
 
-    @transaction.atomic
     def post(self, request):
         context = {}
         add_caregiver_form = CaregiverRegistrationForm(request.POST,request.FILES)
@@ -48,40 +50,43 @@ class AddCaregiver(LoginRequiredMixin, View):
             profile_picture = add_caregiver_form.cleaned_data['profile_picture']
             company = request.user.company
             #Create caregiver user auth model and save
-            new_user = User.objects.create_user(username=email,
-                                                email=email,
-                                                first_name=first_name,
-                                                last_name=last_name,
-                                                password=password,
-                                                company=company)
-            new_user.save()
-            #Create caregiver object and save
-            new_caregiver = Caregiver(user = new_user,
-                                      first_name = first_name,
-                                      last_name = last_name,
-                                      middle_name = middle_name,
-                                      gender = gender,
-                                      address = address,
-                                      city = city,
-                                      state = state,
-                                      zip_code = zip_code,
-                                      date_of_birth = date_of_birth,
-                                      phone_number = phone_number,
-                                      secondary_phone_number = secondary_phone_number,
-                                      email_address = email,
-                                      ssn = ssn,
-                                      referrer = referrer,
-                                      profile_picture = profile_picture,
-                                      company=company)
-            new_caregiver.save()
-            #Add new user to UserRoles with CAREGIVER Role
-            new_role = UserRoles(company=company,
-                                    user=new_user,
-                                    role='CAREGIVER')
-            new_role.save()
-            return redirect('find_caregiver')
-        else:
-            return render(request, 'production/add_caregiver.html', context)
+            try:
+                with transaction.atomic():
+                    new_user = User.objects.create_user(username=email,
+                                                        email=email,
+                                                        first_name=first_name,
+                                                        last_name=last_name,
+                                                        password=password,
+                                                        company=company)
+                    new_user.save()
+                    #Create caregiver object and save
+                    new_caregiver = Caregiver(user = new_user,
+                                              first_name = first_name,
+                                              last_name = last_name,
+                                              middle_name = middle_name,
+                                              gender = gender,
+                                              address = address,
+                                              city = city,
+                                              state = state,
+                                              zip_code = zip_code,
+                                              date_of_birth = date_of_birth,
+                                              phone_number = phone_number,
+                                              secondary_phone_number = secondary_phone_number,
+                                              email_address = email,
+                                              ssn = ssn,
+                                              referrer = referrer,
+                                              profile_picture = profile_picture,
+                                              company=company)
+                    new_caregiver.save()
+                    #Add new user to UserRoles with CAREGIVER Role
+                    new_role = UserRoles(company=company,
+                                            user=new_user,
+                                            role='CAREGIVER')
+                    new_role.save()
+                    return redirect('find_caregiver')
+            except IntegrityError as e:
+                messages.error(request, "Caregiver has already been registered. Please enter a new email address.")
+        return render(request, 'production/add_caregiver.html', context)
 
 class EditChooseCaregiver(LoginRequiredMixin, View):
 

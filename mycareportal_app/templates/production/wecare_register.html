@@ -27,6 +27,15 @@
   <body class="login">
     <div>
       <div class="login_wrapper">
+        {% if messages %}
+          <ul class="messages">
+            {% for message in messages %}
+              <div class="alert alert-danger">
+                <strong class="{{message.tags}}">{{message}}</strong>
+              </div>
+            {% endfor %}
+          </ul>
+        {% endif %}
         {% if form.errors %}
           {% for field in form %}
             {% for error in field.errors %}

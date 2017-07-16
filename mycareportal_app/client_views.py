@@ -17,6 +17,9 @@ import pytz
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+from django.contrib import messages
+from django.db import IntegrityError
+
 @login_required
 def add_client(request):
     return render(request, 'production/care_portal.html')
@@ -101,10 +104,6 @@ class AddClient(LoginRequiredMixin, View):
             company = request.user.company
             #Create Client object and save
             try:
-                existing_client = Client.objects.get(company=current_company,email_address=email)
-            except Client.DoesNotExist:
-                existing_client = None
-            if existing_client is None:
                 new_client = Client(company = company,
                                     email_address = email,
                                     first_name = first_name,
@@ -144,7 +143,9 @@ class AddClient(LoginRequiredMixin, View):
                 })
                 context['edit_client_form'] = edit_client_form
                 return render(request,'production/edit_client.html', context)
-        return render(request,'production/care_portal.html', context)
+            except IntegrityError as e:
+                messages.error(request, "Client already exists. Please enter a new client.")
+        return redirect('add_client')
 
     def parse_date(self,client_birthday):
         caregiver_birthday = client_birthday.date()
@@ -681,79 +682,82 @@ def post_family_details(request):
         company = request.user.company
         family_details_form = FamilyDetailsForm(request.POST,request.FILES)
         if family_details_form.is_valid():
-            first_name = family_details_form.cleaned_data['first_name']
-            last_name = family_details_form.cleaned_data['last_name']
-            relationship = family_details_form.cleaned_data['relationship']
-            phone_number = family_details_form.cleaned_data['phone_number']
-            email = family_details_form.cleaned_data['email']
-            address = family_details_form.cleaned_data['address']
-            city = family_details_form.cleaned_data['city']
-            state = family_details_form.cleaned_data['state']
-            zip_code = family_details_form.cleaned_data['zip_code']
-            power_of_attorney = family_details_form.cleaned_data['power_of_attorney']
-            profile_picture = family_details_form.cleaned_data['profile_picture']
-            password = family_details_form.cleaned_data['password']
-            family_id = family_details_form.cleaned_data['family_id']
-            print(power_of_attorney)
-            #Create family user auth model and save
-            if(family_id==None):
-                new_user = User.objects.create_user(username=email,
-                                                    email=email,
-                                                    first_name=first_name,
-                                                    last_name=last_name,
-                                                    password=password,
-                                                    company=company)
-                new_user.save()
-                #Create family object and save
-                family_contact = FamilyContact(user = new_user,
-                                          company=company,
-                                          email_address = email,
-                                          first_name = first_name,
-                                          last_name = last_name,
-                                          relationship = relationship,
-                                          phone_number = phone_number,
-                                          address = address,
-                                          city = city,
-                                          state = state,
-                                          zip_code = zip_code,
-                                          power_of_attorney = power_of_attorney
-                                          )
-                if profile_picture is not None:
-                    family_contact.profile_picture = profile_picture
-                family_contact.save()
-                #Add new user to UserRoles with CAREGIVER Role
-                new_role = UserRoles(company=company,
-                                        user=new_user,
-                                        role='FAMILYUSER')
-                new_role.save()
-                #Add family user to client
-                client_email = family_details_form.cleaned_data['client_email']
-                assigned_client = Client.objects.get(company=company,email_address=client_email)
-                assigned_client.family_contacts.add(family_contact)
-                assigned_client.save()
-            else:
-                existing_family_member = FamilyContact.objects.get(company=request.user.company,id=family_id)
-                existing_user = existing_family_member.user
-                #update User Auth object
-                existing_user.username=email
-                existing_user.email=email
-                existing_user.first_name=first_name
-                existing_user.last_name=last_name
-                existing_user.save()
-                #update Family Contact object
-                existing_family_member.email_address = email
-                existing_family_member.first_name = first_name
-                existing_family_member.last_name = last_name
-                existing_family_member.relationship = relationship
-                existing_family_member.phone_number = phone_number
-                existing_family_member.address = address
-                existing_family_member.city = city
-                existing_family_member.state = state
-                existing_family_member.zip_code = zip_code
-                existing_family_member.power_of_attorney = power_of_attorney
-                if profile_picture is not None:
-                    existing_family_member.profile_picture = profile_picture
-                existing_family_member.save()
+            try:
+                first_name = family_details_form.cleaned_data['first_name']
+                last_name = family_details_form.cleaned_data['last_name']
+                relationship = family_details_form.cleaned_data['relationship']
+                phone_number = family_details_form.cleaned_data['phone_number']
+                email = family_details_form.cleaned_data['email']
+                address = family_details_form.cleaned_data['address']
+                city = family_details_form.cleaned_data['city']
+                state = family_details_form.cleaned_data['state']
+                zip_code = family_details_form.cleaned_data['zip_code']
+                power_of_attorney = family_details_form.cleaned_data['power_of_attorney']
+                profile_picture = family_details_form.cleaned_data['profile_picture']
+                password = family_details_form.cleaned_data['password']
+                family_id = family_details_form.cleaned_data['family_id']
+                print(power_of_attorney)
+                #Create family user auth model and save
+                if(family_id==None):
+                    new_user = User.objects.create_user(username=email,
+                                                        email=email,
+                                                        first_name=first_name,
+                                                        last_name=last_name,
+                                                        password=password,
+                                                        company=company)
+                    new_user.save()
+                    #Create family object and save
+                    family_contact = FamilyContact(user = new_user,
+                                              company=company,
+                                              email_address = email,
+                                              first_name = first_name,
+                                              last_name = last_name,
+                                              relationship = relationship,
+                                              phone_number = phone_number,
+                                              address = address,
+                                              city = city,
+                                              state = state,
+                                              zip_code = zip_code,
+                                              power_of_attorney = power_of_attorney
+                                              )
+                    if profile_picture is not None:
+                        family_contact.profile_picture = profile_picture
+                    family_contact.save()
+                    #Add new user to UserRoles with CAREGIVER Role
+                    new_role = UserRoles(company=company,
+                                            user=new_user,
+                                            role='FAMILYUSER')
+                    new_role.save()
+                    #Add family user to client
+                    client_email = family_details_form.cleaned_data['client_email']
+                    assigned_client = Client.objects.get(company=company,email_address=client_email)
+                    assigned_client.family_contacts.add(family_contact)
+                    assigned_client.save()
+                else:
+                    existing_family_member = FamilyContact.objects.get(company=request.user.company,id=family_id)
+                    existing_user = existing_family_member.user
+                    #update User Auth object
+                    existing_user.username=email
+                    existing_user.email=email
+                    existing_user.first_name=first_name
+                    existing_user.last_name=last_name
+                    existing_user.save()
+                    #update Family Contact object
+                    existing_family_member.email_address = email
+                    existing_family_member.first_name = first_name
+                    existing_family_member.last_name = last_name
+                    existing_family_member.relationship = relationship
+                    existing_family_member.phone_number = phone_number
+                    existing_family_member.address = address
+                    existing_family_member.city = city
+                    existing_family_member.state = state
+                    existing_family_member.zip_code = zip_code
+                    existing_family_member.power_of_attorney = power_of_attorney
+                    if profile_picture is not None:
+                        existing_family_member.profile_picture = profile_picture
+                    existing_family_member.save()
+            except IntegrityError as e:
+                messages.error(request, "Family member already exists. Please enter new family member.")
         #even if form is invalid, client_email still retrieved
         client_email = request.POST.get('client_email')
         #next 4 lines used for AJAX version

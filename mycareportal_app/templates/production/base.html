@@ -194,6 +194,29 @@
 
     <!-- page content -->
     {% block pagecontent %}
+      {% block message_content %}
+
+        {% if messages %}
+          <ul class="messages">
+            {% for message in messages %}
+              {% if message.tags == 'error' %}
+                <div class="alert alert-danger">
+                  <strong class="{{message.tags}}">{{message}}</strong>
+                </div>
+              {% elif message.tags == 'success' %}
+                <div class="alert alert-success">
+                  <strong class="{{message.tags}}">{{message}}</strong>
+                </div>
+              {% else %}
+                <div class="alert alert-info">
+                  <strong class="{{message.tags}}">{{message}}</strong>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+      {% endblock %}
     {% endblock %}
     <!-- /page content -->
 
