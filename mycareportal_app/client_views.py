@@ -18,7 +18,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.contrib import messages
+
 from django.db import IntegrityError
+from django.core.exceptions import ObjectDoesNotExist
 
 @login_required
 def add_client(request):
@@ -1007,19 +1009,22 @@ def get_family_with_id(request):
 @transaction.atomic
 def delete_family_member(request):
     if request.method == 'POST':
-        current_company = request.user.company
-        family_id = request.POST.get('family_id')
-        client_email = request.POST.get('client_email')
-        if family_id != "" and client_email != "":
-            family_member = FamilyContact.objects.get(company=current_company, id=family_id)
-            family_member.is_active=False
-            family_user = family_member.user
-            family_user.is_active=False
-            family_member.save()
-            family_user.save()
-            messages.success(request, "Deleted family contact {0} {1}".format(family_member.first_name,family_member.last_name))
-        else:
-            messages.warning(request, "Did not find family contact to delete.")
+        try:
+            current_company = request.user.company
+            family_id = request.POST.get('family_id')
+            client_email = request.POST.get('client_email')
+            if family_id != "" and client_email != "":
+                family_member = FamilyContact.objects.get(company=current_company, id=family_id)
+                family_member.is_active=False
+                family_user = family_member.user
+                family_user.is_active=False
+                family_member.save()
+                family_user.save()
+                messages.success(request, "Deleted family contact {0} {1}".format(family_member.first_name,family_member.last_name))
+            else:
+                messages.warning(request, "Did not find family contact to delete.")
+        except ObjectDoesNotExist as e:
+            messages.error(request, "Did not find family contact to delete.")
         return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client_email)
 
 @login_required
@@ -1044,19 +1049,22 @@ def get_provider_with_id(request):
 @transaction.atomic
 def delete_provider(request):
     if request.method == 'POST':
-        current_company = request.user.company
-        provider_id = request.POST.get('provider_id')
-        client_email = request.POST.get('client_email')
-        if provider_id != "" and client_email != "":
-            provider = Provider.objects.get(company=current_company, id=provider_id)
-            provider.is_active=False
-            provider_user = provider.user
-            provider.is_active=False
-            provider.save()
-            provider_user.save()
-            messages.success(request, "Deleted provider contact {0} {1}".format(provider.first_name,provider.last_name))
-        else:
-            messagess.warning(request, "Did not find provider to delete.")
+        try:
+            current_company = request.user.company
+            provider_id = request.POST.get('provider_id')
+            client_email = request.POST.get('client_email')
+            if provider_id != "" and client_email != "":
+                provider = Provider.objects.get(company=current_company, id=provider_id)
+                provider.is_active=False
+                provider_user = provider.user
+                provider.is_active=False
+                provider.save()
+                provider_user.save()
+                messages.success(request, "Deleted provider contact {0} {1}".format(provider.first_name,provider.last_name))
+            else:
+                messagess.warning(request, "Did not find provider to delete.")
+        except ObjectDoesNotExist as e:
+            messages.error(request, "Did not find provider to delete.")
         return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client_email)
 
 @login_required
@@ -1080,16 +1088,19 @@ def get_pharmacy_with_id(request):
 @login_required
 def delete_pharmacy(request):
     if request.method == 'POST':
-        current_company = request.user.company
-        pharmacy_id = request.POST.get('pharmacy_id')
-        client_email = request.POST.get('client_email')
-        if pharmacy_id != "" and client_email != "":
-            pharmacy = Pharmacy.objects.get(company=current_company, id=pharmacy_id)
-            pharmacy.is_active=False
-            pharmacy.save()
-            messages.success(request,"Deleted pharmacy {0}".format(pharmacy.name))
-        else:
-            messages.warning(request,"Did not find pharmacy to delete.")
+        try:
+            current_company = request.user.company
+            pharmacy_id = request.POST.get('pharmacy_id')
+            client_email = request.POST.get('client_email')
+            if pharmacy_id != "" and client_email != "":
+                pharmacy = Pharmacy.objects.get(company=current_company, id=pharmacy_id)
+                pharmacy.is_active=False
+                pharmacy.save()
+                messages.success(request,"Deleted pharmacy {0}".format(pharmacy.name))
+            else:
+                messages.warning(request,"Did not find pharmacy to delete.")
+        except ObjectDoesNotExist as e:
+            messages.error(request, "Did not find pharmacy to delete.")
         return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client_email)
 
 @login_required
@@ -1115,16 +1126,19 @@ def get_payer_with_id(request):
 @login_required
 def delete_payer(request):
     if request.method == 'POST':
-        current_company = request.user.company
-        payer_id = request.POST.get('payer_id')
-        client_email = request.POST.get('client_email')
-        if payer_id != "" and client_email != "":
-            payer = Payer.objects.get(company=current_company, id=payer_id)
-            payer.is_active=False
-            payer.save()
-            messages.success(request, "Deleted payor {0}".format(payer.name))
-        else:
-            messages.warning(request, "Did not find payor to delete")
+        try:
+            current_company = request.user.company
+            payer_id = request.POST.get('payer_id')
+            client_email = request.POST.get('client_email')
+            if payer_id != "" and client_email != "":
+                payer = Payer.objects.get(company=current_company, id=payer_id)
+                payer.is_active=False
+                payer.save()
+                messages.success(request, "Deleted payor {0}".format(payer.name))
+            else:
+                messages.warning(request, "Did not find payor to delete.")
+        except ObjectDoesNotExist as e:
+            messages.warning(request, "Did not find payor to delete.")
         return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client_email)
 
 @login_required

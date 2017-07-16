@@ -17,6 +17,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.contrib import messages
 from django.db import IntegrityError
+from django.core.exceptions import ObjectDoesNotExist
 
 def family_dashboard(request):
 
