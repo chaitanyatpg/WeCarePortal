@@ -59,6 +59,7 @@ class ActivateTabletClient(LoginRequiredMixin, View):
                 existing_register = ClientTabletRegister.objects.get(device_id=tablet_id)
                 existing_register.delete()
             client_tablet_register.save()
+            messages.success(request, "Client {0} {1} successfully registered to tablet!".format(client.first_name,client.last_name))
         return redirect('activate_tablet_choose_client')
 
 class ActivateTabletChooseClient(LoginRequiredMixin, View):
@@ -225,24 +226,28 @@ class EditClient(LoginRequiredMixin, View):
         client_email = edit_client_form.data['email']
         context['all_timezones'] = pytz.all_timezones
         if edit_client_form.is_valid():
-            client_email = edit_client_form.cleaned_data['email']
-            client = Client.objects.get(company=current_company, email_address=client_email)
-            client.first_name = edit_client_form.cleaned_data['first_name']
-            client.last_name = edit_client_form.cleaned_data['last_name']
-            client.middle_name = edit_client_form.cleaned_data['middle_name']
-            client.gender = edit_client_form.cleaned_data['gender']
-            client.date_of_birth = edit_client_form.cleaned_data['date_of_birth']
-            client.phone_number = edit_client_form.cleaned_data['phone_number']
-            client.secondary_phone_number = edit_client_form.cleaned_data['secondary_phone_number']
-            client.email_address = edit_client_form.cleaned_data['email']
-            client.address = edit_client_form.cleaned_data['address']
-            client.city = edit_client_form.cleaned_data['city']
-            client.state = edit_client_form.cleaned_data['state']
-            client.zip_code = edit_client_form.cleaned_data['zip_code']
-            client.time_zone = edit_client_form.cleaned_data['time_zone']
-            if edit_client_form.cleaned_data['profile_picture'] != None and client.profile_picture != edit_client_form.cleaned_data['profile_picture']:
-                client.profile_picture = edit_client_form.cleaned_data['profile_picture']
-            client.save()
+            try:
+                client_email = edit_client_form.cleaned_data['email']
+                client = Client.objects.get(company=current_company, email_address=client_email)
+                client.first_name = edit_client_form.cleaned_data['first_name']
+                client.last_name = edit_client_form.cleaned_data['last_name']
+                client.middle_name = edit_client_form.cleaned_data['middle_name']
+                client.gender = edit_client_form.cleaned_data['gender']
+                client.date_of_birth = edit_client_form.cleaned_data['date_of_birth']
+                client.phone_number = edit_client_form.cleaned_data['phone_number']
+                client.secondary_phone_number = edit_client_form.cleaned_data['secondary_phone_number']
+                client.email_address = edit_client_form.cleaned_data['email']
+                client.address = edit_client_form.cleaned_data['address']
+                client.city = edit_client_form.cleaned_data['city']
+                client.state = edit_client_form.cleaned_data['state']
+                client.zip_code = edit_client_form.cleaned_data['zip_code']
+                client.time_zone = edit_client_form.cleaned_data['time_zone']
+                if edit_client_form.cleaned_data['profile_picture'] != None and client.profile_picture != edit_client_form.cleaned_data['profile_picture']:
+                    client.profile_picture = edit_client_form.cleaned_data['profile_picture']
+                client.save()
+                messages.success(request, "Client {0} {1} successfully edited!".format(client.first_name,client.last_name))
+            except IntegrityError as e:
+                messages.error(request, "Client already exists. Please enter a new Client.")
         client = Client.objects.get(company=current_company, email_address=client_email)
         #initialize client form
         edit_client_form = EditClientDetailsForm(initial=
@@ -310,8 +315,10 @@ class CreateTasks(LoginRequiredMixin, View):
                             activity_category_code = activity_category_code)
             new_task.save()
             context["status_message"] = "Task Added Successfully"
+            messages.success(request, "Task {0} added successfully!".format(task))
         else:
             context["status_message"] = "Error Adding Task"
+            messages.error(request, "Error adding task")
         return redirect("create_tasks")
 
 class FindCaregiver(LoginRequiredMixin, View):
@@ -383,6 +390,10 @@ class ChooseCaregiver(LoginRequiredMixin, View):
             #Find which caregivers are already assigned
             assigned_caregivers = client.caregiver.all()
             context["assigned_caregivers"] = assigned_caregivers
+            if is_unassign == "True":
+                messages.success(request, "Unassigned caregiver {0} {1} from client {2} {3}".format(assigned_caregiver.first_name, assigned_caregiver.last_name, assigned_client.first_name, assigned_client.last_name))
+            else:
+                messages.success(request, "Assigned caregiver {0} {1} to client {2} {3}".format(assigned_caregiver.first_name, assigned_caregiver.last_name, assigned_client.first_name, assigned_client.last_name))
             return render(request,'production/caregiver_tables.html',context)
         else:
             return redirect('find_caregiver')
@@ -472,6 +483,7 @@ class AssignTasks(LoginRequiredMixin, View):
                 self.save_monthly_task(new_task_header)
             if task_type == "Yearly":
                 self.save_yearly_task(new_task_header)
+            messages.success(request, "Assigned task {0} to client {1} {2}".format(task, client.first_name, client.last_name))
         #Almost identical to GET, except don't have the find client form in context,
         #instead, just use the client email from POST
         existing_tasks = Tasks.objects.filter(company=current_company).order_by('activity_task')
@@ -733,6 +745,7 @@ def post_family_details(request):
                     assigned_client = Client.objects.get(company=company,email_address=client_email)
                     assigned_client.family_contacts.add(family_contact)
                     assigned_client.save()
+                    messages.success(request, "Successfully added family contact {0} {1}!".format(first_name,last_name))
                 else:
                     existing_family_member = FamilyContact.objects.get(company=request.user.company,id=family_id)
                     existing_user = existing_family_member.user
@@ -756,6 +769,7 @@ def post_family_details(request):
                     if profile_picture is not None:
                         existing_family_member.profile_picture = profile_picture
                     existing_family_member.save()
+                    messages.success(request, "Edited family contact {0} {1}!".format(first_name,last_name))
             except IntegrityError as e:
                 messages.error(request, "Family member already exists. Please enter new family member.")
         #even if form is invalid, client_email still retrieved
@@ -777,60 +791,65 @@ def post_provider_details(request):
         company = request.user.company
         provider_details_form = ProviderDetailsForm(request.POST,request.FILES)
         if provider_details_form.is_valid():
-            first_name = provider_details_form.cleaned_data['first_name']
-            last_name = provider_details_form.cleaned_data['last_name']
-            speciality = provider_details_form.cleaned_data['speciality']
-            phone_number = provider_details_form.cleaned_data['phone_number']
-            secondary_phone_number = provider_details_form.cleaned_data['secondary_phone_number']
-            email = provider_details_form.cleaned_data['email']
-            password = provider_details_form.cleaned_data['password']
-            provider_id = provider_details_form.cleaned_data['provider_id']
-            if(provider_id is None):
-                new_user = User.objects.create_user(username=email,
-                                                    email=email,
-                                                    first_name=first_name,
-                                                    last_name=last_name,
-                                                    password=password,
-                                                    company=company)
-                new_user.save()
-                #Create family object and save
-                provider_user = Provider(user = new_user,
-                                          company=company,
-                                          email_address = email,
-                                          first_name = first_name,
-                                          last_name = last_name,
-                                          speciality = speciality,
-                                          phone_number = phone_number,
-                                          secondary_phone_number = secondary_phone_number
-                                          )
-                provider_user.save()
-                #Add new user to UserRoles with CAREGIVER Role
-                new_role = UserRoles(company=company,
-                                        user=new_user,
-                                        role='PROVIDERUSER')
-                new_role.save()
-                #Add family user to client
-                client_email = provider_details_form.cleaned_data['client_email']
-                assigned_client = Client.objects.get(company=company,email_address=client_email)
-                assigned_client.provider.add(provider_user)
-                assigned_client.save()
-            else:
-                existing_provider = Provider.objects.get(company=request.user.company,id=provider_id)
-                existing_user = existing_provider.user
-                #update User Auth object
-                existing_user.username=email
-                existing_user.email=email
-                existing_user.first_name=first_name
-                existing_user.last_name=last_name
-                existing_user.save()
-                #update Provider object
-                existing_provider.email_address = email
-                existing_provider.first_name = first_name
-                existing_provider.last_name = last_name
-                existing_provider.speciality = speciality
-                existing_provider.phone_number = phone_number
-                existing_provider.secondary_phone_number = secondary_phone_number
-                existing_provider.save()
+            try:
+                first_name = provider_details_form.cleaned_data['first_name']
+                last_name = provider_details_form.cleaned_data['last_name']
+                speciality = provider_details_form.cleaned_data['speciality']
+                phone_number = provider_details_form.cleaned_data['phone_number']
+                secondary_phone_number = provider_details_form.cleaned_data['secondary_phone_number']
+                email = provider_details_form.cleaned_data['email']
+                password = provider_details_form.cleaned_data['password']
+                provider_id = provider_details_form.cleaned_data['provider_id']
+                if(provider_id is None):
+                    new_user = User.objects.create_user(username=email,
+                                                        email=email,
+                                                        first_name=first_name,
+                                                        last_name=last_name,
+                                                        password=password,
+                                                        company=company)
+                    new_user.save()
+                    #Create family object and save
+                    provider_user = Provider(user = new_user,
+                                              company=company,
+                                              email_address = email,
+                                              first_name = first_name,
+                                              last_name = last_name,
+                                              speciality = speciality,
+                                              phone_number = phone_number,
+                                              secondary_phone_number = secondary_phone_number
+                                              )
+                    provider_user.save()
+                    #Add new user to UserRoles with CAREGIVER Role
+                    new_role = UserRoles(company=company,
+                                            user=new_user,
+                                            role='PROVIDERUSER')
+                    new_role.save()
+                    #Add family user to client
+                    client_email = provider_details_form.cleaned_data['client_email']
+                    assigned_client = Client.objects.get(company=company,email_address=client_email)
+                    assigned_client.provider.add(provider_user)
+                    assigned_client.save()
+                    messages.success(request, "Added provider {0} {1}!".format(first_name,last_name))
+                else:
+                    existing_provider = Provider.objects.get(company=request.user.company,id=provider_id)
+                    existing_user = existing_provider.user
+                    #update User Auth object
+                    existing_user.username=email
+                    existing_user.email=email
+                    existing_user.first_name=first_name
+                    existing_user.last_name=last_name
+                    existing_user.save()
+                    #update Provider object
+                    existing_provider.email_address = email
+                    existing_provider.first_name = first_name
+                    existing_provider.last_name = last_name
+                    existing_provider.speciality = speciality
+                    existing_provider.phone_number = phone_number
+                    existing_provider.secondary_phone_number = secondary_phone_number
+                    existing_provider.save()
+                    messages.success(request, "Edited provider {0} {1}!".format(first_name,last_name))
+            except IntegrityError as e:
+                messages.error(request, "Provider already exists. Please enter new family member.")
         else:
             print(provider_details_form.errors)
         client_email = request.POST.get('client_email')
@@ -850,37 +869,42 @@ def post_pharmacy_details(request):
         company = request.user.company
         pharmacy_details_form = PharmacyDetailsForm(request.POST,request.FILES)
         if pharmacy_details_form.is_valid():
-            pharmacy_name = pharmacy_details_form.cleaned_data['pharmacy_name']
-            contact_name = pharmacy_details_form.cleaned_data['contact_name']
-            phone_number = pharmacy_details_form.cleaned_data['phone_number']
-            fax_number = pharmacy_details_form.cleaned_data['fax_number']
-            email = pharmacy_details_form.cleaned_data['email']
-            pharmacy_id = pharmacy_details_form.cleaned_data['pharmacy_id']
-            client_email = pharmacy_details_form.cleaned_data['client_email']
-            if(pharmacy_id is None):
-                #Create family object and save
-                pharmacy = Pharmacy(company=company,
-                                      email_address = email,
-                                      name = pharmacy_name,
-                                      contact_name = contact_name,
-                                      phone_number = phone_number,
-                                      fax_number = fax_number
-                                      )
-                pharmacy.save()
-                #Add family user to client
+            try:
+                pharmacy_name = pharmacy_details_form.cleaned_data['pharmacy_name']
+                contact_name = pharmacy_details_form.cleaned_data['contact_name']
+                phone_number = pharmacy_details_form.cleaned_data['phone_number']
+                fax_number = pharmacy_details_form.cleaned_data['fax_number']
+                email = pharmacy_details_form.cleaned_data['email']
+                pharmacy_id = pharmacy_details_form.cleaned_data['pharmacy_id']
                 client_email = pharmacy_details_form.cleaned_data['client_email']
-                assigned_client = Client.objects.get(company=company,email_address=client_email)
-                assigned_client.pharmacy.add(pharmacy)
-                assigned_client.save()
-            else:
-                existing_pharmacy = Pharmacy.objects.get(company=request.user.company,id=pharmacy_id)
-                #update Provider object
-                existing_pharmacy.email_address = email
-                existing_pharmacy.name = pharmacy_name
-                existing_pharmacy.contact_name = contact_name
-                existing_pharmacy.phone_number = phone_number
-                existing_pharmacy.fax_number = fax_number
-                existing_pharmacy.save()
+                if(pharmacy_id is None):
+                    #Create family object and save
+                    pharmacy = Pharmacy(company=company,
+                                          email_address = email,
+                                          name = pharmacy_name,
+                                          contact_name = contact_name,
+                                          phone_number = phone_number,
+                                          fax_number = fax_number
+                                          )
+                    pharmacy.save()
+                    #Add family user to client
+                    client_email = pharmacy_details_form.cleaned_data['client_email']
+                    assigned_client = Client.objects.get(company=company,email_address=client_email)
+                    assigned_client.pharmacy.add(pharmacy)
+                    assigned_client.save()
+                    messages.success(request, "Added pharmacy {0}!".format(pharmacy_name))
+                else:
+                    existing_pharmacy = Pharmacy.objects.get(company=request.user.company,id=pharmacy_id)
+                    #update Provider object
+                    existing_pharmacy.email_address = email
+                    existing_pharmacy.name = pharmacy_name
+                    existing_pharmacy.contact_name = contact_name
+                    existing_pharmacy.phone_number = phone_number
+                    existing_pharmacy.fax_number = fax_number
+                    existing_pharmacy.save()
+                    messages.success(request, "Edited pharmacy {0}!".format(pharmacy_name))
+            except IntegrityError as e:
+                messages.error(request, "Pharmacy already exists. Please enter new family member.")
         else:
             print(pharmacy_details_form.errors)
         client_email = request.POST.get('client_email')
@@ -900,46 +924,51 @@ def post_payer_details(request):
         company = request.user.company
         payer_details_form = PayerDetailsForm(request.POST,request.FILES)
         if payer_details_form.is_valid():
-            payer_name = payer_details_form.cleaned_data['payer_name']
-            contact_name = payer_details_form.cleaned_data['contact_name']
-            phone_number = payer_details_form.cleaned_data['phone_number']
-            fax_number = payer_details_form.cleaned_data['fax_number']
-            email = payer_details_form.cleaned_data['email']
-            policy_start_date = payer_details_form.cleaned_data['policy_start_date']
-            policy_end_date = payer_details_form.cleaned_data['policy_end_date']
-            policy_number = payer_details_form.cleaned_data['policy_number']
-            payer_id = payer_details_form.cleaned_data['payer_id']
-            client_email = payer_details_form.cleaned_data['client_email']
-            if(payer_id is None):
-                #Create family object and save
-                payer = Payer(company=company,
-                              email_address = email,
-                              name = payer_name,
-                              contact_name = contact_name,
-                              phone_number = phone_number,
-                              fax_number = fax_number,
-                              policy_start_date = policy_start_date,
-                              policy_end_date = policy_end_date,
-                              policy_number = policy_number
-                                      )
-                payer.save()
-                #Add family user to client
+            try:
+                payer_name = payer_details_form.cleaned_data['payer_name']
+                contact_name = payer_details_form.cleaned_data['contact_name']
+                phone_number = payer_details_form.cleaned_data['phone_number']
+                fax_number = payer_details_form.cleaned_data['fax_number']
+                email = payer_details_form.cleaned_data['email']
+                policy_start_date = payer_details_form.cleaned_data['policy_start_date']
+                policy_end_date = payer_details_form.cleaned_data['policy_end_date']
+                policy_number = payer_details_form.cleaned_data['policy_number']
+                payer_id = payer_details_form.cleaned_data['payer_id']
                 client_email = payer_details_form.cleaned_data['client_email']
-                assigned_client = Client.objects.get(company=company,email_address=client_email)
-                assigned_client.payer.add(payer)
-                assigned_client.save()
-            else:
-                existing_payer = Payer.objects.get(company=request.user.company,id=payer_id)
-                #update Provider object
-                existing_payer.email_address = email
-                existing_payer.name = payer_name
-                existing_payer.contact_name = contact_name
-                existing_payer.phone_number = phone_number
-                existing_payer.fax_number = fax_number
-                existing_payer.policy_start_date = policy_start_date
-                existing_payer.policy_end_date = policy_end_date
-                existing_payer.policy_number = policy_number
-                existing_payer.save()
+                if(payer_id is None):
+                    #Create family object and save
+                    payer = Payer(company=company,
+                                  email_address = email,
+                                  name = payer_name,
+                                  contact_name = contact_name,
+                                  phone_number = phone_number,
+                                  fax_number = fax_number,
+                                  policy_start_date = policy_start_date,
+                                  policy_end_date = policy_end_date,
+                                  policy_number = policy_number
+                                          )
+                    payer.save()
+                    #Add family user to client
+                    client_email = payer_details_form.cleaned_data['client_email']
+                    assigned_client = Client.objects.get(company=company,email_address=client_email)
+                    assigned_client.payer.add(payer)
+                    assigned_client.save()
+                    messages.success(request, "Added payer {0}!".format(payer_name))
+                else:
+                    existing_payer = Payer.objects.get(company=request.user.company,id=payer_id)
+                    #update Provider object
+                    existing_payer.email_address = email
+                    existing_payer.name = payer_name
+                    existing_payer.contact_name = contact_name
+                    existing_payer.phone_number = phone_number
+                    existing_payer.fax_number = fax_number
+                    existing_payer.policy_start_date = policy_start_date
+                    existing_payer.policy_end_date = policy_end_date
+                    existing_payer.policy_number = policy_number
+                    existing_payer.save()
+                    messages.success(request, "Edited payer {0}!".format(payer_name))
+            except IntegrityError as e:
+                messages.error(request, "Payer already exists. Please enter new family member.")
         else:
             print(payer_details_form.errors)
         client_email = request.POST.get('client_email')
@@ -988,6 +1017,9 @@ def delete_family_member(request):
             family_user.is_active=False
             family_member.save()
             family_user.save()
+            messages.success(request, "Deleted family contact {0} {1}".format(family_member.first_name,family_member.last_name))
+        else:
+            messages.warning(request, "Did not find family contact to delete.")
         return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client_email)
 
 @login_required
@@ -1022,6 +1054,9 @@ def delete_provider(request):
             provider.is_active=False
             provider.save()
             provider_user.save()
+            messages.success(request, "Deleted provider contact {0} {1}".format(provider.first_name,provider.last_name))
+        else:
+            messagess.warning(request, "Did not find provider to delete.")
         return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client_email)
 
 @login_required
@@ -1052,6 +1087,9 @@ def delete_pharmacy(request):
             pharmacy = Pharmacy.objects.get(company=current_company, id=pharmacy_id)
             pharmacy.is_active=False
             pharmacy.save()
+            messages.success(request,"Deleted pharmacy {0}".format(pharmacy.name))
+        else:
+            messages.warning(request,"Did not find pharmacy to delete.")
         return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client_email)
 
 @login_required
@@ -1084,6 +1122,9 @@ def delete_payer(request):
             payer = Payer.objects.get(company=current_company, id=payer_id)
             payer.is_active=False
             payer.save()
+            messages.success(request, "Deleted payor {0}".format(payer.name))
+        else:
+            messages.warning(request, "Did not find payor to delete")
         return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client_email)
 
 @login_required

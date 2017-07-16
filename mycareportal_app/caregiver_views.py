@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from django.db import transaction
 from mycareportal_app.models import *
 from mycareportal_app.caregiver_forms import *
@@ -83,7 +85,9 @@ class AddCaregiver(LoginRequiredMixin, View):
                                             user=new_user,
                                             role='CAREGIVER')
                     new_role.save()
-                    return redirect('find_caregiver')
+                    #Add messages
+                    messages.success(request, "Caregiver {0} {1} successfully added!".format(first_name, last_name))
+                    return redirect('add_caregiver')
             except IntegrityError as e:
                 messages.error(request, "Caregiver has already been registered. Please enter a new email address.")
         return render(request, 'production/add_caregiver.html', context)
@@ -140,57 +144,61 @@ class EditCaregiver(LoginRequiredMixin, View):
         edit_caregiver_form = CaregiverEditForm(request.POST,request.FILES)
         context['edit_caregiver_form'] = edit_caregiver_form
         if edit_caregiver_form.is_valid():
-            first_name = edit_caregiver_form.cleaned_data['first_name']
-            last_name = edit_caregiver_form.cleaned_data['last_name']
-            middle_name = edit_caregiver_form.cleaned_data['middle_name']
-            gender = edit_caregiver_form.cleaned_data['gender']
-            address = edit_caregiver_form.cleaned_data['address']
-            city = edit_caregiver_form.cleaned_data['city']
-            state = edit_caregiver_form.cleaned_data['state']
-            zip_code = edit_caregiver_form.cleaned_data['zip_code']
-            date_of_birth = edit_caregiver_form.cleaned_data['date_of_birth']
-            phone_number = edit_caregiver_form.cleaned_data['phone_number']
-            secondary_phone_number = edit_caregiver_form.cleaned_data['secondary_phone_number']
-            email = edit_caregiver_form.cleaned_data['email']
-            ssn = edit_caregiver_form.cleaned_data['ssn']
-            referrer = edit_caregiver_form.cleaned_data['referrer']
-            profile_picture = edit_caregiver_form.cleaned_data['profile_picture']
-            #Get current caregiver
-            caregiver = Caregiver.objects.get(company=current_company,email_address=email)
-            if self.arg_diff(caregiver.first_name, first_name):
-                caregiver.first_name = first_name
-            if self.arg_diff(caregiver.last_name, last_name):
-                caregiver.last_name = last_name
-            if self.arg_diff(caregiver.middle_name, middle_name):
-                caregiver.middle_name = middle_name
-            if self.arg_diff(caregiver.gender, gender):
-                caregiver.gender = gender
-            if self.arg_diff(caregiver.address, address):
-                caregiver.address = address
-            if self.arg_diff(caregiver.city, city):
-                caregiver.city = city
-            if self.arg_diff(caregiver.state, state):
-                caregiver.state = state
-            if self.arg_diff(caregiver.zip_code, zip_code):
-                caregiver.zip_code = zip_code
-            #caregiver.date_of_birth = date_of_birth
-            if self.arg_diff(caregiver.phone_number, phone_number):
-                caregiver.phone_number = phone_number
-            if self.arg_diff(caregiver.secondary_phone_number, secondary_phone_number):
-                caregiver.secondary_phone_number = secondary_phone_number
-            if self.arg_diff(caregiver.ssn, ssn):
-                caregiver.ssn = ssn
-            if self.arg_diff(caregiver.referrer, referrer):
-                caregiver.referrer = referrer
-            if self.arg_diff(caregiver.profile_picture, profile_picture):
-                caregiver.profile_picture = profile_picture
-            if self.arg_diff(caregiver.email_address, email):
-                caregiver.email_address = email
-                caregiver_auth = User.objects.get(company=current_company,email=email)
-                caregiver_auth.email = email
-                caregiver_auth.save()
-            caregiver.save()
-        return redirect('edit_choose_caregiver')
+            try:
+                first_name = edit_caregiver_form.cleaned_data['first_name']
+                last_name = edit_caregiver_form.cleaned_data['last_name']
+                middle_name = edit_caregiver_form.cleaned_data['middle_name']
+                gender = edit_caregiver_form.cleaned_data['gender']
+                address = edit_caregiver_form.cleaned_data['address']
+                city = edit_caregiver_form.cleaned_data['city']
+                state = edit_caregiver_form.cleaned_data['state']
+                zip_code = edit_caregiver_form.cleaned_data['zip_code']
+                date_of_birth = edit_caregiver_form.cleaned_data['date_of_birth']
+                phone_number = edit_caregiver_form.cleaned_data['phone_number']
+                secondary_phone_number = edit_caregiver_form.cleaned_data['secondary_phone_number']
+                email = edit_caregiver_form.cleaned_data['email']
+                ssn = edit_caregiver_form.cleaned_data['ssn']
+                referrer = edit_caregiver_form.cleaned_data['referrer']
+                profile_picture = edit_caregiver_form.cleaned_data['profile_picture']
+                #Get current caregiver
+                caregiver = Caregiver.objects.get(company=current_company,email_address=email)
+                if self.arg_diff(caregiver.first_name, first_name):
+                    caregiver.first_name = first_name
+                if self.arg_diff(caregiver.last_name, last_name):
+                    caregiver.last_name = last_name
+                if self.arg_diff(caregiver.middle_name, middle_name):
+                    caregiver.middle_name = middle_name
+                if self.arg_diff(caregiver.gender, gender):
+                    caregiver.gender = gender
+                if self.arg_diff(caregiver.address, address):
+                    caregiver.address = address
+                if self.arg_diff(caregiver.city, city):
+                    caregiver.city = city
+                if self.arg_diff(caregiver.state, state):
+                    caregiver.state = state
+                if self.arg_diff(caregiver.zip_code, zip_code):
+                    caregiver.zip_code = zip_code
+                #caregiver.date_of_birth = date_of_birth
+                if self.arg_diff(caregiver.phone_number, phone_number):
+                    caregiver.phone_number = phone_number
+                if self.arg_diff(caregiver.secondary_phone_number, secondary_phone_number):
+                    caregiver.secondary_phone_number = secondary_phone_number
+                if self.arg_diff(caregiver.ssn, ssn):
+                    caregiver.ssn = ssn
+                if self.arg_diff(caregiver.referrer, referrer):
+                    caregiver.referrer = referrer
+                if self.arg_diff(caregiver.profile_picture, profile_picture):
+                    caregiver.profile_picture = profile_picture
+                if self.arg_diff(caregiver.email_address, email):
+                    caregiver.email_address = email
+                    caregiver_auth = User.objects.get(company=current_company,email=email)
+                    caregiver_auth.email = email
+                    caregiver_auth.save()
+                caregiver.save()
+                messages.success(request, "Caregiver {0} {1} successfully edited!".format(first_name,last_name))
+            except IntegrityError as e:
+                messages.error(request, "Caregiver already exists. Please add a new Caregiver")
+        return HttpResponseRedirect(reverse('edit_caregiver') + "?caregiver_email=" + email)
 
     def arg_diff(self,old,new):
         return (new != None and old != new)
@@ -297,6 +305,7 @@ class CaregiverDashboard(LoginRequiredMixin, View):
                 task.in_progress = False
                 task.cancelled = True
             task.save()
+            messages.success(request, "Edited Task: {0}".format(task.activity_task))
         return redirect('caregiver_dashboard')
 
     def get_client_tasks(self, client_data, request):

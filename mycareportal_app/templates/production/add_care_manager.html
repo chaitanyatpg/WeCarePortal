@@ -38,6 +38,7 @@
                 </ul>
                 <div class="clearfix"></div>
               </div>
+              {{block.super}}
               <div class="x_content"> <br />
                 <form method='post' action="{% url 'add_care_manager' %}" class="form-horizontal form-label-left">
                   {% csrf_token %}
