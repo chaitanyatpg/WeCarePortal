@@ -41,6 +41,10 @@ AWS_S3_FILE_OVERWRITE = False
     # We also use it in the next setting.
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 
+
+#SSL
+SECURE_SSL_REDIRECT = True
+
 # Application definition
 
 INSTALLED_APPS = [
