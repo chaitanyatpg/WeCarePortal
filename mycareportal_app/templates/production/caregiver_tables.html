@@ -82,10 +82,10 @@
                               <!--<td><button type="submit" class="btn btn-success">Assign</button></td>-->
                               {% if caregiver in assigned_caregivers %}
                                 <input type="hidden" name="{{assign_caregiver_form.is_unassign.html_name}}" value="True">
-                                <td><input class="btn-danger" type="submit" value="Unassign"></td>
+                                <td><input class="btn-danger" type="submit" value="Assigned"></td>
                               {% else %}
                                 <input type="hidden" name="{{assign_caregiver_form.is_unassign.html_name}}" value="False">
-                                <td><input type="submit" value="Assign"></td>
+                                <td><input type="submit" value="Unassigned"></td>
                               {% endif %}
                             </tr>
                           </form>
