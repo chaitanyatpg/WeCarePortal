@@ -269,12 +269,12 @@ class CaregiverDashboard(LoginRequiredMixin, View):
             if current_client_tasks != None:
                 #client_name = '{0} {1}'.format(client_data.first_name, client_data.last_name)
                 client_tasks[client_data] = list(current_client_tasks)
-        #print(current_date)
         context["client_tasks"] = client_tasks
         #Get Update Form
         context["update_task_form"] = UpdateTaskForm()
         return render(request, 'production/caregiver_dashboard.html', context)
 
+    @transaction.atomic
     def post(self, request):
         context = {}
         update_task_form = UpdateTaskForm(request.POST)
@@ -283,9 +283,10 @@ class CaregiverDashboard(LoginRequiredMixin, View):
             comment = update_task_form.cleaned_data["comment"]
             task_id = update_task_form.cleaned_data["task_id"]
             client_id = update_task_form.cleaned_data["client_id"]
+            client = Client.objects.get(company=current_company,id=client_id)
             status = update_task_form.cleaned_data["status"]
-            task = TaskSchedule.objects.get(company=current_company,client=client_id,id=task_id)
-            task.comment = comment
+            task = TaskSchedule.objects.get(company=current_company,client=client,id=task_id)
+            #task.comment = comment
             if status == "pending":
                 task.pending = True
                 task.complete = False
@@ -307,23 +308,38 @@ class CaregiverDashboard(LoginRequiredMixin, View):
                 task.in_progress = False
                 task.cancelled = True
             task.save()
+            self.save_task_comments(request, update_task_form, task, current_company, client, comment)
             messages.success(request, "Edited Task: {0}".format(task.activity_task))
         return redirect('caregiver_dashboard')
+
+    def save_task_comments(self, request, update_task_form, task, current_company, client, comment):
+
+        caregiver = Caregiver.objects.get(company=current_company,user=request.user)
+        task_comment = TaskComment(company=current_company,
+                                    client=client,
+                                    caregiver=caregiver,
+                                    task_schedule=task,
+                                    comment=comment)
+        if comment != "":
+            task_comment.save()
 
     def get_client_tasks(self, client_data, request):
         client_timezone = pytz.timezone(client_data.time_zone)
         #current_date = datetime.date.today()
         current_date = (timezone.now().astimezone(client_timezone)).date()
+        timezone.activate(client_timezone)
         if "tablet_id" in request.session:
             tablet_id = request.session["tablet_id"]
             tablet_client = ClientTabletRegister.objects.get(company=request.user.company,device_id=tablet_id)
             if tablet_client.client == client_data:
                 client_tasks = TaskSchedule.objects.filter(client=client_data,date=current_date).order_by('complete','cancelled','pending','in_progress')
+                client_tasks = list(map(lambda x: (x,TaskComment.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created')),client_tasks))
                 return client_tasks
             else:
                 return None
         else:
             client_tasks = TaskSchedule.objects.filter(client=client_data,date=current_date).order_by('complete','cancelled','pending','in_progress')
+            client_tasks = list(map(lambda x: (x,TaskComment.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created')),client_tasks))
             return client_tasks
 
 @login_required

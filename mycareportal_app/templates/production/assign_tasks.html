@@ -313,10 +313,13 @@
                         <textarea class="form-control" style="height:55px;" id="task_description" name="task_description"></textarea>
                       </div>
                     </div>
-                    <div class="form-group">
-                      <label class="col-sm-3 control-label">Comment</label>
-                      <div class="col-sm-9">
-                        <textarea class="form-control" style="height:55px;" id="task_comment" name="task_comment" disabled="true"></textarea>
+                    <label class="control-label">Comments</label>
+                    <div class="task_comments" id="task_comments">
+                      <div class="form-group">
+                        <label class="col-sm-3 control-label">Comment</label>
+                        <div class="col-sm-9">
+                          <textarea class="form-control" style="height:55px;" id="task_comment" name="task_comment" disabled="true"></textarea>
+                        </div>
                       </div>
                     </div>
                     <div class="form-group">
@@ -533,13 +536,22 @@
                     $('#task_start_time').val(task_data.start_time);
                     $('#task_end_time').val(task_data.end_time);
                     $('#task_description').val(task_data.description);
-                    $('#task_comment').val(task_data.comment);
+                    //$('#task_comment').val(task_data.comment);
                     $('#task_link').html(task_data.link);
                     $('#task_link').attr("href", task_data.link);
                     $('#task_attachment').html(task_data.attachment);
                     $('#task_attachment').attr("href", task_data.attachment);
-                    var status = task_data.status
-                    $('#task_status').val(task_data.status)
+                    var status = task_data.status;
+                    $('#task_status').val(task_data.status);
+                    task_comments = task_data.comments;
+                    $(".task_comments").empty();
+                    for(var i=0;i<task_comments.length;i++){
+                      var comment_str = $('<div class="form-group task_comments_div">\
+                      <label class="col-sm-3 control-label">' + task_comments[i][1] + ' : ' + task_comments[i][2] + '</label>\
+                      <div class="col-sm-9">\
+                      <textarea class="form-control" style="height:55px;" name="task_comment" disabled="true">' + task_comments[i][0] + '</textarea></div></div>');
+                      $('#task_comments').append(comment_str);
+                    }
                   },
                   failure: function(client_data){
                     alert('error fetching client data');

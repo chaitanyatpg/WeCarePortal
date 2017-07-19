@@ -218,6 +218,7 @@ class TaskSchedule(models.Model):
 
     company = models.ForeignKey(Company)
     client = models.ForeignKey(Client)
+    task_header = models.ForeignKey(TaskHeader,null=True) #NOTE: change before product to remove null
     activity_task = models.CharField(max_length=300)
     date = models.DateField()
     start_time = models.CharField(max_length=10, blank=True)
@@ -229,7 +230,6 @@ class TaskSchedule(models.Model):
     description = models.CharField(max_length=1000, blank=True)
     link = models.CharField(max_length=500, blank=True)
     attachment = models.FileField(upload_to="files/tasks", blank=True)
-    comment = models.CharField(max_length=500, blank=True)
 
 class TaskComment(models.Model):
 

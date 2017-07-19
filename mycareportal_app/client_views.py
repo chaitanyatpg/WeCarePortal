@@ -14,6 +14,7 @@ from dateutil import relativedelta
 import datetime
 import json
 import pytz
+import django.utils.timezone as timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -642,13 +643,21 @@ def get_task_with_id(request):
         task_id = request.GET.get('task_id')
         current_company = request.user.company
         current_task = TaskSchedule.objects.get(company=current_company,id = task_id)
+        client = current_task.client
         task_name = current_task.activity_task
         start_time = current_task.start_time
         end_time = current_task.end_time
         description = current_task.description
         link = current_task.link
         attachment = current_task.attachment
-        comment = current_task.comment
+        comments = list(map(lambda x: [x.comment,
+                                        '{0} {1}'.format(x.caregiver.first_name,x.caregiver.last_name),
+                                        '{0}/{1}/{2} {3}'.format(
+                                            convert_to_client_timezone(x.created,client).month,
+                                            convert_to_client_timezone(x.created,client).day,
+                                            convert_to_client_timezone(x.created,client).year,
+                                            convert_to_client_timezone(x.created,client).time())],
+                                        TaskComment.objects.filter(task_schedule=current_task)))
         status = ""
         if current_task.pending:
             status = "pending"
@@ -663,13 +672,20 @@ def get_task_with_id(request):
                     'start_time': start_time,
                     'end_time': end_time,
                     'description': description,
+                    'comments': comments,
                     'link': link,
-                    'comment': comment,
                     'status': status
                     }
         if attachment != "":
-            task_data['attachment'] = attachment.url,
+            task_data['attachment'] = attachment.url
+        print(comments)
         return HttpResponse(json.dumps(task_data), content_type="application/json")
+
+def convert_to_client_timezone(client_timestamp, client):
+
+    client_timezone = pytz.timezone(client.time_zone)
+    new_timestamp = (client_timestamp.astimezone(client_timezone))
+    return new_timestamp
 
 @login_required
 def edit_task_with_id(request):

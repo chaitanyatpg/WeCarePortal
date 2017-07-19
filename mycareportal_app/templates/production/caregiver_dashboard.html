@@ -134,7 +134,7 @@
                             <ul class="messages">
                               {% for client, tasks in client_tasks.items %}
                                 <h3> {{client.first_name|addstr_space:client.last_name}} </h3>
-                                {% for task in tasks %}
+                                {% for task, task_comments in tasks %}
                                 <li>
                                   <img class="avatar" src="{{client.profile_picture.url}}">
 
@@ -157,11 +157,30 @@
                                         <a href="{{task.link}}"><i class="fa fa-external-link"></i>{{task.link}}</a>
                                       {% endif %}
                                     </p>
+                                    <ul class="list-unstyled msg_list">
+                                    {% for comment in task_comments %}
+                                      <li>
+                                        <a>
+                                          <span class="image">
+                                            <img src="{{comment.caregiver.profile_picture.url}}" />
+                                          </span>
+                                          <span>
+                                            <span>{{comment.caregiver.first_name|addstr_space:comment.caregiver.last_name}}</span>
+                                            <span>{{comment.created}}</span>
+                                          </span>
+                                          <span class="message">
+                                            {{comment.comment}}
+                                          </span>
+                                        </a>
+                                      </li>
+
+                                    {% endfor %}
+                                    </ul>
                                     <form method="post" role="form" action="{% url 'caregiver_dashboard' %}">
                                       {% csrf_token %}
                                       <p>
-                                        <label>Comment</label>
-                                        <textarea class="form-control" style="height:55px;" id="task_comment" name="{{update_task_form.comment.html_name}}">{{task.comment}}</textarea>
+                                        <label>New Comment</label>
+                                        <textarea class="form-control" style="height:55px;" id="task_comment" name="{{update_task_form.comment.html_name}}"></textarea>
                                       </p>
                                       <div class="row">
                                         <div class="col-md-3">
