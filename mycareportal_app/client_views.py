@@ -437,6 +437,9 @@ class AssignTasks(LoginRequiredMixin, View):
         context = {}
         current_company = request.user.company
         assign_task_form = AssignTaskForm(request.POST, request.FILES)
+        print("ENTERED TASK POST")
+        print(request.POST)
+        print(request.FILES)
         #Populated here for redirect incase form is not valid
         client_email = assign_task_form.data["client_email"]
         if assign_task_form.is_valid():
@@ -453,7 +456,8 @@ class AssignTasks(LoginRequiredMixin, View):
             end_minute = assign_task_form.cleaned_data["end_minute"]
             description = assign_task_form.cleaned_data["description"]
             link = assign_task_form.cleaned_data["link"]
-            attachment = assign_task_form.cleaned_data["attachment"]
+            #attachments = assign_task_form.cleaned_data["attachment"]
+            attachments = request.FILES.getlist('attachment')
             start_time = ""
             end_time = ""
             if start_hour != "" and start_minute != "":
@@ -470,22 +474,22 @@ class AssignTasks(LoginRequiredMixin, View):
                                             start_time = start_time,
                                             end_time = end_time,
                                             description = description,
-                                            link = link,
-                                            attachment = attachment)
+                                            link = link)
             new_task_header.save()
             #populate task schedule
+            current_user = request.user
             if task_type == "One Time":
-                self.save_one_time_task(new_task_header)
+                self.save_one_time_task(new_task_header, attachments, current_user)
             if task_type == "Daily":
-                self.save_daily_task(new_task_header)
+                self.save_daily_task(new_task_header, attachments, current_user)
             if task_type == "Weekly":
-                self.save_weekly_task(new_task_header)
+                self.save_weekly_task(new_task_header, attachments, current_user)
             if task_type == "Bi-Weekly":
-                self.save_bi_weekly_task(new_task_header)
+                self.save_bi_weekly_task(new_task_header, attachments, current_user)
             if task_type == "Monthly":
-                self.save_monthly_task(new_task_header)
+                self.save_monthly_task(new_task_header, attachments, current_user)
             if task_type == "Yearly":
-                self.save_yearly_task(new_task_header)
+                self.save_yearly_task(new_task_header, attachments, current_user)
             messages.success(request, "Assigned task {0} to client {1} {2}".format(task, client.first_name, client.last_name))
         #Almost identical to GET, except don't have the find client form in context,
         #instead, just use the client email from POST
@@ -507,7 +511,37 @@ class AssignTasks(LoginRequiredMixin, View):
         context["client_schedule"] = client_schedule
         return render(request,'production/assign_tasks.html',context)
 
-    def save_one_time_task(self, new_task_header):
+    def save_task_attachments(self, new_task_header, attachments, current_user, schedule_entry):
+        for uploaded_file in attachments:
+            task_attachment = TaskAttachment(company=new_task_header.company,
+                                            client=new_task_header.client,
+                                            user=current_user,
+                                            task_schedule=schedule_entry,
+                                            attachment=uploaded_file)
+            task_attachment.save()
+
+    def save_existing_task_attachments(self, uploaded_task_attachments, schedule_entry):
+        for uploaded_attachment in uploaded_task_attachments:
+            new_task_attachment = TaskAttachment(company = uploaded_attachment.company,
+                                                client = uploaded_attachment.client,
+                                                user = uploaded_attachment.user,
+                                                task_schedule = schedule_entry,
+                                                attachment = uploaded_attachment.attachment)
+            new_task_attachment.save()
+
+    def save_and_return_task_attachments(self, new_task_header, attachments, current_user, schedule_entry):
+        uploaded_task_attachments = []
+        for uploaded_file in attachments:
+            task_attachment = TaskAttachment(company=new_task_header.company,
+                                            client=new_task_header.client,
+                                            user=current_user,
+                                            task_schedule=schedule_entry,
+                                            attachment=uploaded_file)
+            task_attachment.save()
+            uploaded_task_attachments.append(task_attachment)
+        return uploaded_task_attachments
+
+    def save_one_time_task(self, new_task_header, attachments, current_user):
         schedule_entry = TaskSchedule(company=new_task_header.company,
                                         client=new_task_header.client,
                                         activity_task=new_task_header.activity_task,
@@ -515,14 +549,15 @@ class AssignTasks(LoginRequiredMixin, View):
                                         start_time=new_task_header.start_time,
                                         end_time=new_task_header.end_time,
                                         description = new_task_header.description,
-                                        link = new_task_header.link,
-                                        attachment = new_task_header.attachment)
+                                        link = new_task_header.link)
         schedule_entry.save()
+        self.save_task_attachments(new_task_header, attachments, current_user, schedule_entry)
 
-    def save_daily_task(self, new_task_header):
+    def save_daily_task(self, new_task_header, attachments, current_user):
         start_date = new_task_header.start_date
         end_date = new_task_header.end_date
         date_range_num = end_date - start_date
+        uploaded_task_attachments = []
         for i in range(date_range_num.days + 1):
             new_date = (start_date + datetime.timedelta(days=i)).date()
             schedule_entry = TaskSchedule(company=new_task_header.company,
@@ -532,15 +567,19 @@ class AssignTasks(LoginRequiredMixin, View):
                                             start_time=new_task_header.start_time,
                                             end_time=new_task_header.end_time,
                                             description = new_task_header.description,
-                                            link = new_task_header.link,
-                                            attachment = new_task_header.attachment)
+                                            link = new_task_header.link)
             schedule_entry.save()
+            if len(uploaded_task_attachments)==0:
+                uploaded_task_attachments = self.save_and_return_task_attachments(new_task_header, attachments, current_user, schedule_entry)
+            else:
+                self.save_existing_task_attachments(uploaded_task_attachments, schedule_entry)
 
-    def save_weekly_task(self, new_task_header):
+    def save_weekly_task(self, new_task_header, attachments, current_user):
         start_date = new_task_header.start_date
         current_date = start_date
         end_date = new_task_header.end_date
         delta = datetime.timedelta(days=7) #per Week
+        uploaded_task_attachments = []
         while current_date <= end_date:
             new_date = current_date
             schedule_entry = TaskSchedule(company=new_task_header.company,
@@ -550,16 +589,20 @@ class AssignTasks(LoginRequiredMixin, View):
                                             start_time=new_task_header.start_time,
                                             end_time=new_task_header.end_time,
                                             description = new_task_header.description,
-                                            link = new_task_header.link,
-                                            attachment = new_task_header.attachment)
+                                            link = new_task_header.link)
             schedule_entry.save()
+            if len(uploaded_task_attachments)==0:
+                uploaded_task_attachments = self.save_and_return_task_attachments(new_task_header, attachments, current_user, schedule_entry)
+            else:
+                self.save_existing_task_attachments(uploaded_task_attachments, schedule_entry)
             current_date += delta
 
-    def save_bi_weekly_task(self, new_task_header):
+    def save_bi_weekly_task(self, new_task_header, attachments, current_user):
         start_date = new_task_header.start_date
         current_date = start_date
         end_date = new_task_header.end_date
         delta = datetime.timedelta(days=14) #per Week
+        uploaded_task_attachments = []
         while current_date <= end_date:
             new_date = current_date
             schedule_entry = TaskSchedule(company=new_task_header.company,
@@ -569,16 +612,20 @@ class AssignTasks(LoginRequiredMixin, View):
                                             start_time=new_task_header.start_time,
                                             end_time=new_task_header.end_time,
                                             description = new_task_header.description,
-                                            link = new_task_header.link,
-                                            attachment = new_task_header.attachment)
+                                            link = new_task_header.link)
             schedule_entry.save()
+            if len(uploaded_task_attachments)==0:
+                uploaded_task_attachments = self.save_and_return_task_attachments(new_task_header, attachments, current_user, schedule_entry)
+            else:
+                self.save_existing_task_attachments(uploaded_task_attachments, schedule_entry)
             current_date += delta
 
-    def save_monthly_task(self, new_task_header):
+    def save_monthly_task(self, new_task_header, attachments, current_user):
         start_date = new_task_header.start_date
         current_date = start_date
         end_date = new_task_header.end_date
         delta = relativedelta.relativedelta(months=1) #per Month
+        uploaded_task_attachments = []
         while current_date <= end_date:
             new_date = current_date
             schedule_entry = TaskSchedule(company=new_task_header.company,
@@ -588,16 +635,20 @@ class AssignTasks(LoginRequiredMixin, View):
                                             start_time=new_task_header.start_time,
                                             end_time=new_task_header.end_time,
                                             description = new_task_header.description,
-                                            link = new_task_header.link,
-                                            attachment = new_task_header.attachment)
+                                            link = new_task_header.link)
             schedule_entry.save()
+            if len(uploaded_task_attachments)==0:
+                uploaded_task_attachments = self.save_and_return_task_attachments(new_task_header, attachments, current_user, schedule_entry)
+            else:
+                self.save_existing_task_attachments(uploaded_task_attachments, schedule_entry)
             current_date += delta
 
-    def save_yearly_task(self, new_task_header):
+    def save_yearly_task(self, new_task_header, attachments, current_user):
         start_date = new_task_header.start_date
         current_date = start_date
         end_date = new_task_header.end_date
         delta = relativedelta.relativedelta(months=12) #per Year
+        uploaded_task_attachments = []
         while current_date <= end_date:
             new_date = current_date
             schedule_entry = TaskSchedule(company=new_task_header.company,
@@ -607,9 +658,12 @@ class AssignTasks(LoginRequiredMixin, View):
                                             start_time=new_task_header.start_time,
                                             end_time=new_task_header.end_time,
                                             description = new_task_header.description,
-                                            link = new_task_header.link,
-                                            attachment = new_task_header.attachment)
+                                            link = new_task_header.link)
             schedule_entry.save()
+            if len(uploaded_task_attachments)==0:
+                uploaded_task_attachments = self.save_and_return_task_attachments(new_task_header, attachments, current_user, schedule_entry)
+            else:
+                self.save_existing_task_attachments(uploaded_task_attachments, schedule_entry)
             current_date += delta
 
 @login_required

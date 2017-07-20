@@ -333,13 +333,17 @@ class CaregiverDashboard(LoginRequiredMixin, View):
             tablet_client = ClientTabletRegister.objects.get(company=request.user.company,device_id=tablet_id)
             if tablet_client.client == client_data:
                 client_tasks = TaskSchedule.objects.filter(client=client_data,date=current_date).order_by('complete','cancelled','pending','in_progress')
-                client_tasks = list(map(lambda x: (x,TaskComment.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created')),client_tasks))
+                client_tasks = list(map(lambda x: (x,
+                TaskComment.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created'),
+                TaskAttachment.objects.filter(company=request.user.company,client=client_data,task_schedule=x)),client_tasks))
                 return client_tasks
             else:
                 return None
         else:
             client_tasks = TaskSchedule.objects.filter(client=client_data,date=current_date).order_by('complete','cancelled','pending','in_progress')
-            client_tasks = list(map(lambda x: (x,TaskComment.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created')),client_tasks))
+            client_tasks = list(map(lambda x: (x,
+            TaskComment.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created'),
+            TaskAttachment.objects.filter(company=request.user.company,client=client_data,task_schedule=x)),client_tasks))
             return client_tasks
 
 @login_required

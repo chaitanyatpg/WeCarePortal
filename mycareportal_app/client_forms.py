@@ -250,7 +250,9 @@ class AssignTaskForm(forms.Form):
     end_minute = forms.CharField(required=False)
     description = forms.CharField(required=False, max_length=1000)
     link = forms.CharField(required=False, max_length=500)
-    attachment = forms.FileField(label='Select file', required=False)
+    #attachment = forms.FileField(label='Select file', required=False)
+    attachment = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), label='Select files', required=False)
+
 
     def clean(self):
         cleaned_data = super(AssignTaskForm, self).clean()

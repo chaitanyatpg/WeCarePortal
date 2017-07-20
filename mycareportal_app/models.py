@@ -240,6 +240,15 @@ class TaskComment(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     comment = models.CharField(max_length=500)
 
+class TaskAttachment(models.Model):
+
+    company = models.ForeignKey(Company)
+    client = models.ForeignKey(Client)
+    user = models.ForeignKey(User)
+    task_schedule = models.ForeignKey(TaskSchedule)
+    attachment = models.FileField(upload_to="files/tasks")
+    created = models.DateTimeField(auto_now_add=True)
+
 class AssessmentCategories(models.Model):
 
     category = models.CharField(max_length=500)

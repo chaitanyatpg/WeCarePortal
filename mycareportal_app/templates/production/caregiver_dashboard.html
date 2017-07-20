@@ -134,7 +134,7 @@
                             <ul class="messages">
                               {% for client, tasks in client_tasks.items %}
                                 <h3> {{client.first_name|addstr_space:client.last_name}} </h3>
-                                {% for task, task_comments in tasks %}
+                                {% for task, task_comments, task_attachments in tasks %}
                                 <li>
                                   <img class="avatar" src="{{client.profile_picture.url}}">
 
@@ -157,6 +157,15 @@
                                         <a href="{{task.link}}"><i class="fa fa-external-link"></i>{{task.link}}</a>
                                       {% endif %}
                                     </p>
+                                    <ul>
+                                    {% for attachment in task_attachments %}
+                                        <li>
+                                          <a href="{{attachment.attachment.url}}"><i class="fa fa-paperclip"></i>{{attachment.attachment|trunc_path}}</a>
+                                          <span>Uploaded on {{attachment.created}}</span>
+                                          <span>by {{attachment.user.first_name|addstr_space:attachment.user.last_name}}</span>
+                                        </li>
+                                    {% endfor %}
+                                    </ul>
                                     <ul class="list-unstyled msg_list">
                                     {% for comment in task_comments %}
                                       <li>
