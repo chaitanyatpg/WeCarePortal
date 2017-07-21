@@ -712,6 +712,15 @@ def get_task_with_id(request):
                                             convert_to_client_timezone(x.created,client).year,
                                             convert_to_client_timezone(x.created,client).time())],
                                         TaskComment.objects.filter(task_schedule=current_task)))
+        attachments = list(map(lambda x: [x.attachment.url,
+                                        '{0} {1}'.format(x.user.first_name,x.user.last_name),
+                                        '{0}/{1}/{2} {3}'.format(
+                                            convert_to_client_timezone(x.created,client).month,
+                                            convert_to_client_timezone(x.created,client).day,
+                                            convert_to_client_timezone(x.created,client).year,
+                                            convert_to_client_timezone(x.created,client).time()
+                                        )],
+                                TaskAttachment.objects.filter(task_schedule=current_task)))
         status = ""
         if current_task.pending:
             status = "pending"
@@ -727,12 +736,12 @@ def get_task_with_id(request):
                     'end_time': end_time,
                     'description': description,
                     'comments': comments,
+                    'attachments': attachments,
                     'link': link,
                     'status': status
                     }
         if attachment != "":
             task_data['attachment'] = attachment.url
-        print(comments)
         return HttpResponse(json.dumps(task_data), content_type="application/json")
 
 def convert_to_client_timezone(client_timestamp, client):

@@ -157,6 +157,7 @@
                                         <a href="{{task.link}}"><i class="fa fa-external-link"></i>{{task.link}}</a>
                                       {% endif %}
                                     </p>
+
                                     <ul>
                                     {% for attachment in task_attachments %}
                                         <li>
@@ -185,8 +186,12 @@
 
                                     {% endfor %}
                                     </ul>
-                                    <form method="post" role="form" action="{% url 'caregiver_dashboard' %}">
+                                    <form enctype="multipart/form-data" method="post" role="form" action="{% url 'caregiver_dashboard' %}">
                                       {% csrf_token %}
+                                      <p>
+                                        <label>New Attachments</label>
+                                            {{update_task_form.attachment.label_tag}}{{update_task_form.attachment}}
+                                      </p>
                                       <p>
                                         <label>New Comment</label>
                                         <textarea class="form-control" style="height:55px;" id="task_comment" name="{{update_task_form.comment.html_name}}"></textarea>

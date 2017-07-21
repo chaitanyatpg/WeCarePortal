@@ -318,7 +318,7 @@
           </div>
         </div>-->
         <div id="CalenderModalEdit" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
+          <div class="modal-dialog modal-lg">
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -354,19 +354,16 @@
                     </div>
                     <label class="control-label">Comments</label>
                     <div class="task_comments" id="task_comments">
-                      <div class="form-group">
-                        <label class="col-sm-3 control-label">Comment</label>
-                        <div class="col-sm-9">
-                          <textarea class="form-control" style="height:55px;" id="task_comment" name="task_comment" disabled="true"></textarea>
-                        </div>
-                      </div>
                     </div>
-                    <div class="form-group">
+                    <label class="control-label">Attachments</label>
+                    <div class="task_attachments" id="task_attachments">
+                    </div>
+                    <!--<div class="form-group">
                       <label class="col-sm-3 control-label">Task Attachment</label>
                       <div class="col-sm-9">
                         <a href="" id="task_attachment" name="task_attachment"></a>
                       </div>
-                    </div>
+                    </div>-->
                     <div class="form-group">
                       <label class="col-sm-3 control-label">Task Link</label>
                       <div class="col-sm-9">
@@ -496,7 +493,7 @@
       <!-- Fine uploader template end -->
 
       <!-- Fine uploader attach element -->
-      <script>
+      <!--<script>
       $('#task_attachment_uploader').fineUploader({
         template: 'qq-template',
         request: {
@@ -515,7 +512,7 @@
         },
         autoUpload: false
         });
-      </script>
+      </script>-->
       <!-- end -->
 
     <!-- POST delete task from calendar -->
@@ -670,6 +667,7 @@
                     var status = task_data.status;
                     $('#task_status').val(task_data.status);
                     task_comments = task_data.comments;
+                    task_attachments = task_data.attachments;
                     $(".task_comments").empty();
                     for(var i=0;i<task_comments.length;i++){
                       var comment_str = $('<div class="form-group task_comments_div">\
@@ -677,6 +675,14 @@
                       <div class="col-sm-9">\
                       <textarea class="form-control" style="height:55px;" name="task_comment" disabled="true">' + task_comments[i][0] + '</textarea></div></div>');
                       $('#task_comments').append(comment_str);
+                    }
+                    $(".task_attachments").empty();
+                    for(var i=0;i<task_attachments.length;i++){
+                      var attachment_str = $('<div class="form-group task_attachments_div">\
+                      <label class="col-sm-3 control-label">' + task_attachments[i][1] + ' : ' + task_attachments[i][2] + '</label>\
+                      <div class="col-sm-9">\
+                      <a href=' + task_attachments[i][0] + '><i class="fa fa-paperclip"></i>' + task_attachments[i][0] + '</a>');
+                      $('#task_attachments').append(attachment_str);
                     }
                   },
                   failure: function(client_data){
@@ -720,12 +726,38 @@
               editable: true,
               events : [
                 {% for task in client_schedule %}
+                {% if task.pending %}
                 {
                   title: "{{ task.activity_task }}",
                   start: "{{ task.date|date:'Y-m-d'|append_datetime:task.start_time}}",
                   end: "{{ task.date|date:'Y-m-d'|append_datetime:task.end_time}}",
                   id: "{{ task.id }}"
                 },
+                {% elif task.in_progress %}
+                {
+                  title: "{{ task.activity_task }}",
+                  start: "{{ task.date|date:'Y-m-d'|append_datetime:task.start_time}}",
+                  end: "{{ task.date|date:'Y-m-d'|append_datetime:task.end_time}}",
+                  id: "{{ task.id }}",
+                  color: "#A8D0E6"
+                },
+                {% elif task.complete %}
+                {
+                  title: "{{ task.activity_task }}",
+                  start: "{{ task.date|date:'Y-m-d'|append_datetime:task.start_time}}",
+                  end: "{{ task.date|date:'Y-m-d'|append_datetime:task.end_time}}",
+                  id: "{{ task.id }}",
+                  color: "#3AAFA9"
+                },
+                {% elif task.cancelled %}
+                {
+                  title: "{{ task.activity_task }}",
+                  start: "{{ task.date|date:'Y-m-d'|append_datetime:task.start_time}}",
+                  end: "{{ task.date|date:'Y-m-d'|append_datetime:task.end_time}}",
+                  id: "{{ task.id }}",
+                  color: "#F76C6C"
+                },
+                {% endif %}
                 {% endfor %}
               ],
               timeFormat: 'h:mma'

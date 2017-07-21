@@ -148,7 +148,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "mycareportal_app/static")
 ]
-LOGIN_URL = '/mycareportal_app/login'
+LOGIN_URL = 'login'
 MEDIA_ROOT = os.path.join(BASE_DIR, "mycareportal_app/media")
 
 STATIC_URL = '/static/'

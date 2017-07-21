@@ -277,7 +277,7 @@ class CaregiverDashboard(LoginRequiredMixin, View):
     @transaction.atomic
     def post(self, request):
         context = {}
-        update_task_form = UpdateTaskForm(request.POST)
+        update_task_form = UpdateTaskForm(request.POST, request.FILES)
         if update_task_form.is_valid():
             current_company = request.user.company
             comment = update_task_form.cleaned_data["comment"]
@@ -285,6 +285,7 @@ class CaregiverDashboard(LoginRequiredMixin, View):
             client_id = update_task_form.cleaned_data["client_id"]
             client = Client.objects.get(company=current_company,id=client_id)
             status = update_task_form.cleaned_data["status"]
+            attachments = request.FILES.getlist('attachment')
             task = TaskSchedule.objects.get(company=current_company,client=client,id=task_id)
             #task.comment = comment
             if status == "pending":
@@ -309,8 +310,18 @@ class CaregiverDashboard(LoginRequiredMixin, View):
                 task.cancelled = True
             task.save()
             self.save_task_comments(request, update_task_form, task, current_company, client, comment)
+            self.save_task_attachments(request, update_task_form, task, current_company, client, request.user, attachments)
             messages.success(request, "Edited Task: {0}".format(task.activity_task))
         return redirect('caregiver_dashboard')
+
+    def save_task_attachments(self, request, update_task_form, task, current_company, client, user, attachments):
+        for uploaded_file in attachments:
+            task_attachment = TaskAttachment(company=current_company,
+                                            client=client,
+                                            user=user,
+                                            task_schedule=task,
+                                            attachment=uploaded_file)
+            task_attachment.save()
 
     def save_task_comments(self, request, update_task_form, task, current_company, client, comment):
 
@@ -335,7 +346,7 @@ class CaregiverDashboard(LoginRequiredMixin, View):
                 client_tasks = TaskSchedule.objects.filter(client=client_data,date=current_date).order_by('complete','cancelled','pending','in_progress')
                 client_tasks = list(map(lambda x: (x,
                 TaskComment.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created'),
-                TaskAttachment.objects.filter(company=request.user.company,client=client_data,task_schedule=x)),client_tasks))
+                TaskAttachment.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created')),client_tasks))
                 return client_tasks
             else:
                 return None
