@@ -43,6 +43,7 @@ AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 
 
 #SSL
+
 SECURE_SSL_REDIRECT = True
 
 # Application definition
@@ -148,7 +149,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "mycareportal_app/static")
 ]
-LOGIN_URL = '/mycareportal_app/login'
+LOGIN_URL = 'login'
 MEDIA_ROOT = os.path.join(BASE_DIR, "mycareportal_app/media")
 
 STATIC_URL = '/static/'
