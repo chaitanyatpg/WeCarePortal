@@ -346,7 +346,8 @@ class CaregiverDashboard(LoginRequiredMixin, View):
                 client_tasks = TaskSchedule.objects.filter(client=client_data,date=current_date).order_by('complete','cancelled','pending','in_progress')
                 client_tasks = list(map(lambda x: (x,
                 TaskComment.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created'),
-                TaskAttachment.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created')),client_tasks))
+                TaskAttachment.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created'),
+                TaskLink.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created')),client_tasks))
                 return client_tasks
             else:
                 return None
@@ -354,7 +355,8 @@ class CaregiverDashboard(LoginRequiredMixin, View):
             client_tasks = TaskSchedule.objects.filter(client=client_data,date=current_date).order_by('complete','cancelled','pending','in_progress')
             client_tasks = list(map(lambda x: (x,
             TaskComment.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created'),
-            TaskAttachment.objects.filter(company=request.user.company,client=client_data,task_schedule=x)),client_tasks))
+            TaskAttachment.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created'),
+            TaskLink.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created')),client_tasks))
             return client_tasks
 
 @login_required

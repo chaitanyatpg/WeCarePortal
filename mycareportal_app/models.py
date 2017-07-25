@@ -249,6 +249,15 @@ class TaskAttachment(models.Model):
     attachment = models.FileField(upload_to="files/tasks")
     created = models.DateTimeField(auto_now_add=True)
 
+class TaskLink(models.Model):
+
+    company = models.ForeignKey(Company)
+    client = models.ForeignKey(Client)
+    user = models.ForeignKey(User)
+    task_schedule = models.ForeignKey(TaskSchedule)
+    task_url = models.CharField(max_length=500)
+    created = models.DateTimeField(auto_now_add=True)
+
 class AssessmentCategories(models.Model):
 
     category = models.CharField(max_length=500)

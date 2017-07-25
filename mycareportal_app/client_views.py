@@ -541,6 +541,16 @@ class AssignTasks(LoginRequiredMixin, View):
             uploaded_task_attachments.append(task_attachment)
         return uploaded_task_attachments
 
+    def save_task_link(self, new_task_header, link, current_user, schedule_entry):
+        #will change to support multiple links later
+        task_link = TaskLink(company=new_task_header.company,
+                                client=new_task_header.client,
+                                user=current_user,
+                                task_schedule=schedule_entry,
+                                task_url=link)
+        task_link.save()
+        print("Saved task link")
+
     def save_one_time_task(self, new_task_header, attachments, current_user):
         schedule_entry = TaskSchedule(company=new_task_header.company,
                                         client=new_task_header.client,
@@ -552,6 +562,9 @@ class AssignTasks(LoginRequiredMixin, View):
                                         link = new_task_header.link)
         schedule_entry.save()
         self.save_task_attachments(new_task_header, attachments, current_user, schedule_entry)
+        link = new_task_header.link
+        if link != None and link!= "":
+            self.save_task_link(new_task_header, link, current_user, schedule_entry)
 
     def save_daily_task(self, new_task_header, attachments, current_user):
         start_date = new_task_header.start_date
@@ -573,6 +586,9 @@ class AssignTasks(LoginRequiredMixin, View):
                 uploaded_task_attachments = self.save_and_return_task_attachments(new_task_header, attachments, current_user, schedule_entry)
             else:
                 self.save_existing_task_attachments(uploaded_task_attachments, schedule_entry)
+            link = new_task_header.link
+            if link != None and link!= "":
+                self.save_task_link(new_task_header, link, current_user, schedule_entry)
 
     def save_weekly_task(self, new_task_header, attachments, current_user):
         start_date = new_task_header.start_date
@@ -595,6 +611,9 @@ class AssignTasks(LoginRequiredMixin, View):
                 uploaded_task_attachments = self.save_and_return_task_attachments(new_task_header, attachments, current_user, schedule_entry)
             else:
                 self.save_existing_task_attachments(uploaded_task_attachments, schedule_entry)
+            link = new_task_header.link
+            if link != None and link!= "":
+                self.save_task_link(new_task_header, link, current_user, schedule_entry)
             current_date += delta
 
     def save_bi_weekly_task(self, new_task_header, attachments, current_user):
@@ -618,6 +637,9 @@ class AssignTasks(LoginRequiredMixin, View):
                 uploaded_task_attachments = self.save_and_return_task_attachments(new_task_header, attachments, current_user, schedule_entry)
             else:
                 self.save_existing_task_attachments(uploaded_task_attachments, schedule_entry)
+            link = new_task_header.link
+            if link != None and link!= "":
+                self.save_task_link(new_task_header, link, current_user, schedule_entry)
             current_date += delta
 
     def save_monthly_task(self, new_task_header, attachments, current_user):
@@ -641,6 +663,9 @@ class AssignTasks(LoginRequiredMixin, View):
                 uploaded_task_attachments = self.save_and_return_task_attachments(new_task_header, attachments, current_user, schedule_entry)
             else:
                 self.save_existing_task_attachments(uploaded_task_attachments, schedule_entry)
+            link = new_task_header.link
+            if link != None and link!= "":
+                self.save_task_link(new_task_header, link, current_user, schedule_entry)
             current_date += delta
 
     def save_yearly_task(self, new_task_header, attachments, current_user):
@@ -664,6 +689,9 @@ class AssignTasks(LoginRequiredMixin, View):
                 uploaded_task_attachments = self.save_and_return_task_attachments(new_task_header, attachments, current_user, schedule_entry)
             else:
                 self.save_existing_task_attachments(uploaded_task_attachments, schedule_entry)
+            link = new_task_header.link
+            if link != None and link!= "":
+                self.save_task_link(new_task_header, link, current_user, schedule_entry)
             current_date += delta
 
 @login_required
@@ -721,6 +749,15 @@ def get_task_with_id(request):
                                             convert_to_client_timezone(x.created,client).time()
                                         )],
                                 TaskAttachment.objects.filter(task_schedule=current_task)))
+        links = list(map(lambda x: [x.task_url,
+                                        '{0} {1}'.format(x.user.first_name,x.user.last_name),
+                                        '{0}/{1}/{2} {3}'.format(
+                                            convert_to_client_timezone(x.created,client).month,
+                                            convert_to_client_timezone(x.created,client).day,
+                                            convert_to_client_timezone(x.created,client).year,
+                                            convert_to_client_timezone(x.created,client).time()
+                                        )],
+                                TaskLink.objects.filter(task_schedule=current_task)))
         status = ""
         if current_task.pending:
             status = "pending"
@@ -737,7 +774,7 @@ def get_task_with_id(request):
                     'description': description,
                     'comments': comments,
                     'attachments': attachments,
-                    'link': link,
+                    'links': links,
                     'status': status
                     }
         if attachment != "":

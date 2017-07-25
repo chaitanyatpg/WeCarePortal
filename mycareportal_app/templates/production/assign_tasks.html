@@ -358,18 +358,21 @@
                     <label class="control-label">Attachments</label>
                     <div class="task_attachments" id="task_attachments">
                     </div>
+                    <label class="control-label">Links</label>
+                    <div class="task_links" id="task_links">
+                    </div>
                     <!--<div class="form-group">
                       <label class="col-sm-3 control-label">Task Attachment</label>
                       <div class="col-sm-9">
                         <a href="" id="task_attachment" name="task_attachment"></a>
                       </div>
                     </div>-->
-                    <div class="form-group">
+                    <!--<div class="form-group">
                       <label class="col-sm-3 control-label">Task Link</label>
                       <div class="col-sm-9">
                         <a href="" id="task_link" name="task_link"></a>
                       </div>
-                    </div>
+                    </div>-->
                     <div class="form-group">
                       <label class="col-sm-3 control-label">Status</label>
                       <div class="col-sm-9">
@@ -668,6 +671,7 @@
                     $('#task_status').val(task_data.status);
                     task_comments = task_data.comments;
                     task_attachments = task_data.attachments;
+                    task_links = task_data.links;
                     $(".task_comments").empty();
                     for(var i=0;i<task_comments.length;i++){
                       var comment_str = $('<div class="form-group task_comments_div">\
@@ -683,6 +687,14 @@
                       <div class="col-sm-9">\
                       <a href=' + task_attachments[i][0] + '><i class="fa fa-paperclip"></i>' + task_attachments[i][0] + '</a>');
                       $('#task_attachments').append(attachment_str);
+                    }
+                    $(".task_links").empty();
+                    for(var i=0;i<task_links.length;i++){
+                      var link_str = $('<div class="form-group task_links_div">\
+                      <label class="col-sm-3 control-label">' + task_links[i][1] + ' : ' + task_links[i][2] + '</label>\
+                      <div class="col-sm-9">\
+                      <a href=' + '"' + task_links[i][0] + '"' + '>' + task_links[i][0] + '</a>');
+                      $('#task_links').append(link_str);
                     }
                   },
                   failure: function(client_data){

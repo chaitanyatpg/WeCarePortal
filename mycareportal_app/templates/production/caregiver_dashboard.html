@@ -134,7 +134,7 @@
                             <ul class="messages">
                               {% for client, tasks in client_tasks.items %}
                                 <h3> {{client.first_name|addstr_space:client.last_name}} </h3>
-                                {% for task, task_comments, task_attachments in tasks %}
+                                {% for task, task_comments, task_attachments, task_links in tasks %}
                                 <li>
                                   <img class="avatar" src="{{client.profile_picture.url}}">
 
@@ -145,18 +145,6 @@
                                     <h4 class="heading">{{task.activity_task}}</h4>
                                     <blockquote class="message">{{task.description}}</blockquote>
                                     <br />
-                                    <p class="url">
-                                      <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
-                                      {% if task.attachment %}
-                                        <a href="{{task.attachment.url}}"><i class="fa fa-paperclip"></i>{{task.attachment|trunc_path}}</a>
-                                      {% endif %}
-                                    </p>
-                                    <p class="url">
-                                      <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
-                                      {% if task.link %}
-                                        <a href="{{task.link}}"><i class="fa fa-external-link"></i>{{task.link}}</a>
-                                      {% endif %}
-                                    </p>
 
                                     <ul>
                                     {% for attachment in task_attachments %}
@@ -167,6 +155,14 @@
                                         </li>
                                     {% endfor %}
                                     </ul>
+                                    {% for link in task_links %}
+                                        <p class="url">
+                                          <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
+                                          <a href="{{link.task_url}}"><i class="fa fa-external-link"></i>{{link.task_url}}</a>
+                                          <span>Link added on {{link.created}}</span>
+                                          <span>by {{link.user.first_name|addstr_space:link.user.last_name}}</span>
+                                        </p>
+                                    {% endfor %}
                                     <ul class="list-unstyled msg_list">
                                     {% for comment in task_comments %}
                                       <li>
