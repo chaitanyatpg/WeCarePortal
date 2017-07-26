@@ -288,3 +288,14 @@ class ClientTabletRegister(models.Model):
     company = models.ForeignKey(Company)
     client = models.OneToOneField(Client)
     device_id = models.CharField(max_length=100,unique=True)
+
+class CaregiverTimeSheet(models.Model):
+
+    company = models.ForeignKey(Company)
+    caregiver = models.ForeignKey(Caregiver)
+    client = models.ForeignKey(Client)
+    clock_in_timestamp = models.DateTimeField(auto_now_add=True)
+    clock_out_timestamp = models.DateTimeField(blank=True, null=True)
+    client_timezone = models.CharField(max_length=50)
+    time_worked = models.DurationField(blank=True, null=True)
+    is_active = models.BooleanField()

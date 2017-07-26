@@ -15,6 +15,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.db import IntegrityError
 
+import datetime
+import pytz
+import django.utils.timezone as timezone
+
 # Create your views here.
 
 @login_required
@@ -22,11 +26,14 @@ def home(request):
     context = {}
     current_company = request.user.company
     user = request.user
-    user_roles = UserRoles.objects.filter(user=user)
+    user_roles = UserRoles.objects.filter(company=current_company, user=user)
     user_roles = [x.role for x in user_roles]
     if "CAREMANAGER" in user_roles:
         return redirect('dashboard')
     elif "CAREGIVER" in user_roles:
+        if "tablet_id" in request.session:
+            #if "current_time_sheet" not in request.session:
+            set_caregiver_time_sheet_session(request)
         return redirect('caregiver_dashboard')
     elif "FAMILYUSER" in user_roles:
         return redirect('family_dashboard')
@@ -38,6 +45,14 @@ def login(request):
 
 @login_required
 def logout_view(request):
+    current_company = request.user.company
+    user = request.user
+    user_roles = UserRoles.objects.filter(company=current_company, user=user)
+    user_roles = [x.role for x in user_roles]
+    if "CAREGIVER" in user_roles:
+        if "tablet_id" in request.session:
+            if "current_time_sheet" in request.session:
+                end_caregiver_time_sheet_session(request)
     logout(request)
     return redirect('login')
 
@@ -190,3 +205,39 @@ def set_tablet_id_session(request):
         tablet_id = request.GET.get('tablet_id')
         request.session["tablet_id"] = tablet_id
         return HttpResponse("Set Tablet ID")
+
+@login_required
+def set_caregiver_time_sheet_session(request):
+    print("BEGAN SESSION")
+    current_company = request.user.company
+    current_caregiver = Caregiver.objects.get(company=current_company, user=request.user)
+    tablet_id = request.session["tablet_id"]
+    tablet_client = ClientTabletRegister.objects.get(company=request.user.company,device_id=tablet_id)
+    client_data = tablet_client.client
+
+    #client_timezone = pytz.timezone(client_data.time_zone)
+    #current_date = datetime.date.today()
+    #current_date = (timezone.now().astimezone(client_timezone)).date()
+
+    current_time_sheet = CaregiverTimeSheet(company = current_company,
+                                            caregiver = current_caregiver,
+                                            client = client_data,
+                                            clock_in_timestamp = timezone.now(),
+                                            client_timezone = client_data.time_zone,
+                                            is_active = True)
+    current_time_sheet.save()
+    request.session['current_time_sheet'] = current_time_sheet.id
+
+@login_required
+def end_caregiver_time_sheet_session(request):
+    print("ENDED SESSION")
+    current_time_sheet = CaregiverTimeSheet.objects.get(company=request.user.company, id=request.session['current_time_sheet'])
+    current_time_sheet.clock_out_timestamp = timezone.now()
+    current_time_sheet.is_active = False
+    time_worked = current_time_sheet.clock_out_timestamp - current_time_sheet.clock_in_timestamp
+    print(time_worked)
+    current_time_sheet.time_worked = time_worked
+    current_time_sheet.save()
+    print(current_time_sheet.time_worked)
+    del request.session['current_time_sheet']
+    request.session.modified = True

@@ -270,6 +270,13 @@ class CaregiverDashboard(LoginRequiredMixin, View):
                 #client_name = '{0} {1}'.format(client_data.first_name, client_data.last_name)
                 client_tasks[client_data] = list(current_client_tasks)
         context["client_tasks"] = client_tasks
+        #Get clock in and clock out information
+        if "current_time_sheet" in request.session:
+            current_time_sheet = CaregiverTimeSheet.objects.get(company=request.user.company, id=request.session['current_time_sheet'])
+            time_sheet_clock_in = current_time_sheet.clock_in_timestamp
+            current_time = timezone.now()
+            clocked_in_time = current_time - time_sheet_clock_in
+            context["clocked_in_time"] = str(clocked_in_time).split('.')[0]
         #Get Update Form
         context["update_task_form"] = UpdateTaskForm()
         return render(request, 'production/caregiver_dashboard.html', context)
