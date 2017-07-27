@@ -200,6 +200,25 @@ class AddCareManager(LoginRequiredMixin, View):
         context['add_care_manager_form'] = CareManagerRegistrationForm();
         return render(request, 'production/add_care_manager.html', context)
 
+class ViewActiveCaregivers(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {}
+        current_company = request.user.company
+        active_caregiver_timesheets = CaregiverTimeSheet.objects.filter(company=current_company, is_active=True)
+        context['active_caregiver_timesheets'] = self.construct_timesheet_rows(active_caregiver_timesheets)
+        return render(request, 'production/view_active_caregivers.html', context)
+
+    def construct_timesheet_rows(self, active_caregiver_timesheets):
+        active_caregiver_timesheets = list(map(lambda x: {
+                                                        "caregiver_name": "{0} {1}".format(x.caregiver.first_name,x.caregiver.last_name),
+                                                        "client_name": "{0} {1}".format(x.client.first_name,x.client.last_name),
+                                                        "clock_in_time": (x.clock_in_timestamp.astimezone(pytz.timezone(x.client_timezone))).replace(tzinfo=None),
+                                                        "time_worked": timezone.now() - x.clock_in_timestamp
+                                                    }, active_caregiver_timesheets))
+        print(active_caregiver_timesheets)
+        return active_caregiver_timesheets
+
 def set_tablet_id_session(request):
     if request.method == 'GET':
         tablet_id = request.GET.get('tablet_id')

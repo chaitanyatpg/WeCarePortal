@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^logout$', views.logout_view,name='logout'),
     url(r'^register',views.register,name='register'),
     url(r'^dashboard',views.dashboard,name='dashboard'),
+    url(r'^view_active_caregivers',views.ViewActiveCaregivers.as_view(),name='view_active_caregivers'),
     url(r'^set_tablet_id_session',views.set_tablet_id_session,name='set_tablet_id_session'),
     url(r'^set_caregiver_time_sheet_session', views.set_caregiver_time_sheet_session,name='set_caregiver_time_sheet_session'),
     url(r'^end_caregiver_time_sheet_session', views.end_caregiver_time_sheet_session,name='end_caregiver_time_sheet_session'),
