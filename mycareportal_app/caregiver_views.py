@@ -109,6 +109,39 @@ class EditChooseCaregiver(LoginRequiredMixin, View):
         context = {}
         return render(request, 'production/choose_edit_caregiver.html', context)
 
+class ChooseViewCaregiverTimesheet(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {}
+        current_company = request.user.company
+        all_caregivers = Caregiver.objects.filter(company=current_company).order_by('last_name')
+        context['all_caregivers'] = all_caregivers
+        context['find_caregiver_form'] = FindCaregiverForm()
+        return render(request, 'production/choose_view_caregiver_timesheet.html', context)
+
+class ViewCaregiverTimesheet(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {}
+        find_caregiver_form = FindCaregiverForm(request.GET)
+        current_company = request.user.company
+        if find_caregiver_form.is_valid():
+            caregiver_email = find_caregiver_form.cleaned_data['caregiver_email']
+            caregiver = Caregiver.objects.get(company=current_company,email_address=caregiver_email)
+            caregiver_time_sheets = CaregiverTimeSheet.objects.filter(company=current_company, caregiver=caregiver, is_active=False)
+            context['caregiver_time_sheets'] = self.construct_timesheet_rows(caregiver_time_sheets)
+            return render(request, 'production/view_caregiver_timesheet.html', context)
+
+    def construct_timesheet_rows(self, caregiver_time_sheets):
+        caregiver_time_sheets = list(map(lambda x: {
+                                                        "caregiver_name": "{0} {1}".format(x.caregiver.first_name,x.caregiver.last_name),
+                                                        "client_name": "{0} {1}".format(x.client.first_name,x.client.last_name),
+                                                        "clock_in_time": (x.clock_in_timestamp.astimezone(pytz.timezone(x.client_timezone))).replace(tzinfo=None),
+                                                        "clock_out_time": (x.clock_out_timestamp.astimezone(pytz.timezone(x.client_timezone))).replace(tzinfo=None),
+                                                        "time_worked": x.time_worked
+                                                    }, caregiver_time_sheets))
+        return caregiver_time_sheets
+
 class EditCaregiver(LoginRequiredMixin, View):
 
     def get(self, request):

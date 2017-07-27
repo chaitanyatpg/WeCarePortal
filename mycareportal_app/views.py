@@ -216,7 +216,6 @@ class ViewActiveCaregivers(LoginRequiredMixin, View):
                                                         "clock_in_time": (x.clock_in_timestamp.astimezone(pytz.timezone(x.client_timezone))).replace(tzinfo=None),
                                                         "time_worked": timezone.now() - x.clock_in_timestamp
                                                     }, active_caregiver_timesheets))
-        print(active_caregiver_timesheets)
         return active_caregiver_timesheets
 
 def set_tablet_id_session(request):

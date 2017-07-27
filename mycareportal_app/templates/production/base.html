@@ -60,6 +60,9 @@
                     {% if module_dict.DASHBOARD.VIEWACTIVECAREGIVERS %}
                       <li><a href={% url 'view_active_caregivers' %}>View Active Caregivers</a><li>
                     {% endif %}
+                    {% if module_dict.DASHBOARD.VIEWCAREGIVERTIMESHEET %}
+                      <li><a href={% url 'choose_view_caregiver_timesheet' %}>View Caregiver Timesheet</a><li>
+                    {% endif %}
                   </ul>
                 </li>
                 <li><a><i class="fa fa-home"></i>Client Portal<span class="fa fa-chevron-down"></span></a>

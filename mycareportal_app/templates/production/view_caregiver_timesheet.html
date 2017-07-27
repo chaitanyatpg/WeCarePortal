@@ -1,5 +1,5 @@
 {% extends "production/base.html" %}
-{% block title %} View Active Caregivers {% endblock %}
+{% block title %} View Caregiver Timesheet {% endblock %}
 {% load mycareportal_app_extras%}
 {% block headlibs %}
 {% load static %}
@@ -30,7 +30,7 @@
       <div class="">
         <div class="page-title">
           <div class="title_left">
-            <h3>Active Caregivers</h3>
+            <h3>View Caregiver Timesheet</h3>
           </div>
         </div>
         <div class="clearfix"></div>
@@ -40,7 +40,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
           <div class="x_panel">
             <div class="x_title">
-              <h2>Caregivers<small>caregivers who are currently active</small></h2>
+              <h2>Caregiver<small>caregiver timesheet</small></h2>
               <ul class="nav navbar-right panel_toolbox">
                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                 </li>
@@ -55,15 +55,17 @@
                     <th>Caregiver</th>
                     <th>Assigned Client</th>
                     <th>Clock in time</th>
-                    <th>Current Time Worked</th>
+                    <th>Clock out time</th>
+                    <th>Total Time Worked</th>
                   </tr>
                 </thead>
                 <tbody>
-                    {% for time_sheet in active_caregiver_timesheets %}
+                    {% for time_sheet in caregiver_time_sheets %}
                       <tr>
                         <td>{{time_sheet.caregiver_name}}</td>
                         <td>{{time_sheet.client_name}}</td>
                         <td>{{time_sheet.clock_in_time}}</td>
+                        <td>{{time_sheet.clock_out_time}}</td>
                         <td>{{time_sheet.time_worked}}</td>
                       </tr>
                     {% endfor %}
