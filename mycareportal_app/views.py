@@ -183,30 +183,33 @@ class AddCareManager(LoginRequiredMixin, View):
         current_company = request.user.company
         add_care_manager_form = CareManagerRegistrationForm(request.POST)
         if add_care_manager_form.is_valid():
-            first_name = add_care_manager_form.cleaned_data['first_name']
-            last_name = add_care_manager_form.cleaned_data['last_name']
-            email = add_care_manager_form.cleaned_data['email']
-            password = add_care_manager_form.cleaned_data['password']
-            can_add = add_care_manager_form.cleaned_data['can_add']
-            new_user = User.objects.create_user(username=email,
-                                                email=email,
-                                                first_name=first_name,
-                                                last_name=last_name,
-                                                password=password,
-                                                company=current_company)
-            new_user.save()
-            #Create care manager object and save
-            new_care_manager = CareManager(user=new_user,
-                                           company=current_company,
-                                           email_address=email,
-                                           can_add=can_add)
-            new_care_manager.save()
-            #Add new user to UserRoles with CAREMANAGER role
-            new_role = UserRoles(company=current_company,
-                                    user=new_user,
-                                    role='CAREMANAGER')
-            new_role.save()
-            messages.success(request, "Care Manager {0} {1} successfully Added!".format(first_name,last_name))
+            try:
+                first_name = add_care_manager_form.cleaned_data['first_name']
+                last_name = add_care_manager_form.cleaned_data['last_name']
+                email = add_care_manager_form.cleaned_data['email']
+                password = add_care_manager_form.cleaned_data['password']
+                can_add = add_care_manager_form.cleaned_data['can_add']
+                new_user = User.objects.create_user(username=email,
+                                                    email=email,
+                                                    first_name=first_name,
+                                                    last_name=last_name,
+                                                    password=password,
+                                                    company=current_company)
+                new_user.save()
+                #Create care manager object and save
+                new_care_manager = CareManager(user=new_user,
+                                               company=current_company,
+                                               email_address=email,
+                                               can_add=can_add)
+                new_care_manager.save()
+                #Add new user to UserRoles with CAREMANAGER role
+                new_role = UserRoles(company=current_company,
+                                        user=new_user,
+                                        role='CAREMANAGER')
+                new_role.save()
+                messages.success(request, "Care Manager {0} {1} successfully Added!".format(first_name,last_name))
+            except IntegrityError as e:
+                messages.error(request, "Care Manager already exists. Please enter a different Care Manager")
         context['add_care_manager_form'] = CareManagerRegistrationForm();
         return render(request, 'production/add_care_manager.html', context)
 
