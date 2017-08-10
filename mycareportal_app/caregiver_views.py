@@ -213,7 +213,8 @@ class EditCaregiver(LoginRequiredMixin, View):
                     caregiver.state = state
                 if self.arg_diff(caregiver.zip_code, zip_code):
                     caregiver.zip_code = zip_code
-                #caregiver.date_of_birth = date_of_birth
+                if self.arg_diff(caregiver.date_of_birth, date_of_birth):
+                    caregiver.date_of_birth = date_of_birth
                 if self.arg_diff(caregiver.phone_number, phone_number):
                     caregiver.phone_number = phone_number
                 if self.arg_diff(caregiver.secondary_phone_number, secondary_phone_number):
