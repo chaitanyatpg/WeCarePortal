@@ -206,6 +206,7 @@ class AddCareManager(LoginRequiredMixin, View):
                                     user=new_user,
                                     role='CAREMANAGER')
             new_role.save()
+            messages.success(request, "Care Manager {0} {1} successfully Added!".format(first_name,last_name))
         context['add_care_manager_form'] = CareManagerRegistrationForm();
         return render(request, 'production/add_care_manager.html', context)
 
