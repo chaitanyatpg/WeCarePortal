@@ -10,6 +10,9 @@ class Company(models.Model):
     company_name = models.CharField(max_length=100,unique=True)
     contact_number = models.CharField(max_length=40)
     address = models.CharField(max_length=400)
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=2)
+    zip_code = models.CharField(max_length=10)
 
 class User(AbstractUser):
 

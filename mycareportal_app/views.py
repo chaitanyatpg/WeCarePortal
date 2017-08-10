@@ -70,6 +70,9 @@ def register(request):
         company_name = form.cleaned_data['company_name']
         contact_number = form.cleaned_data['contact_number']
         address = form.cleaned_data['address']
+        city = form.cleaned_data['city']
+        state = form.cleaned_data['state']
+        zip_code = form.cleaned_data['zip_code']
         first_name = form.cleaned_data['first_name']
         last_name = form.cleaned_data['last_name']
         username = form.cleaned_data['email']
@@ -80,7 +83,10 @@ def register(request):
         try:
             new_company = Company(company_name=company_name,
                                         contact_number=contact_number,
-                                        address=address)
+                                        address=address,
+                                        city=city,
+                                        state=state,
+                                        zip_code=zip_code)
             new_company.save()
         except IntegrityError as e:
             exception_flag = True
