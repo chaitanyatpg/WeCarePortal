@@ -147,7 +147,10 @@ def dashboard(request):
     company_details = {
         'company_name' : current_company.company_name,
         'contact_number' : current_company.contact_number,
-        'address' : current_company.address
+        'address' : "{0}, {1} {2}, {3}".format(current_company.address,
+                                            current_company.city,
+                                            current_company.state,
+                                            current_company.zip_code)
     }
     #Add totals to context
     context['total_clients'] = total_clients
