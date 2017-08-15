@@ -37,10 +37,11 @@
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
+                    <!--
                     <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
                       <div class="profile_img">
                         <div id="crop-avatar">
-                          <!-- Current avatar -->
+
                           {% if caregiver_data.profile_picture %}
                             <img class="img-responsive avatar-view" src="{{caregiver_data.profile_picture}}" alt="Avatar" title="Change the avatar">
                           {% else %}
@@ -59,49 +60,10 @@
                         </li>
                         <li><i class="fa fa-male user-profile-icon"></i><i class="fa fa-female user-profile-icon"></i> {{caregiver_data.gender}}
                         </li>
-                        <!--<li>
-                          <i class="fa fa-briefcase user-profile-icon"></i> Nurse
-                        </li>
-
-                        <li class="m-top-xs">
-                          <i class="fa fa-external-link user-profile-icon"></i>
-                          <a href="http://www.wecareportal.com" target="_blank">www.wecare.com</a>
-                        </li>-->
                       </ul>
                       <br />
-
-                      <!-- start skills -->
-                      <!--<h4>Skills</h4>
-                      <ul class="list-unstyled user_data">
-                        <li>
-                          <p>Web Applications</p>
-                          <div class="progress progress_sm">
-                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="50"></div>
-                          </div>
-                        </li>
-                        <li>
-                          <p>Website Design</p>
-                          <div class="progress progress_sm">
-                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="70"></div>
-                          </div>
-                        </li>
-                        <li>
-                          <p>Python</p>
-                          <div class="progress progress_sm">
-                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="100"></div>
-                          </div>
-                        </li>
-                        <li>
-                          <p>UI / UX</p>
-                          <div class="progress progress_sm">
-                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="50"></div>
-                          </div>
-                        </li>
-                      </ul>-->
-                      <!-- end of skills -->
-
-                    </div>
-                    <div class="col-md-9 col-sm-9 col-xs-12">
+                    </div>-->
+                    <div class="col-md-12 col-sm-12 col-xs-12">
 
                       <!--<div class="profile_title">
                         <div class="col-md-6">
@@ -142,10 +104,13 @@
                             <!-- start recent activity -->
                             <ul class="messages">
                               {% for client, tasks in client_tasks.items %}
-                                <h3> {{client.first_name|addstr_space:client.last_name}} </h3>
+                                <center><h3> {{client.first_name|addstr_space:client.last_name}} </h3>
+                                <img src="{{client.profile_picture.url}}" style="width:230px;height:200px;"></center>
+                              </br>
+                              <hr>
                                 {% for task, task_comments, task_attachments, task_links in tasks %}
                                 <li>
-                                  <img class="avatar" src="{{client.profile_picture.url}}">
+                                  <!--<img class="avatar" src="{{client.profile_picture.url}}">-->
 
                                   <div class="message_date">
                                     <h5 class="date text-info">{{task.start_time|addstr_space:'-'|addstr_space:task.end_time}}</h5>
