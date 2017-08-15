@@ -313,6 +313,8 @@ class CaregiverDashboard(LoginRequiredMixin, View):
             context["clocked_in_time"] = str(clocked_in_time).split('.')[0]
         #Get Update Form
         context["update_task_form"] = UpdateTaskForm()
+        #Get current date
+        context["current_date"] = timezone.now()
         return render(request, 'production/caregiver_dashboard.html', context)
 
     @transaction.atomic
