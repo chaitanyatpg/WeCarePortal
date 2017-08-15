@@ -293,8 +293,8 @@ class CaregiverDashboard(LoginRequiredMixin, View):
                         'date_of_birth': date_of_birth,
                         'gender': gender}
         context["caregiver_data"] = caregiver_data
-        if caregiver.profile_picture:
-            caregiver_data['profile_picture'] = caregiver.profile_picture.url
+        #if caregiver.profile_picture:
+        #    caregiver_data['profile_picture'] = caregiver.profile_picture.url
         #Get Tasks for assigned clients for the current day
         client_tasks = {}
         current_date = datetime.date.today()
