@@ -285,7 +285,7 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Time Zone<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not edit_client_form.time_zone.value is None %}
-                        <select required class="select2_single form-control" tabindex="-1" name={{edit_client_form.time_zone.html_name}} value={{edit_client_form.time_zone.value}}>
+                        <select required class="select2_time_zone form-control" tabindex="-1" name={{edit_client_form.time_zone.html_name}} value={{edit_client_form.time_zone.value}}>
                           <option selected=selected>{{edit_client_form.time_zone.value}}</option>
                           {% for timezone in all_timezones %}
                             <option value='{{timezone}}'>{{timezone}}</option>
@@ -1025,6 +1025,8 @@
 <script src="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
 <!-- Dropzone.js -->
 <script src="{% static 'vendors/dropzone/dist/min/dropzone.min.js' %}"></script>
+<!-- Select2 -->
+<script src="{% static 'vendors/select2/dist/js/select2.full.min.js' %}"></script>
 {% endblock %}
 
 {% block scripts %}
@@ -1272,4 +1274,14 @@
       });
     </script>
 <!-- /bootstrap-daterangepicker -->
+<!-- Select2 -->
+<script>
+      $(document).ready(function() {
+        $(".select2_time_zone").select2({
+          placeholder: "Select a Time Zone",
+          allowClear: true
+        });
+      });
+    </script>
+<!-- /Select2 -->
 {% endblock %}
