@@ -177,6 +177,7 @@ class EditCaregiver(LoginRequiredMixin, View):
         context = {}
         current_company = request.user.company
         edit_caregiver_form = CaregiverEditForm(request.POST,request.FILES)
+        email = request.POST.get('email')
         context['edit_caregiver_form'] = edit_caregiver_form
         if edit_caregiver_form.is_valid():
             try:
