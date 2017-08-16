@@ -106,7 +106,9 @@
                               {% for client, tasks in client_tasks.items %}
                               <center>
                                 <h3> {{client.first_name|addstr_space:client.last_name}} </h3>
-                                <img src="{{client.profile_picture.url}}" style="width:230px;height:200px;">
+                                {% if client.profile_picture %}
+                                  <img src="{{client.profile_picture.url}}" style="width:230px;height:200px;">
+                                {% endif %}
                                 </br>
                                   <i class="fa fa-map-marker user-profile-icon"></i> {{client.address}}
 
@@ -152,7 +154,9 @@
                                       <li>
                                         <a>
                                           <span class="image">
-                                            <img src="{{comment.caregiver.profile_picture.url}}" />
+                                            {% if comment.caregiver.profile_picture %}
+                                              <img src="{{comment.caregiver.profile_picture.url}}" />
+                                            {% endif %}
                                           </span>
                                           <span>
                                             <span>{{comment.caregiver.first_name|addstr_space:comment.caregiver.last_name}}</span>
