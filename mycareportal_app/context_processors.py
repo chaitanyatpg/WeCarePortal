@@ -74,6 +74,7 @@ def add_current_user_context(request):
         user_roles = [x.role for x in user_roles]
         if 'CAREGIVER' in user_roles:
             auth_info = Caregiver.objects.get(user=request.user)
+            auth_info.profile_picture = None
             context['current_user_info'] = auth_info
         if 'FAMILYUSER' in user_roles:
             auth_info = FamilyContact.objects.get(user=request.user)
