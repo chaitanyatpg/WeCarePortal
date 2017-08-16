@@ -141,7 +141,7 @@ class Pharmacy(models.Model):
     name = models.CharField(max_length=100)
     contact_name = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=40)
-    fax_number = models.CharField(max_length=40)
+    fax_number = models.CharField(max_length=40, blank=True)
     is_active = models.BooleanField(default=True)
 
 class Payer(models.Model):
@@ -151,7 +151,7 @@ class Payer(models.Model):
     name = models.CharField(max_length=100)
     contact_name = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=40)
-    fax_number = models.CharField(max_length=40)
+    fax_number = models.CharField(max_length=40, blank=True)
     policy_start_date = models.DateField()
     policy_end_date = models.DateField()
     policy_number = models.CharField(max_length=40)
