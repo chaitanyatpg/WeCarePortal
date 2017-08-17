@@ -391,6 +391,12 @@
                 <input type="hidden" id="task_id_delete" name="{{delete_task_form.task_id.html_name}}">
                 <button type="submit" class="btn btn-danger edit_calendar_submit">Delete Task</button>
               </form>
+              <form id="delete_recurring_task_details" enctype="multipart/form-data" action="{% url 'delete_recurring_task_with_id' %}" method="post" class="form-horizontal" role="form">
+                {% csrf_token %}
+                <input type="hidden" id="recurring_task_id_delete" name="{{delete_task_form.task_id.html_name}}">
+                <label id='recurring_task_header_details'></label>
+                <button type="submit" class="btn btn-danger edit_calendar_submit">Delete Recurring Task</button>
+              </form>
               </div>
 
             </div>
@@ -540,6 +546,30 @@
     </script>
     <!-- end post delete task from calendar -->
 
+    <!-- POST delete recurring task from calendar -->
+    <script type="text/javascript">
+      var delete_recurring_task_form = $('#delete_recurring_task_details');
+      delete_recurring_task_form.submit(function(){
+        $.ajax({
+          type: delete_recurring_task_form.attr('method'),
+          url: delete_recurring_task_form.attr('action'),
+          data: delete_recurring_task_form.serialize(),
+          success: function(all_recurring_tasks){
+            //var delete_recurring_task_id = $('#recurring_task_id_delete').val();
+            for(i=0;i<all_recurring_tasks.length;i++)
+            {
+              $('#calendar').fullCalendar('removeEvents', all_recurring_tasks[i]);
+            }
+          },
+          error: function(){
+            console.log("FAILURE");
+          }
+        });
+        return false;
+      });
+    </script>
+    <!-- end post delete task from calendar -->
+
     <script>
     $(document).ready(function(){
       $('#client_dropdown').change(function(){
@@ -656,7 +686,14 @@
                   dataType: "json",
                   contentType: "application/json",
                   success: function(task_data){
+                    $('#recurring_task_header_details').html("");
+                    if(task_data.hasOwnProperty('task_type'))
+                    {
+                      var task_header_details = 'Occurs ' + task_data.task_type + ' from ' + task_data.start_date + ' to ' + task_data.end_date
+                      $('#recurring_task_header_details').html(task_header_details);
+                    }
                     $('#task_id_delete').val(task_data.task_id);
+                    $('#recurring_task_id_delete').val(task_data.task_id);
                     $('#task_id_edit').val(task_data.task_id);
                     $('#task_name').val(task_data.task_name);
                     $('#task_start_time').val(task_data.start_time);

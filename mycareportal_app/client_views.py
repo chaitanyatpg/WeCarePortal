@@ -505,6 +505,8 @@ class AssignTasks(LoginRequiredMixin, View):
         context["client_email"] = client_email
         #Get Form
         context["assign_task_form"] = AssignTaskForm()
+        #Get Delete Task Form
+        context["delete_task_form"] = DeleteTaskForm()
         #Get Schedule for Client
         current_client = Client.objects.get(company=current_company,email_address=client_email)
         client_schedule = TaskSchedule.objects.filter(company=current_company,client=current_client)
@@ -559,7 +561,8 @@ class AssignTasks(LoginRequiredMixin, View):
                                         start_time=new_task_header.start_time,
                                         end_time=new_task_header.end_time,
                                         description = new_task_header.description,
-                                        link = new_task_header.link)
+                                        link = new_task_header.link,
+                                        task_header = new_task_header)
         schedule_entry.save()
         self.save_task_attachments(new_task_header, attachments, current_user, schedule_entry)
         link = new_task_header.link
@@ -580,7 +583,8 @@ class AssignTasks(LoginRequiredMixin, View):
                                             start_time=new_task_header.start_time,
                                             end_time=new_task_header.end_time,
                                             description = new_task_header.description,
-                                            link = new_task_header.link)
+                                            link = new_task_header.link,
+                                            task_header = new_task_header)
             schedule_entry.save()
             if len(uploaded_task_attachments)==0:
                 uploaded_task_attachments = self.save_and_return_task_attachments(new_task_header, attachments, current_user, schedule_entry)
@@ -605,7 +609,8 @@ class AssignTasks(LoginRequiredMixin, View):
                                             start_time=new_task_header.start_time,
                                             end_time=new_task_header.end_time,
                                             description = new_task_header.description,
-                                            link = new_task_header.link)
+                                            link = new_task_header.link,
+                                            task_header = new_task_header)
             schedule_entry.save()
             if len(uploaded_task_attachments)==0:
                 uploaded_task_attachments = self.save_and_return_task_attachments(new_task_header, attachments, current_user, schedule_entry)
@@ -631,7 +636,8 @@ class AssignTasks(LoginRequiredMixin, View):
                                             start_time=new_task_header.start_time,
                                             end_time=new_task_header.end_time,
                                             description = new_task_header.description,
-                                            link = new_task_header.link)
+                                            link = new_task_header.link,
+                                            task_header = new_task_header)
             schedule_entry.save()
             if len(uploaded_task_attachments)==0:
                 uploaded_task_attachments = self.save_and_return_task_attachments(new_task_header, attachments, current_user, schedule_entry)
@@ -657,7 +663,8 @@ class AssignTasks(LoginRequiredMixin, View):
                                             start_time=new_task_header.start_time,
                                             end_time=new_task_header.end_time,
                                             description = new_task_header.description,
-                                            link = new_task_header.link)
+                                            link = new_task_header.link,
+                                            task_header = new_task_header)
             schedule_entry.save()
             if len(uploaded_task_attachments)==0:
                 uploaded_task_attachments = self.save_and_return_task_attachments(new_task_header, attachments, current_user, schedule_entry)
@@ -683,7 +690,8 @@ class AssignTasks(LoginRequiredMixin, View):
                                             start_time=new_task_header.start_time,
                                             end_time=new_task_header.end_time,
                                             description = new_task_header.description,
-                                            link = new_task_header.link)
+                                            link = new_task_header.link,
+                                            task_header = new_task_header)
             schedule_entry.save()
             if len(uploaded_task_attachments)==0:
                 uploaded_task_attachments = self.save_and_return_task_attachments(new_task_header, attachments, current_user, schedule_entry)
@@ -779,6 +787,15 @@ def get_task_with_id(request):
                     }
         if attachment != "":
             task_data['attachment'] = attachment.url
+        #Get header info if header exists
+        if current_task.task_header:
+            task_data['task_type'] = current_task.task_header.task_type
+            task_data['start_date'] = '{0}/{1}/{2}'.format(current_task.task_header.start_date.month,
+                                                        current_task.task_header.start_date.day,
+                                                        current_task.task_header.start_date.year)
+            task_data['end_date'] = '{0}/{1}/{2}'.format(current_task.task_header.end_date.month,
+                                                        current_task.task_header.end_date.day,
+                                                        current_task.task_header.end_date.year)
         return HttpResponse(json.dumps(task_data), content_type="application/json")
 
 def convert_to_client_timezone(client_timestamp, client):
@@ -803,6 +820,22 @@ def delete_task_with_id(request):
         current_task = TaskSchedule.objects.get(company=company, id = task_id)
         current_task.delete()
         return HttpResponse("Delete Successful")
+
+@login_required
+def delete_recurring_task_with_id(request):
+    if request.method == 'POST':
+        context = {}
+        company = request.user.company
+        task_id = request.POST.get('task_id')
+        current_task = TaskSchedule.objects.get(company=company, id = task_id)
+        task_header = current_task.task_header
+        all_recurring_task_ids = []
+        if task_header != None:
+            all_recurring_tasks = TaskSchedule.objects.filter(company=company, task_header=task_header)
+            all_recurring_task_ids = list(map(lambda x: x.id, all_recurring_tasks))
+            for recurring_task in all_recurring_tasks:
+                recurring_task.delete()
+        return HttpResponse(json.dumps(all_recurring_task_ids),content_type="application/json")
 
 @login_required
 @transaction.atomic

@@ -60,6 +60,7 @@ urlpatterns = [
     url(r'^get_task_with_id', client_views.get_task_with_id,name='get_task_with_id'),
     url(r'^edit_task_with_id', client_views.edit_task_with_id,name='edit_task_with_id'),
     url(r'^delete_task_with_id', client_views.delete_task_with_id,name='delete_task_with_id'),
+    url(r'^delete_recurring_task_with_id', client_views.delete_recurring_task_with_id,name='delete_recurring_task_with_id'),
     url(r'^add_caregiver',caregiver_views.AddCaregiver.as_view(),name='add_caregiver'),
     url(r'^edit_choose_caregiver', caregiver_views.EditChooseCaregiver.as_view(),name='edit_choose_caregiver'),
     url(r'^choose_view_caregiver_timesheet', caregiver_views.ChooseViewCaregiverTimesheet.as_view(),name='choose_view_caregiver_timesheet'),
