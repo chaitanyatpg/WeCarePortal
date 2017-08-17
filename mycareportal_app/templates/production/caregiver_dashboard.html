@@ -37,55 +37,7 @@
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
-                    <!--
-                    <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
-                      <div class="profile_img">
-                        <div id="crop-avatar">
-
-                          {% if caregiver_data.profile_picture %}
-                            <img class="img-responsive avatar-view" src="{{caregiver_data.profile_picture}}" alt="Avatar" title="Change the avatar">
-                          {% else %}
-                            <img class="img-responsive avatar-view" src="{% static 'pictures/img.png' %}" alt="Avatar" title="Change the avatar">
-                          {% endif %}
-                        </div>
-                      </div>
-                      <h3>{{caregiver_data.name}}</h3>
-
-                      <ul class="list-unstyled user_data">
-                        <li><i class="fa fa-map-marker user-profile-icon"></i> {{caregiver_data.address}}
-                        </li>
-                        <li><i class="fa fa-mobile-phone user-profile-icon"></i> {{caregiver_data.phone_number}}
-                        </li>
-                        <li><i class="fa fa-calendar user-profile-icon"></i> {{caregiver_data.date_of_birth}}
-                        </li>
-                        <li><i class="fa fa-male user-profile-icon"></i><i class="fa fa-female user-profile-icon"></i> {{caregiver_data.gender}}
-                        </li>
-                      </ul>
-                      <br />
-                    </div>-->
                     <div class="col-md-12 col-sm-12 col-xs-12">
-
-                      <!--<div class="profile_title">
-                        <div class="col-md-6">
-                          <h2>Hours Worked</h2>
-                        </div>
-                        <div class="col-md-6">
-                          <div id="reportrange" class="pull-right" style="margin-top: 5px; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #E6E9ED">
-                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-                            <span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>
-                          </div>
-                        </div>
-                      </div>-->
-                      <!-- start of user-activity-graph -->
-                      <!--<div id="graph_bar" style="width:100%; height:280px;"></div>-->
-                      <!-- end of user-activity-graph -->
-                      <!--{% if request.session.tablet_id %}
-                        {% if request.session.current_time_sheet %}
-                          <a href="{% url 'end_caregiver_time_sheet_session' %}" class="btn btn-warning">Clock Out</a>
-                        {% else %}
-                          <a href="{% url 'set_caregiver_time_sheet_session' %}" class="btn btn-success">Clock In</a>
-                        {% endif %}
-                      {% endif %}-->
                       {% if request.session.current_time_sheet %}
                         <h4>Clocked in for: {{clocked_in_time}}</h4>
                       {% endif %}
@@ -93,10 +45,6 @@
                         <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
                           <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Today's Tasks</a>
                           </li>
-                          <!--<li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Ongoing Tasks</a>
-                          </li>
-                          <li role="presentation" class=""><a href="#tab_content3" role="tab" id="profile-tab2" data-toggle="tab" aria-expanded="false">Notes</a>
-                          </li>-->
                         </ul>
                         <div id="myTabContent" class="tab-content">
                           <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
@@ -106,7 +54,9 @@
                               {% for client, tasks in client_tasks.items %}
                               <center>
                                 <h3> {{client.first_name|addstr_space:client.last_name}} </h3>
-
+                                {% if client.profile_picture %}
+                                  <img src="{{client.profile_picture.url}}" style="width:230px;height:200px;">
+                                {% endif %}
                                 </br>
                                   <i class="fa fa-map-marker user-profile-icon"></i> {{client.address}}
 
@@ -120,7 +70,7 @@
                               <hr>
                                 {% for task, task_comments, task_attachments, task_links in tasks %}
                                 <li>
-                                  <!--<img class="avatar" src="{{client.profile_picture.url}}">-->
+
 
                                   <div class="message_date">
                                     <h5 class="date text-info">{{task.start_time|addstr_space:'-'|addstr_space:task.end_time}}</h5>
@@ -152,7 +102,9 @@
                                       <li>
                                         <a>
                                           <span class="image">
-
+                                            {% if comment.caregiver.profile_picture %}
+                                              <img src="{{comment.caregiver.profile_picture.url}}" />
+                                            {% endif %}
                                           </span>
                                           <span>
                                             <span>{{comment.caregiver.first_name|addstr_space:comment.caregiver.last_name}}</span>
@@ -229,84 +181,6 @@
                                 </li>
                                 {% endfor %}
                               {% endfor %}
-                              <!--{% for client in client_tasks %}
-                                <h3> {{client.first_name|addstr_space:client.last_name}} </h3>
-                                  <li>
-                                    <img class="avatar" src="{{client.profile_picture.url}}">
-
-                                    <div class="message_date">
-                                      <h3 class="date text-info">7:00 - 8:00</h3>
-                                    </div>
-                                    <div class="message_wrapper">
-                                      <h4 class="heading">{{client_tasks.client.items}}</h4>
-                                      <blockquote class="message">Refer to the attached list for specifics</blockquote>
-                                      <br />
-                                      <p class="url">
-                                        <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
-                                        <a href="#"><i class="fa fa-paperclip"></i> grocery_list.txt </a>
-                                      </p>
-                                    </div>
-                                  </li>
-                                {% endfor %}-->
-
-                              <!--<li>
-                                <img src="images/img.svg" class="avatar" alt="Avatar">
-                                <div class="message_date">
-                                  <h3 class="date text-info">7:00 - 8:00</h3>
-                                </div>
-                                <div class="message_wrapper">
-                                  <h4 class="heading">Buy Groceries</h4>
-                                  <blockquote class="message">Refer to the attached list for specifics</blockquote>
-                                  <br />
-                                  <p class="url">
-                                    <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
-                                    <a href="#"><i class="fa fa-paperclip"></i> grocery_list.txt </a>
-                                  </p>
-                                </div>
-                              </li>
-                              <li>
-                                <img src="images/img.svg" class="avatar" alt="Avatar">
-                                <div class="message_date">
-                                  <h3 class="date text-error">9:00 - 9:30</h3>
-                                </div>
-                                <div class="message_wrapper">
-                                  <h4 class="heading">Make Breakfast</h4>
-                                  <blockquote class="message">Make breakfast, using ingredients in the fridge. Note: Patient is
-                                  allergic to peanuts. </blockquote>
-                                  <br />
-                                </div>
-                              </li>
-                              <li>
-                                <img src="images/img.svg" class="avatar" alt="Avatar">
-                                <div class="message_date">
-                                  <h3 class="date text-info">10:30 - 1:00</h3>
-                                </div>
-                                <div class="message_wrapper">
-                                  <h4 class="heading">Drive Patient to Grandchildrens House</h4>
-                                  <blockquote class="message">Refer to linked google maps page for directions.</blockquote>
-                                  <br />
-                                  <p class="url">
-                                    <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
-                                    <a href="https://www.google.com/maps/dir/Googleplex,+1600+Amphitheatre+Parkway,+Mountain+View,+CA+94043/Empire+State+Building,+350+5th+Ave,+New+York,+NY+10118/@41.1285171,-111.1550885,5z/data=!4m13!4m12!1m5!1m1!1s0x808fba02425dad8f:0x6c296c66619367e0!2m2!1d-122.0840575!2d37.4219999!1m5!1m1!1s0x89c259a9b3117469:0xd134e199a405a163!2m2!1d-73.9856644!2d40.7484405"><i class="fa fa-map-marker user-profile-icon"></i> directions </a>
-                                  </p>
-                                </div>
-                              </li>
-                              <li>
-                                <img src="images/img.svg" class="avatar" alt="Avatar">
-                                <div class="message_date">
-                                  <h3 class="date text-error">5:00 - 7:30</h3>
-                                </div>
-                                <div class="message_wrapper">
-                                  <h4 class="heading">Drive Patient back from Grandchildrens House</h4>
-                                  <blockquote class="message">Refer to linked google maps page for directions.</blockquote>
-                                  <br />
-                                  <p class="url">
-                                    <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
-                                    <a href="https://www.google.com/maps/dir/Googleplex,+1600+Amphitheatre+Parkway,+Mountain+View,+CA+94043/Empire+State+Building,+350+5th+Ave,+New+York,+NY+10118/@41.1285171,-111.1550885,5z/data=!4m13!4m12!1m5!1m1!1s0x808fba02425dad8f:0x6c296c66619367e0!2m2!1d-122.0840575!2d37.4219999!1m5!1m1!1s0x89c259a9b3117469:0xd134e199a405a163!2m2!1d-73.9856644!2d40.7484405"><i class="fa fa-map-marker user-profile-icon"></i> directions </a>
-                                  </p>
-                                </div>
-                              </li>-->
-
                             </ul>
                             <!-- end recent activity -->
 
