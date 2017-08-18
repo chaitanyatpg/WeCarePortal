@@ -175,7 +175,7 @@ class AddCareManager(LoginRequiredMixin, View):
     def get(self, request):
         context = {}
         current_company = request.user.company
-        context['add_care_manager_form'] = CareManagerRegistrationForm();
+        context['add_care_manager_form'] = CareManagerRegistrationForm()
         return render(request, 'production/add_care_manager.html', context)
 
     def post(self, request):
@@ -230,6 +230,44 @@ class ViewActiveCaregivers(LoginRequiredMixin, View):
                                                         "time_worked": timezone.now() - x.clock_in_timestamp
                                                     }, active_caregiver_timesheets))
         return active_caregiver_timesheets
+
+class EditCompany(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {}
+        current_company = request.user.company
+        company_edit_form = CompanyEditForm(initial=
+        {
+            'company_name': current_company.company_name,
+            'contact_number': current_company.contact_number,
+            'address': current_company.address,
+            'city': current_company.city,
+            'state': current_company.state,
+            'zip_code': current_company.zip_code
+        })
+        context['company_edit_form'] = company_edit_form
+        context['current_company'] = current_company
+        return render(request, 'production/edit_company.html', context)
+
+    def post(self, request):
+        context = {}
+        current_company = request.user.company
+        company_edit_form = CompanyEditForm(request.POST)
+        if company_edit_form.is_valid():
+            try:
+                current_company.company_name = company_edit_form.cleaned_data['company_name']
+                current_company.contact_number = company_edit_form.cleaned_data['contact_number']
+                current_company.address = company_edit_form.cleaned_data['address']
+                current_company.city = company_edit_form.cleaned_data['city']
+                current_company.state = company_edit_form.cleaned_data['state']
+                current_company.zip_code = company_edit_form.cleaned_data['zip_code']
+                current_company.save()
+                messages.success(request, "Company details successfully edited")
+            except IntegrityError as e:
+                messages.error(request, "Company with entered name already exists. Please enter a different name.")
+        else:
+            messages.error(request, "Error editing company details")
+        return redirect('edit_company')
 
 def set_tablet_id_session(request):
     if request.method == 'GET':

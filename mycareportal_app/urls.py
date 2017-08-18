@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^login$', auth_views.LoginView.as_view(template_name='production/wecare_login.html'),name='login'),
     url(r'^logout$', views.logout_view,name='logout'),
     url(r'^register',views.register,name='register'),
+    url(r'^edit_company', views.EditCompany.as_view(), name='edit_company'),
     url(r'^dashboard',views.dashboard,name='dashboard'),
     url(r'^view_active_caregivers',views.ViewActiveCaregivers.as_view(),name='view_active_caregivers'),
     url(r'^set_tablet_id_session',views.set_tablet_id_session,name='set_tablet_id_session'),

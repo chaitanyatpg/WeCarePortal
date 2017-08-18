@@ -49,3 +49,17 @@ class CareManagerRegistrationForm(forms.Form):
                             code='invalid',
                             params={'value': 'Passwords do not match'})
         return cleaned_data
+
+class CompanyEditForm(forms.Form):
+
+    company_name = forms.CharField(max_length=200)
+    contact_number = forms.CharField(max_length=20)
+    address = forms.CharField(max_length=400)
+    city = forms.CharField(max_length=100)
+    state = forms.CharField(max_length=2)
+    zip_code = forms.CharField(max_length=10)
+
+    def clean(self):
+
+        cleaned_data = super(CompanyEditForm, self).clean()
+        return cleaned_data

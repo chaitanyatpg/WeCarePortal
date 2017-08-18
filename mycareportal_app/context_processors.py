@@ -35,6 +35,7 @@ def add_roles_to_context(request):
             module_dict['DASHBOARD']['ADMINDASHBOARD']=True
             if care_manager.can_add:
                 module_dict['DASHBOARD']['ADDCAREMANAGER']=True
+            module_dict['DASHBOARD']['EDITCOMPANY']=True
             module_dict['DASHBOARD']['VIEWACTIVECAREGIVERS']=True
             module_dict['DASHBOARD']['VIEWCAREGIVERTIMESHEET']=True
             module_dict['CLIENTPORTAL']['CLIENTONBOARDING']=True
