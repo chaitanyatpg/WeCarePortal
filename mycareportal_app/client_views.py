@@ -1028,6 +1028,10 @@ def post_pharmacy_details(request):
                 email = pharmacy_details_form.cleaned_data['email']
                 pharmacy_id = pharmacy_details_form.cleaned_data['pharmacy_id']
                 client_email = pharmacy_details_form.cleaned_data['client_email']
+                address = pharmacy_details_form.cleaned_data['address']
+                city = pharmacy_details_form.cleaned_data['city']
+                state = pharmacy_details_form.cleaned_data['state']
+                zip_code = pharmacy_details_form.cleaned_data['zip_code']
                 if(pharmacy_id is None):
                     #Create family object and save
                     pharmacy = Pharmacy(company=company,
@@ -1035,7 +1039,11 @@ def post_pharmacy_details(request):
                                           name = pharmacy_name,
                                           contact_name = contact_name,
                                           phone_number = phone_number,
-                                          fax_number = fax_number
+                                          fax_number = fax_number,
+                                          address = address,
+                                          city = city,
+                                          state = state,
+                                          zip_code = zip_code
                                           )
                     pharmacy.save()
                     #Add family user to client
@@ -1052,10 +1060,14 @@ def post_pharmacy_details(request):
                     existing_pharmacy.contact_name = contact_name
                     existing_pharmacy.phone_number = phone_number
                     existing_pharmacy.fax_number = fax_number
+                    existing_pharmacy.address = address
+                    existing_pharmacy.city = city
+                    existing_pharmacy.state = state
+                    existing_pharmacy.zip_code = zip_code
                     existing_pharmacy.save()
                     messages.success(request, "Edited pharmacy {0}!".format(pharmacy_name))
             except IntegrityError as e:
-                messages.error(request, "Pharmacy already exists. Please enter new family member.")
+                messages.error(request, "Pharmacy already exists. Please enter new pharmacy.")
         else:
             print(pharmacy_details_form.errors)
         client_email = request.POST.get('client_email')
@@ -1086,6 +1098,10 @@ def post_payer_details(request):
                 policy_number = payer_details_form.cleaned_data['policy_number']
                 payer_id = payer_details_form.cleaned_data['payer_id']
                 client_email = payer_details_form.cleaned_data['client_email']
+                address = payer_details_form.cleaned_data['address']
+                city = payer_details_form.cleaned_data['city']
+                state = payer_details_form.cleaned_data['state']
+                zip_code = payer_details_form.cleaned_data['zip_code']
                 if(payer_id is None):
                     #Create family object and save
                     payer = Payer(company=company,
@@ -1096,7 +1112,11 @@ def post_payer_details(request):
                                   fax_number = fax_number,
                                   policy_start_date = policy_start_date,
                                   policy_end_date = policy_end_date,
-                                  policy_number = policy_number
+                                  policy_number = policy_number,
+                                  address=address,
+                                  city=city,
+                                  state=state,
+                                  zip_code=zip_code
                                           )
                     payer.save()
                     #Add family user to client
@@ -1116,10 +1136,14 @@ def post_payer_details(request):
                     existing_payer.policy_start_date = policy_start_date
                     existing_payer.policy_end_date = policy_end_date
                     existing_payer.policy_number = policy_number
+                    existing_payer.address = address
+                    existing_payer.city = city
+                    existing_payer.state = state
+                    existing_payer.zip_code = zip_code
                     existing_payer.save()
                     messages.success(request, "Edited payer {0}!".format(payer_name))
             except IntegrityError as e:
-                messages.error(request, "Payer already exists. Please enter new family member.")
+                messages.error(request, "Payer already exists. Please enter new payer.")
         else:
             print(payer_details_form.errors)
         client_email = request.POST.get('client_email')
@@ -1229,7 +1253,11 @@ def get_pharmacy_with_id(request):
             'contact_name': pharmacy.contact_name,
             'phone_number': pharmacy.phone_number,
             'fax_number': pharmacy.fax_number,
-            'pharmacy_id': pharmacy.id
+            'pharmacy_id': pharmacy.id,
+            'address' : pharmacy.address,
+            'city' : pharmacy.city,
+            'state' : pharmacy.state,
+            'zip_code' : pharmacy.zip_code
         }
         return HttpResponse(json.dumps(pharmacy_data),content_type="application/json")
 
@@ -1268,7 +1296,11 @@ def get_payer_with_id(request):
             'policy_start_date': str(payer.policy_start_date),
             'policy_end_date': str(payer.policy_end_date),
             'policy_number': payer.policy_number,
-            'payer_id': payer.id
+            'payer_id': payer.id,
+            'address' : payer.address,
+            'city' : payer.city,
+            'state' : payer.state,
+            'zip_code' : payer.zip_code
         }
         return HttpResponse(json.dumps(payer_data),content_type="application/json")
 
