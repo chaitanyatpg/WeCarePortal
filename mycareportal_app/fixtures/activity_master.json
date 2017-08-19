@@ -3,7 +3,7 @@
 		"model": "mycareportal_app.activitymaster",
 		"pk": 1,
 		"fields": {
-			"activity_code": "ALD001",
+			"activity_code": "ADL001",
 			"activity_description": "Activities of Daily Living"
 		}
 	},
@@ -11,7 +11,7 @@
 		"model": "mycareportal_app.activitymaster",
 		"pk": 2,
 		"fields": {
-			"activity_code": "IALD001",
+			"activity_code": "IADL001",
 			"activity_description": "Instrumental Activities of Daily Living"
 		}
 	}

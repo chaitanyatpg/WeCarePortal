@@ -3,8 +3,8 @@
 		"model": "mycareportal_app.activitysubcategory",
 		"pk": 1,
 		"fields": {
-			"activity_code": "ALD001",
-			"activity_category_code": "ALD001P",
+			"activity_code": "ADL001",
+			"activity_category_code": "ADL001P",
       "activity_category": "Personal Hygiene"
 		}
 	},
@@ -12,8 +12,8 @@
 		"model": "mycareportal_app.activitysubcategory",
 		"pk": 2,
 		"fields": {
-			"activity_code": "ALD001",
-			"activity_category_code": "ALD001D",
+			"activity_code": "ADL001",
+			"activity_category_code": "ADL001D",
       "activity_category": "Dressing"
 		}
 	},
@@ -21,8 +21,8 @@
 		"model": "mycareportal_app.activitysubcategory",
 		"pk": 3,
 		"fields": {
-			"activity_code": "ALD001",
-			"activity_category_code": "ALD001E",
+			"activity_code": "ADL001",
+			"activity_category_code": "ADL001E",
       "activity_category": "Eating"
 		}
 	},
@@ -30,8 +30,8 @@
 		"model": "mycareportal_app.activitysubcategory",
 		"pk": 4,
 		"fields": {
-			"activity_code": "ALD001",
-			"activity_category_code": "ALD001M",
+			"activity_code": "ADL001",
+			"activity_category_code": "ADL001M",
       "activity_category": "Maintaining Continence"
 		}
 	},
@@ -39,8 +39,8 @@
 		"model": "mycareportal_app.activitysubcategory",
 		"pk": 5,
 		"fields": {
-			"activity_code": "ALD001",
-			"activity_category_code": "ALD001T",
+			"activity_code": "ADL001",
+			"activity_category_code": "ADL001T",
       "activity_category": "Transferring"
 		}
 	},
@@ -48,8 +48,8 @@
 		"model": "mycareportal_app.activitysubcategory",
 		"pk": 6,
 		"fields": {
-			"activity_code": "IALD001",
-			"activity_category_code": "IALD001B",
+			"activity_code": "IADL001",
+			"activity_category_code": "IADL001B",
       "activity_category": "Basic communication skills"
 		}
 	},
@@ -57,8 +57,8 @@
 		"model": "mycareportal_app.activitysubcategory",
 		"pk": 7,
 		"fields": {
-			"activity_code": "IALD001",
-			"activity_category_code": "IALD001T",
+			"activity_code": "IADL001",
+			"activity_category_code": "IADL001T",
       "activity_category": "Transportation"
 		}
 	},
@@ -66,8 +66,8 @@
 		"model": "mycareportal_app.activitysubcategory",
 		"pk": 8,
 		"fields": {
-			"activity_code": "IALD001",
-			"activity_category_code": "IALD001M",
+			"activity_code": "IADL001",
+			"activity_category_code": "IADL001M",
       "activity_category": "Meal preparation"
 		}
 	},
@@ -75,8 +75,8 @@
 		"model": "mycareportal_app.activitysubcategory",
 		"pk": 9,
 		"fields": {
-			"activity_code": "IALD001",
-			"activity_category_code": "IALD001S",
+			"activity_code": "IADL001",
+			"activity_category_code": "IADL001S",
       "activity_category": "Shopping"
 		}
 	},
@@ -84,8 +84,8 @@
 		"model": "mycareportal_app.activitysubcategory",
 		"pk": 10,
 		"fields": {
-			"activity_code": "IALD001",
-			"activity_category_code": "IALD001H",
+			"activity_code": "IADL001",
+			"activity_category_code": "IADL001H",
       "activity_category": "Housework"
 		}
 	},
@@ -93,8 +93,8 @@
 		"model": "mycareportal_app.activitysubcategory",
 		"pk": 11,
 		"fields": {
-			"activity_code": "IALD001",
-			"activity_category_code": "IALD001M",
+			"activity_code": "IADL001",
+			"activity_category_code": "IADL001M",
       "activity_category": "Managing medications"
 		}
 	},
@@ -102,8 +102,8 @@
 		"model": "mycareportal_app.activitysubcategory",
 		"pk": 12,
 		"fields": {
-			"activity_code": "IALD001",
-			"activity_category_code": "IALD001F",
+			"activity_code": "IADL001",
+			"activity_category_code": "IADL001F",
       "activity_category": "Finances - Managing Personal Finances"
 		}
 	}

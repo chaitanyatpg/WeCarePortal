@@ -3,7 +3,7 @@
 		"model": "mycareportal_app.defaulttasks",
 		"pk": 1,
 		"fields": {
-			"activity_category_code": "ALD001P",
+			"activity_category_code": "ADL001P",
 			"activity_task": "Bathing"
 		}
 	},
@@ -11,7 +11,7 @@
 		"model": "mycareportal_app.defaulttasks",
 		"pk": 2,
 		"fields": {
-			"activity_category_code": "ALD001P",
+			"activity_category_code": "ADL001P",
 			"activity_task": "Grooming"
 		}
 	},
@@ -19,7 +19,7 @@
 		"model": "mycareportal_app.defaulttasks",
 		"pk": 3,
 		"fields": {
-			"activity_category_code": "ALD001P",
+			"activity_category_code": "ADL001P",
 			"activity_task": "Oral Care"
 		}
 	},
@@ -27,7 +27,7 @@
 		"model": "mycareportal_app.defaulttasks",
 		"pk": 4,
 		"fields": {
-			"activity_category_code": "ALD001D",
+			"activity_category_code": "ADL001D",
 			"activity_task": "Clothing Decision"
 		}
 	},
@@ -35,7 +35,7 @@
 		"model": "mycareportal_app.defaulttasks",
 		"pk": 5,
 		"fields": {
-			"activity_category_code": "ALD001D",
+			"activity_category_code": "ADL001D",
 			"activity_task": "Physically Dressing"
 		}
 	},
@@ -43,7 +43,7 @@
 		"model": "mycareportal_app.defaulttasks",
 		"pk": 6,
 		"fields": {
-			"activity_category_code": "ALD001E",
+			"activity_category_code": "ADL001E",
 			"activity_task": "Feeding"
 		}
 	},
@@ -51,7 +51,7 @@
 		"model": "mycareportal_app.defaulttasks",
 		"pk": 7,
 		"fields": {
-			"activity_category_code": "ALD001M",
+			"activity_category_code": "ADL001M",
 			"activity_task": "Mental Help to use Restroom"
 		}
 	},
@@ -59,7 +59,7 @@
 		"model": "mycareportal_app.defaulttasks",
 		"pk": 8,
 		"fields": {
-			"activity_category_code": "ALD001M",
+			"activity_category_code": "ADL001M",
 			"activity_task": "Physical Help to use Restroom"
 		}
 	},
@@ -67,7 +67,7 @@
 		"model": "mycareportal_app.defaulttasks",
 		"pk": 9,
 		"fields": {
-			"activity_category_code": "ALD001T",
+			"activity_category_code": "ADL001T",
 			"activity_task": "Transferring Seated to Standing Position"
 		}
 	},
@@ -75,7 +75,7 @@
 		"model": "mycareportal_app.defaulttasks",
 		"pk": 10,
 		"fields": {
-			"activity_category_code": "ALD001T",
+			"activity_category_code": "ADL001T",
 			"activity_task": "Transferring In and Out of Bed"
 		}
 	},
@@ -83,7 +83,7 @@
 		"model": "mycareportal_app.defaulttasks",
 		"pk": 11,
 		"fields": {
-			"activity_category_code": "IALD001B",
+			"activity_category_code": "IADL001B",
 			"activity_task": "Using Land Phone, Mobile Phone, Email or Internet"
 		}
 	},
@@ -91,15 +91,15 @@
 		"model": "mycareportal_app.defaulttasks",
 		"pk": 12,
 		"fields": {
-			"activity_category_code": "IALD001T",
-			"activity_task": "Driving Oneself"
+			"activity_category_code": "IADL001T",
+			"activity_task": "Driving self"
 		}
 	},
   {
 		"model": "mycareportal_app.defaulttasks",
 		"pk": 13,
 		"fields": {
-			"activity_category_code": "IALD001T",
+			"activity_category_code": "IADL001T",
 			"activity_task": "Arranging Ride"
 		}
 	},
@@ -107,7 +107,7 @@
 		"model": "mycareportal_app.defaulttasks",
 		"pk": 14,
 		"fields": {
-			"activity_category_code": "IALD001T",
+			"activity_category_code": "IADL001T",
 			"activity_task": "Public Transportation"
 		}
 	},
@@ -115,7 +115,7 @@
 		"model": "mycareportal_app.defaulttasks",
 		"pk": 15,
 		"fields": {
-			"activity_category_code": "IALD001M",
+			"activity_category_code": "IADL001M",
 			"activity_task": "Meal Planning"
 		}
 	},
@@ -123,7 +123,7 @@
 		"model": "mycareportal_app.defaulttasks",
 		"pk": 16,
 		"fields": {
-			"activity_category_code": "IALD001M",
+			"activity_category_code": "IADL001M",
 			"activity_task": "Meal Preparation"
 		}
 	},
@@ -131,7 +131,7 @@
 		"model": "mycareportal_app.defaulttasks",
 		"pk": 17,
 		"fields": {
-			"activity_category_code": "IALD001M",
+			"activity_category_code": "IADL001M",
 			"activity_task": "Meal Storage"
 		}
 	},
@@ -139,7 +139,7 @@
 		"model": "mycareportal_app.defaulttasks",
 		"pk": 18,
 		"fields": {
-			"activity_category_code": "IALD001M",
+			"activity_category_code": "IADL001M",
 			"activity_task": "Safely use Kitchen Equipment"
 		}
 	},
@@ -147,7 +147,7 @@
 		"model": "mycareportal_app.defaulttasks",
 		"pk": 19,
 		"fields": {
-			"activity_category_code": "IALD001S",
+			"activity_category_code": "IADL001S",
 			"activity_task": "Appropriate Food Shopping Decision"
 		}
 	},
@@ -155,7 +155,7 @@
 		"model": "mycareportal_app.defaulttasks",
 		"pk": 20,
 		"fields": {
-			"activity_category_code": "IALD001S",
+			"activity_category_code": "IADL001S",
 			"activity_task": "Appropriate Clothes Shopping Decision"
 		}
 	},
@@ -163,7 +163,7 @@
 		"model": "mycareportal_app.defaulttasks",
 		"pk": 21,
 		"fields": {
-			"activity_category_code": "IALD001H",
+			"activity_category_code": "IADL001H",
 			"activity_task": "Laundry"
 		}
 	},
@@ -171,7 +171,7 @@
 		"model": "mycareportal_app.defaulttasks",
 		"pk": 22,
 		"fields": {
-			"activity_category_code": "IALD001H",
+			"activity_category_code": "IADL001H",
 			"activity_task": "Dish Cleaning"
 		}
 	},
@@ -179,7 +179,7 @@
 		"model": "mycareportal_app.defaulttasks",
 		"pk": 23,
 		"fields": {
-			"activity_category_code": "IALD001H",
+			"activity_category_code": "IADL001H",
 			"activity_task": "Hygenic Maintenance of Residence"
 		}
 	},
@@ -187,15 +187,15 @@
 		"model": "mycareportal_app.defaulttasks",
 		"pk": 24,
 		"fields": {
-			"activity_category_code": "IALD001M",
-			"activity_task": "Help Take Accurate Dosage at Accurate Time"
+			"activity_category_code": "IADL001M",
+			"activity_task": "Medication Reminder"
 		}
 	},
   {
 		"model": "mycareportal_app.defaulttasks",
 		"pk": 25,
 		"fields": {
-			"activity_category_code": "IALD001M",
+			"activity_category_code": "IADL001M",
 			"activity_task": "Managing Refill"
 		}
 	},
@@ -203,7 +203,7 @@
 		"model": "mycareportal_app.defaulttasks",
 		"pk": 26,
 		"fields": {
-			"activity_category_code": "IALD001M",
+			"activity_category_code": "IADL001M",
 			"activity_task": "Avoid Conflict"
 		}
 	},
@@ -211,7 +211,7 @@
 		"model": "mycareportal_app.defaulttasks",
 		"pk": 27,
 		"fields": {
-			"activity_category_code": "IALD001F",
+			"activity_category_code": "IADL001F",
 			"activity_task": "Budget Management"
 		}
 	},
@@ -219,7 +219,7 @@
 		"model": "mycareportal_app.defaulttasks",
 		"pk": 28,
 		"fields": {
-			"activity_category_code": "IALD001F",
+			"activity_category_code": "IADL001F",
 			"activity_task": "Writing Checks"
 		}
 	},
@@ -227,7 +227,7 @@
 		"model": "mycareportal_app.defaulttasks",
 		"pk": 29,
 		"fields": {
-			"activity_category_code": "IALD001F",
+			"activity_category_code": "IADL001F",
 			"activity_task": "Paying Bills"
 		}
 	},
@@ -235,7 +235,7 @@
 		"model": "mycareportal_app.defaulttasks",
 		"pk": 30,
 		"fields": {
-			"activity_category_code": "IALD001F",
+			"activity_category_code": "IADL001F",
 			"activity_task": "Avoiding Scams"
 		}
 	}
