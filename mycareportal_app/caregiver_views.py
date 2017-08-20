@@ -299,12 +299,17 @@ class CaregiverDashboard(LoginRequiredMixin, View):
         #Get Tasks for assigned clients for the current day
         client_tasks = {}
         current_date = datetime.date.today()
+        tasks_not_complete = False #Bool for whether all tasks are complete (or cancelled)
         for client_data in assigned_clients:
             current_client_tasks = self.get_client_tasks(client_data, request)
+            #if "tablet_id" in request.session:
+            if not tasks_not_complete:
+                tasks_not_complete = self.check_task_complete_status(current_client_tasks)
             if current_client_tasks != None:
                 #client_name = '{0} {1}'.format(client_data.first_name, client_data.last_name)
                 client_tasks[client_data] = list(current_client_tasks)
         context["client_tasks"] = client_tasks
+        context["tasks_not_complete"] = tasks_not_complete
         #Get clock in and clock out information
         if "current_time_sheet" in request.session:
             current_time_sheet = CaregiverTimeSheet.objects.get(company=request.user.company, id=request.session['current_time_sheet'])
@@ -402,6 +407,12 @@ class CaregiverDashboard(LoginRequiredMixin, View):
             TaskAttachment.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created'),
             TaskLink.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created')),client_tasks))
             return client_tasks
+
+    def check_task_complete_status(self, current_client_tasks):
+        for task in current_client_tasks:
+            if not(task[0].complete or task[0].cancelled):
+                return True
+        return False
 
 @login_required
 def caregiver_dashboard(request):
