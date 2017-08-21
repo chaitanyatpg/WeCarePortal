@@ -332,6 +332,13 @@
                         {{edit_caregiver_form.profile_picture.label_tag}}{{edit_caregiver_form.profile_picture}}
                       </div>
                   </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Rating<span class="required">*</span> </label>
+                    <div class="starrr stars"></div>
+                    <span class="stars-count">{{edit_caregiver_form.rating.value}}</span> star(s)
+                    <input type="hidden" id="edit_caregiver_form_rating" name={{edit_caregiver_form.rating.html_name}} value={{edit_caregiver_form.rating.value}}>
+                  </div>
+
                   <!--
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Location</label>
@@ -409,6 +416,8 @@
 <script src="{% static 'vendors/dropzone/dist/min/dropzone.min.js' %}"></script>
 <!-- Select2 -->
 <script src="{% static 'vendors/select2/dist/js/select2.full.min.js' %}"></script>
+<!-- starrr -->
+<script src="{% static 'vendors/starrr/dist/starrr.js' %}"></script>
 <!-- jquery.inputmask -->
 <script src="{% static 'vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js' %}"></script>
 {% endblock %}
@@ -451,4 +460,17 @@
     });
   </script>
 <!-- /jquery.inputmask -->
+
+<!-- Starrr -->
+<script>
+  $(document).ready(function(){
+    $(".stars").starrr({
+      rating: {{edit_caregiver_form.rating.value}}
+    });
+    $(".stars").on("starrr:change", function(e, value){
+      $(".stars-count").html(value);
+      $("#edit_caregiver_form_rating").val(value);
+    });
+  });
+</script>
 {% endblock %}

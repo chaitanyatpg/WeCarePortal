@@ -60,6 +60,7 @@ class CaregiverEditForm(forms.Form):
     ssn = forms.CharField(max_length=20)
     referrer = forms.CharField(max_length=100, required=False)
     profile_picture = forms.ImageField(label='Select file', required=False)
+    rating = forms.IntegerField(required=False)
 
     def clean_picture(self):
         picture = self.cleaned_data['profile_picture']

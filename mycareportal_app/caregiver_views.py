@@ -168,8 +168,10 @@ class EditCaregiver(LoginRequiredMixin, View):
                 'email': caregiver.email_address,
                 'ssn': caregiver.ssn,
                 'referrer': caregiver.referrer,
-                'profile_picture': caregiver.profile_picture
+                'profile_picture': caregiver.profile_picture,
+                'rating': caregiver.rating
             })
+            print(caregiver.rating)
             context['edit_caregiver_form'] = edit_caregiver_form
         return render(request,'production/edit_caregiver.html', context)
 
@@ -196,6 +198,8 @@ class EditCaregiver(LoginRequiredMixin, View):
                 ssn = edit_caregiver_form.cleaned_data['ssn']
                 referrer = edit_caregiver_form.cleaned_data['referrer']
                 profile_picture = edit_caregiver_form.cleaned_data['profile_picture']
+                rating = edit_caregiver_form.cleaned_data['rating']
+                print ("RATING: " + str(rating))
                 #Get current caregiver
                 caregiver = Caregiver.objects.get(company=current_company,email_address=email)
                 if self.arg_diff(caregiver.first_name, first_name):
@@ -231,6 +235,7 @@ class EditCaregiver(LoginRequiredMixin, View):
                     caregiver_auth = User.objects.get(company=current_company,email=email)
                     caregiver_auth.email = email
                     caregiver_auth.save()
+                caregiver.rating = rating
                 caregiver.save()
                 messages.success(request, "Caregiver {0} {1} successfully edited!".format(first_name,last_name))
             except IntegrityError as e:
