@@ -54,10 +54,11 @@ class CompanyEditForm(forms.Form):
 
     company_name = forms.CharField(max_length=200)
     contact_number = forms.CharField(max_length=20)
-    address = forms.CharField(max_length=400)
-    city = forms.CharField(max_length=100)
-    state = forms.CharField(max_length=2)
-    zip_code = forms.CharField(max_length=10)
+    address = forms.CharField(max_length=400,required=False)
+    city = forms.CharField(max_length=100,required=False)
+    state = forms.CharField(max_length=2,required=False)
+    zip_code = forms.CharField(max_length=10,required=False)
+    account_number = forms.IntegerField(required=False)
 
     def clean(self):
 

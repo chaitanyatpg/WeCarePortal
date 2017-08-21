@@ -13,6 +13,8 @@ class Company(models.Model):
     city = models.CharField(max_length=100)
     state = models.CharField(max_length=2)
     zip_code = models.CharField(max_length=10)
+    account_number = models.IntegerField(unique=True, null=True)
+    parent_account = models.ForeignKey('self', null=True)
 
 class User(AbstractUser):
 

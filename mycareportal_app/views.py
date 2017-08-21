@@ -239,6 +239,7 @@ class EditCompany(LoginRequiredMixin, View):
         company_edit_form = CompanyEditForm(initial=
         {
             'company_name': current_company.company_name,
+            'account_number': current_company.account_number,
             'contact_number': current_company.contact_number,
             'address': current_company.address,
             'city': current_company.city,
@@ -256,6 +257,7 @@ class EditCompany(LoginRequiredMixin, View):
         if company_edit_form.is_valid():
             try:
                 current_company.company_name = company_edit_form.cleaned_data['company_name']
+                current_company.account_number = company_edit_form.cleaned_data['account_number']
                 current_company.contact_number = company_edit_form.cleaned_data['contact_number']
                 current_company.address = company_edit_form.cleaned_data['address']
                 current_company.city = company_edit_form.cleaned_data['city']
