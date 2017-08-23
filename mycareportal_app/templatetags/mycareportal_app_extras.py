@@ -1,4 +1,5 @@
 from django import template
+from datetime import datetime
 
 register = template.Library()
 
@@ -22,6 +23,18 @@ def append_datetime(x,y):
     else:
         out_str = x
     return out_str
+
+@register.filter
+def convert_time_24_to_12(x):
+    output_time = ""
+    if x:
+        output_hour = x.split(":")[0]
+        output_minute = x.split(":")[1]
+        new_x = "{0}:{1}".format(output_hour,output_minute)
+        new_time = datetime.strptime(new_x,"%H:%M")
+        output_time = new_time.strftime("%I:%M %p")
+    return output_time
+
 
 @register.filter
 def trunc_path(x):

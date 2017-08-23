@@ -461,9 +461,9 @@ class AssignTasks(LoginRequiredMixin, View):
             start_time = ""
             end_time = ""
             if start_hour != "" and start_minute != "":
-                start_time = "{0}:{1}:00".format(str(start_hour),str(start_minute))
+                start_time = "{0}:{1}".format(str(start_hour),str(start_minute))
             if end_hour != "" and end_minute != "":
-                end_time = "{0}:{1}:00".format(str(end_hour),str(end_minute))
+                end_time = "{0}:{1}".format(str(end_hour),str(end_minute))
             #save task header
             new_task_header = TaskHeader(company=current_company,
                                             client=client,
@@ -737,6 +737,16 @@ def get_task_with_id(request):
         task_name = current_task.activity_task
         start_time = current_task.start_time
         end_time = current_task.end_time
+        start_hour = ""
+        start_minute = ""
+        end_hour = ""
+        end_minute = ""
+        if start_time:
+            start_hour = start_time.split(":")[0]
+            start_minute = start_time.split(":")[1]
+        if end_time:
+            end_hour = end_time.split(":")[0]
+            end_minute = end_time.split(":")[1]
         description = current_task.description
         link = current_task.link
         attachment = current_task.attachment
@@ -779,6 +789,10 @@ def get_task_with_id(request):
                     'task_name': task_name,
                     'start_time': start_time,
                     'end_time': end_time,
+                    'start_hour': start_hour,
+                    'start_minute': start_minute,
+                    'end_hour': end_hour,
+                    'end_minute': end_minute,
                     'description': description,
                     'comments': comments,
                     'attachments': attachments,
