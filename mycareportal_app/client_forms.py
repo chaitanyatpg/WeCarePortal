@@ -276,12 +276,15 @@ class FindClientForm(forms.Form):
 
 class EditTaskForm(forms.Form):
 
+    client_id = forms.IntegerField()
     task_id = forms.IntegerField()
-    start_time = forms.CharField(max_length=10, required=False)
-    end_time = forms.CharField(max_length=10, required=False)
+    start_hour = forms.CharField(max_length=2, required=False)
+    start_minute = forms.CharField(max_length=2, required=False)
+    end_hour = forms.CharField(max_length=2, required=False)
+    end_minute = forms.CharField(max_length=2, required=False)
     description = forms.CharField(max_length=1000, required=False)
     link = forms.CharField(max_length=500, required=False)
-    attachment = forms.FileField(label='Select file', required=False)
+    attachment = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), label='Select files', required=False)
 
     def clean(self):
         cleaned_data = super(EditTaskForm, self).clean()

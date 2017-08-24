@@ -424,8 +424,12 @@ class AssignTasks(LoginRequiredMixin, View):
             context["assign_task_form"] = AssignTaskForm()
             #Get Delete Task Form
             context["delete_task_form"] = DeleteTaskForm()
+            #Get Edit Task Form
+            context["edit_task_form"] = EditTaskForm()
             #Get Schedule for Client
             current_client = Client.objects.get(company=current_company,email_address=client_email)
+            client_id = current_client.id
+            context["client_id"] = client_id
             client_schedule = TaskSchedule.objects.filter(company=current_company,client=current_client)
             context["client_schedule"] = client_schedule
             return render(request,'production/assign_tasks.html',context)
@@ -819,11 +823,48 @@ def convert_to_client_timezone(client_timestamp, client):
     return new_timestamp
 
 @login_required
+@transaction.atomic
 def edit_task_with_id(request):
     if request.method == 'POST':
         context = {}
         company = request.user.company
-        return True
+        edit_task_form = EditTaskForm(request.POST, request.FILES)
+        client_id = request.POST.get('client_id')
+        if edit_task_form.is_valid():
+            task_id = edit_task_form.cleaned_data["task_id"]
+            client_id = edit_task_form.cleaned_data["client_id"]
+            current_client = Client.objects.get(company=company, id=client_id)
+            client_email = current_client.email_address
+            current_task = TaskSchedule.objects.get(company=company,client=current_client, id=task_id)
+            description = edit_task_form.cleaned_data["description"]
+            start_hour = edit_task_form.cleaned_data["start_hour"]
+            end_hour = edit_task_form.cleaned_data["end_hour"]
+            start_minute = edit_task_form.cleaned_data["start_minute"]
+            end_minute = edit_task_form.cleaned_data["end_minute"]
+            attachments = request.FILES.getlist('attachment')
+            start_time = ""
+            end_time = ""
+            if start_hour != "" and start_minute != "":
+                start_time = "{0}:{1}".format(str(start_hour),str(start_minute))
+            if end_hour != "" and end_minute != "":
+                end_time = "{0}:{1}".format(str(end_hour),str(end_minute))
+            current_task.description = description
+            current_task.start_time = start_time
+            current_task.end_time = end_time
+            current_task.save()
+            for uploaded_attachment in attachments:
+                new_task_attachment = TaskAttachment(company = company,
+                                                    client = current_client,
+                                                    user = request.user,
+                                                    task_schedule = current_task,
+                                                    attachment = uploaded_attachment)
+                new_task_attachment.save()
+            messages.success(request, "Successfully Edited Task!")
+            return HttpResponseRedirect(reverse('assign_tasks') + "?client_email=" + client_email)
+    messages.error(request, "Error Editing Task")
+    current_client = Client.objects.get(company=company, id=client_id)
+    client_email = current_client.email_address
+    return HttpResponseRedirect(reverse('assign_tasks') + "?client_email=" + client_email)
 
 @login_required
 def delete_task_with_id(request):
