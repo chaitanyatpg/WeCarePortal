@@ -91,6 +91,8 @@ class UpdateTaskForm(forms.Form):
     task_id = forms.IntegerField()
     client_id = forms.IntegerField()
     attachment = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), label='', required=False)
+    incident_id = forms.IntegerField(required=False)
+    location_id = forms.IntegerField(required=False)
 
     def clean(self):
         cleaned_data = super(UpdateTaskForm, self).clean()

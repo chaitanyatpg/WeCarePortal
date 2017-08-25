@@ -706,6 +706,32 @@ class AssignTasks(LoginRequiredMixin, View):
                 self.save_task_link(new_task_header, link, current_user, schedule_entry)
             current_date += delta
 
+class ViewIncidentsByClient(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {}
+        current_company = request.user.company
+        find_client_form = FindClientForm(request.GET)
+        if find_client_form.is_valid():
+            client_email = find_client_form.cleaned_data['client_email']
+            client = Client.objects.get(company=current_company, email_address = client_email)
+            client_incidents = IncidentReport.objects.filter(company=current_company, client=client).order_by('incident_timestamp')
+            client_timezone = pytz.timezone(client.time_zone)
+            for client_incident in client_incidents:
+                client_incident.incident_timestamp = (client_incident.incident_timestamp.astimezone(client_timezone)).replace(tzinfo=None)
+            context['client_incidents'] = client_incidents
+        return render(request,'production/view_client_incidents.html', context)
+
+class ChooseViewClientIncidents(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {}
+        current_company = request.user.company
+        all_clients = Client.objects.filter(company=current_company).order_by('last_name')
+        context['all_clients'] = all_clients
+        context['find_client_form'] = FindClientForm()
+        return render(request,'production/choose_view_client_incidents.html', context)
+
 @login_required
 def get_client_with_email(request):
     if request.method == 'GET':

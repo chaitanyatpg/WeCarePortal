@@ -61,10 +61,16 @@
                       <li><a href={% url 'add_care_manager' %}>Add Care Manager</a></li>
                     {% endif %}
                     {% if module_dict.DASHBOARD.VIEWACTIVECAREGIVERS %}
-                      <li><a href={% url 'view_active_caregivers' %}>View Active Caregivers</a><li>
+                      <li><a href={% url 'view_active_caregivers' %}>View Active Caregivers</a></li>
                     {% endif %}
                     {% if module_dict.DASHBOARD.VIEWCAREGIVERTIMESHEET %}
-                      <li><a href={% url 'choose_view_caregiver_timesheet' %}>View Caregiver Timesheet</a><li>
+                      <li><a href={% url 'choose_view_caregiver_timesheet' %}>View Caregiver Timesheet</a></li>
+                    {% endif %}
+                    {% if module_dict.DASHBOARD.VIEWDAILYINCIDENTS %}
+                      <li><a href={% url 'view_daily_incidents' %}>View Daily Incidents</a></li>
+                    {% endif %}
+                    {% if module_dict.CLIENTPORTAL.VIEWINCIDENTSBYCLIENT %}
+                      <li><a href={% url 'choose_view_client_incidents' %}>View Incidents by Client</a></li>
                     {% endif %}
                   </ul>
                 </li>

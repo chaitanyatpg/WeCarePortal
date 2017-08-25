@@ -1,0 +1,170 @@
+[
+	{
+		"model": "mycareportal_app.defaultincidents",
+		"pk": 1,
+		"fields": {
+			"incident": "Fall - Preparing Meal"
+		}
+	},
+  {
+		"model": "mycareportal_app.defaultincidents",
+		"pk": 2,
+		"fields": {
+			"incident": "Fall - Putting away/washing dishes"
+		}
+	},
+  {
+		"model": "mycareportal_app.defaultincidents",
+		"pk": 3,
+		"fields": {
+			"incident": "Fall - Fatigue"
+		}
+	},
+  {
+		"model": "mycareportal_app.defaultincidents",
+		"pk": 4,
+		"fields": {
+			"incident": "Fall - Walking Room to Room"
+		}
+	},
+  {
+		"model": "mycareportal_app.defaultincidents",
+		"pk": 5,
+		"fields": {
+			"incident": "Fall - Fatigue"
+		}
+	},
+  {
+		"model": "mycareportal_app.defaultincidents",
+		"pk": 6,
+		"fields": {
+			"incident": "Fall - Getting up/Ready for bed"
+		}
+	},
+  {
+		"model": "mycareportal_app.defaultincidents",
+		"pk": 7,
+		"fields": {
+			"incident": "Fall - Going Outside"
+		}
+	},
+  {
+		"model": "mycareportal_app.defaultincidents",
+		"pk": 8,
+		"fields": {
+			"incident": "ER Admittance"
+		}
+	},
+  {
+		"model": "mycareportal_app.defaultincidents",
+		"pk": 9,
+		"fields": {
+			"incident": "Doctor Call"
+		}
+	},
+  {
+		"model": "mycareportal_app.defaultincidents",
+		"pk": 10,
+		"fields": {
+			"incident": "Communicates Despression/Loneliness"
+		}
+	},
+  {
+		"model": "mycareportal_app.defaultincidents",
+		"pk": 11,
+		"fields": {
+			"incident": "Wanders outside no recall"
+		}
+	},
+  {
+		"model": "mycareportal_app.defaultincidents",
+		"pk": 12,
+		"fields": {
+			"incident": "Hot Water Scalding"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaultincidents",
+		"pk": 13,
+		"fields": {
+			"incident": "Fall - Other"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaultincidents",
+		"pk": 14,
+		"fields": {
+			"incident": "Noticeable Weight Gain"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaultincidents",
+		"pk": 15,
+		"fields": {
+			"incident": "Noticeable Weight Loss"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaultincidents",
+		"pk": 16,
+		"fields": {
+			"incident": "Evidence of Hoarding"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaultincidents",
+		"pk": 17,
+		"fields": {
+			"incident": "Vehicle Accident"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaultincidents",
+		"pk": 18,
+		"fields": {
+			"incident": "Noticeable Body Odor"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaultincidents",
+		"pk": 19,
+		"fields": {
+			"incident": "Unopened Mail"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaultincidents",
+		"pk": 20,
+		"fields": {
+			"incident": "Signs of fire"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaultincidents",
+		"pk": 21,
+		"fields": {
+			"incident": "Expired Food"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaultincidents",
+		"pk": 22,
+		"fields": {
+			"incident": "Increase in Convenience Foods"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaultincidents",
+		"pk": 23,
+		"fields": {
+			"incident": "Foul Home Smells"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaultincidents",
+		"pk": 24,
+		"fields": {
+			"incident": "Client/Caregiver turmoil"
+		}
+	}
+]

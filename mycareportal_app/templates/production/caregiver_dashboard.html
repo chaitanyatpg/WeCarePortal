@@ -138,6 +138,21 @@
                                         <label>New Comment</label>
                                         <textarea class="form-control" style="height:55px;" id="task_comment" name="{{update_task_form.comment.html_name}}"></textarea>
                                       </p>
+                                      <p>
+                                        <label>Report Incident</label>
+                                          <select name={{update_task_form.incident_id.html_name}}>
+                                            <option value="" disabled selected>Select Incident</option>
+                                            {% for incident in default_incidents %}
+                                              <option value="{{incident.id}}">{{incident.incident}}</option>
+                                            {% endfor %}
+                                          </select>
+                                          <select name={{update_task_form.location_id.html_name}}>
+                                            <option value="" disabled selected>Select Location</option>
+                                            {% for location in incident_locations %}
+                                              <option value="{{location.id}}">{{location.location}}</option>
+                                            {% endfor %}
+                                          </select>
+                                      </p>
                                       <div class="row">
                                         <div class="col-md-3">
                                           <label>

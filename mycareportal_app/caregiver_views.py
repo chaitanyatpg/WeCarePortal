@@ -326,6 +326,12 @@ class CaregiverDashboard(LoginRequiredMixin, View):
         context["update_task_form"] = UpdateTaskForm()
         #Get current date
         context["current_date"] = timezone.now()
+        #Get default incidents
+        default_incidents = DefaultIncidents.objects.all().order_by('incident')
+        context['default_incidents'] = default_incidents
+        #Get incident locations
+        incident_locations = IncidentLocations.objects.all().order_by('location')
+        context['incident_locations'] = incident_locations
         return render(request, 'production/caregiver_dashboard.html', context)
 
     @transaction.atomic
@@ -339,6 +345,8 @@ class CaregiverDashboard(LoginRequiredMixin, View):
             client_id = update_task_form.cleaned_data["client_id"]
             client = Client.objects.get(company=current_company,id=client_id)
             status = update_task_form.cleaned_data["status"]
+            incident_id = update_task_form.cleaned_data["incident_id"]
+            location_id = update_task_form.cleaned_data["location_id"]
             attachments = request.FILES.getlist('attachment')
             task = TaskSchedule.objects.get(company=current_company,client=client,id=task_id)
             #task.comment = comment
@@ -365,8 +373,26 @@ class CaregiverDashboard(LoginRequiredMixin, View):
             task.save()
             self.save_task_comments(request, update_task_form, task, current_company, client, comment)
             self.save_task_attachments(request, update_task_form, task, current_company, client, request.user, attachments)
+            if(incident_id and location_id):
+                self.report_incident(request, update_task_form, incident_id, location_id, client, request.user, task)
             messages.success(request, "Edited Task: {0}".format(task.activity_task))
         return redirect('caregiver_dashboard')
+
+    def report_incident(self, request, update_task_form, incident_id, location_id, client, user, task):
+
+        incident = DefaultIncidents.objects.get(id = incident_id)
+        location = IncidentLocations.objects.get(id = location_id)
+        incident_report = IncidentReport(company = request.user.company,
+                                        client = client,
+                                        reporter = user,
+                                        task=task,
+                                        incident = incident,
+                                        location = location,
+                                        incident_name = incident.incident,
+                                        location_name = location.location
+                                        )
+        incident_report.save()
+        messages.success(request, "Reported Incident: {0} at location {1}".format(incident.incident, location.location))
 
     def save_task_attachments(self, request, update_task_form, task, current_company, client, user, attachments):
         for uploaded_file in attachments:

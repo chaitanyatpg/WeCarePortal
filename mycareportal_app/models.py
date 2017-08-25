@@ -312,3 +312,30 @@ class CaregiverTimeSheet(models.Model):
     client_timezone = models.CharField(max_length=50)
     time_worked = models.DurationField(blank=True, null=True)
     is_active = models.BooleanField()
+
+class DefaultIncidents(models.Model):
+
+    incident = models.CharField(max_length=150)
+    #location = models.CharField(max_length=100, blank=True)
+    #reason = models.CharField(max_Length=100, blank=True)
+    #trigger_frequency = models.IntegerField()
+    #duration = models.CharField(max_length=30, blank=True)
+    #duration_frequency = models.IntegerField(blank=True)
+    #home_modification = BooleanField()
+    #move_management = BooleanField()
+    #additional_care = BooleanField()
+
+class IncidentLocations(models.Model):
+
+    location = models.CharField(max_length=100)
+
+class IncidentReport(models.Model):
+    company = models.ForeignKey(Company)
+    client = models.ForeignKey(Client)
+    reporter = models.ForeignKey(User)
+    task = models.ForeignKey(TaskSchedule)
+    incident = models.ForeignKey(DefaultIncidents)
+    location = models.ForeignKey(IncidentLocations)
+    incident_name = models.CharField(max_length=150)
+    location_name = models.CharField(max_length=100)
+    incident_timestamp = models.DateTimeField(auto_now_add=True)

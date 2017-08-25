@@ -231,6 +231,24 @@ class ViewActiveCaregivers(LoginRequiredMixin, View):
                                                     }, active_caregiver_timesheets))
         return active_caregiver_timesheets
 
+class ViewDailyIncidents(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {}
+        current_company = request.user.company
+        clients = Client.objects.filter(company=current_company).order_by('last_name')
+        today_incidents = []
+        for client in clients:
+            client_timezone = pytz.timezone(client.time_zone)
+            current_date = (timezone.now().astimezone(client_timezone)).date()
+            client_incidents = list(IncidentReport.objects.filter(company=current_company,client=client, incident_timestamp__date = current_date))
+            for client_incident in client_incidents:
+                client_incident.incident_timestamp = (client_incident.incident_timestamp.astimezone(client_timezone)).replace(tzinfo=None)
+            if(len(client_incidents)!=0):
+                today_incidents += client_incidents
+        context['today_incidents'] = today_incidents
+        return render(request, 'production/view_daily_incidents.html', context)
+
 class EditCompany(LoginRequiredMixin, View):
 
     def get(self, request):
