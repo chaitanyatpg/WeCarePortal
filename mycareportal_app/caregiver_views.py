@@ -308,7 +308,7 @@ class CaregiverDashboard(LoginRequiredMixin, View):
         for client_data in assigned_clients:
             current_client_tasks = self.get_client_tasks(client_data, request)
             #if "tablet_id" in request.session:
-            if not tasks_not_complete and len(current_client_tasks) != 0:
+            if not tasks_not_complete and current_client_tasks != None:
                 tasks_not_complete = self.check_task_complete_status(current_client_tasks)
             if current_client_tasks != None:
                 #client_name = '{0} {1}'.format(client_data.first_name, client_data.last_name)
