@@ -219,7 +219,12 @@ class EditClient(LoginRequiredMixin, View):
             context["delete_provider_details_form"] = DeleteProviderDetailsForm()
             context["delete_pharmacy_details_form"] = DeletePharmacyDetailsForm()
             context["delete_payer_details_form"] = DeletePayerDetailsForm()
-
+            #Client Criteria map
+            client_match_categories = ClientMatchCategory.objects.all()
+            client_match_criteria = ClientMatchCriteria.objects.filter(is_default=True) | ClientMatchCriteria.objects.filter(company=current_company)
+            client_criteria_map = ClientCriteriaMap.objects.filter(company=current_company,client=client)
+            criteria_map = self.make_criteria_map(client_match_categories,client_match_criteria,client_criteria_map,current_company,client)
+            context['criteria_map'] = criteria_map
         return render(request,'production/edit_client.html', context)
 
     def post(self, request):
@@ -280,6 +285,18 @@ class EditClient(LoginRequiredMixin, View):
         output_year = client_birthday.year
         output_string = "{0}/{1}/{2}".format(output_month,output_day,output_year)
         return output_string
+
+    def make_criteria_map(self, client_match_categories,client_match_criteria,client_criteria_map,company,client):
+        criteria_map = {}
+        for category in client_match_categories:
+            criteria_map[category] = {}
+            for criteria in client_match_criteria:
+                if criteria.client_match_category == category:
+                    (criteria_status, created) = client_criteria_map.get_or_create(company=company,client=client,
+                                                    client_match_category=category,client_match_criteria=criteria)
+                    criteria_map[category][criteria] = criteria_status
+                    criteria_status.save()
+        return criteria_map
 
 class AssignTasksChooseClient(LoginRequiredMixin, View):
 
