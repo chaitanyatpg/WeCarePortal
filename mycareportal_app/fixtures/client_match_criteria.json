@@ -1,0 +1,182 @@
+[
+	{
+		"model": "mycareportal_app.clientmatchcriteria",
+		"pk": 1,
+		"fields": {
+			"client_match_category": "1",
+			"criteria": "Dementia Experience",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.clientmatchcriteria",
+		"pk": 2,
+		"fields": {
+			"client_match_category": "1",
+			"criteria": "Hospice Experience",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.clientmatchcriteria",
+		"pk": 3,
+		"fields": {
+			"client_match_category": "1",
+			"criteria": "Incontinence Experience",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.clientmatchcriteria",
+		"pk": 4,
+		"fields": {
+			"client_match_category": "1",
+			"criteria": "Automobile Insured",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.clientmatchcriteria",
+		"pk": 5,
+		"fields": {
+			"client_match_category": "1",
+			"criteria": "Accept Client Smoker",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.clientmatchcriteria",
+		"pk": 6,
+		"fields": {
+			"client_match_category": "1",
+			"criteria": "Overnight Shifts Available",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.clientmatchcriteria",
+		"pk": 7,
+		"fields": {
+			"client_match_category": "1",
+			"criteria": "Male Caregiver",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.clientmatchcriteria",
+		"pk": 8,
+		"fields": {
+			"client_match_category": "1",
+			"criteria": "Female Caregiver",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.clientmatchcriteria",
+		"pk": 9,
+		"fields": {
+			"client_match_category": "1",
+			"criteria": "Client Language Spoken",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.clientmatchcriteria",
+		"pk": 10,
+		"fields": {
+			"client_match_category": "2",
+			"criteria": "Car Insurance",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.clientmatchcriteria",
+		"pk": 11,
+		"fields": {
+			"client_match_category": "2",
+			"criteria": "CNA License",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.clientmatchcriteria",
+		"pk": 12,
+		"fields": {
+			"client_match_category": "2",
+			"criteria": "CPR Certified",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.clientmatchcriteria",
+		"pk": 13,
+		"fields": {
+			"client_match_category": "2",
+			"criteria": "First Aid Certified",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.clientmatchcriteria",
+		"pk": 14,
+		"fields": {
+			"client_match_category": "2",
+			"criteria": "Drivers License",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.clientmatchcriteria",
+		"pk": 15,
+		"fields": {
+			"client_match_category": "2",
+			"criteria": "HHA Certification",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.clientmatchcriteria",
+		"pk": 16,
+		"fields": {
+			"client_match_category": "2",
+			"criteria": "LVN/LPN Certified",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.clientmatchcriteria",
+		"pk": 17,
+		"fields": {
+			"client_match_category": "2",
+			"criteria": "Medication Aide",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.clientmatchcriteria",
+		"pk": 18,
+		"fields": {
+			"client_match_category": "2",
+			"criteria": "Company Training Certificates",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.clientmatchcriteria",
+		"pk": 19,
+		"fields": {
+			"client_match_category": "3",
+			"criteria": "OK with Cats",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.clientmatchcriteria",
+		"pk": 20,
+		"fields": {
+			"client_match_category": "3",
+			"criteria": "OK with Dogs",
+			"is_default": "True"
+		}
+	}
+]

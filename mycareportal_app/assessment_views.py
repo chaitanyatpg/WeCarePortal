@@ -57,7 +57,8 @@ class AssessmentTool(LoginRequiredMixin, View):
                 if assessment_task.assessment_category == category:
                     (assessment_status, created) = client_assessment_map.get_or_create(company=company, client=client, assessment_category=category,assessment_task=assessment_task)
                     task_map[category][assessment_task] = assessment_status
-                    assessment_status.save()
+                    if created:
+                        assessment_status.save()
         return task_map
 
 @login_required

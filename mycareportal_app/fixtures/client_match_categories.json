@@ -1,0 +1,30 @@
+[
+	{
+		"model": "mycareportal_app.clientmatchcategory",
+		"pk": 1,
+		"fields": {
+			"category": "General"
+		}
+	},
+	{
+		"model": "mycareportal_app.clientmatchcategory",
+		"pk": 2,
+		"fields": {
+			"category": "Certifications"
+		}
+	},
+	{
+		"model": "mycareportal_app.clientmatchcategory",
+		"pk": 3,
+		"fields": {
+			"category": "Pets"
+		}
+	},
+	{
+		"model": "mycareportal_app.clientmatchcategory",
+		"pk": 4,
+		"fields": {
+			"category": "Transfers"
+		}
+	}
+]

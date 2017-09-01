@@ -339,3 +339,29 @@ class IncidentReport(models.Model):
     incident_name = models.CharField(max_length=150)
     location_name = models.CharField(max_length=100)
     incident_timestamp = models.DateTimeField(auto_now_add=True)
+
+class CaregiverSchedule(models.Model):
+    company = models.ForeignKey(Company)
+    caregiver = models.ForeignKey(Caregiver)
+    client = models.ForeignKey(Client)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+
+class ClientMatchCategory(models.Model):
+    category = models.CharField(max_length=500)
+
+class ClientMatchCriteria(models.Model):
+    client_match_category = models.ForeignKey(ClientMatchCategory)
+    criteria = models.CharField(max_length=2000)
+    is_default = models.BooleanField(default=False)
+    company = models.ForeignKey(Company, blank=True, null=True)
+
+class ClientCriteriaMap(models.Model):
+
+    company = models.ForeignKey(Company)
+    client = models.ForeignKey(Client)
+    client_match_category = models.ForeignKey(ClientMatchCategory)
+    client_match_criteria = models.ForeignKey(ClientMatchCriteria)
+    status = models.CharField(max_length=2)
