@@ -173,6 +173,21 @@ class EditCaregiver(LoginRequiredMixin, View):
             })
             print(caregiver.rating)
             context['edit_caregiver_form'] = edit_caregiver_form
+            #Client Criteria map
+            client_match_categories = ClientMatchCategory.objects.all()
+            client_match_criteria = ClientMatchCriteria.objects.filter(is_default=True) | ClientMatchCriteria.objects.filter(company=current_company)
+
+            caregiver_criteria_map = CaregiverCriteriaMap.objects.filter(company=current_company,caregiver=caregiver)
+            caregiver_certification_map = CaregiverCertificationMap.objects.filter(company=current_company,caregiver=caregiver)
+            caregiver_transfer_map = CaregiverTransferMap.objects.filter(company=current_company,caregiver=caregiver)
+
+            criteria_map = self.make_criteria_map(client_match_categories,client_match_criteria,caregiver_criteria_map,current_company,caregiver)
+            certification_map = self.make_certification_map(client_match_categories,client_match_criteria,caregiver_certification_map,current_company,caregiver)
+            transfer_map = self.make_transfer_map(client_match_categories,client_match_criteria,caregiver_transfer_map,current_company,caregiver)
+
+            context['criteria_map'] = criteria_map
+            context['certification_map'] = certification_map
+            context['transfer_map'] = transfer_map
         return render(request,'production/edit_caregiver.html', context)
 
     def post(self, request):
@@ -253,6 +268,45 @@ class EditCaregiver(LoginRequiredMixin, View):
         output_string = "{0}/{1}/{2}".format(output_month,output_day,output_year)
         return output_string
 
+    def make_criteria_map(self, client_match_categories,client_match_criteria,caregiver_criteria_map,company,caregiver):
+        criteria_map = {}
+        for category in client_match_categories:
+            if category.category in ['General', 'Pets']:
+                criteria_map[category] = {}
+                for criteria in client_match_criteria:
+                    if criteria.client_match_category == category:
+                        (criteria_status, created) = caregiver_criteria_map.get_or_create(company=company,caregiver=caregiver,
+                                                        client_match_category=category,client_match_criteria=criteria)
+                        criteria_map[category][criteria] = criteria_status
+                        criteria_status.save()
+        return criteria_map
+
+    def make_certification_map(self, client_match_categories,client_match_criteria,caregiver_certification_map,company,caregiver):
+        criteria_map = {}
+        for category in client_match_categories:
+            if category.category in ['Certifications']:
+                criteria_map[category] = {}
+                for criteria in client_match_criteria:
+                    if criteria.client_match_category == category:
+                        (criteria_status, created) = caregiver_certification_map.get_or_create(company=company,caregiver=caregiver,
+                                                        client_match_category=category,client_match_criteria=criteria)
+                        criteria_map[category][criteria] = criteria_status
+                        criteria_status.save()
+        return criteria_map
+
+    def make_transfer_map(self, client_match_categories,client_match_criteria,caregiver_transfer_map,company,caregiver):
+        criteria_map = {}
+        for category in client_match_categories:
+            if category.category in ['Transfers']:
+                criteria_map[category] = {}
+                for criteria in client_match_criteria:
+                    if criteria.client_match_category == category:
+                        (criteria_status, created) = caregiver_transfer_map.get_or_create(company=company,caregiver=caregiver,
+                                                        client_match_category=category,client_match_criteria=criteria)
+                        criteria_map[category][criteria] = criteria_status
+                        criteria_status.save()
+        return criteria_map
+
 @login_required
 def get_caregiver_with_email(request):
     if request.method == 'GET':
@@ -277,6 +331,48 @@ def get_caregiver_with_email(request):
         context["caregiver_data"] = caregiver_data
         #return JsonResponse(caregiver_data)
         return HttpResponse(json.dumps(caregiver_data), content_type="application/json")
+
+@login_required
+def post_criteria_caregiver(request):
+
+    if request.method == "POST":
+        company = request.user.company;
+        status_id = request.POST['status_id']
+        status = request.POST['status']
+        #client_id = request.POST['client_id']
+        #client = Client.objects.get(company=company,id=client_id)
+        criteria_map = CaregiverCriteriaMap.objects.get(company=company,id=status_id)
+        criteria_map.status = status
+        criteria_map.save()
+    return HttpResponse("Changed Status")
+
+@login_required
+def post_certification_caregiver(request):
+
+    if request.method == "POST":
+        company = request.user.company;
+        status_id = request.POST['status_id']
+        status = request.POST['status']
+        #client_id = request.POST['client_id']
+        #client = Client.objects.get(company=company,id=client_id)
+        certification_map = CaregiverCertificationMap.objects.get(company=company,id=status_id)
+        certification_map.status = status
+        certification_map.save()
+    return HttpResponse("Changed Status")
+
+@login_required
+def post_transfer_caregiver(request):
+
+    if request.method == "POST":
+        company = request.user.company;
+        experience_id = request.POST['experience_id']
+        experience = request.POST['experience']
+        #client_id = request.POST['client_id']
+        #client = Client.objects.get(company=company,id=client_id)
+        transfer_map = CaregiverTransferMap.objects.get(company=company,id=experience_id)
+        transfer_map.experience = experience
+        transfer_map.save()
+    return HttpResponse("Changed Status")
 
 class CaregiverDashboard(LoginRequiredMixin, View):
 

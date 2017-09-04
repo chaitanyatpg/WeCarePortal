@@ -356,27 +356,163 @@
                               <label>
 
                                 {% if status.status == 'Y' %}
-                                  <input type="radio" name="{{status.id}}" checked="checked" value='Y'>Y
+                                  <input type="radio" class="criteria_radio" name="{{status.id}}" checked="checked" value='Y'>W
                                 {% else %}
-                                  <input type="radio" name="{{status.id}}" value='Y'>Y
+                                  <input type="radio" class="criteria_radio" name="{{status.id}}" value='Y'>W
                                 {% endif %}
                               </label>
                             </div>
                             <div class="radio-inline">
                               <label>
                                 {% if status.status == 'N' %}
-                                  <input type="radio" name="{{status.id}}" checked="checked" value='N'>N
+                                  <input type="radio" class="criteria_radio" name="{{status.id}}" checked="checked" value='N'>N
                                 {% else %}
-                                  <input type="radio" name="{{status.id}}" value='N'>N
+                                  <input type="radio" class="criteria_radio" name="{{status.id}}" value='N'>N
                                 {% endif %}
                               </label>
                             </div>
                             <div class="radio-inline">
                               <label>
                                 {% if status.status == 'NA' %}
-                                  <input type="radio" name="{{status.id}}" checked="checked" value='NA'>N/A
+                                  <input type="radio" class="criteria_radio" name="{{status.id}}" checked="checked" value='NA'>N/A
                                 {% else %}
-                                  <input type="radio" name="{{status.id}}" value='NA'>N/A
+                                  <input type="radio" class="criteria_radio" name="{{status.id}}" value='NA'>N/A
+                                {% endif %}
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+
+                        {% endfor %}
+                        <div class="ln_solid"></div>
+                        <!--<div class="form-group">
+                          <div class="col-md-9 col-sm-9 col-xs-12">
+                            <button type="submit" class="btn btn-success">Submit</button>
+                          </div>
+                        </div>-->
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+
+              {% for category, criterias in certification_map.items %}
+                <div class="row">
+                  <div class="x_panel">
+                    <div class="x_title">
+                      <h2>{{category.category}}<small></small></h2>
+                      <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                      </ul>
+                      <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                      <br />
+
+                        {% for criteria, status in criterias.items %}
+
+                        <div class = "row">
+                          <div class="form-group">
+                            <label class="col-md-8 col-sm-8 col-xs-12">{{criteria.criteria}}
+                              <br>
+                            </label>
+                            <div class="radio-inline">
+                              <label>
+                                {% if status.status == 'Y' %}
+                                  <input type="radio" class='certification_radio' name="{{status.id}}" checked="checked" value='Y'>W
+                                {% else %}
+                                  <input type="radio" class='certification_radio' name="{{status.id}}" value='Y'>W
+                                {% endif %}
+                              </label>
+                            </div>
+                            <div class="radio-inline">
+                              <label>
+                                {% if status.status == 'N' %}
+                                  <input type="radio" class='certification_radio' name="{{status.id}}" checked="checked" value='N'>N
+                                {% else %}
+                                  <input type="radio" class='certification_radio' name="{{status.id}}" value='N'>N
+                                {% endif %}
+                              </label>
+                            </div>
+                            <div class="radio-inline">
+                              <label>
+                                {% if status.status == 'NA' %}
+                                  <input type="radio" class='certification_radio' name="{{status.id}}" checked="checked" value='NA'>N/A
+                                {% else %}
+                                  <input type="radio" class='certification_radio' name="{{status.id}}" value='NA'>N/A
+                                {% endif %}
+                              </label>
+                            </div>
+                            <!--<div>
+                              <label>Start Date</label>
+                              {% if status.start_date %}
+                                <input type="text" class="date-picker form-control col-md-7 col-xs-12" required="required" name={{edit_client_form.date_of_birth.html_name}} value='{{edit_client_form.date_of_birth.value}}'>
+                              {% else %}
+
+                              {% endif %}
+                            </div>-->
+                          </div>
+                        </div>
+
+                        {% endfor %}
+                        <div class="ln_solid"></div>
+                        <!--<div class="form-group">
+                          <div class="col-md-9 col-sm-9 col-xs-12">
+                            <button type="submit" class="btn btn-success">Submit</button>
+                          </div>
+                        </div>-->
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+
+              {% for category, criterias in transfer_map.items %}
+                <div class="row">
+                  <div class="x_panel">
+                    <div class="x_title">
+                      <h2>{{category.category}}<small></small></h2>
+                      <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                      </ul>
+                      <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                      <br />
+
+                        {% for criteria, status in criterias.items %}
+
+                        <div class = "row">
+                          <div class="form-group">
+                            <label class="col-md-6 col-sm-6 col-xs-12">{{criteria.criteria}}
+                              <br>
+                            </label>
+                            <div class="radio-inline">
+
+                              <label>
+
+                                {% if status.experience == 1 %}
+                                  <input type="radio" class="transfer_radio" name="{{status.id}}" checked="checked" value=1>Minimal or no Experience
+                                {% else %}
+                                  <input type="radio" class="transfer_radio" name="{{status.id}}" value='1'>Minimal or no Experience
+                                {% endif %}
+                              </label>
+                            </div>
+                            <div class="radio-inline">
+                              <label>
+                                {% if status.experience == 2 %}
+                                  <input type="radio" class="transfer_radio" name="{{status.id}}" checked="checked" value=2>Some Experience
+                                {% else %}
+                                  <input type="radio" class="transfer_radio" name="{{status.id}}" value='2'>Some Experience
+                                {% endif %}
+                              </label>
+                            </div>
+                            <div class="radio-inline">
+                              <label>
+                                {% if status.experience == 3 %}
+                                  <input type="radio" class="transfer_radio" name="{{status.id}}" checked="checked" value=3>Proficient
+                                {% else %}
+                                  <input type="radio" class="transfer_radio" name="{{status.id}}" value='3'>Proficient
                                 {% endif %}
                               </label>
                             </div>
@@ -1247,6 +1383,88 @@
 {% endblock %}
 
 {% block scripts %}
+<!--get cookie -->
+  <script>
+  function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+  }
+</script>
+<!-- end -->
+
+<!-- Post criteria radio -->
+  <script type="text/javascript">
+      $(document).ready(function(){
+        var csrftoken = getCookie('csrftoken');
+        $('input[class=criteria_radio]:radio').change(function(){
+          $.ajax({
+            url: 'post_criteria',
+            beforeSend: function(jqXHR, settings){
+              jqXHR.setRequestHeader("x-csrftoken",csrftoken);
+            },
+            type: 'POST',
+            data: {status_id: this.name, status: this.value}
+          })
+          console.log('entered');
+        });
+      });
+
+  </script>
+<!-- end -->
+
+<!-- Post Certification radio -->
+  <script type="text/javascript">
+      $(document).ready(function(){
+        var csrftoken = getCookie('csrftoken');
+        $('input[class=certification_radio]:radio').change(function(){
+          $.ajax({
+            url: 'post_certification',
+            beforeSend: function(jqXHR, settings){
+              jqXHR.setRequestHeader("x-csrftoken",csrftoken);
+            },
+            type: 'POST',
+            data: {status_id: this.name, status: this.value}
+          })
+          console.log('entered');
+        });
+      });
+
+  </script>
+<!-- end -->
+
+<!-- Post Transfer radio -->
+  <script type="text/javascript">
+      $(document).ready(function(){
+        var csrftoken = getCookie('csrftoken');
+        $('input[class=transfer_radio]:radio').change(function(){
+          $.ajax({
+            url: 'post_transfer',
+            beforeSend: function(jqXHR, settings){
+              jqXHR.setRequestHeader("x-csrftoken",csrftoken);
+            },
+            type: 'POST',
+            data: {experience_id: this.name, experience: this.value}
+          })
+          console.log('entered');
+        });
+      });
+  </script>
+<!-- end -->
+
+
+
+
 <!-- get family details from table -->
 <script type="text/javascript">
   $(".family_table_details").click(function(){
@@ -1285,6 +1503,7 @@
   });
 </script>
 <!-- end -->
+<!-- Post Family details -->
 <script type="text/javascript">
   var post_family_form = $('#post_family_details');
   post_family_form.submit(function(){

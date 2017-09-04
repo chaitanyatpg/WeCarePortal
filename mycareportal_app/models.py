@@ -365,3 +365,57 @@ class ClientCriteriaMap(models.Model):
     client_match_category = models.ForeignKey(ClientMatchCategory)
     client_match_criteria = models.ForeignKey(ClientMatchCriteria)
     status = models.CharField(max_length=2)
+
+class CaregiverCriteriaMap(models.Model):
+
+    company = models.ForeignKey(Company)
+    caregiver = models.ForeignKey(Caregiver)
+    client_match_category = models.ForeignKey(ClientMatchCategory)
+    client_match_criteria = models.ForeignKey(ClientMatchCriteria)
+    status = models.CharField(max_length=2)
+
+class ClientCertificationMap(models.Model):
+
+    company = models.ForeignKey(Company)
+    client = models.ForeignKey(Client)
+    client_match_category = models.ForeignKey(ClientMatchCategory)
+    client_match_criteria = models.ForeignKey(ClientMatchCriteria)
+    status = models.CharField(max_length=2)
+
+class CaregiverCertificationMap(models.Model):
+
+    company = models.ForeignKey(Company)
+    caregiver = models.ForeignKey(Caregiver)
+    client_match_category = models.ForeignKey(ClientMatchCategory)
+    client_match_criteria = models.ForeignKey(ClientMatchCriteria)
+    start_date = models.DateField(null=True)
+    end_date = models.DateField(null=True)
+    status = models.CharField(max_length=2)
+
+class ClientTransferMap(models.Model):
+
+    EXPERIENCE_CHOICES = (
+    (1, 1),
+    (2, 2),
+    (3, 3)
+    )
+
+    company = models.ForeignKey(Company)
+    client = models.ForeignKey(Client)
+    client_match_category = models.ForeignKey(ClientMatchCategory)
+    client_match_criteria = models.ForeignKey(ClientMatchCriteria)
+    experience = models.IntegerField(EXPERIENCE_CHOICES,null=True)
+
+class CaregiverTransferMap(models.Model):
+
+    EXPERIENCE_CHOICES = (
+    (1, 1),
+    (2, 2),
+    (3, 3)
+    )
+
+    company = models.ForeignKey(Company)
+    caregiver = models.ForeignKey(Caregiver)
+    client_match_category = models.ForeignKey(ClientMatchCategory)
+    client_match_criteria = models.ForeignKey(ClientMatchCriteria)
+    experience = models.IntegerField(EXPERIENCE_CHOICES,null=True)

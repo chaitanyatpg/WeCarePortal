@@ -223,8 +223,14 @@ class EditClient(LoginRequiredMixin, View):
             client_match_categories = ClientMatchCategory.objects.all()
             client_match_criteria = ClientMatchCriteria.objects.filter(is_default=True) | ClientMatchCriteria.objects.filter(company=current_company)
             client_criteria_map = ClientCriteriaMap.objects.filter(company=current_company,client=client)
+            client_certification_map = ClientCertificationMap.objects.filter(company=current_company,client=client)
+            client_transfer_map = ClientTransferMap.objects.filter(company=current_company,client=client)
             criteria_map = self.make_criteria_map(client_match_categories,client_match_criteria,client_criteria_map,current_company,client)
+            certification_map = self.make_certification_map(client_match_categories,client_match_criteria,client_certification_map,current_company,client)
+            transfer_map = self.make_transfer_map(client_match_categories,client_match_criteria,client_transfer_map,current_company,client)
             context['criteria_map'] = criteria_map
+            context['certification_map'] = certification_map
+            context['transfer_map'] = transfer_map
         return render(request,'production/edit_client.html', context)
 
     def post(self, request):
@@ -289,13 +295,40 @@ class EditClient(LoginRequiredMixin, View):
     def make_criteria_map(self, client_match_categories,client_match_criteria,client_criteria_map,company,client):
         criteria_map = {}
         for category in client_match_categories:
-            criteria_map[category] = {}
-            for criteria in client_match_criteria:
-                if criteria.client_match_category == category:
-                    (criteria_status, created) = client_criteria_map.get_or_create(company=company,client=client,
-                                                    client_match_category=category,client_match_criteria=criteria)
-                    criteria_map[category][criteria] = criteria_status
-                    criteria_status.save()
+            if category.category in ['General', 'Pets']:
+                criteria_map[category] = {}
+                for criteria in client_match_criteria:
+                    if criteria.client_match_category == category:
+                        (criteria_status, created) = client_criteria_map.get_or_create(company=company,client=client,
+                                                        client_match_category=category,client_match_criteria=criteria)
+                        criteria_map[category][criteria] = criteria_status
+                        criteria_status.save()
+        return criteria_map
+
+    def make_certification_map(self, client_match_categories,client_match_criteria,client_certification_map,company,client):
+        criteria_map = {}
+        for category in client_match_categories:
+            if category.category in ['Certifications']:
+                criteria_map[category] = {}
+                for criteria in client_match_criteria:
+                    if criteria.client_match_category == category:
+                        (criteria_status, created) = client_certification_map.get_or_create(company=company,client=client,
+                                                        client_match_category=category,client_match_criteria=criteria)
+                        criteria_map[category][criteria] = criteria_status
+                        criteria_status.save()
+        return criteria_map
+
+    def make_transfer_map(self, client_match_categories,client_match_criteria,client_transfer_map,company,client):
+        criteria_map = {}
+        for category in client_match_categories:
+            if category.category in ['Transfers']:
+                criteria_map[category] = {}
+                for criteria in client_match_criteria:
+                    if criteria.client_match_category == category:
+                        (criteria_status, created) = client_transfer_map.get_or_create(company=company,client=client,
+                                                        client_match_category=category,client_match_criteria=criteria)
+                        criteria_map[category][criteria] = criteria_status
+                        criteria_status.save()
         return criteria_map
 
 class AssignTasksChooseClient(LoginRequiredMixin, View):
@@ -1521,3 +1554,45 @@ def get_sub_categories(request):
 @login_required
 def find_caregiver(request):
     return render(request, 'production/CareFinder.html')
+
+@login_required
+def post_criteria(request):
+
+    if request.method == "POST":
+        company = request.user.company;
+        status_id = request.POST['status_id']
+        status = request.POST['status']
+        #client_id = request.POST['client_id']
+        #client = Client.objects.get(company=company,id=client_id)
+        criteria_map = ClientCriteriaMap.objects.get(company=company,id=status_id)
+        criteria_map.status = status
+        criteria_map.save()
+    return HttpResponse("Changed Status")
+
+@login_required
+def post_certification(request):
+
+    if request.method == "POST":
+        company = request.user.company;
+        status_id = request.POST['status_id']
+        status = request.POST['status']
+        #client_id = request.POST['client_id']
+        #client = Client.objects.get(company=company,id=client_id)
+        certification_map = ClientCertificationMap.objects.get(company=company,id=status_id)
+        certification_map.status = status
+        certification_map.save()
+    return HttpResponse("Changed Status")
+
+@login_required
+def post_transfer(request):
+
+    if request.method == "POST":
+        company = request.user.company;
+        experience_id = request.POST['experience_id']
+        experience = request.POST['experience']
+        #client_id = request.POST['client_id']
+        #client = Client.objects.get(company=company,id=client_id)
+        transfer_map = ClientTransferMap.objects.get(company=company,id=experience_id)
+        transfer_map.experience = experience
+        transfer_map.save()
+    return HttpResponse("Changed Status")

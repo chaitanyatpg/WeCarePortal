@@ -178,5 +178,23 @@
 			"criteria": "OK with Dogs",
 			"is_default": "True"
 		}
+	},
+	{
+		"model": "mycareportal_app.clientmatchcriteria",
+		"pk": 21,
+		"fields": {
+			"client_match_category": "4",
+			"criteria": "Hoyer Lift Experience",
+			"is_default": "True"
+		}
+	},
+	{
+		"model": "mycareportal_app.clientmatchcriteria",
+		"pk": 22,
+		"fields": {
+			"client_match_category": "4",
+			"criteria": "Gait Belt Experience",
+			"is_default": "True"
+		}
 	}
 ]
