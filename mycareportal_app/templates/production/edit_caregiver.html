@@ -659,7 +659,7 @@
         var csrftoken = getCookie('csrftoken');
         $('input[class=criteria_radio]:radio').change(function(){
           $.ajax({
-            url: 'post_criteria_caregiver',
+            url: 'caregiver_post_criteria',
             beforeSend: function(jqXHR, settings){
               jqXHR.setRequestHeader("x-csrftoken",csrftoken);
             },
@@ -679,7 +679,7 @@
         var csrftoken = getCookie('csrftoken');
         $('input[class=certification_radio]:radio').change(function(){
           $.ajax({
-            url: 'post_certification_caregiver',
+            url: 'caregiver_post_certification',
             beforeSend: function(jqXHR, settings){
               jqXHR.setRequestHeader("x-csrftoken",csrftoken);
             },
@@ -699,7 +699,7 @@
         var csrftoken = getCookie('csrftoken');
         $('input[class=transfer_radio]:radio').change(function(){
           $.ajax({
-            url: 'post_transfer_caregiver',
+            url: 'caregiver_post_transfer',
             beforeSend: function(jqXHR, settings){
               jqXHR.setRequestHeader("x-csrftoken",csrftoken);
             },

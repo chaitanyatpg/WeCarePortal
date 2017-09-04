@@ -403,8 +403,6 @@ class ChooseCaregiver(LoginRequiredMixin, View):
     def get(self, request):
         context = {}
         current_company = request.user.company
-        all_caregivers = Caregiver.objects.filter(company=current_company).order_by('last_name')
-        context['all_caregivers'] = all_caregivers
         find_caregiver_form = FindCaregiverForm(request.GET)
         #context['find_caregiver_form'] = find_caregiver_form
         if find_caregiver_form.is_valid():
@@ -416,6 +414,9 @@ class ChooseCaregiver(LoginRequiredMixin, View):
             #Find which caregivers are already assigned
             assigned_caregivers = client.caregiver.all()
             context["assigned_caregivers"] = assigned_caregivers
+            all_caregivers = Caregiver.objects.filter(company=current_company).order_by('last_name')
+            all_caregivers = self.match_client_caregiver_criteria(all_caregivers,client,current_company)
+            context['all_caregivers'] = all_caregivers
         return render(request,'production/caregiver_tables.html',context)
 
     @transaction.atomic
@@ -461,22 +462,22 @@ class ChooseCaregiver(LoginRequiredMixin, View):
                 caregiver_schedule.save()
             assigned_client.save()
             #GET - will replace with redirect later
-            all_caregivers = Caregiver.objects.filter(company=current_company).order_by('last_name')
-            context['all_caregivers'] = all_caregivers
-            context["client_email"] = client_email
-            client = Client.objects.get(company=current_company,email_address=client_email)
-            context["client_details"] = client
-            context["assign_caregiver_form"] = AssignCaregiverForm()
-            #Find which caregivers are already assigned
-            assigned_caregivers = client.caregiver.all()
-            context["assigned_caregivers"] = assigned_caregivers
-            if is_unassign == "True":
-                messages.success(request, "Unassigned caregiver {0} {1} from client {2} {3}".format(assigned_caregiver.first_name, assigned_caregiver.last_name, assigned_client.first_name, assigned_client.last_name))
-            else:
-                messages.success(request, "Assigned caregiver {0} {1} to client {2} {3}".format(assigned_caregiver.first_name, assigned_caregiver.last_name, assigned_client.first_name, assigned_client.last_name))
-            return render(request,'production/caregiver_tables.html',context)
+            return HttpResponseRedirect(reverse('choose_caregiver') + "?client_email=" + client_email)
         else:
             return redirect('find_caregiver')
+
+    def match_client_caregiver_criteria(self, all_caregivers, client, company):
+        client_criteria = ClientCriteriaMap.objects.filter(company=company,client=client)
+        client_certifications = ClientCertificationMap.objects.filter(company=company,client=client)
+        client_transfers = ClientTransferMap.objects.filter(company=company,client=client)
+        matching_caregivers = []
+        for caregiver in all_caregivers:
+            client_criteria = CaregiverCriteriaMap.objects.filter(company=company,caregiver=caregiver)
+            client_certifications = CaregiverCertificationMap.objects.filter(company=company,caregiver=caregiver)
+            client_transfers = CaregiverTransferMap.objects.filter(company=company,caregiver=caregiver)
+            
+        return all_caregivers
+
 
 class AssignTasks(LoginRequiredMixin, View):
 

@@ -333,7 +333,7 @@ def get_caregiver_with_email(request):
         return HttpResponse(json.dumps(caregiver_data), content_type="application/json")
 
 @login_required
-def post_criteria_caregiver(request):
+def caregiver_post_criteria(request):
 
     if request.method == "POST":
         company = request.user.company;
@@ -347,9 +347,10 @@ def post_criteria_caregiver(request):
     return HttpResponse("Changed Status")
 
 @login_required
-def post_certification_caregiver(request):
+def caregiver_post_certification(request):
 
     if request.method == "POST":
+        print("ASDASDASDASD")
         company = request.user.company;
         status_id = request.POST['status_id']
         status = request.POST['status']
@@ -361,7 +362,7 @@ def post_certification_caregiver(request):
     return HttpResponse("Changed Status")
 
 @login_required
-def post_transfer_caregiver(request):
+def caregiver_post_transfer(request):
 
     if request.method == "POST":
         company = request.user.company;
