@@ -252,7 +252,7 @@
                   <form method="post" action="{% url 'choose_caregiver' %}">
                     {% csrf_token %}
                     <div class="modal-body">
-                      
+                      Are you sure you want to unassign this caregiver?
 
                     </div>
                     <div class="modal-footer">
@@ -260,7 +260,7 @@
                       <input type="hidden" name="{{assign_caregiver_form.client_email.html_name}}" value={{client_email}}>
                       <input type="hidden" name="{{assign_caregiver_form.is_unassign.html_name}}" value="True">
                       <button type="button" class="btn btn-danger antoclose2" data-dismiss="modal">Close</button>
-                      <button class="btn btn-success">Add new shifts</a>
+                      <!--<button class="btn btn-success">Add new shifts</a>-->
                       <button class="btn btn-success">Unassign</a>
                       <!--<button type="button" class="btn btn-success edit_calendar_submit">Save changes</button>-->
                     </div>
@@ -318,7 +318,9 @@
     <!-- end Assign Caregiver modal -->
     <script>
       $(document).ready(function(){
-        $('#datatable').DataTable();
+        $('#datatable').DataTable({
+          "aaSorting": []
+        });
       });
     </script>
 
@@ -439,7 +441,7 @@
     <!-- /Datatables -->
 
     <!-- FullCalendar -->
-    <script>
+    <!--<script>
           $(window).load(function() {
             var date = new Date(),
                 d = date.getDate(),
@@ -671,6 +673,6 @@
               }]*/
             });
           });
-        </script>
+        </script>-->
     <!-- /FullCalendar -->
 {% endblock %}

@@ -467,17 +467,69 @@ class ChooseCaregiver(LoginRequiredMixin, View):
             return redirect('find_caregiver')
 
     def match_client_caregiver_criteria(self, all_caregivers, client, company):
-        client_criteria = ClientCriteriaMap.objects.filter(company=company,client=client)
-        client_certifications = ClientCertificationMap.objects.filter(company=company,client=client)
+        client_criteria = ClientCriteriaMap.objects.filter(company=company,client=client,status__in=['Y','N'])
+        client_certifications = ClientCertificationMap.objects.filter(company=company,client=client,status__in=['Y','N'])
         client_transfers = ClientTransferMap.objects.filter(company=company,client=client)
         matching_caregivers = []
         for caregiver in all_caregivers:
-            client_criteria = CaregiverCriteriaMap.objects.filter(company=company,caregiver=caregiver)
-            client_certifications = CaregiverCertificationMap.objects.filter(company=company,caregiver=caregiver)
-            client_transfers = CaregiverTransferMap.objects.filter(company=company,caregiver=caregiver)
-            
-        return all_caregivers
+            caregiver_criteria = CaregiverCriteriaMap.objects.filter(company=company,caregiver=caregiver)
+            caregiver_certifications = CaregiverCertificationMap.objects.filter(company=company,caregiver=caregiver)
+            caregiver_transfers = CaregiverTransferMap.objects.filter(company=company,caregiver=caregiver)
+            (criteria_score, criteria_does_match) = self.criteria_match(client_criteria,caregiver_criteria)
+            (certification_score, certification_does_match) = self.criteria_match(client_certifications,caregiver_certifications)
+            (transfer_score, transfer_does_match) = self.transfer_match(client_transfers, caregiver_transfers)
+            if (criteria_does_match and certification_does_match and transfer_does_match):
+                matching_caregivers.append((caregiver,criteria_score + certification_score + transfer_score))
+        matching_caregivers.sort(key=lambda x: x[1], reverse=True)
+        matching_caregivers = map(lambda x: x[0], matching_caregivers)
+        return matching_caregivers
 
+    def criteria_match(self, client_criteria_map, caregiver_criteria_map):
+        score = 0
+        does_match = True
+        print(len(client_criteria_map))
+        print(len(caregiver_criteria_map))
+        for criteria in client_criteria_map:
+            client_match_criteria = criteria.client_match_criteria
+            caregiver_criteria = None
+            for i in caregiver_criteria_map:
+                if i.client_match_criteria == client_match_criteria:
+                    caregiver_criteria = i
+            if caregiver_criteria:
+                if (criteria.status == 'N'):
+                    if (caregiver_criteria.status == 'Y'):
+                        score += 1
+                    else:
+                        does_match = False
+                elif (criteria.status == 'Y'):
+                    if (caregiver_criteria.status == 'Y'):
+                        score += 1
+            else:
+                if criteria.status == 'N':
+                    does_match = False
+        print(score,does_match)
+        return(score,does_match)
+
+    def transfer_match(self, client_transfer_map, caregiver_transfer_map):
+        score = 0
+        does_match = True
+        for criteria in client_transfer_map:
+            client_match_criteria = criteria.client_match_criteria
+            client_experience = criteria.experience
+            caregiver_criteria = None
+            for i in caregiver_transfer_map:
+                if i.client_match_criteria == client_match_criteria:
+                    caregiver_criteria = i
+            if caregiver_criteria:
+                caregiver_experience = caregiver_criteria.experience
+                if caregiver_experience >= client_experience:
+                    score += 1
+                else:
+                    does_match = False
+            else:
+                if client_experience > 1:
+                    does_match = False
+        return(score,does_match)
 
 class AssignTasks(LoginRequiredMixin, View):
 
