@@ -1,5 +1,6 @@
 {% extends "production/base.html" %}
 {% block title %} Edit Client {% endblock %}
+{% load mycareportal_app_extras%}
 {% block headlibs %}
 {% load static %}
 <!-- iCheck -->
@@ -356,27 +357,27 @@
                               <label>
 
                                 {% if status.status == 'Y' %}
-                                  <input type="radio" class="criteria_radio" name="{{status.id}}" checked="checked" value='Y'>W
+                                  <input type="radio" class="criteria_radio" name="{{status.id|addstr:'_'|addstr:'criteria'}}" checked="checked" value='Y'>W
                                 {% else %}
-                                  <input type="radio" class="criteria_radio" name="{{status.id}}" value='Y'>W
+                                  <input type="radio" class="criteria_radio" name="{{status.id|addstr:'_'|addstr:'criteria'}}" value='Y'>W
                                 {% endif %}
                               </label>
                             </div>
                             <div class="radio-inline">
                               <label>
                                 {% if status.status == 'N' %}
-                                  <input type="radio" class="criteria_radio" name="{{status.id}}" checked="checked" value='N'>N
+                                  <input type="radio" class="criteria_radio" name="{{status.id|addstr:'_'|addstr:'criteria'}}" checked="checked" value='N'>N
                                 {% else %}
-                                  <input type="radio" class="criteria_radio" name="{{status.id}}" value='N'>N
+                                  <input type="radio" class="criteria_radio" name="{{status.id|addstr:'_'|addstr:'criteria'}}" value='N'>N
                                 {% endif %}
                               </label>
                             </div>
                             <div class="radio-inline">
                               <label>
                                 {% if status.status == 'NA' %}
-                                  <input type="radio" class="criteria_radio" name="{{status.id}}" checked="checked" value='NA'>N/A
+                                  <input type="radio" class="criteria_radio" name="{{status.id|addstr:'_'|addstr:'criteria'}}" checked="checked" value='NA'>N/A
                                 {% else %}
-                                  <input type="radio" class="criteria_radio" name="{{status.id}}" value='NA'>N/A
+                                  <input type="radio" class="criteria_radio" name="{{status.id|addstr:'_'|addstr:'criteria'}}" value='NA'>N/A
                                 {% endif %}
                               </label>
                             </div>
@@ -419,27 +420,27 @@
                             <div class="radio-inline">
                               <label>
                                 {% if status.status == 'Y' %}
-                                  <input type="radio" class='certification_radio' name="{{status.id}}" checked="checked" value='Y'>W
+                                  <input type="radio" class='certification_radio' name="{{status.id|addstr:'_'|addstr:'certification'}}" checked="checked" value='Y'>W
                                 {% else %}
-                                  <input type="radio" class='certification_radio' name="{{status.id}}" value='Y'>W
+                                  <input type="radio" class='certification_radio' name="{{status.id|addstr:'_'|addstr:'certification'}}" value='Y'>W
                                 {% endif %}
                               </label>
                             </div>
                             <div class="radio-inline">
                               <label>
                                 {% if status.status == 'N' %}
-                                  <input type="radio" class='certification_radio' name="{{status.id}}" checked="checked" value='N'>N
+                                  <input type="radio" class='certification_radio' name="{{status.id|addstr:'_'|addstr:'certification'}}" checked="checked" value='N'>N
                                 {% else %}
-                                  <input type="radio" class='certification_radio' name="{{status.id}}" value='N'>N
+                                  <input type="radio" class='certification_radio' name="{{status.id|addstr:'_'|addstr:'certification'}}" value='N'>N
                                 {% endif %}
                               </label>
                             </div>
                             <div class="radio-inline">
                               <label>
                                 {% if status.status == 'NA' %}
-                                  <input type="radio" class='certification_radio' name="{{status.id}}" checked="checked" value='NA'>N/A
+                                  <input type="radio" class='certification_radio' name="{{status.id|addstr:'_'|addstr:'certification'}}" checked="checked" value='NA'>N/A
                                 {% else %}
-                                  <input type="radio" class='certification_radio' name="{{status.id}}" value='NA'>N/A
+                                  <input type="radio" class='certification_radio' name="{{status.id|addstr:'_'|addstr:'certification'}}" value='NA'>N/A
                                 {% endif %}
                               </label>
                             </div>
@@ -492,27 +493,27 @@
                               <label>
 
                                 {% if status.experience == 1 %}
-                                  <input type="radio" class="transfer_radio" name="{{status.id}}" checked="checked" value=1>Minimal or no Experience
+                                  <input type="radio" class="transfer_radio" name="{{status.id|addstr:'_'|addstr:'transfer'}}" checked="checked" value=1>Minimal or no Experience
                                 {% else %}
-                                  <input type="radio" class="transfer_radio" name="{{status.id}}" value='1'>Minimal or no Experience
+                                  <input type="radio" class="transfer_radio" name="{{status.id|addstr:'_'|addstr:'transfer'}}" value='1'>Minimal or no Experience
                                 {% endif %}
                               </label>
                             </div>
                             <div class="radio-inline">
                               <label>
                                 {% if status.experience == 2 %}
-                                  <input type="radio" class="transfer_radio" name="{{status.id}}" checked="checked" value=2>Some Experience
+                                  <input type="radio" class="transfer_radio" name="{{status.id|addstr:'_'|addstr:'transfer'}}" checked="checked" value=2>Some Experience
                                 {% else %}
-                                  <input type="radio" class="transfer_radio" name="{{status.id}}" value='2'>Some Experience
+                                  <input type="radio" class="transfer_radio" name="{{status.id|addstr:'_'|addstr:'transfer'}}" value='2'>Some Experience
                                 {% endif %}
                               </label>
                             </div>
                             <div class="radio-inline">
                               <label>
                                 {% if status.experience == 3 %}
-                                  <input type="radio" class="transfer_radio" name="{{status.id}}" checked="checked" value=3>Proficient
+                                  <input type="radio" class="transfer_radio" name="{{status.id|addstr:'_'|addstr:'transfer'}}" checked="checked" value=3>Proficient
                                 {% else %}
-                                  <input type="radio" class="transfer_radio" name="{{status.id}}" value='3'>Proficient
+                                  <input type="radio" class="transfer_radio" name="{{status.id|addstr:'_'|addstr:'transfer'}}" value='3'>Proficient
                                 {% endif %}
                               </label>
                             </div>

@@ -1614,6 +1614,7 @@ def post_criteria(request):
     if request.method == "POST":
         company = request.user.company;
         status_id = request.POST['status_id']
+        status_id = status_id.split('_')[0]
         status = request.POST['status']
         #client_id = request.POST['client_id']
         #client = Client.objects.get(company=company,id=client_id)
@@ -1628,6 +1629,7 @@ def post_certification(request):
     if request.method == "POST":
         company = request.user.company;
         status_id = request.POST['status_id']
+        status_id = status_id.split('_')[0]
         status = request.POST['status']
         #client_id = request.POST['client_id']
         #client = Client.objects.get(company=company,id=client_id)
@@ -1642,6 +1644,7 @@ def post_transfer(request):
     if request.method == "POST":
         company = request.user.company;
         experience_id = request.POST['experience_id']
+        experience_id = experience_id.split('_')[0]
         experience = request.POST['experience']
         #client_id = request.POST['client_id']
         #client = Client.objects.get(company=company,id=client_id)
