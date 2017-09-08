@@ -62,6 +62,9 @@ class ProviderUser(models.Model):
     def __unicode__(self):
         return self.user.username
 
+def get_caregiver_profile_picture_upload_path(instance, filename):
+    return "company_{0}/caregiver/caregiver_{1}/profile_pictures/{2}".format(instance.company.company_id,instance.id,filename)
+
 class Caregiver(models.Model):
 
     company = models.ForeignKey(Company)
@@ -81,7 +84,7 @@ class Caregiver(models.Model):
     ssn = models.CharField(max_length=20)
     referrer = models.CharField(max_length=100,blank=True)
     rating = models.IntegerField(default=0)
-    profile_picture = models.ImageField(upload_to="pictures/profile_pictures")
+    profile_picture = models.ImageField(upload_to=get_caregiver_profile_picture_upload_path)
     #add location
     #add tags
 
@@ -106,6 +109,9 @@ class MoveManager(models.Model):
     def __unicode__(self):
         return self.user.username
 
+def get_family_profile_picture_upload_path(instance, filename):
+    return "company_{0}/family/family_{1}/profile_pictures/{2}".format(instance.company.company_id,instance.id,filename)
+
 class FamilyContact(models.Model):
 
     company = models.ForeignKey(Company)
@@ -121,7 +127,7 @@ class FamilyContact(models.Model):
     zip_code = models.CharField(max_length=10)
     power_of_attorney = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    profile_picture = models.ImageField(upload_to="pictures/profile_pictures")
+    profile_picture = models.ImageField(upload_to=get_family_profile_picture_upload_path)
 
 class Provider(models.Model):
 
@@ -167,6 +173,9 @@ class Payer(models.Model):
     zip_code = models.CharField(max_length=10, blank=True)
     is_active = models.BooleanField(default=True)
 
+def get_client_profile_picture_upload_path(instance, filename):
+    return "company_{0}/client/client_{1}/profile_pictures/{2}".format(instance.company.company_id,instance.id,filename)
+
 class Client(models.Model):
 
     company = models.ForeignKey(Company)
@@ -183,7 +192,7 @@ class Client(models.Model):
     state = models.CharField(max_length=2)
     zip_code = models.CharField(max_length=10)
     time_zone = models.CharField(max_length=50)
-    profile_picture = models.ImageField(upload_to="pictures/profile_pictures")
+    profile_picture = models.ImageField(upload_to=get_client_profile_picture_upload_path)
 
     caregiver = models.ManyToManyField(Caregiver, blank=True)
     family_contacts = models.ManyToManyField(FamilyContact, blank=True)
@@ -253,13 +262,19 @@ class TaskComment(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     comment = models.CharField(max_length=500)
 
+def get_task_attachment_upload_path(instance, filename):
+    return "company_{0}/client/client_{1}/tasks/taskheader_{2}/{3}".format(instance.company.company_id,
+                                                        instance.client.id,
+                                                        instance.task_schedule.task_header.id,
+                                                        filename)
+
 class TaskAttachment(models.Model):
 
     company = models.ForeignKey(Company)
     client = models.ForeignKey(Client)
     user = models.ForeignKey(User)
     task_schedule = models.ForeignKey(TaskSchedule)
-    attachment = models.FileField(upload_to="files/tasks")
+    attachment = models.FileField(upload_to=get_task_attachment_upload_path)
     created = models.DateTimeField(auto_now_add=True)
 
 class TaskLink(models.Model):

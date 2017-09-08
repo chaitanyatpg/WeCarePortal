@@ -121,8 +121,10 @@ class AddClient(LoginRequiredMixin, View):
                                     city = city,
                                     state = state,
                                     zip_code = zip_code,
-                                    time_zone = time_zone,
-                                    profile_picture = profile_picture)
+                                    time_zone = time_zone
+                                    )
+                new_client.save()
+                new_client.profile_picture = profile_picture
                 new_client.save()
                 context['client_success_msg'] = "Client successfully added. Add additional Details Below."
                 #Redirect to edit screen
@@ -1128,6 +1130,7 @@ def post_family_details(request):
                                                   zip_code = zip_code,
                                                   power_of_attorney = power_of_attorney
                                                   )
+                        family_contact.save()
                         if profile_picture is not None:
                             family_contact.profile_picture = profile_picture
                         family_contact.save()

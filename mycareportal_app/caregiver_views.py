@@ -31,6 +31,7 @@ class AddCaregiver(LoginRequiredMixin, View):
         context['add_caregiver_form'] = CaregiverRegistrationForm()
         return render(request,'production/add_caregiver.html', context)
 
+    @transaction.atomic
     def post(self, request):
         context = {}
         add_caregiver_form = CaregiverRegistrationForm(request.POST,request.FILES)
@@ -79,8 +80,10 @@ class AddCaregiver(LoginRequiredMixin, View):
                                               email_address = email,
                                               ssn = ssn,
                                               referrer = referrer,
-                                              profile_picture = profile_picture,
                                               company=company)
+                    new_caregiver.save()
+                    #Save Image
+                    new_caregiver.profile_picture = profile_picture
                     new_caregiver.save()
                     #Add new user to UserRoles with CAREGIVER Role
                     new_role = UserRoles(company=company,
