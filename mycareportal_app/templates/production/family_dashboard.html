@@ -90,6 +90,11 @@
                             <ul class="messages">
                               {% for client, tasks in client_tasks.items %}
                                 <h3> {{client.first_name|addstr_space:client.last_name}} </h3>
+                                {% for active_caregiver in active_caregivers %}
+                                  {% if active_caregiver.client == client %}
+                                    <h5 style="color:#1ABB9C;">Caregiver {{active_caregiver.caregiver.first_name|addstr_space:active_caregiver.caregiver.last_name}} has arrived</h5>
+                                  {% endif %}
+                                {% endfor %}
                                 {% for task in tasks %}
                                 <li>
                                   <img class="avatar" src="{{client.profile_picture.url}}">
