@@ -262,10 +262,12 @@ class EditCompany(LoginRequiredMixin, View):
             'address': current_company.address,
             'city': current_company.city,
             'state': current_company.state,
-            'zip_code': current_company.zip_code
+            'zip_code': current_company.zip_code,
+            'time_zone': current_company.time_zone
         })
         context['company_edit_form'] = company_edit_form
         context['current_company'] = current_company
+        context['all_timezones'] = pytz.all_timezones
         return render(request, 'production/edit_company.html', context)
 
     def post(self, request):
@@ -281,10 +283,12 @@ class EditCompany(LoginRequiredMixin, View):
                 current_company.city = company_edit_form.cleaned_data['city']
                 current_company.state = company_edit_form.cleaned_data['state']
                 current_company.zip_code = company_edit_form.cleaned_data['zip_code']
+                current_company.time_zone = company_edit_form.cleaned_data['time_zone']
+                print(current_company.time_zone)
                 current_company.save()
                 messages.success(request, "Company details successfully edited")
             except IntegrityError as e:
-                messages.error(request, "Company with entered name already exists. Please enter a different name.")
+                messages.error(request, "Company with entered name or account number already exists. Please enter a different name or account number.")
         else:
             messages.error(request, "Error editing company details")
         return redirect('edit_company')

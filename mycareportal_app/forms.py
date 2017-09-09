@@ -59,6 +59,7 @@ class CompanyEditForm(forms.Form):
     state = forms.CharField(max_length=2,required=False)
     zip_code = forms.CharField(max_length=10,required=False)
     account_number = forms.IntegerField(required=False)
+    time_zone = forms.CharField(max_length=50, required=False)
 
     def clean(self):
 
