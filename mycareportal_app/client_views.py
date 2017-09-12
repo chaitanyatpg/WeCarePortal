@@ -524,12 +524,12 @@ class ChooseCaregiver(LoginRequiredMixin, View):
                     caregiver_criteria = i
             if caregiver_criteria:
                 caregiver_experience = caregiver_criteria.experience
-                if caregiver_experience >= client_experience:
+                if caregiver_experience != None and caregiver_experience >= client_experience:
                     score += 1
                 else:
                     does_match = False
             else:
-                if client_experience > 1:
+                if client_experience != None and client_experience > 1:
                     does_match = False
         return(score,does_match)
 
