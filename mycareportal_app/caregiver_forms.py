@@ -97,3 +97,18 @@ class UpdateTaskForm(forms.Form):
     def clean(self):
         cleaned_data = super(UpdateTaskForm, self).clean()
         return cleaned_data
+
+class ScheduleShiftForm(forms.Form):
+
+    caregiver_id = forms.IntegerField()
+    client_id = forms.IntegerField()
+    start_date = forms.DateField()
+    end_date = forms.DateField()
+    start_hour = forms.CharField(max_length=10)
+    start_minute = forms.CharField(max_length=10)
+    end_hour = forms.CharField(max_length=10)
+    end_minute = forms.CharField(max_length=10)
+
+    def clean(self):
+        cleaned_data = super(ScheduleShiftForm, self).clean()
+        return cleaned_data

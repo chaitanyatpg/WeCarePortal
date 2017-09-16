@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
+from django.core import serializers
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from mycareportal_app.models import *
@@ -546,6 +547,85 @@ class CaregiverDashboard(LoginRequiredMixin, View):
             if not(task[0].complete or task[0].cancelled):
                 return True
         return False
+
+class SelectShiftsChoose(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        company = request.user.company
+        context['all_caregivers'] = Caregiver.objects.filter(company=company).order_by('last_name')
+        context['find_caregiver_form'] = FindCaregiverForm()
+        return render(request, 'production/schedule_shifts_choose.html', context)
+
+class ScheduleShifts(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        current_company = request.user.company
+        find_caregiver_form = FindCaregiverForm(request.GET)
+        if find_caregiver_form.is_valid():
+            caregiver_email = find_caregiver_form.cleaned_data['caregiver_email']
+            caregiver = Caregiver.objects.get(company=current_company,email_address=caregiver_email)
+            clients = Client.objects.filter(company=current_company)
+            assigned_clients = []
+            for client in clients:
+                if caregiver in client.caregiver.all():
+                    assigned_clients.append(client)
+            context['caregiver'] = caregiver
+            context['assigned_clients'] = assigned_clients
+            context['schedule_shift_form'] = ScheduleShiftForm()
+            context['caregiver_shifts'] = CaregiverSchedule.objects.filter(company=current_company,caregiver=caregiver)
+            print(context['caregiver_shifts'])
+            return render(request, 'production/schedule_shifts.html', context)
+        else:
+            messages.success(request, "There was an error processing the previous request. Please contact a system administrator")
+            return redirect('select_shifts_choose')
+
+    def post(self, request, *args, **kwargs):
+        context = {}
+        current_company = request.user.company
+        schedule_shifts_form = ScheduleShiftForm(request.POST)
+        if schedule_shifts_form.is_valid():
+            caregiver_id = schedule_shifts_form.cleaned_data['caregiver_id']
+            client_id = schedule_shifts_form.cleaned_data['client_id']
+            start_date = schedule_shifts_form.cleaned_data['start_date']
+            end_date = schedule_shifts_form.cleaned_data['end_date']
+            start_hour = schedule_shifts_form.cleaned_data['start_hour']
+            start_minute = schedule_shifts_form.cleaned_data['start_minute']
+            end_hour = schedule_shifts_form.cleaned_data['end_hour']
+            end_minute = schedule_shifts_form.cleaned_data['end_minute']
+            assigned_caregiver = Caregiver.objects.get(company=current_company, id=caregiver_id)
+            assigned_client = Client.objects.get(company=current_company, id=client_id)
+            start_time = ""
+            end_time = ""
+            if start_hour != "" and start_minute != "":
+                start_time = "{0}:{1}".format(str(start_hour),str(start_minute))
+                start_time = datetime.datetime.strptime(start_time,'%H:%M').time()
+            if end_hour != "" and end_minute != "":
+                end_time = "{0}:{1}".format(str(end_hour),str(end_minute))
+                end_time = datetime.datetime.strptime(end_time,'%H:%M').time()
+            caregiver_schedule = CaregiverSchedule(company=current_company,
+                                                    caregiver = assigned_caregiver,
+                                                    client = assigned_client,
+                                                    start_date = start_date,
+                                                    end_date = end_date,
+                                                    start_time = start_time,
+                                                    end_time = end_time)
+            caregiver_schedule.save()
+        return HttpResponseRedirect(reverse('schedule_shifts') + "?caregiver_email=" + assigned_caregiver.email_address)
+
+@login_required
+def get_assigned_clients_with_caregiver_with_id(request):
+    company = request.user.company
+    caregiver_email = request.GET.get('email_data')
+    caregiver = Caregiver.objects.get(company=company, email_address=caregiver_email)
+    clients = Client.objects.filter(company=company)
+    assigned_clients = []
+    for client in clients:
+        if caregiver in client.caregiver.all():
+            assigned_clients.append(client)
+    assigned_clients = serializers.serialize('json',assigned_clients)
+    return HttpResponse(json.dumps(assigned_clients), content_type="application/json")
 
 @login_required
 def caregiver_dashboard(request):

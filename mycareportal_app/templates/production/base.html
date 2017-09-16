@@ -104,6 +104,9 @@
                     {%if module_dict.CAREGIVERPORTAL.CAREGIVEREDIT %}
                       <li><a href={% url 'edit_choose_caregiver' %}>Edit Caregiver </a></li>
                     {% endif %}
+                    {% if module_dict.CAREGIVERPORTAL.SCHEDULESHIFTS %}
+                      <li><a href={% url 'select_shifts_choose' %}>Schedule Shifts </a></li>
+                    {% endif %}
                     {% if module_dict.CAREGIVERPORTAL.CAREGIVERDASHBOARD %}
                       <li><a href={% url 'caregiver_dashboard' %}>Caregiver Dashboard </a></li>
                     {% endif %}
