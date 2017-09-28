@@ -14,7 +14,8 @@ import datetime
 import json
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+import pytz
+import django.utils.timezone as timezone
 from django.contrib import messages
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
@@ -62,6 +63,9 @@ class FamilyDashboard(LoginRequiredMixin, View):
         return render(request, 'production/family_dashboard.html', context)
 
     def get_client_tasks(self, client_data):
-        current_date = datetime.date.today()
+        client_timezone = pytz.timezone(client_data.time_zone)
+        #current_date = datetime.date.today()
+        current_date = (timezone.now().astimezone(client_timezone)).date()
+        timezone.activate(client_timezone)
         client_tasks = TaskSchedule.objects.filter(client=client_data,date=current_date)
         return client_tasks
