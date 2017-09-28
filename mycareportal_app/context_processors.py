@@ -61,6 +61,8 @@ def add_roles_to_context(request):
             #module_dict['MOVEMANAGEMENTPORTAL']['MOVEMANAGERDASHBOARD']=True
             #module_dict['MOVEMANAGEMENTPORTAL']['VIEWMOVEPROJECTS']=True
             #module_dict['MOVEMANAGEMENTPORTAL']['VIEWMOVEBIDS']=True
+            module_dict['REPORTING']['VIEWALLCLIENTS']=True
+            module_dict['REPORTING']['VIEWALLCAREGIVERS']=True
         #CAREGIVER PERMISSIONS
         if 'CAREGIVER' in user_roles:
             module_dict['CAREGIVERPORTAL']['CAREGIVERDASHBOARD']=True

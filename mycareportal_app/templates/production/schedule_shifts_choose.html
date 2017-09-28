@@ -163,7 +163,7 @@
             alert('error fetching caregiver data');
           }
         });
-        $.ajax({
+        /*$.ajax({
           type: "GET",
           url: '{% url "get_assigned_clients_with_caregiver_with_id" %}',
           data: { email_data: email },
@@ -175,7 +175,7 @@
           failure: function(client_data){
             alert('error fetching assigned clients');
           }
-        });
+        });*/
       });
     });
     </script>
