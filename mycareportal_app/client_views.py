@@ -430,12 +430,7 @@ class ChooseCaregiver(LoginRequiredMixin, View):
             caregiver_email = assign_caregiver_form.cleaned_data['caregiver_email']
             client_email = assign_caregiver_form.cleaned_data['client_email']
             is_unassign = assign_caregiver_form.cleaned_data['is_unassign']
-            start_date = assign_caregiver_form.cleaned_data['start_date']
-            end_date = assign_caregiver_form.cleaned_data['end_date']
-            start_hour = assign_caregiver_form.cleaned_data['start_hour']
-            start_minute = assign_caregiver_form.cleaned_data['start_minute']
-            end_hour = assign_caregiver_form.cleaned_data['end_hour']
-            end_minute = assign_caregiver_form.cleaned_data['end_minute']
+
             assigned_caregiver = Caregiver.objects.get(company=current_company, email_address=caregiver_email)
             assigned_client = Client.objects.get(company=current_company, email_address=client_email)
             if is_unassign == "True":
@@ -443,25 +438,6 @@ class ChooseCaregiver(LoginRequiredMixin, View):
                 caregiver_schedule = CaregiverSchedule.objects.filter(company=current_company,caregiver=assigned_caregiver,client=assigned_client).delete()
             else:
                 assigned_client.caregiver.add(assigned_caregiver)
-                start_time = ""
-                end_time = ""
-                if start_hour != "" and start_minute != "":
-                    start_time = "{0}:{1}".format(str(start_hour),str(start_minute))
-                    start_time = datetime.datetime.strptime(start_time,'%H:%M').time()
-                if end_hour != "" and end_minute != "":
-                    end_time = "{0}:{1}".format(str(end_hour),str(end_minute))
-                    end_time = datetime.datetime.strptime(end_time,'%H:%M').time()
-                print(start_time)
-                print(end_time)
-                caregiver_schedule = CaregiverSchedule(company=current_company,
-                                                        caregiver = assigned_caregiver,
-                                                        client = assigned_client,
-                                                        start_date = start_date,
-                                                        end_date = end_date,
-                                                        start_time = start_time,
-                                                        end_time = end_time)
-                print(caregiver_schedule)
-                caregiver_schedule.save()
             assigned_client.save()
             #GET - will replace with redirect later
             return HttpResponseRedirect(reverse('choose_caregiver') + "?client_email=" + client_email)

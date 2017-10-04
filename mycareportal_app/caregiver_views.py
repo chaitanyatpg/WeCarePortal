@@ -604,14 +604,19 @@ class ScheduleShifts(LoginRequiredMixin, View):
             if end_hour != "" and end_minute != "":
                 end_time = "{0}:{1}".format(str(end_hour),str(end_minute))
                 end_time = datetime.datetime.strptime(end_time,'%H:%M').time()
-            caregiver_schedule = CaregiverSchedule(company=current_company,
-                                                    caregiver = assigned_caregiver,
-                                                    client = assigned_client,
-                                                    start_date = start_date,
-                                                    end_date = end_date,
-                                                    start_time = start_time,
-                                                    end_time = end_time)
-            caregiver_schedule.save()
+            date_range_num = end_date - start_date
+            for i in range(date_range_num.days + 1):
+                new_date = (start_date + datetime.timedelta(days=i))
+                print(start_time)
+                print(end_time)
+                print(new_date)
+                caregiver_schedule = CaregiverSchedule(company=current_company,
+                                                        caregiver = assigned_caregiver,
+                                                        client = assigned_client,
+                                                        date = new_date,
+                                                        start_time = start_time,
+                                                        end_time = end_time)
+                caregiver_schedule.save()
         return HttpResponseRedirect(reverse('schedule_shifts') + "?caregiver_email=" + assigned_caregiver.email_address)
 
 @login_required

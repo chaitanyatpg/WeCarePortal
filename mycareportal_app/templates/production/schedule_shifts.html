@@ -780,8 +780,8 @@
                 {% for schedule_entry in caregiver_shifts %}
                 {
                   title: "{{ schedule_entry.client.first_name|addstr_space:schedule_entry.client.last_name }}",
-                  start: "{{ schedule_entry.start_date|date:'Y-m-d'|append_datetime:schedule_entry.start_time}}",
-                  end: "{{ schedule_entry.end_date|date:'Y-m-d'|append_datetime:schedule_entry.end_time}}",
+                  start: "{{ schedule_entry.date|date:'Y-m-d'|append_datetime:schedule_entry.start_time}}",
+                  end: "{{ schedule_entry.date|date:'Y-m-d'|append_datetime:schedule_entry.end_time}}",
                   id: "{{ schedule_entry.id }}"
                 },
                 {% endfor %}

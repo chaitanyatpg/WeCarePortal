@@ -230,12 +230,6 @@ class AssignCaregiverForm(forms.Form):
     caregiver_email = forms.CharField(max_length=100)
     client_email = forms.CharField(max_length=100)
     is_unassign = forms.CharField(initial="False", required=False)
-    start_date = forms.DateField(required = False)
-    end_date = forms.DateField(required = False)
-    start_hour = forms.CharField(max_length=10,required=False)
-    start_minute = forms.CharField(max_length=10,required=False)
-    end_hour = forms.CharField(max_length=10,required=False)
-    end_minute = forms.CharField(max_length=10,required=False)
 
     def clean(self):
         cleaned_data = super(AssignCaregiverForm, self).clean()

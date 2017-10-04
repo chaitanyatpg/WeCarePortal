@@ -360,8 +360,7 @@ class CaregiverSchedule(models.Model):
     company = models.ForeignKey(Company)
     caregiver = models.ForeignKey(Caregiver)
     client = models.ForeignKey(Client)
-    start_date = models.DateField()
-    end_date = models.DateField()
+    date = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
 
