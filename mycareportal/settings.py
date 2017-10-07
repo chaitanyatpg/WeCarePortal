@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 import dj_database_url
+import sendgrid as sendgrid_backend
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -44,6 +45,10 @@ AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 
 #SSL - comment out when running locally
 SECURE_SSL_REDIRECT = True
+
+#Email Settings (Sendgrid)
+EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+SENDGRID_API_KEY = "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"
 
 # Application definition
 

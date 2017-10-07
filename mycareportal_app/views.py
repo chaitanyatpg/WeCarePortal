@@ -19,6 +19,8 @@ import datetime
 import pytz
 import django.utils.timezone as timezone
 
+from django.core.mail import send_mail
+
 # Create your views here.
 
 @login_required
@@ -286,6 +288,7 @@ class EditCompany(LoginRequiredMixin, View):
                 current_company.time_zone = company_edit_form.cleaned_data['time_zone']
                 print(current_company.time_zone)
                 current_company.save()
+                #send_mail('Test sendgrid', 'Test message', 'info@wecareportal.com', ['dhruv.ranjan@gmail.com'], fail_silently=False)
                 messages.success(request, "Company details successfully edited")
             except IntegrityError as e:
                 messages.error(request, "Company with entered name or account number already exists. Please enter a different name or account number.")
