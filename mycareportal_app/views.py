@@ -222,16 +222,40 @@ class ViewActiveCaregivers(LoginRequiredMixin, View):
         current_company = request.user.company
         active_caregiver_timesheets = CaregiverTimeSheet.objects.filter(company=current_company, is_active=True)
         context['active_caregiver_timesheets'] = self.construct_timesheet_rows(active_caregiver_timesheets)
+        context['close_caregiver_session_form'] = CloseCaregiverSessionForm()
         return render(request, 'production/view_active_caregivers.html', context)
+
+    def post(self, request):
+        context = {}
+        current_company = request.user.company
+        close_caregiver_session_form = CloseCaregiverSessionForm(request.POST)
+        print("ENTERED THE MATRIX")
+        print(request.POST.get('caregiver_session_id'))
+        if close_caregiver_session_form.is_valid():
+            caregiver_session_id = close_caregiver_session_form.cleaned_data['caregiver_session_id']
+            self.close_caregiver_time_sheet_session(current_company, caregiver_session_id)
+        return redirect('view_active_caregivers')
 
     def construct_timesheet_rows(self, active_caregiver_timesheets):
         active_caregiver_timesheets = list(map(lambda x: {
                                                         "caregiver_name": "{0} {1}".format(x.caregiver.first_name,x.caregiver.last_name),
                                                         "client_name": "{0} {1}".format(x.client.first_name,x.client.last_name),
                                                         "clock_in_time": (x.clock_in_timestamp.astimezone(pytz.timezone(x.client_timezone))).replace(tzinfo=None),
-                                                        "time_worked": timezone.now() - x.clock_in_timestamp
+                                                        "time_worked": timezone.now() - x.clock_in_timestamp,
+                                                        "id": x.id
                                                     }, active_caregiver_timesheets))
         return active_caregiver_timesheets
+
+    def close_caregiver_time_sheet_session(self, company, caregiver_session_id):
+        print("ENDED SESSION")
+        current_time_sheet = CaregiverTimeSheet.objects.get(company=company, id=caregiver_session_id)
+        current_time_sheet.clock_out_timestamp = timezone.now()
+        current_time_sheet.is_active = False
+        time_worked = current_time_sheet.clock_out_timestamp - current_time_sheet.clock_in_timestamp
+        print(time_worked)
+        current_time_sheet.time_worked = time_worked
+        current_time_sheet.save()
+        print(current_time_sheet.time_worked)
 
 class ViewDailyIncidents(LoginRequiredMixin, View):
 

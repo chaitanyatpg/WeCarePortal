@@ -65,3 +65,12 @@ class CompanyEditForm(forms.Form):
 
         cleaned_data = super(CompanyEditForm, self).clean()
         return cleaned_data
+
+class CloseCaregiverSessionForm(forms.Form):
+
+    caregiver_session_id = forms.IntegerField()
+
+    def clean(self):
+
+        cleaned_data = super(CloseCaregiverSessionForm, self).clean()
+        return cleaned_data
