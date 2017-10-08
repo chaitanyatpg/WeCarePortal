@@ -236,22 +236,22 @@
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title" id="myModalLabel2">Edit Task</h4>
+                <h4 class="modal-title" id="myModalLabel2">Edit Schedule</h4>
               </div>
-              <form id="edit_task_details" enctype="multipart/form-data" method="post" action="{% url 'edit_task_with_id' %}" class="form-horizontal calender" role="form">
+              <form enctype="multipart/form-data" method="post" action="{% url 'edit_schedule_with_id' %}" class="form-horizontal calender" role="form">
               {% csrf_token %}
               <div class="modal-body">
                 <div id="testmodal2" style="padding: 5px 20px;">
                     <div class="form-group">
-                      <label class="col-sm-3 control-label">Task</label>
+                      <label class="col-sm-3 control-label">Client Name</label>
                       <div class="col-sm-9">
-                        <input type="text" class="form-control" id="task_name" name="task_name" disabled="true">
+                        <input type="text" class="form-control" id="client_name" disabled="true">
                       </div>
                     </div>
                     <div class="form-group">
                       <label class="col-sm-3 control-label">Start Time</label>
                       <div class="col-sm-9">
-                        <select id="task_start_hour" name="{{edit_task_form.start_hour.html_name}}">
+                        <select id="start_hour" name="{{edit_schedule_form.start_hour.html_name}}">
                           <option value="00">12 AM</option>
                           <option value="01">1 AM</option>
                           <option value="02">2 AM</option>
@@ -277,7 +277,7 @@
                           <option value="22">10 PM</option>
                           <option value="23">11 PM</option>
                         </select>
-                        <select id="task_start_minute" name="{{edit_task_form.start_minute.html_name}}">
+                        <select id="start_minute" name="{{edit_schedule_form.start_minute.html_name}}">
                           <option value="00">00</option>
                           <option value="10">10</option>
                           <option value="20">20</option>
@@ -296,7 +296,7 @@
                     <div class="form-group">
                       <label class="col-sm-3 control-label">End Time</label>
                       <div class="col-sm-9">
-                        <select id="task_end_hour" name="{{edit_task_form.end_hour.html_name}}">
+                        <select id="end_hour" name="{{edit_schedule_form.end_hour.html_name}}">
                           <option value="00">12 AM</option>
                           <option value="01">1 AM</option>
                           <option value="02">2 AM</option>
@@ -322,7 +322,7 @@
                           <option value="22">10 PM</option>
                           <option value="23">11 PM</option>
                         </select>
-                        <select id="task_end_minute" name="{{edit_task_form.end_minute.html_name}}">
+                        <select id="end_minute" name="{{edit_schedule_form.end_minute.html_name}}">
                           <option value="00">00</option>
                           <option value="10">10</option>
                           <option value="20">20</option>
@@ -332,66 +332,26 @@
                         </select>
                       </div>
                     </div>
-                    <!--<div class="form-group">
-                      <label class="col-sm-3 control-label">End Time</label>
-                      <div class="col-sm-9">
-                        <input type="text" class="form-control" id="task_end_time" name="task_end_time">
-                      </div>
-                    </div>-->
-                    <div class="form-group">
-                      <label class="col-sm-3 control-label">Description</label>
-                      <div class="col-sm-9">
-                        <textarea class="form-control" style="height:55px;" id="task_description" name="{{edit_task_form.description.html_name}}"></textarea>
-                      </div>
-                    </div>
-                    <label class="control-label">Comments</label>
-                    <div class="task_comments" id="task_comments">
-                    </div>
-                    <label class="control-label">Attachments</label>
-                    <div>
-                      {{edit_task_form.attachment.label_tag}}{{edit_task_form.attachment}}
-                    </div>
-                    <div class="task_attachments" id="task_attachments">
-                    </div>
-                    <label class="control-label">Links</label>
-                    <div class="task_links" id="task_links">
-                    </div>
-                    <!--<div class="form-group">
-                      <label class="col-sm-3 control-label">Task Attachment</label>
-                      <div class="col-sm-9">
-                        <a href="" id="task_attachment" name="task_attachment"></a>
-                      </div>
-                    </div>-->
-                    <!--<div class="form-group">
-                      <label class="col-sm-3 control-label">Task Link</label>
-                      <div class="col-sm-9">
-                        <a href="" id="task_link" name="task_link"></a>
-                      </div>
-                    </div>-->
-                    <div class="form-group">
-                      <label class="col-sm-3 control-label">Status</label>
-                      <div class="col-sm-9">
-                        <input type="text" class="form-control" id="task_status" name="task_status" disabled="true">
-                      </div>
-                    </div>
                 </div>
               </div>
               <div class="modal-footer">
-                <input type="hidden" id="task_id_edit" name="{{edit_task_form.task_id.html_name}}">
-                <input type="hidden" name="{{edit_task_form.client_id.html_name}}" value={{client_id}}>
+                <input type="hidden" id="schedule_id_edit" name="{{edit_schedule_form.schedule_id.html_name}}">
+                <input type="hidden" name="{{edit_schedule_form.caregiver_id.html_name}}" value={{caregiver.id}}>
                 <button type="button" class="btn btn-default antoclose2" data-dismiss="modal">Close</button>
                 <div>
                   <button type="submit" class="btn btn-success edit_calendar_submit">Save changes</button>
                 </div>
               </form>
-              <form id="delete_task_details" enctype="multipart/form-data" action="{% url 'delete_task_with_id' %}" method="post" class="form-horizontal" role="form">
+              <form id='delete_schedule_details' enctype="multipart/form-data" action="{% url 'delete_schedule_with_id' %}" method="post" class="form-horizontal" role="form">
                 {% csrf_token %}
-                <input type="hidden" id="task_id_delete" name="{{delete_task_form.task_id.html_name}}">
+                <input type="hidden" name="{{delete_schedule_form.caregiver_id.html_name}}" value="{{caregiver.id}}">
+                <input type="hidden" id="schedule_id_delete" name="{{delete_schedule_form.schedule_id.html_name}}">
                 <button type="submit" class="btn btn-danger edit_calendar_submit">Delete Task</button>
               </form>
-              <form id="delete_recurring_task_details" enctype="multipart/form-data" action="{% url 'delete_recurring_task_with_id' %}" method="post" class="form-horizontal" role="form">
+              <form id='delete_recurring_schedule_details'enctype="multipart/form-data" action="{% url 'delete_recurring_schedule_with_id' %}" method="post" class="form-horizontal" role="form">
                 {% csrf_token %}
-                <input type="hidden" id="recurring_task_id_delete" name="{{delete_task_form.task_id.html_name}}">
+                <input type="hidden" name="{{delete_schedule_form.caregiver_id.html_name}}" value="{{caregiver.id}}">
+                <input type="hidden" id="schedule_id_delete_recurring" name="{{delete_schedule_form.schedule_id.html_name}}">
                 <label id='recurring_task_header_details'></label>
                 <button type="submit" class="btn btn-danger edit_calendar_submit">Delete Recurring Task</button>
               </form>
@@ -524,15 +484,15 @@
 
     <!-- POST delete task from calendar -->
     <script type="text/javascript">
-      var delete_task_form = $('#delete_task_details');
-      delete_task_form.submit(function(){
+      var delete_schedule_form = $('#delete_schedule_details');
+      delete_schedule_form.submit(function(){
         $.ajax({
-          type: delete_task_form.attr('method'),
-          url: delete_task_form.attr('action'),
-          data: delete_task_form.serialize(),
+          type: delete_schedule_form.attr('method'),
+          url: delete_schedule_form.attr('action'),
+          data: delete_schedule_form.serialize(),
           success: function(msg){
             console.log(msg);
-            var delete_task_id = $('#task_id_delete').val();
+            var delete_task_id = $('#schedule_id_delete').val();
             $('#calendar').fullCalendar('removeEvents', delete_task_id);
           },
           error: function(){
@@ -546,17 +506,17 @@
 
     <!-- POST delete recurring task from calendar -->
     <script type="text/javascript">
-      var delete_recurring_task_form = $('#delete_recurring_task_details');
+      var delete_recurring_task_form = $('#delete_recurring_schedule_details');
       delete_recurring_task_form.submit(function(){
         $.ajax({
           type: delete_recurring_task_form.attr('method'),
           url: delete_recurring_task_form.attr('action'),
           data: delete_recurring_task_form.serialize(),
-          success: function(all_recurring_tasks){
+          success: function(all_recurring_schedule_ids){
             //var delete_recurring_task_id = $('#recurring_task_id_delete').val();
-            for(i=0;i<all_recurring_tasks.length;i++)
+            for(i=0;i<all_recurring_schedule_ids.length;i++)
             {
-              $('#calendar').fullCalendar('removeEvents', all_recurring_tasks[i]);
+              $('#calendar').fullCalendar('removeEvents', all_recurring_schedule_ids[i]);
             }
           },
           error: function(){
@@ -677,65 +637,26 @@
               eventClick: function(calEvent, jsEvent, view) {
                 $('#fc_edit').click();
                 //$('#task_name').val(calEvent.title);
-                var task_id = calEvent.id;
+                var schedule_id = calEvent.id;
                 $.ajax({
                   type: "GET",
-                  url: '{% url "get_task_with_id" %}',
-                  data: { task_id: task_id },
+                  url: '{% url "get_schedule_with_id" %}',
+                  data: { schedule_id: schedule_id, caregiver_id: {{caregiver.id}}},
                   dataType: "json",
                   contentType: "application/json",
-                  success: function(task_data){
-                    $('#recurring_task_header_details').html("");
-                    if(task_data.hasOwnProperty('task_type'))
-                    {
-                      var task_header_details = 'Occurs ' + task_data.task_type + ' from ' + task_data.start_date + ' to ' + task_data.end_date
-                      $('#recurring_task_header_details').html(task_header_details);
-                    }
-                    $('#task_id_delete').val(task_data.task_id);
-                    $('#recurring_task_id_delete').val(task_data.task_id);
-                    $('#task_id_edit').val(task_data.task_id);
-                    $('#task_name').val(task_data.task_name);
-                    //$('#task_start_time').val(task_data.start_time);
-                    //$('#task_end_time').val(task_data.end_time);
-                    $('#task_start_hour').val(task_data.start_hour);
-                    $('#task_start_minute').val(task_data.start_minute);
-                    $('#task_end_hour').val(task_data.end_hour);
-                    $('#task_end_minute').val(task_data.end_minute);
-                    $('#task_description').val(task_data.description);
-                    //$('#task_comment').val(task_data.comment);
-                    $('#task_link').html(task_data.link);
-                    $('#task_link').attr("href", task_data.link);
-                    $('#task_attachment').html(task_data.attachment);
-                    $('#task_attachment').attr("href", task_data.attachment);
-                    var status = task_data.status;
-                    $('#task_status').val(task_data.status);
-                    task_comments = task_data.comments;
-                    task_attachments = task_data.attachments;
-                    task_links = task_data.links;
-                    $(".task_comments").empty();
-                    for(var i=0;i<task_comments.length;i++){
-                      var comment_str = $('<div class="form-group task_comments_div">\
-                      <label class="col-sm-3 control-label">' + task_comments[i][1] + ' : ' + task_comments[i][2] + '</label>\
-                      <div class="col-sm-9">\
-                      <textarea class="form-control" style="height:55px;" name="task_comment" disabled="true">' + task_comments[i][0] + '</textarea></div></div>');
-                      $('#task_comments').append(comment_str);
-                    }
-                    $(".task_attachments").empty();
-                    for(var i=0;i<task_attachments.length;i++){
-                      var attachment_str = $('<div class="form-group task_attachments_div">\
-                      <label class="col-sm-3 control-label">' + task_attachments[i][1] + ' : ' + task_attachments[i][2] + '</label>\
-                      <div class="col-sm-9">\
-                      <a href=' + task_attachments[i][0] + '><i class="fa fa-paperclip"></i>' + task_attachments[i][0] + '</a>');
-                      $('#task_attachments').append(attachment_str);
-                    }
-                    $(".task_links").empty();
-                    for(var i=0;i<task_links.length;i++){
-                      var link_str = $('<div class="form-group task_links_div">\
-                      <label class="col-sm-3 control-label">' + task_links[i][1] + ' : ' + task_links[i][2] + '</label>\
-                      <div class="col-sm-9">\
-                      <a href=' + '"' + task_links[i][0] + '"' + '>' + task_links[i][0] + '</a>');
-                      $('#task_links').append(link_str);
-                    }
+                  success: function(schedule_data){
+                    $('#client_id').val(schedule_data.client_id);
+                    $('#client_id_edit').val(schedule_data.client_id);
+                    $('#client_id_delete').val(schedule_data.client_id);
+                    $('#client_id_delete_recurring').val(schedule_data.client_id);
+                    $('#schedule_id_edit').val(schedule_data.schedule_id);
+                    $('#schedule_id_delete').val(schedule_data.schedule_id);
+                    $('#schedule_id_delete_recurring').val(schedule_data.schedule_id);
+                    $('#client_name').val(schedule_data.client_name);
+                    $('#start_hour').val(schedule_data.start_hour);
+                    $('#start_minute').val(schedule_data.start_minute);
+                    $('#end_hour').val(schedule_data.end_hour);
+                    $('#end_minute').val(schedule_data.end_minute);
                   },
                   failure: function(client_data){
                     alert('error fetching client data');

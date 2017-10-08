@@ -112,3 +112,25 @@ class ScheduleShiftForm(forms.Form):
     def clean(self):
         cleaned_data = super(ScheduleShiftForm, self).clean()
         return cleaned_data
+
+class EditScheduleForm(forms.Form):
+
+    schedule_id = forms.IntegerField()
+    caregiver_id = forms.IntegerField()
+    start_hour = forms.CharField(max_length=10)
+    start_minute = forms.CharField(max_length=10)
+    end_hour = forms.CharField(max_length=10)
+    end_minute = forms.CharField(max_length=10)
+
+    def clean(self):
+        cleaned_data = super(EditScheduleForm, self).clean()
+        return cleaned_data
+
+class DeleteScheduleForm(forms.Form):
+
+    schedule_id = forms.IntegerField()
+    caregiver_id = forms.IntegerField()
+
+    def clean(self):
+        cleaned_data = super(DeleteScheduleForm, self).clean()
+        return cleaned_data

@@ -574,6 +574,8 @@ class ScheduleShifts(LoginRequiredMixin, View):
             context['caregiver'] = caregiver
             context['assigned_clients'] = assigned_clients
             context['schedule_shift_form'] = ScheduleShiftForm()
+            context['delete_schedule_form'] = DeleteScheduleForm()
+            context['edit_schedule_form'] = EditScheduleForm()
             context['caregiver_shifts'] = CaregiverSchedule.objects.filter(company=current_company,caregiver=caregiver)
             print(context['caregiver_shifts'])
             return render(request, 'production/schedule_shifts.html', context)
@@ -605,6 +607,14 @@ class ScheduleShifts(LoginRequiredMixin, View):
                 end_time = "{0}:{1}".format(str(end_hour),str(end_minute))
                 end_time = datetime.datetime.strptime(end_time,'%H:%M').time()
             date_range_num = end_date - start_date
+            caregiver_schedule_header = CaregiverScheduleHeader(company=current_company,
+                                                    caregiver = assigned_caregiver,
+                                                    client = assigned_client,
+                                                    start_date = start_date,
+                                                    end_date = end_date,
+                                                    start_time = start_time,
+                                                    end_time = end_time)
+            caregiver_schedule_header.save()
             for i in range(date_range_num.days + 1):
                 new_date = (start_date + datetime.timedelta(days=i))
                 print(start_time)
@@ -615,9 +625,98 @@ class ScheduleShifts(LoginRequiredMixin, View):
                                                         client = assigned_client,
                                                         date = new_date,
                                                         start_time = start_time,
-                                                        end_time = end_time)
+                                                        end_time = end_time,
+                                                        schedule_header=caregiver_schedule_header)
                 caregiver_schedule.save()
         return HttpResponseRedirect(reverse('schedule_shifts') + "?caregiver_email=" + assigned_caregiver.email_address)
+
+@login_required
+def get_schedule_with_id(request):
+    company = request.user.company
+    caregiver_id = request.GET.get('caregiver_id')
+    schedule_id = request.GET.get('schedule_id')
+    schedule_entry = CaregiverSchedule.objects.get(company=company,
+                                                caregiver__id = caregiver_id,
+                                                id=schedule_id)
+    client = schedule_entry.client
+    start_hour = str(schedule_entry.start_time.hour).zfill(2)
+    start_minute = str(schedule_entry.end_time.minute).zfill(2)
+    end_hour = str(schedule_entry.end_time.hour).zfill(2)
+    end_minute = str(schedule_entry.end_time.minute).zfill(2)
+    schedule_data = {
+        "schedule_id": schedule_id,
+        "client_id": client.id,
+        "client_name": "{0} {1}".format(client.first_name,client.last_name),
+        "start_hour": start_hour,
+        "start_minute": start_minute,
+        "end_hour": end_hour,
+        "end_minute": end_minute
+    }
+    return HttpResponse(json.dumps(schedule_data), content_type="application/json")
+
+@login_required
+def edit_schedule_with_id(request):
+    company = request.user.company
+    edit_schedule_form = EditScheduleForm(request.POST, request.FILES)
+    caregiver_id = request.POST.get('caregiver_id')
+    if edit_schedule_form.is_valid():
+        caregiver_id = edit_schedule_form.cleaned_data['caregiver_id']
+        schedule_id = edit_schedule_form.cleaned_data['schedule_id']
+        start_hour = edit_schedule_form.cleaned_data['start_hour']
+        end_hour = edit_schedule_form.cleaned_data['end_hour']
+        start_minute = edit_schedule_form.cleaned_data['start_minute']
+        end_minute = edit_schedule_form.cleaned_data['end_minute']
+        start_time = None
+        end_time= None
+        if start_hour != "" and start_minute != "":
+            start_time = "{0}:{1}".format(str(start_hour),str(start_minute))
+            start_time = datetime.datetime.strptime(start_time,'%H:%M').time()
+        if end_hour != "" and end_minute != "":
+            end_time = "{0}:{1}".format(str(end_hour),str(end_minute))
+            end_time = datetime.datetime.strptime(end_time,'%H:%M').time()
+        schedule_entry = CaregiverSchedule.objects.get(company=company,
+                                                    caregiver__id=caregiver_id,
+                                                    id=schedule_id)
+        if start_time:
+            schedule_entry.start_time = start_time
+        if end_time:
+            schedule_entry.end_time = end_time
+        schedule_entry.save()
+    current_caregiver = Caregiver.objects.get(company=company, id=caregiver_id)
+    caregiver_email = current_caregiver.email_address
+    return HttpResponseRedirect(reverse('schedule_shifts') + "?caregiver_email=" + caregiver_email)
+
+@login_required
+def delete_schedule_with_id(request):
+    company = request.user.company
+    caregiver_id = request.POST.get('caregiver_id')
+    schedule_id = request.POST.get('schedule_id')
+    schedule_entry = CaregiverSchedule.objects.get(company=company,
+                                                caregiver__id = caregiver_id,
+                                                id=schedule_id)
+    schedule_entry.delete()
+    return HttpResponse("Delete Successful")
+
+@login_required
+def delete_recurring_schedule_with_id(request):
+    if request.method == 'POST':
+        context = {}
+        company=request.user.company
+        caregiver_id = request.POST.get('caregiver_id')
+        schedule_id = request.POST.get('schedule_id')
+        schedule_entry = CaregiverSchedule.objects.get(company=company,
+                                                    caregiver__id = caregiver_id,
+                                                    id=schedule_id)
+        schedule_header = schedule_entry.schedule_header
+        all_recurring_schedule_ids = []
+        if schedule_header != None:
+            all_recurring_schedule_entries = CaregiverSchedule.objects.filter(company=company,
+                                                                            caregiver_id = caregiver_id,
+                                                                            schedule_header=schedule_header)
+            all_recurring_schedule_ids = list(map(lambda x: x.id, all_recurring_schedule_entries))
+            for recurring_schedule_entry in all_recurring_schedule_entries:
+                recurring_schedule_entry.delete()
+        return HttpResponse(json.dumps(all_recurring_schedule_ids),content_type="application/json")
 
 @login_required
 def get_assigned_clients_with_caregiver_with_id(request):

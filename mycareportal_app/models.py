@@ -356,7 +356,17 @@ class IncidentReport(models.Model):
     location_name = models.CharField(max_length=100)
     incident_timestamp = models.DateTimeField(auto_now_add=True)
 
+class CaregiverScheduleHeader(models.Model):
+    company = models.ForeignKey(Company)
+    caregiver = models.ForeignKey(Caregiver)
+    client = models.ForeignKey(Client)
+    start_date = models.DateField(null=True) #change b4 prod
+    end_date = models.DateField(null=True) #change b4 prod
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+
 class CaregiverSchedule(models.Model):
+    schedule_header = models.ForeignKey(CaregiverScheduleHeader,null=True) #change b4 production
     company = models.ForeignKey(Company)
     caregiver = models.ForeignKey(Caregiver)
     client = models.ForeignKey(Client)
