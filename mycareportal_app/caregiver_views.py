@@ -142,7 +142,7 @@ class ViewCaregiverTimesheet(LoginRequiredMixin, View):
                                                         "client_name": "{0} {1}".format(x.client.first_name,x.client.last_name),
                                                         "clock_in_time": (x.clock_in_timestamp.astimezone(pytz.timezone(x.client_timezone))).replace(tzinfo=None),
                                                         "clock_out_time": (x.clock_out_timestamp.astimezone(pytz.timezone(x.client_timezone))).replace(tzinfo=None),
-                                                        "time_worked": x.time_worked
+                                                        "time_worked": str(x.time_worked).split(".")[0]
                                                     }, caregiver_time_sheets))
         return caregiver_time_sheets
 

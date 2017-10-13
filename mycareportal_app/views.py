@@ -229,8 +229,6 @@ class ViewActiveCaregivers(LoginRequiredMixin, View):
         context = {}
         current_company = request.user.company
         close_caregiver_session_form = CloseCaregiverSessionForm(request.POST)
-        print("ENTERED THE MATRIX")
-        print(request.POST.get('caregiver_session_id'))
         if close_caregiver_session_form.is_valid():
             caregiver_session_id = close_caregiver_session_form.cleaned_data['caregiver_session_id']
             self.close_caregiver_time_sheet_session(current_company, caregiver_session_id)
@@ -241,7 +239,7 @@ class ViewActiveCaregivers(LoginRequiredMixin, View):
                                                         "caregiver_name": "{0} {1}".format(x.caregiver.first_name,x.caregiver.last_name),
                                                         "client_name": "{0} {1}".format(x.client.first_name,x.client.last_name),
                                                         "clock_in_time": (x.clock_in_timestamp.astimezone(pytz.timezone(x.client_timezone))).replace(tzinfo=None),
-                                                        "time_worked": timezone.now() - x.clock_in_timestamp,
+                                                        "time_worked": str(timezone.now() - x.clock_in_timestamp).split(".")[0],
                                                         "id": x.id
                                                     }, active_caregiver_timesheets))
         return active_caregiver_timesheets
