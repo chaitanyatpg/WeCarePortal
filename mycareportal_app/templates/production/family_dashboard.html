@@ -100,7 +100,9 @@
                                   <img class="avatar" src="{{client.profile_picture.url}}">
 
                                   <div class="message_date">
-                                    <h5 class="date text-info">{{task.start_time|addstr_space:'-'|addstr_space:task.end_time}}</h5>
+                                    <h5 class="date text-info">
+                                      <span>{{task.start_time|convert_time_24_to_12|addstr_space:'-'}}</span>
+                                      <span>{{task.end_time|convert_time_24_to_12}}</span>
                                   </div>
                                   <div class="message_wrapper">
                                     <h4 class="heading">{{task.activity_task}}</h4>
