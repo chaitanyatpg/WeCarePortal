@@ -89,16 +89,27 @@
                             <!-- start recent activity -->
                             <ul class="messages">
                               {% for client, tasks in client_tasks.items %}
-                                <h3> {{client.first_name|addstr_space:client.last_name}} </h3>
                                 {% for active_caregiver in active_caregivers %}
                                   {% if active_caregiver.client == client %}
                                     <h5 style="color:#1ABB9C;">Caregiver {{active_caregiver.caregiver.first_name|addstr_space:active_caregiver.caregiver.last_name}} has arrived</h5>
                                   {% endif %}
                                 {% endfor %}
-                                {% for task in tasks %}
-                                <li>
-                                  <img class="avatar" src="{{client.profile_picture.url}}">
+                                <center>
+                                  <h3> {{client.first_name|addstr_space:client.last_name}} </h3>
+                                  {% if client.profile_picture %}
+                                    <img src="{{client.profile_picture.url}}" style="width:230px;height:200px;">
+                                  {% endif %}
+                                  </br>
+                                    <i class="fa fa-map-marker user-profile-icon"></i> {{client.address}}
 
+                                    <i class="fa fa-mobile-phone user-profile-icon"></i> {{client.phone_number}}
+
+                                    <!--<i class="fa fa-calendar user-profile-icon"></i>-->
+
+                                    <i class="fa fa-male user-profile-icon"></i><i class="fa fa-female user-profile-icon"></i> {{client.gender}}
+                                </center>
+                                {% for task, task_comments, task_attachments, task_links in tasks %}
+                                <li>
                                   <div class="message_date">
                                     <h5 class="date text-info">
                                       <span>{{task.start_time|convert_time_24_to_12|addstr_space:'-'}}</span>
@@ -108,20 +119,43 @@
                                     <h4 class="heading">{{task.activity_task}}</h4>
                                     <blockquote class="message">{{task.description}}</blockquote>
                                     <br />
-                                    <p class="url">
-                                      <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
-                                      {% if task.attachment %}
-                                        <a href="{{task.attachment.url}}"><i class="fa fa-paperclip"></i>{{task.attachment|trunc_path}}</a>
-                                      {% endif %}
-                                    </p>
-                                    <p class="url">
-                                      <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
-                                      {% if task.link %}
-                                        <a href="{{task.link}}"><i class="fa fa-external-link"></i>{{task.link}}</a>
-                                      {% endif %}
-                                    </p>
-
-                                      {% csrf_token %}
+                                    <ul>
+                                    {% for attachment in task_attachments %}
+                                        <li>
+                                          <a href="{{attachment.attachment.url}}"><i class="fa fa-paperclip"></i>{{attachment.attachment|trunc_path}}</a>
+                                          <span>Uploaded on {{attachment.created}}</span>
+                                          <span>by {{attachment.user.first_name|addstr_space:attachment.user.last_name}}</span>
+                                        </li>
+                                    {% endfor %}
+                                    </ul>
+                                    {% for link in task_links %}
+                                        <p class="url">
+                                          <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
+                                          <a href="{{link.task_url}}"><i class="fa fa-external-link"></i>{{link.task_url}}</a>
+                                          <span>Link added on {{link.created}}</span>
+                                          <span>by {{link.user.first_name|addstr_space:link.user.last_name}}</span>
+                                        </p>
+                                    {% endfor %}
+                                    <ul class="list-unstyled msg_list">
+                                    {% for comment in task_comments %}
+                                      <li>
+                                        <a>
+                                          <span class="image">
+                                            {% if comment.caregiver.profile_picture %}
+                                              <img src="{{comment.caregiver.profile_picture.url}}" />
+                                            {% endif %}
+                                          </span>
+                                          <span>
+                                            <span>{{comment.caregiver.first_name|addstr_space:comment.caregiver.last_name}}</span>
+                                            <span>{{comment.created}}</span>
+                                          </span>
+                                          <span class="message">
+                                            {{comment.comment}}
+                                          </span>
+                                        </a>
+                                      </li>
+                                    {% endfor %}
+                                    </ul>
                                       <p>
                                         <label>Comment</label>
                                         <textarea readonly class="form-control" style="height:55px;" id="task_comment" name="{{update_task_form.comment.html_name}}">{{task.comment}}</textarea>

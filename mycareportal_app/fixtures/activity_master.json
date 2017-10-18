@@ -14,5 +14,13 @@
 			"activity_code": "IADL001",
 			"activity_description": "Instrumental Activities of Daily Living"
 		}
+	},
+	{
+		"model": "mycareportal_app.activitymaster",
+		"pk": 3,
+		"fields": {
+			"activity_code": "MISC001",
+			"activity_description": "Miscellaneous Tasks"
+		}
 	}
 ]

@@ -54,7 +54,7 @@ class FamilyDashboard(LoginRequiredMixin, View):
         client_tasks = {}
         current_date = datetime.date.today()
         for client_data in related_clients:
-            current_client_tasks = self.get_client_tasks(client_data)
+            current_client_tasks = self.get_client_tasks(client_data, current_company)
             #client_name = '{0} {1}'.format(client_data.first_name, client_data.last_name)
             client_tasks[client_data] = list(current_client_tasks)
         context["client_tasks"] = client_tasks
@@ -62,10 +62,14 @@ class FamilyDashboard(LoginRequiredMixin, View):
         #context["update_task_form"] = UpdateTaskForm()
         return render(request, 'production/family_dashboard.html', context)
 
-    def get_client_tasks(self, client_data):
+    def get_client_tasks(self, client_data, current_company):
         client_timezone = pytz.timezone(client_data.time_zone)
         #current_date = datetime.date.today()
         current_date = (timezone.now().astimezone(client_timezone)).date()
         timezone.activate(client_timezone)
-        client_tasks = TaskSchedule.objects.filter(client=client_data,date=current_date)
+        client_tasks = TaskSchedule.objects.filter(company=current_company,client=client_data,date=current_date).order_by('complete','cancelled','pending','in_progress')
+        client_tasks = list(map(lambda x: (x,
+        TaskComment.objects.filter(company=current_company,client=client_data,task_schedule=x).order_by('created'),
+        TaskAttachment.objects.filter(company=current_company,client=client_data,task_schedule=x).order_by('created'),
+        TaskLink.objects.filter(company=current_company,client=client_data,task_schedule=x).order_by('created')),client_tasks))
         return client_tasks

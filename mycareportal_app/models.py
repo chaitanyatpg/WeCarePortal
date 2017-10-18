@@ -216,6 +216,7 @@ class DefaultTasks(models.Model):
 
     activity_category_code = models.CharField(max_length=100)
     activity_task = models.CharField(max_length=300)
+    task_code = models.CharField(max_length=30)
 
 class Tasks(models.Model):
 

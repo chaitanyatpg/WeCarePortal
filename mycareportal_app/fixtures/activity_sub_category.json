@@ -58,7 +58,7 @@
 		"pk": 7,
 		"fields": {
 			"activity_code": "IADL001",
-			"activity_category_code": "IADL001T",
+			"activity_category_code": "IADL002T",
       "activity_category": "Transportation"
 		}
 	},
@@ -67,7 +67,7 @@
 		"pk": 8,
 		"fields": {
 			"activity_code": "IADL001",
-			"activity_category_code": "IADL001M",
+			"activity_category_code": "IADL003M",
       "activity_category": "Meal preparation"
 		}
 	},
@@ -76,7 +76,7 @@
 		"pk": 9,
 		"fields": {
 			"activity_code": "IADL001",
-			"activity_category_code": "IADL001S",
+			"activity_category_code": "IADL004S",
       "activity_category": "Shopping"
 		}
 	},
@@ -85,7 +85,7 @@
 		"pk": 10,
 		"fields": {
 			"activity_code": "IADL001",
-			"activity_category_code": "IADL001H",
+			"activity_category_code": "IADL005H",
       "activity_category": "Housework"
 		}
 	},
@@ -94,7 +94,7 @@
 		"pk": 11,
 		"fields": {
 			"activity_code": "IADL001",
-			"activity_category_code": "IADL001M",
+			"activity_category_code": "IADL006M",
       "activity_category": "Managing medications"
 		}
 	},
@@ -103,7 +103,115 @@
 		"pk": 12,
 		"fields": {
 			"activity_code": "IADL001",
-			"activity_category_code": "IADL001F",
+			"activity_category_code": "IADL007F",
+      "activity_category": "Finances - Managing Personal Finances"
+		}
+	},
+	{
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 13,
+		"fields": {
+			"activity_code": "MISC001",
+			"activity_category_code": "MISC001P",
+      "activity_category": "Personal Hygiene"
+		}
+	},
+  {
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 14,
+		"fields": {
+			"activity_code": "MISC001",
+			"activity_category_code": "MISC001D",
+      "activity_category": "Dressing"
+		}
+	},
+  {
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 15,
+		"fields": {
+			"activity_code": "MISC001",
+			"activity_category_code": "MISC001E",
+      "activity_category": "Eating"
+		}
+	},
+  {
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 16,
+		"fields": {
+			"activity_code": "MISC001",
+			"activity_category_code": "MISC001M",
+      "activity_category": "Maintaining Continence"
+		}
+	},
+  {
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 17,
+		"fields": {
+			"activity_code": "MISC001",
+			"activity_category_code": "MISC001T",
+      "activity_category": "Transferring"
+		}
+	},
+  {
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 18,
+		"fields": {
+			"activity_code": "MISC001",
+			"activity_category_code": "MISC001B",
+      "activity_category": "Basic communication skills"
+		}
+	},
+  {
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 19,
+		"fields": {
+			"activity_code": "MISC001",
+			"activity_category_code": "MISC002T",
+      "activity_category": "Transportation"
+		}
+	},
+  {
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 20,
+		"fields": {
+			"activity_code": "MISC001",
+			"activity_category_code": "MISC003M",
+      "activity_category": "Meal preparation"
+		}
+	},
+  {
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 21,
+		"fields": {
+			"activity_code": "MISC001",
+			"activity_category_code": "MISC004S",
+      "activity_category": "Shopping"
+		}
+	},
+  {
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 22,
+		"fields": {
+			"activity_code": "MISC001",
+			"activity_category_code": "MISC005H",
+      "activity_category": "Housework"
+		}
+	},
+  {
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 23,
+		"fields": {
+			"activity_code": "MISC001",
+			"activity_category_code": "MISC006M",
+      "activity_category": "Managing medications"
+		}
+	},
+  {
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 24,
+		"fields": {
+			"activity_code": "MISC001",
+			"activity_category_code": "MISC007F",
       "activity_category": "Finances - Managing Personal Finances"
 		}
 	}
