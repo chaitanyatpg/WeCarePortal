@@ -83,6 +83,7 @@ urlpatterns = [
     url(r'^edit_choose_caregiver', caregiver_views.EditChooseCaregiver.as_view(),name='edit_choose_caregiver'),
     url(r'^choose_view_caregiver_timesheet', caregiver_views.ChooseViewCaregiverTimesheet.as_view(),name='choose_view_caregiver_timesheet'),
     url(r'^view_caregiver_timesheet', caregiver_views.ViewCaregiverTimesheet.as_view(),name='view_caregiver_timesheet'),
+    url(r'^export_all_caregiver_timesheets/csv/$', caregiver_views.export_all_caregiver_timesheets, name='export_all_caregiver_timesheets'),
     url(r'^get_caregiver_with_email', caregiver_views.get_caregiver_with_email,name='get_caregiver_with_email'),
     url(r'^edit_caregiver', caregiver_views.EditCaregiver.as_view(),name='edit_caregiver'),
     url(r'^caregiver_dashboard',caregiver_views.CaregiverDashboard.as_view(),name=

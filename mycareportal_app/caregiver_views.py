@@ -13,6 +13,7 @@ import datetime
 import pytz
 import django.utils.timezone as timezone
 import json
+import csv
 from collections import defaultdict
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -738,3 +739,22 @@ def caregiver_dashboard(request):
 @login_required
 def calendar(request):
     return render(request, 'production/task_calendar.html')
+
+@login_required
+def export_all_caregiver_timesheets(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="all_caregiver_timesheets.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['Caregiver', 'Client', 'Clock in Timestamp', 'Clock out Timestamp', 'Client Timezone', 'Time Worked'])
+
+    caregiver_timesheets = CaregiverTimeSheet.objects.filter(company=request.user.company)
+    for timesheet in caregiver_timesheets:
+        parsed_timesheet = ["{0} {1}".format(timesheet.caregiver.first_name,timesheet.caregiver.last_name),
+                            "{0} {1}".format(timesheet.client.first_name,timesheet.client.last_name),
+                            timesheet.clock_in_timestamp,
+                            timesheet.clock_out_timestamp,
+                            timesheet.client_timezone,
+                            timesheet.time_worked]
+        writer.writerow(parsed_timesheet)
+    return response
