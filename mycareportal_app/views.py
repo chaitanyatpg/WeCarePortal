@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+import json
 from django.contrib import messages
 from django.db import IntegrityError
 
@@ -359,3 +359,33 @@ def end_caregiver_time_sheet_session(request):
     print(current_time_sheet.time_worked)
     del request.session['current_time_sheet']
     request.session.modified = True
+
+@login_required
+def date_filter_dashboard(request):
+    print("WERERWER")
+    dashboard_task_data = {}
+    current_company = request.user.company
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    print(start_date)
+    print(end_date)
+    #company_time_zone = current_company.time_zone
+    #company_time_zone = pytz.timezone(company_time_zone)
+    #current_date = (timezone.now().astimezone(client_timezone)).date()
+    #timezone.activate(client_timezone)
+    #default_tasks = DefaultTasks.objects.count()
+    #custom_tasks = Tasks.objects.filter(company=current_company).count()
+    total_scheduled_tasks = TaskSchedule.objects.filter(company=current_company,date__range=[start_date,end_date]).count()
+    total_pending_tasks = TaskSchedule.objects.filter(company=current_company,pending=True,date__range=[start_date,end_date]).count()
+    total_in_progress_tasks = TaskSchedule.objects.filter(company=current_company,in_progress=True,date__range=[start_date,end_date]).count()
+    total_completed_tasks = TaskSchedule.objects.filter(company=current_company,complete=True,date__range=[start_date,end_date]).count()
+    total_cancelled_tasks = TaskSchedule.objects.filter(company=current_company,cancelled=True,date__range=[start_date,end_date]).count()
+
+    #context['default_tasks'] = default_tasks
+    #context['custom_tasks'] = custom_tasks
+    dashboard_task_data['total_scheduled_tasks'] = total_scheduled_tasks
+    dashboard_task_data['total_pending_tasks'] = total_pending_tasks
+    dashboard_task_data['total_in_progress_tasks'] = total_in_progress_tasks
+    dashboard_task_data['total_completed_tasks'] = total_completed_tasks
+    dashboard_task_data['total_cancelled_tasks'] = total_cancelled_tasks
+    return HttpResponse(json.dumps(dashboard_task_data),content_type="application/json")

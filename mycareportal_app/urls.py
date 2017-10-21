@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^register',views.register,name='register'),
     url(r'^edit_company', views.EditCompany.as_view(), name='edit_company'),
     url(r'^dashboard',views.dashboard,name='dashboard'),
+    url(r'^date_filter_dashboard',views.date_filter_dashboard,name='date_filter_dashboard'),
     url(r'^view_active_caregivers',views.ViewActiveCaregivers.as_view(),name='view_active_caregivers'),
     url(r'^view_daily_incidents', views.ViewDailyIncidents.as_view(),name='view_daily_incidents'),
     url(r'^choose_view_client_incidents', client_views.ChooseViewClientIncidents.as_view(),name='choose_view_client_incidents'),
