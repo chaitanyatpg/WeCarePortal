@@ -54,7 +54,7 @@ class ProviderDashboard(LoginRequiredMixin, View):
         #current_date = datetime.date.today()
         current_date = (timezone.now().astimezone(client_timezone)).date()
         timezone.activate(client_timezone)
-        client_tasks = TaskSchedule.objects.filter(company=current_company,client=client_data,date=current_date).order_by('complete','cancelled','pending','in_progress')
+        client_tasks = TaskSchedule.objects.filter(company=current_company,client=client_data,date=current_date).order_by('cancelled','pending','in_progress','complete')
         client_tasks = list(map(lambda x: (x,
         TaskComment.objects.filter(company=current_company,client=client_data,task_schedule=x).order_by('created'),
         TaskAttachment.objects.filter(company=current_company,client=client_data,task_schedule=x).order_by('created'),
