@@ -39,6 +39,8 @@ def home(request):
         return redirect('caregiver_dashboard')
     elif "FAMILYUSER" in user_roles:
         return redirect('family_dashboard')
+    elif "PROVIDERUSER" in user_roles:
+        return redirect('provider_dashboard')
     else:
         return redirect('login')
 

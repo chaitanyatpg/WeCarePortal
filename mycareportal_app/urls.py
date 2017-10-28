@@ -92,7 +92,7 @@ urlpatterns = [
     url(r'^calendar',caregiver_views.calendar,name='calendar'),
     url(r'^family_dashboard',family_views.FamilyDashboard.as_view(),name=
     'family_dashboard'),
-    url(r'^provider_dashboard',provider_views.provider_dashboard,name=
+    url(r'^provider_dashboard',provider_views.ProviderDashboard.as_view(),name=
     'provider_dashboard'),
     url(r'^assessment_choose_client',assessment_views.AssessmentChooseClient.as_view(),name='assessment_choose_client'),
     url(r'^assessment_tool',assessment_views.AssessmentTool.as_view(),name=
