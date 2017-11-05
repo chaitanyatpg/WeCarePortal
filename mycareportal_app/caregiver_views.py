@@ -752,9 +752,9 @@ def export_all_caregiver_timesheets(request):
     for timesheet in caregiver_timesheets:
         parsed_timesheet = ["{0} {1}".format(timesheet.caregiver.first_name,timesheet.caregiver.last_name),
                             "{0} {1}".format(timesheet.client.first_name,timesheet.client.last_name),
-                            timesheet.clock_in_timestamp,
-                            timesheet.clock_out_timestamp,
+                            str(timesheet.clock_in_timestamp.astimezone(pytz.timezone(timesheet.client_timezone)).replace(tzinfo=None)).split(".")[0],
+                            str(timesheet.clock_out_timestamp.astimezone(pytz.timezone(timesheet.client_timezone)).replace(tzinfo=None)).split(".")[0],
                             timesheet.client_timezone,
-                            timesheet.time_worked]
+                            str(timesheet.time_worked).split(".")[0]]
         writer.writerow(parsed_timesheet)
     return response
