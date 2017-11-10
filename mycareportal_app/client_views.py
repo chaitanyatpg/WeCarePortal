@@ -126,29 +126,8 @@ class AddClient(LoginRequiredMixin, View):
                 new_client.save()
                 new_client.profile_picture = profile_picture
                 new_client.save()
-                context['client_success_msg'] = "Client successfully added. Add additional Details Below."
-                #Redirect to edit screen
-                client = Client.objects.get(company=current_company, email_address=client_email)
-                #initialize client form
-                edit_client_form = EditClientDetailsForm(initial=
-                {
-                    'first_name': client.first_name,
-                    'last_name': client.last_name,
-                    'middle_name': client.middle_name,
-                    'gender': client.gender,
-                    'date_of_birth': self.parse_date(client.date_of_birth),
-                    'phone_number': client.phone_number,
-                    'secondary_phone_number': client.secondary_phone_number,
-                    'email': client.email_address,
-                    'address': client.address,
-                    'city': client.city,
-                    'state': client.state,
-                    'zip_code': client.zip_code,
-                    'time_zone': client.time_zone,
-                    'profile_picture': client.profile_picture
-                })
-                context['edit_client_form'] = edit_client_form
-                return render(request,'production/edit_client.html', context)
+                messages.success(request, "Client successfully added. Add additional Details Below.")
+                return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client_email)
             except IntegrityError as e:
                 messages.error(request, "Client already exists. Please enter a new client.")
         return redirect('add_client')
@@ -264,27 +243,7 @@ class EditClient(LoginRequiredMixin, View):
                 messages.success(request, "Client {0} {1} successfully edited!".format(client.first_name,client.last_name))
             except IntegrityError as e:
                 messages.error(request, "Client already exists. Please enter a new Client.")
-        client = Client.objects.get(company=current_company, email_address=client_email)
-        #initialize client form
-        edit_client_form = EditClientDetailsForm(initial=
-        {
-            'first_name': client.first_name,
-            'last_name': client.last_name,
-            'middle_name': client.middle_name,
-            'gender': client.gender,
-            'date_of_birth': self.parse_date(client.date_of_birth),
-            'phone_number': client.phone_number,
-            'secondary_phone_number': client.secondary_phone_number,
-            'email': client.email_address,
-            'address': client.address,
-            'city': client.city,
-            'state': client.state,
-            'zip_code': client.zip_code,
-            'time_zone': client.time_zone,
-            'profile_picture': client.profile_picture
-        })
-        context['edit_client_form'] = edit_client_form
-        return render(request,'production/edit_client.html', context)
+        return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client_email)
 
     def parse_date(self,client_birthday):
         caregiver_birthday = client_birthday.date()
