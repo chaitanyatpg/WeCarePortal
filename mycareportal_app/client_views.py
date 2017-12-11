@@ -848,7 +848,7 @@ def get_task_with_id(request):
         link = current_task.link
         attachment = current_task.attachment
         comments = list(map(lambda x: [x.comment,
-                                        '{0} {1}'.format(x.caregiver.first_name,x.caregiver.last_name),
+                                        '{0} {1}'.format(x.user.first_name,x.user.last_name),
                                         '{0}/{1}/{2} {3}'.format(
                                             convert_to_client_timezone(x.created,client).month,
                                             convert_to_client_timezone(x.created,client).day,

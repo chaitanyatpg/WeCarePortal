@@ -59,8 +59,22 @@ class FamilyDashboard(LoginRequiredMixin, View):
             client_tasks[client_data] = list(current_client_tasks)
         context["client_tasks"] = client_tasks
         #Get Update Form
-        #context["update_task_form"] = UpdateTaskForm()
+        context["update_task_form"] = UpdateTaskForm()
         return render(request, 'production/family_dashboard.html', context)
+
+    def post(self, request):
+        context = {}
+        update_task_form = UpdateTaskForm(request.POST, request.FILES)
+        if update_task_form.is_valid():
+            current_company = request.user.company
+            comment = update_task_form.cleaned_data["comment"]
+            task_id = update_task_form.cleaned_data["task_id"]
+            client_id = update_task_form.cleaned_data["client_id"]
+            client = Client.objects.get(company=current_company,id=client_id)
+            task = TaskSchedule.objects.get(company=current_company,client=client,id=task_id)
+            self.save_task_comments(request, update_task_form, task, current_company, client, comment)
+            messages.success(request, "Edited Task: {0}".format(task.activity_task))
+        return redirect('family_dashboard')
 
     def get_client_tasks(self, client_data, current_company):
         client_timezone = pytz.timezone(client_data.time_zone)
@@ -73,3 +87,14 @@ class FamilyDashboard(LoginRequiredMixin, View):
         TaskAttachment.objects.filter(company=current_company,client=client_data,task_schedule=x).order_by('created'),
         TaskLink.objects.filter(company=current_company,client=client_data,task_schedule=x).order_by('created')),client_tasks))
         return client_tasks
+
+    def save_task_comments(self, request, update_task_form, task, current_company, client, comment):
+
+        #caregiver = Caregiver.objects.get(company=current_company,user=request.user)
+        task_comment = TaskComment(company=current_company,
+                                    client=client,
+                                    user=request.user,
+                                    task_schedule=task,
+                                    comment=comment)
+        if comment != "":
+            task_comment.save()

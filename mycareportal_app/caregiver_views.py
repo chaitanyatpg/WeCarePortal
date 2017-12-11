@@ -509,10 +509,10 @@ class CaregiverDashboard(LoginRequiredMixin, View):
 
     def save_task_comments(self, request, update_task_form, task, current_company, client, comment):
 
-        caregiver = Caregiver.objects.get(company=current_company,user=request.user)
+        #caregiver = Caregiver.objects.get(company=current_company,user=request.user)
         task_comment = TaskComment(company=current_company,
                                     client=client,
-                                    caregiver=caregiver,
+                                    user=request.user,
                                     task_schedule=task,
                                     comment=comment)
         if comment != "":

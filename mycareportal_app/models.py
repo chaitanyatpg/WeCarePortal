@@ -259,7 +259,8 @@ class TaskComment(models.Model):
 
     company = models.ForeignKey(Company)
     client = models.ForeignKey(Client)
-    caregiver = models.ForeignKey(Caregiver)
+    #caregiver = models.ForeignKey(Caregiver)
+    user = models.ForeignKey(User,null=True) #change before final deployment
     task_schedule = models.ForeignKey(TaskSchedule)
     created = models.DateTimeField(auto_now_add=True)
     comment = models.CharField(max_length=500)
