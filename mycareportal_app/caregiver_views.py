@@ -23,6 +23,8 @@ from django.contrib import messages
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 
+from mycareportal_app.common import error_messaging as error_messaging
+
 def add_caregiver(request):
     return render(request, 'production/add_caregiver.html')
 
@@ -97,6 +99,9 @@ class AddCaregiver(LoginRequiredMixin, View):
                     return redirect('add_caregiver')
             except IntegrityError as e:
                 messages.error(request, "Caregiver has already been registered. Please enter a new email address.")
+        else:
+            form_errors = add_caregiver_form.errors.as_data()
+            error_messaging.render_error_messages(request, form_errors)
         return render(request, 'production/add_caregiver.html', context)
 
 class EditChooseCaregiver(LoginRequiredMixin, View):

@@ -23,6 +23,8 @@ from django.contrib import messages
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 
+from mycareportal_app.common import error_messaging as error_messaging
+
 @login_required
 def add_client(request):
     return render(request, 'production/care_portal.html')
@@ -1106,6 +1108,13 @@ def post_family_details(request):
                     messages.success(request, "Edited family contact {0} {1}!".format(first_name,last_name))
             except IntegrityError as e:
                 messages.error(request, "Family member already exists. Please enter new family member.")
+        else:
+            form_errors = family_details_form.errors.as_data()
+            error_messaging.render_error_messages(request, form_errors)
+            #for error in form_errors:
+            #    for message in form_errors[error]:
+            #        for message_text in message:
+            #            messages.error(request, str(message_text))
         #even if form is invalid, client_email still retrieved
         client_email = request.POST.get('client_email')
         #next 4 lines used for AJAX version
@@ -1213,7 +1222,8 @@ def post_provider_details(request):
             except IntegrityError as e:
                 messages.error(request, "Provider already exists. Please enter new Provider.")
         else:
-            print(provider_details_form.errors)
+            form_errors = provider_details_form.errors.as_data()
+            error_messaging.render_error_messages(request, form_errors)
         client_email = request.POST.get('client_email')
         #BELOW: AJAX
         #assigned_client = Client.objects.get(company=request.user.company,email_address=client_email)
@@ -1280,7 +1290,8 @@ def post_pharmacy_details(request):
             except IntegrityError as e:
                 messages.error(request, "Pharmacy already exists. Please enter new pharmacy.")
         else:
-            print(pharmacy_details_form.errors)
+            form_errors = pharmacy_details_form.errors.as_data()
+            error_messaging.render_error_messages(request, form_errors)
         client_email = request.POST.get('client_email')
         #BELOW: AJAX
         #assigned_client = Client.objects.get(company=request.user.company,email_address=client_email)
@@ -1356,7 +1367,8 @@ def post_payer_details(request):
             except IntegrityError as e:
                 messages.error(request, "Payer already exists. Please enter new payer.")
         else:
-            print(payer_details_form.errors)
+            form_errors = payer_details_form.errors.as_data()
+            error_messaging.render_error_messages(request, form_errors)
         client_email = request.POST.get('client_email')
         #BELOW: AJAX
         #assigned_client = Client.objects.get(company=request.user.company,email_address=client_email)

@@ -2,8 +2,10 @@ from django import forms
 from django.contrib.auth.models import User
 from mycareportal_app.models import *
 from django.utils.translation import ugettext as _
+import re
 
 class ManagerRegistrationForm(forms.Form):
+    MIN_LENGTH = 8
 
     company_name = forms.CharField(max_length=200)
     email = forms.CharField(max_length=200)
@@ -27,6 +29,16 @@ class ManagerRegistrationForm(forms.Form):
                             _('Passwords do not match'),
                             code='invalid',
                             params={'value': 'Passwords do not match'})
+        if (not(bool(re.match("(?=.*[A-Z])",password)))):
+            raise forms.ValidationError("Password must be at least {0} characters long, have one capital letter and one number".
+                                        format(self.MIN_LENGTH))
+        if (not(bool(re.search(r'\d',password)))):
+            raise forms.ValidationError("Password must be at least {0} characters long, have one capital letter and one number".
+                                        format(self.MIN_LENGTH))
+        if len(password) < self.MIN_LENGTH:
+            raise forms.ValidationError("Password must be at least {0} characters long, have one capital letter and one number".
+                                        format(self.MIN_LENGTH))
+
         return cleaned_data
 
 class CareManagerRegistrationForm(forms.Form):
