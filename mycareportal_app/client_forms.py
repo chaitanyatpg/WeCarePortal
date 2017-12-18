@@ -2,6 +2,7 @@ from django import forms
 from mycareportal_app.models import *
 from django.utils.translation import ugettext as _
 import re
+import datetime
 
 class ClientRegistrationForm(forms.Form):
 
@@ -270,6 +271,8 @@ class CreateTaskForm(forms.Form):
 
 class AssignTaskForm(forms.Form):
 
+    MAX_TASK_DURATION = 365
+
     client_email = forms.CharField(max_length=200)
     task = forms.CharField(max_length=300)
     task_type = forms.CharField(max_length=100)
@@ -284,9 +287,19 @@ class AssignTaskForm(forms.Form):
     #attachment = forms.FileField(label='Select file', required=False)
     attachment = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), label='Select files', required=False)
 
+    def clean_date_duration(self, start_date, end_date):
+        duration = end_date - start_date
+        print(duration.days)
+        if duration.days > 365:
+            raise forms.ValidationError("Tasks can only be assigned for a maximum duration of one year".
+                                        format(self.MAX_TASK_DURATION))
+
 
     def clean(self):
         cleaned_data = super(AssignTaskForm, self).clean()
+        start_date = cleaned_data.get("start_date")
+        end_date = cleaned_data.get("end_date")
+        self.clean_date_duration(start_date, end_date)
         return cleaned_data
 
 class FindClientForm(forms.Form):

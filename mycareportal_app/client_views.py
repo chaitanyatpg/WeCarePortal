@@ -510,9 +510,9 @@ class AssignTasks(LoginRequiredMixin, View):
         context = {}
         current_company = request.user.company
         assign_task_form = AssignTaskForm(request.POST, request.FILES)
-        print("ENTERED TASK POST")
-        print(request.POST)
-        print(request.FILES)
+        #print("ENTERED TASK POST")
+        #print(request.POST)
+        #print(request.FILES)
         #Populated here for redirect incase form is not valid
         client_email = assign_task_form.data["client_email"]
         if assign_task_form.is_valid():
@@ -564,27 +564,31 @@ class AssignTasks(LoginRequiredMixin, View):
             if task_type == "Yearly":
                 self.save_yearly_task(new_task_header, attachments, current_user)
             messages.success(request, "Assigned task {0} to client {1} {2}".format(task, client.first_name, client.last_name))
+        else:
+            form_errors = assign_task_form.errors.as_data()
+            error_messaging.render_error_messages(request, form_errors)
         #Almost identical to GET, except don't have the find client form in context,
         #instead, just use the client email from POST
-        existing_tasks = Tasks.objects.filter(company=current_company).order_by('activity_task')
-        default_tasks = DefaultTasks.objects.all().order_by('activity_task')
-        all_tasks = []
-        for i in existing_tasks:
-            all_tasks.append(i)
-        for i in default_tasks:
-            all_tasks.append(i)
-        context["all_tasks"] = all_tasks
+        return HttpResponseRedirect(reverse('assign_tasks') + "?client_email=" + client_email)
+        #existing_tasks = Tasks.objects.filter(company=current_company).order_by('activity_task')
+        #default_tasks = DefaultTasks.objects.all().order_by('activity_task')
+        #all_tasks = []
+        #for i in existing_tasks:
+        #    all_tasks.append(i)
+        #for i in default_tasks:
+        #    all_tasks.append(i)
+        #context["all_tasks"] = all_tasks
         #Populate client email
-        context["client_email"] = client_email
+        #context["client_email"] = client_email
         #Get Form
-        context["assign_task_form"] = AssignTaskForm()
+        #context["assign_task_form"] = AssignTaskForm()
         #Get Delete Task Form
-        context["delete_task_form"] = DeleteTaskForm()
+        #context["delete_task_form"] = DeleteTaskForm()
         #Get Schedule for Client
-        current_client = Client.objects.get(company=current_company,email_address=client_email)
-        client_schedule = TaskSchedule.objects.filter(company=current_company,client=current_client)
-        context["client_schedule"] = client_schedule
-        return render(request,'production/assign_tasks.html',context)
+        #current_client = Client.objects.get(company=current_company,email_address=client_email)
+        #client_schedule = TaskSchedule.objects.filter(company=current_company,client=current_client)
+        #context["client_schedule"] = client_schedule
+        #return render(request,'production/assign_tasks.html',context)
 
     def save_task_attachments(self, new_task_header, attachments, current_user, schedule_entry):
         for uploaded_file in attachments:
