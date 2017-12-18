@@ -478,6 +478,8 @@ class ChooseCaregiver(LoginRequiredMixin, View):
 
 class AssignTasks(LoginRequiredMixin, View):
 
+    MAX_FILE_SIZE = 104857600 #100mb in bytes
+
     def get(self, request):
         context = {}
         current_company = request.user.company
@@ -521,58 +523,61 @@ class AssignTasks(LoginRequiredMixin, View):
         #print(request.FILES)
         #Populated here for redirect incase form is not valid
         client_email = assign_task_form.data["client_email"]
-        if assign_task_form.is_valid():
-            #get data from form
-            client_email = assign_task_form.cleaned_data["client_email"]
-            client = Client.objects.get(company=current_company,email_address=client_email)
-            task = assign_task_form.cleaned_data["task"]
-            task_type = assign_task_form.cleaned_data["task_type"]
-            start_date = assign_task_form.cleaned_data["start_date"]
-            end_date = assign_task_form.cleaned_data["end_date"]
-            start_hour = assign_task_form.cleaned_data["start_hour"]
-            start_minute = assign_task_form.cleaned_data["start_minute"]
-            end_hour = assign_task_form.cleaned_data["end_hour"]
-            end_minute = assign_task_form.cleaned_data["end_minute"]
-            description = assign_task_form.cleaned_data["description"]
-            link = assign_task_form.cleaned_data["link"]
-            #attachments = assign_task_form.cleaned_data["attachment"]
-            attachments = request.FILES.getlist('attachment')
-            start_time = ""
-            end_time = ""
-            if start_hour != "" and start_minute != "":
-                start_time = "{0}:{1}".format(str(start_hour),str(start_minute))
-            if end_hour != "" and end_minute != "":
-                end_time = "{0}:{1}".format(str(end_hour),str(end_minute))
-            #save task header
-            new_task_header = TaskHeader(company=current_company,
-                                            client=client,
-                                            activity_task=task,
-                                            start_date = start_date,
-                                            end_date = end_date,
-                                            task_type = task_type,
-                                            start_time = start_time,
-                                            end_time = end_time,
-                                            description = description,
-                                            link = link)
-            new_task_header.save()
-            #populate task schedule
-            current_user = request.user
-            if task_type == "One Time":
-                self.save_one_time_task(new_task_header, attachments, current_user)
-            if task_type == "Daily":
-                self.save_daily_task(new_task_header, attachments, current_user)
-            if task_type == "Weekly":
-                self.save_weekly_task(new_task_header, attachments, current_user)
-            if task_type == "Bi-Weekly":
-                self.save_bi_weekly_task(new_task_header, attachments, current_user)
-            if task_type == "Monthly":
-                self.save_monthly_task(new_task_header, attachments, current_user)
-            if task_type == "Yearly":
-                self.save_yearly_task(new_task_header, attachments, current_user)
-            messages.success(request, "Assigned task {0} to client {1} {2}".format(task, client.first_name, client.last_name))
-        else:
-            form_errors = assign_task_form.errors.as_data()
-            error_messaging.render_error_messages(request, form_errors)
+        attachments = request.FILES.getlist('attachment')
+        are_attachments_valid = self.validate_attachments(request, attachments)
+        if are_attachments_valid:
+            if assign_task_form.is_valid():
+                #get data from form
+                client_email = assign_task_form.cleaned_data["client_email"]
+                client = Client.objects.get(company=current_company,email_address=client_email)
+                task = assign_task_form.cleaned_data["task"]
+                task_type = assign_task_form.cleaned_data["task_type"]
+                start_date = assign_task_form.cleaned_data["start_date"]
+                end_date = assign_task_form.cleaned_data["end_date"]
+                start_hour = assign_task_form.cleaned_data["start_hour"]
+                start_minute = assign_task_form.cleaned_data["start_minute"]
+                end_hour = assign_task_form.cleaned_data["end_hour"]
+                end_minute = assign_task_form.cleaned_data["end_minute"]
+                description = assign_task_form.cleaned_data["description"]
+                link = assign_task_form.cleaned_data["link"]
+                #attachments = assign_task_form.cleaned_data["attachment"]
+                #attachments = request.FILES.getlist('attachment')
+                start_time = ""
+                end_time = ""
+                if start_hour != "" and start_minute != "":
+                    start_time = "{0}:{1}".format(str(start_hour),str(start_minute))
+                if end_hour != "" and end_minute != "":
+                    end_time = "{0}:{1}".format(str(end_hour),str(end_minute))
+                #save task header
+                new_task_header = TaskHeader(company=current_company,
+                                                client=client,
+                                                activity_task=task,
+                                                start_date = start_date,
+                                                end_date = end_date,
+                                                task_type = task_type,
+                                                start_time = start_time,
+                                                end_time = end_time,
+                                                description = description,
+                                                link = link)
+                new_task_header.save()
+                #populate task schedule
+                current_user = request.user
+                if task_type == "One Time":
+                    self.save_one_time_task(new_task_header, attachments, current_user)
+                if task_type == "Daily":
+                    self.save_daily_task(new_task_header, attachments, current_user)
+                if task_type == "Weekly":
+                    self.save_weekly_task(new_task_header, attachments, current_user)
+                if task_type == "Bi-Weekly":
+                    self.save_bi_weekly_task(new_task_header, attachments, current_user)
+                if task_type == "Monthly":
+                    self.save_monthly_task(new_task_header, attachments, current_user)
+                if task_type == "Yearly":
+                    self.save_yearly_task(new_task_header, attachments, current_user)
+                messages.success(request, "Assigned task {0} to client {1} {2}".format(task, client.first_name, client.last_name))
+            else:
+                form_errors = assign_task_form.errors.as_data()
+                error_messaging.render_error_messages(request, form_errors)
         #Almost identical to GET, except don't have the find client form in context,
         #instead, just use the client email from POST
         return HttpResponseRedirect(reverse('assign_tasks') + "?client_email=" + client_email)
@@ -595,6 +600,13 @@ class AssignTasks(LoginRequiredMixin, View):
         #client_schedule = TaskSchedule.objects.filter(company=current_company,client=current_client)
         #context["client_schedule"] = client_schedule
         #return render(request,'production/assign_tasks.html',context)
+
+    def validate_attachments(self, request, attachments):
+        for attachment in attachments:
+            if attachment._size > self.MAX_FILE_SIZE:
+                messages.error(request, "Attachment {0} is too large. All attachments must be under 100mb.".format(attachment))
+                return False
+        return True
 
     def save_task_attachments(self, new_task_header, attachments, current_user, schedule_entry):
         for uploaded_file in attachments:
@@ -931,41 +943,49 @@ def convert_to_client_timezone(client_timestamp, client):
 @transaction.atomic
 def edit_task_with_id(request):
     if request.method == 'POST':
+        MAX_FILE_SIZE = 104857600 #10mb in bytes
         context = {}
         company = request.user.company
         edit_task_form = EditTaskForm(request.POST, request.FILES)
         client_id = request.POST.get('client_id')
-        if edit_task_form.is_valid():
-            task_id = edit_task_form.cleaned_data["task_id"]
-            client_id = edit_task_form.cleaned_data["client_id"]
-            current_client = Client.objects.get(company=company, id=client_id)
-            client_email = current_client.email_address
-            current_task = TaskSchedule.objects.get(company=company,client=current_client, id=task_id)
-            description = edit_task_form.cleaned_data["description"]
-            start_hour = edit_task_form.cleaned_data["start_hour"]
-            end_hour = edit_task_form.cleaned_data["end_hour"]
-            start_minute = edit_task_form.cleaned_data["start_minute"]
-            end_minute = edit_task_form.cleaned_data["end_minute"]
-            attachments = request.FILES.getlist('attachment')
-            start_time = ""
-            end_time = ""
-            if start_hour != "" and start_minute != "":
-                start_time = "{0}:{1}".format(str(start_hour),str(start_minute))
-            if end_hour != "" and end_minute != "":
-                end_time = "{0}:{1}".format(str(end_hour),str(end_minute))
-            current_task.description = description
-            current_task.start_time = start_time
-            current_task.end_time = end_time
-            current_task.save()
-            for uploaded_attachment in attachments:
-                new_task_attachment = TaskAttachment(company = company,
-                                                    client = current_client,
-                                                    user = request.user,
-                                                    task_schedule = current_task,
-                                                    attachment = uploaded_attachment)
-                new_task_attachment.save()
-            messages.success(request, "Successfully Edited Task!")
-            return HttpResponseRedirect(reverse('assign_tasks') + "?client_email=" + client_email)
+        attachments = request.FILES.getlist('attachment')
+        are_attachments_valid = True
+        for attachment in attachments:
+            if attachment._size > MAX_FILE_SIZE:
+                messages.error(request, "Attachment {0} is too large. All attachments must be under 100mb.".format(attachment))
+                are_attachments_valid = False
+        if are_attachments_valid:
+            if edit_task_form.is_valid():
+                task_id = edit_task_form.cleaned_data["task_id"]
+                client_id = edit_task_form.cleaned_data["client_id"]
+                current_client = Client.objects.get(company=company, id=client_id)
+                client_email = current_client.email_address
+                current_task = TaskSchedule.objects.get(company=company,client=current_client, id=task_id)
+                description = edit_task_form.cleaned_data["description"]
+                start_hour = edit_task_form.cleaned_data["start_hour"]
+                end_hour = edit_task_form.cleaned_data["end_hour"]
+                start_minute = edit_task_form.cleaned_data["start_minute"]
+                end_minute = edit_task_form.cleaned_data["end_minute"]
+                #attachments = request.FILES.getlist('attachment')
+                start_time = ""
+                end_time = ""
+                if start_hour != "" and start_minute != "":
+                    start_time = "{0}:{1}".format(str(start_hour),str(start_minute))
+                if end_hour != "" and end_minute != "":
+                    end_time = "{0}:{1}".format(str(end_hour),str(end_minute))
+                current_task.description = description
+                current_task.start_time = start_time
+                current_task.end_time = end_time
+                current_task.save()
+                for uploaded_attachment in attachments:
+                    new_task_attachment = TaskAttachment(company = company,
+                                                        client = current_client,
+                                                        user = request.user,
+                                                        task_schedule = current_task,
+                                                        attachment = uploaded_attachment)
+                    new_task_attachment.save()
+                messages.success(request, "Successfully Edited Task!")
+                return HttpResponseRedirect(reverse('assign_tasks') + "?client_email=" + client_email)
     messages.error(request, "Error Editing Task")
     current_client = Client.objects.get(company=company, id=client_id)
     client_email = current_client.email_address

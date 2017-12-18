@@ -294,6 +294,7 @@ class CreateTaskForm(forms.Form):
 class AssignTaskForm(forms.Form):
 
     MAX_TASK_DURATION = 365
+    MAX_FILE_SIZE = 104857600 #100mb in bytes
 
     client_email = forms.CharField(max_length=200)
     task = forms.CharField(max_length=300)
@@ -309,6 +310,13 @@ class AssignTaskForm(forms.Form):
     #attachment = forms.FileField(label='Select file', required=False)
     attachment = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), label='Select files', required=False)
 
+    #def clean_attachment(self):
+    #    attachments = self.cleaned_data.get('attachment')
+    #    for attachment in attachments:
+    #        print(attachment)
+    #        if attachment.size > self.MAX_FILE_SIZE:
+    #            raise forms.ValidationError("Attachment size must be less than 100mb")
+
     def clean_date_duration(self, start_date, end_date):
         duration = end_date - start_date
         print(duration.days)
@@ -322,6 +330,7 @@ class AssignTaskForm(forms.Form):
         start_date = cleaned_data.get("start_date")
         end_date = cleaned_data.get("end_date")
         self.clean_date_duration(start_date, end_date)
+        #self.clean_attachment()
         return cleaned_data
 
 class FindClientForm(forms.Form):

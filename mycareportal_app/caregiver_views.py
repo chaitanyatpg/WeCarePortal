@@ -392,6 +392,8 @@ def caregiver_post_transfer(request):
 
 class CaregiverDashboard(LoginRequiredMixin, View):
 
+    MAX_FILE_SIZE = 104857600 #100mb in bytes
+
     def get(self, request):
         context = {}
         current_company = request.user.company
@@ -450,45 +452,55 @@ class CaregiverDashboard(LoginRequiredMixin, View):
     def post(self, request):
         context = {}
         update_task_form = UpdateTaskForm(request.POST, request.FILES)
-        if update_task_form.is_valid():
-            current_company = request.user.company
-            comment = update_task_form.cleaned_data["comment"]
-            task_id = update_task_form.cleaned_data["task_id"]
-            client_id = update_task_form.cleaned_data["client_id"]
-            client = Client.objects.get(company=current_company,id=client_id)
-            status = update_task_form.cleaned_data["status"]
-            incident_id = update_task_form.cleaned_data["incident_id"]
-            location_id = update_task_form.cleaned_data["location_id"]
-            attachments = request.FILES.getlist('attachment')
-            task = TaskSchedule.objects.get(company=current_company,client=client,id=task_id)
-            #task.comment = comment
-            if status == "pending":
-                task.pending = True
-                task.complete = False
-                task.in_progress = False
-                task.cancelled = False
-            elif status == "complete":
-                task.pending = False
-                task.complete = True
-                task.in_progress = False
-                task.cancelled = False
-            elif status == "in_progress":
-                task.pending = False
-                task.complete = False
-                task.in_progress = True
-                task.cancelled = False
-            elif status == "cancelled":
-                task.pending = False
-                task.complete = False
-                task.in_progress = False
-                task.cancelled = True
-            task.save()
-            self.save_task_comments(request, update_task_form, task, current_company, client, comment)
-            self.save_task_attachments(request, update_task_form, task, current_company, client, request.user, attachments)
-            if(incident_id and location_id):
-                self.report_incident(request, update_task_form, incident_id, location_id, client, request.user, task)
-            messages.success(request, "Edited Task: {0}".format(task.activity_task))
+        attachments = request.FILES.getlist('attachment')
+        are_attachments_valid = self.validate_attachments(request, attachments)
+        if are_attachments_valid:
+            if update_task_form.is_valid():
+                current_company = request.user.company
+                comment = update_task_form.cleaned_data["comment"]
+                task_id = update_task_form.cleaned_data["task_id"]
+                client_id = update_task_form.cleaned_data["client_id"]
+                client = Client.objects.get(company=current_company,id=client_id)
+                status = update_task_form.cleaned_data["status"]
+                incident_id = update_task_form.cleaned_data["incident_id"]
+                location_id = update_task_form.cleaned_data["location_id"]
+                #attachments = request.FILES.getlist('attachment')
+                task = TaskSchedule.objects.get(company=current_company,client=client,id=task_id)
+                #task.comment = comment
+                if status == "pending":
+                    task.pending = True
+                    task.complete = False
+                    task.in_progress = False
+                    task.cancelled = False
+                elif status == "complete":
+                    task.pending = False
+                    task.complete = True
+                    task.in_progress = False
+                    task.cancelled = False
+                elif status == "in_progress":
+                    task.pending = False
+                    task.complete = False
+                    task.in_progress = True
+                    task.cancelled = False
+                elif status == "cancelled":
+                    task.pending = False
+                    task.complete = False
+                    task.in_progress = False
+                    task.cancelled = True
+                task.save()
+                self.save_task_comments(request, update_task_form, task, current_company, client, comment)
+                self.save_task_attachments(request, update_task_form, task, current_company, client, request.user, attachments)
+                if(incident_id and location_id):
+                    self.report_incident(request, update_task_form, incident_id, location_id, client, request.user, task)
+                messages.success(request, "Edited Task: {0}".format(task.activity_task))
         return redirect('caregiver_dashboard')
+
+    def validate_attachments(self, request, attachments):
+        for attachment in attachments:
+            if attachment._size > self.MAX_FILE_SIZE:
+                messages.error(request, "Attachment {0} is too large. All attachments must be under 100mb.".format(attachment))
+                return False
+        return True
 
     def report_incident(self, request, update_task_form, incident_id, location_id, client, user, task):
 
