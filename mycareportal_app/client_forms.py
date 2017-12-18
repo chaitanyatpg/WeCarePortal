@@ -6,6 +6,9 @@ import datetime
 
 class ClientRegistrationForm(forms.Form):
 
+    # Limit uploads to 5MB
+    MAX_UPLOAD_SIZE = 5242880
+
     first_name = forms.CharField(max_length=100)
     last_name = forms.CharField(max_length=100)
     middle_name = forms.CharField(max_length=100, required=False)
@@ -25,11 +28,15 @@ class ClientRegistrationForm(forms.Form):
 
     def clean_picture(self):
         picture = self.cleaned_data['profile_picture']
-        if not picture:
-            return None
-        if not picture.content_type or not picture.content_type.startswith('image'):
-            raise forms.ValidationError('Image file type is not recognized. Please try again')
-        return picture
+        if picture:
+            if picture._size > self.MAX_UPLOAD_SIZE:
+                raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
+
+        #if not picture:
+        #    return None
+        #if not picture.content_type or not picture.content_type.startswith('image'):
+        #    raise forms.ValidationError('Image file type is not recognized. Please try again')
+        #return picture
 
     def clean(self):
 
@@ -41,9 +48,12 @@ class ClientRegistrationForm(forms.Form):
                             _('Passwords do not match'),
                             code='invalid',
                             params={'value': 'Passwords do not match'})
+        self.clean_picture()
         return cleaned_data
 
 class EditClientDetailsForm(forms.Form):
+
+    MAX_UPLOAD_SIZE = 5242880
 
     first_name = forms.CharField(max_length=100)
     last_name = forms.CharField(max_length=100)
@@ -64,11 +74,15 @@ class EditClientDetailsForm(forms.Form):
 
     def clean_picture(self):
         picture = self.cleaned_data['profile_picture']
-        if not picture:
-            return None
-        if not picture.content_type or not picture.content_type.startswith('image'):
-            raise forms.ValidationError('Image file type is not recognized. Please try again')
-        return picture
+        if picture:
+            if picture._size > self.MAX_UPLOAD_SIZE:
+                raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
+        #picture = self.cleaned_data['profile_picture']
+        #if not picture:
+        #    return None
+        #if not picture.content_type or not picture.content_type.startswith('image'):
+        #    raise forms.ValidationError('Image file type is not recognized. Please try again')
+        #return picture
 
     def clean(self):
 
@@ -80,11 +94,13 @@ class EditClientDetailsForm(forms.Form):
                             _('Passwords do not match'),
                             code='invalid',
                             params={'value': 'Passwords do not match'})
+        self.clean_picture()
         return cleaned_data
 
 class FamilyDetailsForm(forms.Form):
 
     MIN_LENGTH = 8
+    MAX_UPLOAD_SIZE = 5242880
 
     client_email = forms.CharField(max_length=200)
     first_name = forms.CharField(max_length=100)
@@ -104,11 +120,15 @@ class FamilyDetailsForm(forms.Form):
 
     def clean_picture(self):
         picture = self.cleaned_data['profile_picture']
-        if not picture:
-            return None
-        if not picture.content_type or not picture.content_type.startswith('image'):
-            raise forms.ValidationError('Image file type is not recognized. Please try again')
-        return picture
+        if picture:
+            if picture._size > self.MAX_UPLOAD_SIZE:
+                raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
+        #picture = self.cleaned_data['profile_picture']
+        #if not picture:
+        #    return None
+        #if not picture.content_type or not picture.content_type.startswith('image'):
+        #    raise forms.ValidationError('Image file type is not recognized. Please try again')
+        #return picture
 
     def clean(self):
         cleaned_data = super(FamilyDetailsForm, self).clean()
@@ -128,6 +148,7 @@ class FamilyDetailsForm(forms.Form):
         if (not(bool(re.search(r'\d',password)))):
             raise forms.ValidationError("Password must be at least {0} characters long, have one capital letter and one number".
                                         format(self.MIN_LENGTH))
+        self.clean_picture()
         return cleaned_data
 
 class DeleteFamilyDetailsForm(forms.Form):

@@ -132,6 +132,9 @@ class AddClient(LoginRequiredMixin, View):
                 return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client_email)
             except IntegrityError as e:
                 messages.error(request, "Client already exists. Please enter a new client.")
+        else:
+            form_errors = add_client_form.errors.as_data()
+            error_messaging.render_error_messages(request, form_errors)
         return redirect('add_client')
 
     def parse_date(self,client_birthday):
@@ -245,6 +248,9 @@ class EditClient(LoginRequiredMixin, View):
                 messages.success(request, "Client {0} {1} successfully edited!".format(client.first_name,client.last_name))
             except IntegrityError as e:
                 messages.error(request, "Client already exists. Please enter a new Client.")
+        else:
+            form_errors = edit_client_form.errors.as_data()
+            error_messaging.render_error_messages(request, form_errors)
         return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client_email)
 
     def parse_date(self,client_birthday):

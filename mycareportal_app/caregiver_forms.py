@@ -7,6 +7,7 @@ import re
 class CaregiverRegistrationForm(forms.Form):
 
     MIN_LENGTH = 8
+    MAX_UPLOAD_SIZE = 5242880
 
     first_name = forms.CharField(max_length=100)
     last_name = forms.CharField(max_length=100)
@@ -28,11 +29,15 @@ class CaregiverRegistrationForm(forms.Form):
 
     def clean_picture(self):
         picture = self.cleaned_data['profile_picture']
-        if not picture:
-            return None
-        if not picture.content_type or not picture.content_type.startswith('image'):
-            raise forms.ValidationError('Image file type is not recognized. Please try again')
-        return picture
+        if picture:
+            if picture._size > self.MAX_UPLOAD_SIZE:
+                raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
+        #picture = self.cleaned_data['profile_picture']
+        #if not picture:
+        #    return None
+        #if not picture.content_type or not picture.content_type.startswith('image'):
+        #    raise forms.ValidationError('Image file type is not recognized. Please try again')
+        #return picture
 
     def clean(self):
 
@@ -53,9 +58,12 @@ class CaregiverRegistrationForm(forms.Form):
         if (not(bool(re.search(r'\d',password)))):
             raise forms.ValidationError("Password must be at least {0} characters long, have one capital letter and one number".
                                         format(self.MIN_LENGTH))
+        self.clean_picture()
         return cleaned_data
 
 class CaregiverEditForm(forms.Form):
+
+    MAX_UPLOAD_SIZE = 5242880
 
     first_name = forms.CharField(max_length=100, required=False)
     last_name = forms.CharField(max_length=100, required=False)
@@ -76,15 +84,20 @@ class CaregiverEditForm(forms.Form):
 
     def clean_picture(self):
         picture = self.cleaned_data['profile_picture']
-        if not picture:
-            return None
-        if not picture.content_type or not picture.content_type.startswith('image'):
-            raise forms.ValidationError('Image file type is not recognized. Please try again')
-        return picture
+        if picture:
+            if picture._size > self.MAX_UPLOAD_SIZE:
+                raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
+        #picture = self.cleaned_data['profile_picture']
+        #if not picture:
+        #    return None
+        #if not picture.content_type or not picture.content_type.startswith('image'):
+        #    raise forms.ValidationError('Image file type is not recognized. Please try again')
+        #return picture
 
     def clean(self):
 
         cleaned_data = super(CaregiverEditForm, self).clean()
+        self.clean_picture()
         return cleaned_data
 
 class FindCaregiverForm(forms.Form):
