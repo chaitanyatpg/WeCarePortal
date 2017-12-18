@@ -198,6 +198,9 @@ class EditCaregiver(LoginRequiredMixin, View):
             context['criteria_map'] = criteria_map
             context['certification_map'] = certification_map
             context['transfer_map'] = transfer_map
+        else:
+            form_errors = find_caregiver_form.errors.as_data()
+            error_messaging.render_error_messages(request, form_errors)
         return render(request,'production/edit_caregiver.html', context)
 
     def post(self, request):

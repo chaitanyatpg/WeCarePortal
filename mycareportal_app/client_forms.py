@@ -139,15 +139,16 @@ class FamilyDetailsForm(forms.Form):
                             _('Passwords do not match'),
                             code='invalid',
                             params={'value': 'Passwords do not match'})
-        if len(password) < self.MIN_LENGTH:
-            raise forms.ValidationError("Password must be at least {0} characters long, have one capital letter and one number".
-                                        format(self.MIN_LENGTH))
-        if (not(bool(re.match("(?=.*[A-Z])",password)))):
-            raise forms.ValidationError("Password must be at least {0} characters long, have one capital letter and one number".
-                                        format(self.MIN_LENGTH))
-        if (not(bool(re.search(r'\d',password)))):
-            raise forms.ValidationError("Password must be at least {0} characters long, have one capital letter and one number".
-                                        format(self.MIN_LENGTH))
+        if password:
+            if len(password) < self.MIN_LENGTH:
+                raise forms.ValidationError("Password must be at least {0} characters long, have one capital letter and one number".
+                                            format(self.MIN_LENGTH))
+            if (not(bool(re.match("(?=.*[A-Z])",password)))):
+                raise forms.ValidationError("Password must be at least {0} characters long, have one capital letter and one number".
+                                            format(self.MIN_LENGTH))
+            if (not(bool(re.search(r'\d',password)))):
+                raise forms.ValidationError("Password must be at least {0} characters long, have one capital letter and one number".
+                                            format(self.MIN_LENGTH))
         self.clean_picture()
         return cleaned_data
 
