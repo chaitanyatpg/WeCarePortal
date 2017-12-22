@@ -26,22 +26,22 @@ class ProviderDashboard(LoginRequiredMixin, View):
 
     def get(self, request):
         context = {}
-        current_company = request.user.company
-        provider = Provider.objects.get(company=current_company,user=request.user)
-        related_clients = Client.objects.filter(company=current_company, provider=provider)
+        #current_company = request.user.company
+        provider = Provider.objects.filter(user=request.user)
+        related_clients = Client.objects.filter(provider__in=provider)
         related_caregivers = []
         for client in related_clients:
             client_caregivers = client.caregiver.all()
             related_caregivers += client_caregivers
-        context["current_provider"] = provider
-        active_caregivers = CaregiverTimeSheet.objects.filter(company=current_company, client__in=related_clients, caregiver__in=related_caregivers, is_active=True)
+        context["current_provider"] = provider[0]
+        active_caregivers = CaregiverTimeSheet.objects.filter(client__in=related_clients, caregiver__in=related_caregivers, is_active=True)
         context['active_caregivers'] = active_caregivers
         #Get displayable family contact data
         #Get Tasks for related clients for the current day
         client_tasks = {}
         current_date = datetime.date.today()
         for client_data in related_clients:
-            current_client_tasks = self.get_client_tasks(client_data, current_company)
+            current_client_tasks = self.get_client_tasks(client_data)
             #client_name = '{0} {1}'.format(client_data.first_name, client_data.last_name)
             client_tasks[client_data] = list(current_client_tasks)
         context["client_tasks"] = client_tasks
@@ -49,14 +49,14 @@ class ProviderDashboard(LoginRequiredMixin, View):
         #context["update_task_form"] = UpdateTaskForm()
         return render(request, 'production/provider_dashboard_2.html', context)
 
-    def get_client_tasks(self, client_data, current_company):
+    def get_client_tasks(self, client_data):
         client_timezone = pytz.timezone(client_data.time_zone)
         #current_date = datetime.date.today()
         current_date = (timezone.now().astimezone(client_timezone)).date()
         timezone.activate(client_timezone)
-        client_tasks = TaskSchedule.objects.filter(company=current_company,client=client_data,date=current_date).order_by('cancelled','pending','in_progress','complete')
+        client_tasks = TaskSchedule.objects.filter(client=client_data,date=current_date).order_by('cancelled','pending','in_progress','complete')
         client_tasks = list(map(lambda x: (x,
-        TaskComment.objects.filter(company=current_company,client=client_data,task_schedule=x).order_by('created'),
-        TaskAttachment.objects.filter(company=current_company,client=client_data,task_schedule=x).order_by('created'),
-        TaskLink.objects.filter(company=current_company,client=client_data,task_schedule=x).order_by('created')),client_tasks))
+        TaskComment.objects.filter(client=client_data,task_schedule=x).order_by('created'),
+        TaskAttachment.objects.filter(client=client_data,task_schedule=x).order_by('created'),
+        TaskLink.objects.filter(client=client_data,task_schedule=x).order_by('created')),client_tasks))
         return client_tasks

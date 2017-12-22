@@ -133,7 +133,7 @@ class FamilyContact(models.Model):
 class Provider(models.Model):
 
     company = models.ForeignKey(Company)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User)
     email_address = models.CharField(max_length=100)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)

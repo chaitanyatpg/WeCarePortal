@@ -1039,7 +1039,7 @@ def post_family_details(request):
                 profile_picture = family_details_form.cleaned_data['profile_picture']
                 password = family_details_form.cleaned_data['password']
                 family_id = family_details_form.cleaned_data['family_id']
-                print(power_of_attorney)
+                #print(power_of_attorney)
                 #Create family user auth model and save
                 if(family_id==None):
                     #check if there is an existing soft-deleted user
@@ -1173,10 +1173,13 @@ def post_provider_details(request):
                 email = provider_details_form.cleaned_data['email']
                 password = provider_details_form.cleaned_data['password']
                 provider_id = provider_details_form.cleaned_data['provider_id']
-                if(provider_id is None):
+                if(provider_id is None): #Not in edit mode - new provider
                     #check if there is an existing soft-deleted user
                     existing_user = User.objects.filter(company=company,username=email,email=email)
+                    #check if there is an existing user in a different company
+                    existing_user_other_company = User.objects.filter(email=email,username=email)
                     if(existing_user):
+                        print("REEEEE")
                         existing_user = existing_user[0]
                         client_email = provider_details_form.cleaned_data['client_email']
                         assigned_client = Client.objects.get(company=company,email_address=client_email)
@@ -1201,7 +1204,35 @@ def post_provider_details(request):
                             messages.success(request, "Added provider {0} {1}!".format(first_name,last_name))
                         else:
                             messages.error(request, "Provider already exists. Please enter new Provider.")
+                    elif(existing_user_other_company):
+                        print("BLEEE")
+                        existing_user_other_company = existing_user_other_company[0]
+                        #Create Provider object and save
+                        provider_user = Provider(user = existing_user_other_company,
+                                                  company=company,
+                                                  email_address = email,
+                                                  first_name = first_name,
+                                                  last_name = last_name,
+                                                  speciality = speciality,
+                                                  phone_number = phone_number,
+                                                  secondary_phone_number = secondary_phone_number
+                                                  )
+                        provider_user.save()
+                        print("2")
+                        #Add new user to UserRoles with PROVIDER Role
+                        new_role = UserRoles(company=company,
+                                                user=existing_user_other_company,
+                                                role='PROVIDERUSER')
+                        new_role.save()
+                        print("3")
+                        #Add Provider user to client
+                        client_email = provider_details_form.cleaned_data['client_email']
+                        assigned_client = Client.objects.get(company=company,email_address=client_email)
+                        assigned_client.provider.add(provider_user)
+                        assigned_client.save()
+                        messages.success(request, "Added provider {0} {1}!".format(first_name,last_name))
                     else:
+                        print("MEEEEE")
                         new_user = User.objects.create_user(username=email,
                                                             email=email,
                                                             first_name=first_name,
