@@ -24,6 +24,8 @@ from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 
 from mycareportal_app.common import error_messaging as error_messaging
+from django.contrib.sites.shortcuts import get_current_site
+from mycareportal_app.email.caregiver.caregiver_email_processor import CaregiverEmailProcessor
 
 def add_caregiver(request):
     return render(request, 'production/add_caregiver.html')
@@ -67,6 +69,7 @@ class AddCaregiver(LoginRequiredMixin, View):
                                                         last_name=last_name,
                                                         password=password,
                                                         company=company)
+                    new_user.is_active = False
                     new_user.save()
                     #Create caregiver object and save
                     new_caregiver = Caregiver(user = new_user,
@@ -94,6 +97,12 @@ class AddCaregiver(LoginRequiredMixin, View):
                                             user=new_user,
                                             role='CAREGIVER')
                     new_role.save()
+                    #Send verification email
+                    current_site = get_current_site(request)
+                    email_manager = CaregiverEmailProcessor()
+                    email_manager.send_verification_email(
+                    new_user, current_site.domain
+                    )
                     #Add messages
                     messages.success(request, "Caregiver {0} {1} successfully added!".format(first_name, last_name))
                     return redirect('add_caregiver')

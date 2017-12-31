@@ -50,6 +50,9 @@ SECURE_SSL_REDIRECT = True
 EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
 SENDGRID_API_KEY = "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"
 
+#Custom - email sending active_caregivers
+CAN_SEND_EMAILS = True
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -80,7 +83,9 @@ AUTH_USER_MODEL = 'mycareportal_app.User'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['mycareportal_app/templates'],
+        'DIRS': ['mycareportal_app/templates',
+                'mycareportal_app/email/care_manager/templates',
+                'mycareportal_app/email/caregiver/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

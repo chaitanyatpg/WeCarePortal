@@ -15,13 +15,26 @@ import json
 from django.contrib import messages
 from django.db import IntegrityError
 
+from django.contrib.sites.shortcuts import get_current_site
+
 import datetime
 import pytz
 import django.utils.timezone as timezone
 
 from django.core.mail import send_mail
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from mycareportal_app.common.tokens import account_activation_token
+from mycareportal_app.email.care_manager.care_manager_email_processor import CareManagerEmailProcessor
 
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 # Create your views here.
+
+#@receiver(pre_save, sender=User)
+#def user_sign_up_(sender, instance, **kwargs):
+#    if instance._state.adding:
+#        instance.is_active = False
 
 @login_required
 def home(request):
@@ -60,7 +73,6 @@ def logout_view(request):
     logout(request)
     return redirect('login')
 
-@transaction.atomic
 def register(request):
     context = {}
     if request.method == 'GET':
@@ -84,52 +96,80 @@ def register(request):
         password = form.cleaned_data['password']
         exception_flag = False
         #Create company object and save
-        try:
-            new_company = Company(company_name=company_name,
-                                        contact_number=contact_number,
-                                        address=address,
-                                        city=city,
-                                        state=state,
-                                        zip_code=zip_code)
-            new_company.save()
-        except IntegrityError as e:
-            exception_flag = True
-            messages.error(request, "Company has already been registered. Please enter a new company name.")
-        if not exception_flag:
+        with transaction.atomic():
             try:
-                #Create care manager user auth object and save
-                new_user = User.objects.create_user(username=username,
-                                                    email=email,
-                                                    first_name=first_name,
-                                                    last_name=last_name,
-                                                    password=password,
-                                                    company=new_company)
-                new_user.save()
+                new_company = Company(company_name=company_name,
+                                            contact_number=contact_number,
+                                            address=address,
+                                            city=city,
+                                            state=state,
+                                            zip_code=zip_code)
+                new_company.save()
             except IntegrityError as e:
                 exception_flag = True
-                messages.error(request, "User has already been registered. Please enter a new email address.")
+                messages.error(request, "Company has already been registered. Please enter a new company name.")
+            if not exception_flag:
+                try:
+                    #Create care manager user auth object and save
+                    new_user = User.objects.create_user(username=username,
+                                                        email=email,
+                                                        first_name=first_name,
+                                                        last_name=last_name,
+                                                        password=password,
+                                                        company=new_company)
+                    new_user.save()
+                except IntegrityError as e:
+                    exception_flag = True
+                    messages.error(request, "User has already been registered. Please enter a new email address.")
+            if not exception_flag:
+                try:
+                    #Create care manager object and save
+                    new_care_manager = CareManager(user=new_user,
+                                                   company=new_company,
+                                                   email_address=email)
+                    new_care_manager.save()
+                except IntegrityError as e:
+                    exception_flag = True
+                    messages.error(request, "User has already been registered. Please enter a new email address.")
+            if not exception_flag:
+                #Add new user to UserRoles with CAREMANAGER role
+                new_role = UserRoles(company=new_company,
+                                        user=new_user,
+                                        role='CAREMANAGER')
+                new_role.save()
         if not exception_flag:
-            try:
-                #Create care manager object and save
-                new_care_manager = CareManager(user=new_user,
-                                               company=new_company,
-                                               email_address=email)
-                new_care_manager.save()
-            except IntegrityError as e:
-                exception_flag = True
-                messages.error(request, "User has already been registered. Please enter a new email address.")
-        if not exception_flag:
-            #Add new user to UserRoles with CAREMANAGER role
-            new_role = UserRoles(company=new_company,
-                                    user=new_user,
-                                    role='CAREMANAGER')
-            new_role.save()
+            #Send verification email
+            new_user = User.objects.get(id=new_user.id)
+            new_user.is_active = False
+            new_user.save()
+            current_site = get_current_site(request)
+            email_manager = CareManagerEmailProcessor()
+            email_manager.send_verification_email(
+            new_user, current_site.domain
+            )
             #Authenticate new user and log in
             new_user = authenticate(username=username,
                                     password=password)
-            auth_login(request, new_user)
+            #auth_login(request, new_user)
+            messages.info(request, "Company {0} and Care Manager {1} {2} successfully Added! Please refer to verification email sent to {3} to complete registration".format(company_name,first_name,last_name,email))
             return redirect('home')
     return render(request, 'production/wecare_register.html', context)
+
+def activate(request, uidb64, token):
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.account_activated = True
+        user.save()
+        auth_login(request, user)
+        # return redirect('home')
+        return redirect('home')
+    else:
+        return HttpResponse('Activation link is invalid!')
 
 @login_required
 def dashboard(request):

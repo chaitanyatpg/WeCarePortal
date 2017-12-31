@@ -20,6 +20,7 @@ class Company(models.Model):
 class User(AbstractUser):
 
     company = models.ForeignKey(Company)
+    account_activated = models.BooleanField(default=False)
 
 class UserRoles(models.Model):
 

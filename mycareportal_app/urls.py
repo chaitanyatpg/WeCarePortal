@@ -26,6 +26,8 @@ urlpatterns = [
     url(r'^login$', auth_views.LoginView.as_view(template_name='production/wecare_login.html'),name='login'),
     url(r'^logout$', views.logout_view,name='logout'),
     url(r'^register',views.register,name='register'),
+    url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        views.activate, name='activate'),
     url(r'^edit_company', views.EditCompany.as_view(), name='edit_company'),
     url(r'^dashboard',views.dashboard,name='dashboard'),
     url(r'^date_filter_dashboard',views.date_filter_dashboard,name='date_filter_dashboard'),
