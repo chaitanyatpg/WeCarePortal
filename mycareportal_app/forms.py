@@ -89,9 +89,13 @@ class CloseCaregiverSessionForm(forms.Form):
 
 class PasswordResetForm(forms.Form):
 
+    MIN_LENGTH = 8
+
     password = forms.CharField(max_length=30,required=True)
     confirm_password = forms.CharField(max_length=30,required=True)
-    user_id = forms.IntegerField()
+    uidb64 = forms.CharField(required=True)
+    token = forms.CharField(required=True)
+    user_id = forms.IntegerField(required=True)
 
     def clean(self):
 
@@ -103,4 +107,14 @@ class PasswordResetForm(forms.Form):
                             _('Passwords do not match'),
                             code='invalid',
                             params={'value': 'Passwords do not match'})
+        if (not(bool(re.match("(?=.*[A-Z])",password)))):
+            raise forms.ValidationError("Password must be at least {0} characters long, have one capital letter and one number".
+                                        format(self.MIN_LENGTH))
+        if (not(bool(re.search(r'\d',password)))):
+            raise forms.ValidationError("Password must be at least {0} characters long, have one capital letter and one number".
+                                        format(self.MIN_LENGTH))
+        if len(password) < self.MIN_LENGTH:
+            raise forms.ValidationError("Password must be at least {0} characters long, have one capital letter and one number".
+                                        format(self.MIN_LENGTH))
+
         return cleaned_data

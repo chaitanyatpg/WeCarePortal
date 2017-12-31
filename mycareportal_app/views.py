@@ -29,6 +29,8 @@ from mycareportal_app.email.care_manager.care_manager_email_processor import Car
 
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
+
+from mycareportal_app.common import error_messaging as error_messaging
 # Create your views here.
 
 #@receiver(pre_save, sender=User)
@@ -195,6 +197,8 @@ def pwd_activate(request, uidb64, token):
             user = None
         if user is not None and account_activation_token.check_token(user, token):
             context['user'] = user
+            context['uidb64'] = uidb64
+            context['token'] = token
             context['form'] = PasswordResetForm()
             return render(request, "production/wecare_pwd_reset.html", context)
         else:
@@ -204,9 +208,13 @@ def reset_password(request):
     if request.method == "POST":
         context = {}
         form = PasswordResetForm(request.POST)
+        uidb64 = request.POST.get("uidb64")
+        token = request.POST.get("token")
         if form.is_valid():
             password = form.cleaned_data["password"]
             user_id = form.cleaned_data["user_id"]
+            uidb64 = form.cleaned_data["uidb64"]
+            token = form.cleaned_data["token"]
             user = User.objects.get(id=user_id)
             user.set_password(password)
             user.is_active = True
@@ -214,7 +222,9 @@ def reset_password(request):
             user.save()
             messages.success(request, "Password reset. You can now log in.")
         else:
-            messages.error(request, "Error resetting password")
+            form_errors = form.errors.as_data()
+            error_messaging.render_error_messages(request, form_errors)
+            return redirect("pwd_activate", uidb64=uidb64, token=token)
         return redirect("login")
 
 def pwd_activate_2(request, uidb64, token):
