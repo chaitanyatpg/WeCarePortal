@@ -55,7 +55,6 @@ class AddCaregiver(LoginRequiredMixin, View):
             phone_number = add_caregiver_form.cleaned_data['phone_number']
             secondary_phone_number = add_caregiver_form.cleaned_data['secondary_phone_number']
             email = add_caregiver_form.cleaned_data['email']
-            password = add_caregiver_form.cleaned_data['password']
             ssn = add_caregiver_form.cleaned_data['ssn']
             referrer = add_caregiver_form.cleaned_data['referrer']
             profile_picture = add_caregiver_form.cleaned_data['profile_picture']
@@ -67,9 +66,9 @@ class AddCaregiver(LoginRequiredMixin, View):
                                                         email=email,
                                                         first_name=first_name,
                                                         last_name=last_name,
-                                                        password=password,
                                                         company=company)
                     new_user.is_active = False
+                    new_user.set_unusable_password()
                     new_user.save()
                     #Create caregiver object and save
                     new_caregiver = Caregiver(user = new_user,

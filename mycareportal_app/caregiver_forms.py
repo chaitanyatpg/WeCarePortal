@@ -21,8 +21,6 @@ class CaregiverRegistrationForm(forms.Form):
     phone_number = forms.CharField(max_length=20)
     secondary_phone_number = forms.CharField(max_length=20, required=False)
     email = forms.CharField(max_length=200)
-    password = forms.CharField(max_length=30)
-    confirm_password = forms.CharField(max_length=30)
     ssn = forms.CharField(max_length=20)
     referrer = forms.CharField(max_length=100, required=False)
     profile_picture = forms.ImageField(label='Select file', required=False)
@@ -42,22 +40,6 @@ class CaregiverRegistrationForm(forms.Form):
     def clean(self):
 
         cleaned_data = super(CaregiverRegistrationForm, self).clean()
-        password = cleaned_data.get('password')
-        confirm_password = cleaned_data.get('confirm_password')
-        if password != confirm_password:
-            raise forms.ValidationError(
-                            _('Passwords do not match'),
-                            code='invalid',
-                            params={'value': 'Passwords do not match'})
-        if len(password) < self.MIN_LENGTH:
-            raise forms.ValidationError("Password must be at least {0} characters long, have one capital letter and one number".
-                                        format(self.MIN_LENGTH))
-        if (not(bool(re.match("(?=.*[A-Z])",password)))):
-            raise forms.ValidationError("Password must be at least {0} characters long, have one capital letter and one number".
-                                        format(self.MIN_LENGTH))
-        if (not(bool(re.search(r'\d',password)))):
-            raise forms.ValidationError("Password must be at least {0} characters long, have one capital letter and one number".
-                                        format(self.MIN_LENGTH))
         self.clean_picture()
         return cleaned_data
 

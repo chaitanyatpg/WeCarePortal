@@ -86,3 +86,21 @@ class CloseCaregiverSessionForm(forms.Form):
 
         cleaned_data = super(CloseCaregiverSessionForm, self).clean()
         return cleaned_data
+
+class PasswordResetForm(forms.Form):
+
+    password = forms.CharField(max_length=30,required=True)
+    confirm_password = forms.CharField(max_length=30,required=True)
+    user_id = forms.IntegerField()
+
+    def clean(self):
+
+        cleaned_data = super(PasswordResetForm, self).clean()
+        password = cleaned_data.get('password')
+        confirm_password = cleaned_data.get('confirm_password')
+        if password != confirm_password:
+            raise forms.ValidationError(
+                            _('Passwords do not match'),
+                            code='invalid',
+                            params={'value': 'Passwords do not match'})
+        return cleaned_data

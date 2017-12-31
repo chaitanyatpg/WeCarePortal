@@ -167,6 +167,70 @@ def activate(request, uidb64, token):
         user.save()
         auth_login(request, user)
         # return redirect('home')
+        # Generate one time message for account activation
+        messages.success(request, "Account successfully activated")
+        return redirect('home')
+    else:
+        return HttpResponse('Activation link is invalid!')
+
+class PasswordActivate(View):
+
+    def get(self, request):
+        context = {}
+        try:
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+        if user is not None and account_activation_token.check_token(user, token):
+            return render(request, "production/wecare_pwd_reset.html", context)
+
+def pwd_activate(request, uidb64, token):
+    if request.method == "GET":
+        context = {}
+        try:
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+        if user is not None and account_activation_token.check_token(user, token):
+            context['user'] = user
+            context['form'] = PasswordResetForm()
+            return render(request, "production/wecare_pwd_reset.html", context)
+        else:
+            return HttpResponse("Activation link is invalid")
+
+def reset_password(request):
+    if request.method == "POST":
+        context = {}
+        form = PasswordResetForm(request.POST)
+        if form.is_valid():
+            password = form.cleaned_data["password"]
+            user_id = form.cleaned_data["user_id"]
+            user = User.objects.get(id=user_id)
+            user.set_password(password)
+            user.is_active = True
+            user.account_activated = True
+            user.save()
+            messages.success(request, "Password reset. You can now log in.")
+        else:
+            messages.error(request, "Error resetting password")
+        return redirect("login")
+
+def pwd_activate_2(request, uidb64, token):
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.account_activated = True
+        user.save()
+        auth_login(request, user)
+        # return redirect('home')
+        # Generate one time message for account activation
+        messages.success(request, "Account successfully activated")
         return redirect('home')
     else:
         return HttpResponse('Activation link is invalid!')
