@@ -305,14 +305,14 @@ class AddCareManager(LoginRequiredMixin, View):
                 first_name = add_care_manager_form.cleaned_data['first_name']
                 last_name = add_care_manager_form.cleaned_data['last_name']
                 email = add_care_manager_form.cleaned_data['email']
-                password = add_care_manager_form.cleaned_data['password']
                 can_add = add_care_manager_form.cleaned_data['can_add']
                 new_user = User.objects.create_user(username=email,
                                                     email=email,
                                                     first_name=first_name,
                                                     last_name=last_name,
-                                                    password=password,
                                                     company=current_company)
+                new_user.is_active = False
+                new_user.set_unusable_password()
                 new_user.save()
                 #Create care manager object and save
                 new_care_manager = CareManager(user=new_user,
@@ -325,6 +325,12 @@ class AddCareManager(LoginRequiredMixin, View):
                                         user=new_user,
                                         role='CAREMANAGER')
                 new_role.save()
+                #Send verification email
+                current_site = get_current_site(request)
+                email_manager = CareManagerEmailProcessor()
+                email_manager.new_send_verification_email(
+                new_user, current_site.domain
+                )
                 messages.success(request, "Care Manager {0} {1} successfully Added!".format(first_name,last_name))
             except IntegrityError as e:
                 messages.error(request, "Care Manager already exists. Please enter a different Care Manager")
