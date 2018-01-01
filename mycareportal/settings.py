@@ -85,7 +85,9 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': ['mycareportal_app/templates',
                 'mycareportal_app/email/care_manager/templates',
-                'mycareportal_app/email/caregiver/templates'],
+                'mycareportal_app/email/caregiver/templates',
+                'mycareportal_app/email/family/templates',
+                'mycareportal_app/email/provider/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

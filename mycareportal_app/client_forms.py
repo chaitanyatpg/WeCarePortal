@@ -114,8 +114,6 @@ class FamilyDetailsForm(forms.Form):
     zip_code = forms.CharField(max_length=10)
     power_of_attorney = forms.BooleanField(required=False)
     profile_picture = forms.ImageField(label='Select file', required=False)
-    password = forms.CharField(max_length=30, required=False)
-    confirm_password = forms.CharField(max_length=30, required=False)
     family_id = forms.IntegerField(required=False)
 
     def clean_picture(self):
@@ -132,23 +130,6 @@ class FamilyDetailsForm(forms.Form):
 
     def clean(self):
         cleaned_data = super(FamilyDetailsForm, self).clean()
-        password = cleaned_data.get('password')
-        confirm_password = cleaned_data.get('confirm_password')
-        if password != confirm_password:
-            raise forms.ValidationError(
-                            _('Passwords do not match'),
-                            code='invalid',
-                            params={'value': 'Passwords do not match'})
-        if password:
-            if len(password) < self.MIN_LENGTH:
-                raise forms.ValidationError("Password must be at least {0} characters long, have one capital letter and one number".
-                                            format(self.MIN_LENGTH))
-            if (not(bool(re.match("(?=.*[A-Z])",password)))):
-                raise forms.ValidationError("Password must be at least {0} characters long, have one capital letter and one number".
-                                            format(self.MIN_LENGTH))
-            if (not(bool(re.search(r'\d',password)))):
-                raise forms.ValidationError("Password must be at least {0} characters long, have one capital letter and one number".
-                                            format(self.MIN_LENGTH))
         self.clean_picture()
         return cleaned_data
 
@@ -172,30 +153,11 @@ class ProviderDetailsForm(forms.Form):
     phone_number = forms.CharField(max_length=20)
     secondary_phone_number = forms.CharField(max_length=20, required=False)
     email = forms.CharField(max_length=200)
-    password = forms.CharField(max_length=30,required=False)
-    confirm_password = forms.CharField(max_length=30,required=False)
     provider_id = forms.IntegerField(required=False)
     client_email = forms.CharField(max_length=200)
 
     def clean(self):
         cleaned_data = super(ProviderDetailsForm, self).clean()
-        password = cleaned_data.get('password')
-        confirm_password = cleaned_data.get('confirm_password')
-        if password != confirm_password:
-            raise forms.ValidationError(
-                            _('Passwords do not match'),
-                            code='invalid',
-                            params={'value': 'Passwords do not match'})
-        if password:
-            if len(password) < self.MIN_LENGTH:
-                raise forms.ValidationError("Password must be at least {0} characters long, have one capital letter and one number".
-                                            format(self.MIN_LENGTH))
-            if (not(bool(re.match("(?=.*[A-Z])",password)))):
-                raise forms.ValidationError("Password must be at least {0} characters long, have one capital letter and one number".
-                                            format(self.MIN_LENGTH))
-            if (not(bool(re.search(r'\d',password)))):
-                raise forms.ValidationError("Password must be at least {0} characters long, have one capital letter and one number".
-                                            format(self.MIN_LENGTH))
         return cleaned_data
 
 class DeleteProviderDetailsForm(forms.Form):

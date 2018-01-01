@@ -24,6 +24,9 @@ from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 
 from mycareportal_app.common import error_messaging as error_messaging
+from django.contrib.sites.shortcuts import get_current_site
+from mycareportal_app.email.family.family_email_processor import FamilyEmailProcessor
+from mycareportal_app.email.provider.provider_email_processor import ProviderEmailProcessor
 
 @login_required
 def add_client(request):
@@ -1037,7 +1040,6 @@ def post_family_details(request):
                 zip_code = family_details_form.cleaned_data['zip_code']
                 power_of_attorney = family_details_form.cleaned_data['power_of_attorney']
                 profile_picture = family_details_form.cleaned_data['profile_picture']
-                password = family_details_form.cleaned_data['password']
                 family_id = family_details_form.cleaned_data['family_id']
                 #print(power_of_attorney)
                 #Create family user auth model and save
@@ -1080,8 +1082,9 @@ def post_family_details(request):
                                                             email=email,
                                                             first_name=first_name,
                                                             last_name=last_name,
-                                                            password=password,
                                                             company=company)
+                        new_user.is_active = False
+                        new_user.set_unusable_password()
                         new_user.save()
                         #Create family object and save
                         family_contact = FamilyContact(user = new_user,
@@ -1111,6 +1114,12 @@ def post_family_details(request):
                         assigned_client = Client.objects.get(company=company,email_address=client_email)
                         assigned_client.family_contacts.add(family_contact)
                         assigned_client.save()
+                        #Send verification email
+                        current_site = get_current_site(request)
+                        email_manager = FamilyEmailProcessor()
+                        email_manager.send_verification_email(
+                        new_user, current_site.domain
+                        )
                         messages.success(request, "Successfully added family contact {0} {1}!".format(first_name,last_name))
                 else:
                     existing_family_member = FamilyContact.objects.get(company=request.user.company,id=family_id)
@@ -1171,7 +1180,6 @@ def post_provider_details(request):
                 phone_number = provider_details_form.cleaned_data['phone_number']
                 secondary_phone_number = provider_details_form.cleaned_data['secondary_phone_number']
                 email = provider_details_form.cleaned_data['email']
-                password = provider_details_form.cleaned_data['password']
                 provider_id = provider_details_form.cleaned_data['provider_id']
                 if(provider_id is None): #Not in edit mode - new provider
                     #check if there is an existing soft-deleted user
@@ -1179,7 +1187,6 @@ def post_provider_details(request):
                     #check if there is an existing user in a different company
                     existing_user_other_company = User.objects.filter(email=email,username=email)
                     if(existing_user):
-                        print("REEEEE")
                         existing_user = existing_user[0]
                         client_email = provider_details_form.cleaned_data['client_email']
                         assigned_client = Client.objects.get(company=company,email_address=client_email)
@@ -1237,8 +1244,8 @@ def post_provider_details(request):
                                                             email=email,
                                                             first_name=first_name,
                                                             last_name=last_name,
-                                                            password=password,
                                                             company=company)
+                        new_user.set_unusable_password()
                         new_user.save()
                         #Create Provider object and save
                         provider_user = Provider(user = new_user,
@@ -1261,6 +1268,12 @@ def post_provider_details(request):
                         assigned_client = Client.objects.get(company=company,email_address=client_email)
                         assigned_client.provider.add(provider_user)
                         assigned_client.save()
+                        #Send verification email
+                        current_site = get_current_site(request)
+                        email_manager = ProviderEmailProcessor()
+                        email_manager.send_verification_email(
+                        new_user, current_site.domain
+                        )
                         messages.success(request, "Added provider {0} {1}!".format(first_name,last_name))
                 else:
                     existing_provider = Provider.objects.get(company=request.user.company,id=provider_id)
