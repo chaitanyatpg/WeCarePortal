@@ -26,6 +26,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from mycareportal_app.common import error_messaging as error_messaging
 from django.contrib.sites.shortcuts import get_current_site
 from mycareportal_app.email.caregiver.caregiver_email_processor import CaregiverEmailProcessor
+from mycareportal_app.email.client.client_email_processor import ClientEmailProcessor
 
 def add_caregiver(request):
     return render(request, 'production/add_caregiver.html')
@@ -524,6 +525,18 @@ class CaregiverDashboard(LoginRequiredMixin, View):
                                         location_name = location.location
                                         )
         incident_report.save()
+        #Send incident email
+        #1. get related family members
+        family_details = client.family_contacts.filter(is_active=True)
+        #2. get related providers
+        provider_details = client.provider.filter(is_active=True)
+        #3. get related care move_manager_dashboard
+        care_managers = CareManager.objects.filter(company = request.user.company)
+        #4. send email to family, provider, user who reported
+        email_manager = ClientEmailProcessor()
+        email_manager.send_incident_email(
+        client, user, care_managers, family_details, provider_details, task, incident, location
+        )
         messages.success(request, "Reported Incident: {0} at location {1}".format(incident.incident, location.location))
 
     def save_task_attachments(self, request, update_task_form, task, current_company, client, user, attachments):
