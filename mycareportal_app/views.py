@@ -26,6 +26,7 @@ from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from mycareportal_app.common.tokens import account_activation_token
 from mycareportal_app.email.care_manager.care_manager_email_processor import CareManagerEmailProcessor
+from mycareportal_app.email.caregiver.caregiver_email_processor import CaregiverEmailProcessor
 
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
@@ -466,6 +467,13 @@ def set_caregiver_time_sheet_session(request):
                                             client_timezone = client_data.time_zone,
                                             is_active = True)
     current_time_sheet.save()
+    # Send clock in email to care managers and family members of client
+    care_managers = CareManager.objects.filter(company=current_company)
+    family_members = client_data.family_contacts.filter(is_active=True)
+    email_manager = CaregiverEmailProcessor()
+    email_manager.send_clock_in_email(
+    client_data, current_caregiver, care_managers, family_members
+    )
     request.session['current_time_sheet'] = current_time_sheet.id
 
 @login_required
@@ -474,11 +482,20 @@ def end_caregiver_time_sheet_session(request):
     current_time_sheet = CaregiverTimeSheet.objects.get(company=request.user.company, id=request.session['current_time_sheet'])
     current_time_sheet.clock_out_timestamp = timezone.now()
     current_time_sheet.is_active = False
+    client = current_time_sheet.client
+    current_caregiver = current_time_sheet.caregiver
     time_worked = current_time_sheet.clock_out_timestamp - current_time_sheet.clock_in_timestamp
     print(time_worked)
     current_time_sheet.time_worked = time_worked
     current_time_sheet.save()
     print(current_time_sheet.time_worked)
+    # Send clock out email to care managers and family members of client
+    care_managers = CareManager.objects.filter(company=request.user.company)
+    family_members = client.family_contacts.filter(is_active=True)
+    email_manager = CaregiverEmailProcessor()
+    email_manager.send_clock_out_email(
+    client, current_caregiver, care_managers, family_members
+    )
     del request.session['current_time_sheet']
     request.session.modified = True
 
