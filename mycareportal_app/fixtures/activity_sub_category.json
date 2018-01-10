@@ -214,5 +214,14 @@
 			"activity_category_code": "MISC007F",
       "activity_category": "Finances - Managing Personal Finances"
 		}
+	},
+	{
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 25,
+		"fields": {
+			"activity_code": "MISC001",
+			"activity_category_code": "MISC0000",
+      "activity_category": "Miscellaneous"
+		}
 	}
 ]
