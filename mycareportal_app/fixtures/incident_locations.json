@@ -54,5 +54,12 @@
 		"fields": {
 			"location": "Other"
 		}
+	},
+	{
+		"model": "mycareportal_app.incidentlocations",
+		"pk": 9,
+		"fields": {
+			"location": "Bedroom"
+		}
 	}
 ]
