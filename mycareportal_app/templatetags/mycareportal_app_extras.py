@@ -41,3 +41,12 @@ def trunc_path(x):
     split_string = str(x).split('/')
     out_string = split_string[-1]
     return out_string
+
+@register.filter
+def to_yes_no(x):
+    if (str(x)=="True"):
+        return "Yes"
+    elif (str(x)=="False"):
+        return "No"
+    else:
+        return x

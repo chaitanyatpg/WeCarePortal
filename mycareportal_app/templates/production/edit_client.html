@@ -808,7 +808,7 @@
                         <td>{{family_detail.last_name}}</td>
                         <td>{{family_detail.email_address}}</td>
                         <td>{{family_detail.relationship}}</td>
-                        <td>{{family_detail.power_of_attorney}}</td>
+                        <td>{{family_detail.power_of_attorney|to_yes_no}}</td>
                         <input type="hidden" class="hidden_family_id" value="{{family_detail.id}}">
                         <!--<td class="family_view_button"><a href="#">View</a></td>-->
                       </tr>
