@@ -835,7 +835,8 @@
                   title: "{{ task.activity_task }}",
                   start: "{{ task.date|date:'Y-m-d'|append_datetime:task.start_time}}",
                   end: "{{ task.date|date:'Y-m-d'|append_datetime:task.end_time}}",
-                  id: "{{ task.id }}"
+                  id: "{{ task.id }}",
+                  color: "#FFE4B5"
                 },
                 {% elif task.in_progress %}
                 {
