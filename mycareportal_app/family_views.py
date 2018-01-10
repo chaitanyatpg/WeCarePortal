@@ -38,6 +38,7 @@ class FamilyDashboard(LoginRequiredMixin, View):
         context["current_family_contact"] = family_contact
         active_caregivers = CaregiverTimeSheet.objects.filter(company=current_company, client__in=related_clients, caregiver__in=related_caregivers, is_active=True)
         context['active_caregivers'] = active_caregivers
+        context['related_caregivers'] = related_caregivers
         #Get displayable family contact data
         name = '{0} {1}'.format(family_contact.first_name, family_contact.last_name)
         address = '{0}, {1} {2} {3}'.format(family_contact.address, family_contact.city, family_contact.state, family_contact.zip_code)

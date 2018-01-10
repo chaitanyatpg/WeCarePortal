@@ -87,7 +87,30 @@
                         <div id="myTabContent" class="tab-content">
                           <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
                             <!-- start recent activity -->
+                            <center>
+                              <h3>Assigned Caregivers</h3>
+                            </center>
                             <ul class="messages">
+                              {% for caregiver in related_caregivers %}
+                                <div class='container'>
+                                  <div class='row'>
+                                    <div class='col-md-3 col-sm-1'>
+                                      <center>
+                                        <h4 style="color:#1ABB9C;">{{caregiver.first_name|addstr_space:caregiver.last_name}}</h4>
+
+                                        {% if caregiver.profile_picture %}
+                                          <img src="{{caregiver.profile_picture.url}}" style="width:230px;height:200px">
+                                        {% else %}
+                                          <img class="img-responsive avatar-view" src="{% static 'pictures/img.png' %}" alt="Avatar" title="Change the avatar">
+                                        {% endif %}
+                                        </br>
+                                        <i class="fa fa-map-marker user-profile-icon"></i>{{caregiver.address}}
+                                        <i class="fa fa-mobile-phone user-profile-icon"></i>{{caregiver.phone_number}}
+                                      </center>
+                                    </div>
+                                  </div>
+                                </div>
+                              {% endfor %}
                               {% for client, tasks in client_tasks.items %}
                                 {% for active_caregiver in active_caregivers %}
                                   {% if active_caregiver.client == client %}
