@@ -116,5 +116,6 @@ urlpatterns = [
     url(r'^view_move_bids',move_manage_views.view_move_bids,
     name='view_move_bids'),
     url(r'^view_all_caregivers', reporting_views.ViewAllCaregivers.as_view(),name='view_all_caregivers'),
-    url(r'^view_all_clients', reporting_views.ViewAllClients.as_view(),name='view_all_clients')
+    url(r'^view_all_clients', reporting_views.ViewAllClients.as_view(),name='view_all_clients'),
+    url(r'^view_clients_without_caregivers', reporting_views.ViewClientsWithoutCaregiver.as_view(),name='view_clients_without_caregivers')
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

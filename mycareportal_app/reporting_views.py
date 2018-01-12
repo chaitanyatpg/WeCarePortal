@@ -39,3 +39,13 @@ class ViewAllClients(LoginRequiredMixin, View):
         clients = Client.objects.filter(company=company).order_by('last_name')
         context['clients'] = clients
         return render(request, "production/view_all_clients.html", context)
+
+class ViewClientsWithoutCaregiver(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        print("ASDASDASGGGG")
+        company = request.user.company
+        clients = Client.objects.filter(company=company,caregiver=None).order_by('last_name')
+        context['clients'] = clients
+        return render(request, "production/view_all_clients.html", context)
