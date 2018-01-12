@@ -30,6 +30,7 @@ urlpatterns = [
         views.activate, name='activate'),
     url(r'^pwd_activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         views.pwd_activate, name='pwd_activate'),
+    url(r'^forgot_password', views.ForgotPassword.as_view(),name='forgot_password'),
     url(r'^reset_password',views.reset_password,name='reset_password'),
     url(r'^edit_company', views.EditCompany.as_view(), name='edit_company'),
     url(r'^dashboard',views.dashboard,name='dashboard'),

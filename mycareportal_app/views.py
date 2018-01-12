@@ -27,6 +27,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from mycareportal_app.common.tokens import account_activation_token
 from mycareportal_app.email.care_manager.care_manager_email_processor import CareManagerEmailProcessor
 from mycareportal_app.email.caregiver.caregiver_email_processor import CaregiverEmailProcessor
+from mycareportal_app.email.user.user_email_processor import UserEmailProcessor
 
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
@@ -227,6 +228,37 @@ def reset_password(request):
             error_messaging.render_error_messages(request, form_errors)
             return redirect("pwd_activate", uidb64=uidb64, token=token)
         return redirect("login")
+
+class ForgotPassword(View):
+
+    def get(self, request):
+        context = {}
+        context['password_form'] = ForgotPasswordForm()
+        return render(request, 'production/wecare_pwd_forgot.html', context)
+
+    @transaction.atomic
+    def post(self, request):
+        context = {}
+        form = ForgotPasswordForm(request.POST)
+        if form.is_valid():
+            #Send reset email
+            try:
+                email = form.cleaned_data['email']
+                user = User.objects.get(email=email)
+                user.account_activated = False
+                user.save()
+                current_site = get_current_site(request)
+                email_manager = UserEmailProcessor()
+                email_manager.pwd_reset_email(
+                user, current_site.domain
+                )
+                messages.success(request, "Sent password reset email to {0}".format(email))
+            except:
+                messages.error(request, "Error sending password reset email")
+        else:
+            messages.error(request, "Error sending password reset email")
+        return redirect('login')
+
 
 def pwd_activate_2(request, uidb64, token):
     try:

@@ -33,9 +33,9 @@
 
         <div class="login_form">
           <section class="login_content">
-            <form method="post" action="{% url 'login' %}">
+            <form method="post" action="{% url 'forgot_password' %}">
               {% csrf_token %}
-              <h1>Login</h1>
+              <h1>Forgot Password</h1>
               {% if messages %}
                 <ul class="messages">
                   {% for message in messages %}
@@ -69,31 +69,16 @@
                   </div>
                 {% endfor %}
               {% endif %}
+              <p>Enter your email address to generate password reset email</p>
               <div>
-                <input type="text" class="form-control" placeholder="Username" name="{{form.username.html_name}}">
+                <input type="text" class="form-control" placeholder="Email" name="{{password_form.email.html_name}}">
               </input>
               </div>
               <div>
-                <input type="password" class="form-control" placeholder="Password" name="{{form.password.html_name}}">
-              </input>
-              </div>
-              <div>
-                <input type="submit" class="btn btn-default submit" value="Login"></input>
-                <input type="hidden" name="next" value="{% url 'home' %}"></input>
+                <input type="submit" class="btn btn-default submit" value="Reset Password"></input>
                 <!--<a class="reset_pass" href="#">Forgot your password?</a>-->
               </div>
-
               <div class="clearfix"></div>
-
-              <div class="separator">
-                <p class="change_link">New to the site?
-                  <a href="{% url 'register' %}" class="to_register"> Create Account </a>
-                </p>
-                <a href="{% url 'forgot_password' %}" class="to_register"> Forgot Password? </a>
-                <div class="clearfix"></div>
-                <br />
-
-              </div>
             </form>
           </section>
         </div>

@@ -109,3 +109,11 @@ class PasswordResetForm(forms.Form):
                                         format(self.MIN_LENGTH))
 
         return cleaned_data
+
+class ForgotPasswordForm(forms.Form):
+
+    email = forms.EmailField(required=True)
+
+    def clean(self):
+        cleaned_data = super(ForgotPasswordForm, self).clean()
+        return cleaned_data

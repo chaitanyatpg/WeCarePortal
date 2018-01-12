@@ -88,7 +88,8 @@ TEMPLATES = [
                 'mycareportal_app/email/caregiver/templates',
                 'mycareportal_app/email/family/templates',
                 'mycareportal_app/email/provider/templates',
-                'mycareportal_app/email/client/templates'],
+                'mycareportal_app/email/client/templates',
+                'mycareportal_app/email/user/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
