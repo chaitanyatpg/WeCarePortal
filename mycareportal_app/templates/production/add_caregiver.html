@@ -274,9 +274,9 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">SSN<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not add_caregiver_form.ssn.value is None %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '999-99-9999'" required="required" name={{add_caregiver_form.ssn.html_name}} value={{add_caregiver_form.ssn.value}}>
+                        <input type="text" class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '999-99-9999'" name={{add_caregiver_form.ssn.html_name}} value={{add_caregiver_form.ssn.value}}>
                       {% else %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '999-99-9999'" required="required" name={{add_caregiver_form.ssn.html_name}}>
+                        <input type="text" class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '999-99-9999'" name={{add_caregiver_form.ssn.html_name}}>
                       {% endif %}
                     </div>
                   </div>

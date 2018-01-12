@@ -90,7 +90,7 @@ class Caregiver(models.Model):
     date_of_birth = models.DateTimeField()
     phone_number = models.CharField(max_length=40)
     secondary_phone_number = models.CharField(max_length=40, blank=True)
-    ssn = models.CharField(max_length=20)
+    ssn = models.CharField(max_length=20, blank=True)
     referrer = models.CharField(max_length=100,blank=True)
     rating = models.IntegerField(default=0)
     profile_picture = models.ImageField(upload_to=get_caregiver_profile_picture_upload_path)

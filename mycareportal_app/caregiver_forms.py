@@ -21,7 +21,7 @@ class CaregiverRegistrationForm(forms.Form):
     phone_number = forms.CharField(max_length=20)
     secondary_phone_number = forms.CharField(max_length=20, required=False)
     email = forms.CharField(max_length=200)
-    ssn = forms.CharField(max_length=20)
+    ssn = forms.CharField(max_length=20, required=False)
     referrer = forms.CharField(max_length=100, required=False)
     profile_picture = forms.ImageField(label='Select file', required=False)
 
@@ -59,7 +59,7 @@ class CaregiverEditForm(forms.Form):
     phone_number = forms.CharField(max_length=20, required=False)
     secondary_phone_number = forms.CharField(max_length=20, required=False)
     email = forms.CharField(max_length=200, required=False)
-    ssn = forms.CharField(max_length=20)
+    ssn = forms.CharField(max_length=20, required=False)
     referrer = forms.CharField(max_length=100, required=False)
     profile_picture = forms.ImageField(label='Select file', required=False)
     rating = forms.IntegerField(required=False)
