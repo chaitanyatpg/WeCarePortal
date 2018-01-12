@@ -2,11 +2,13 @@ from django.db import models
 #from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
 from PIL import Image
+import uuid
 # Create your models here.
 
 class Company(models.Model):
 
     company_id = models.AutoField(primary_key=True)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     company_name = models.CharField(max_length=100,unique=True)
     contact_number = models.CharField(max_length=40)
     address = models.CharField(max_length=400)
@@ -20,6 +22,7 @@ class Company(models.Model):
 class User(AbstractUser):
 
     company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     account_activated = models.BooleanField(default=False)
 
 class UserRoles(models.Model):
@@ -39,6 +42,7 @@ class UserRoles(models.Model):
 class CareManager(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     company = models.ForeignKey(Company)
     email_address = models.CharField(max_length = 100)
     can_add = models.BooleanField(default=True)
@@ -49,6 +53,7 @@ class CareManager(models.Model):
 class FamilyUser(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     company = models.ForeignKey(Company)
     email_address = models.CharField(max_length = 100)
 
@@ -58,6 +63,7 @@ class FamilyUser(models.Model):
 class ProviderUser(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     company = models.ForeignKey(Company)
     email_address = models.CharField(max_length = 100)
 
@@ -70,6 +76,7 @@ def get_caregiver_profile_picture_upload_path(instance, filename):
 class Caregiver(models.Model):
 
     company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     email_address = models.CharField(max_length = 100)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=100)
@@ -96,6 +103,7 @@ class Caregiver(models.Model):
 class HomeModificationUser(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     company = models.ForeignKey(Company)
     email_address = models.CharField(max_length = 100)
 
@@ -105,6 +113,7 @@ class HomeModificationUser(models.Model):
 class MoveManager(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     company = models.ForeignKey(Company)
     email_address = models.CharField(max_length = 100)
 
@@ -117,6 +126,7 @@ def get_family_profile_picture_upload_path(instance, filename):
 class FamilyContact(models.Model):
 
     company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     email_address = models.CharField(max_length=100)
     first_name = models.CharField(max_length=100)
@@ -134,6 +144,7 @@ class FamilyContact(models.Model):
 class Provider(models.Model):
 
     company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User)
     email_address = models.CharField(max_length=100)
     first_name = models.CharField(max_length=100)
@@ -147,6 +158,7 @@ class Provider(models.Model):
 class Pharmacy(models.Model):
 
     company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     email_address = models.CharField(max_length=100)
     name = models.CharField(max_length=100)
     contact_name = models.CharField(max_length=100)
@@ -161,6 +173,7 @@ class Pharmacy(models.Model):
 class Payer(models.Model):
 
     company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     email_address = models.CharField(max_length=100)
     name = models.CharField(max_length=100)
     contact_name = models.CharField(max_length=100)
@@ -181,6 +194,7 @@ def get_client_profile_picture_upload_path(instance, filename):
 class Client(models.Model):
 
     company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     email_address = models.CharField(max_length=100, unique=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
@@ -205,29 +219,34 @@ class Client(models.Model):
 class ActivityMaster(models.Model):
 
     activity_code = models.CharField(max_length=100)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     activity_description = models.CharField(max_length=300)
 
 class ActivitySubCategory(models.Model):
 
     activity_code = models.CharField(max_length=100)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     activity_category_code = models.CharField(max_length=100)
     activity_category = models.CharField(max_length=300)
 
 class DefaultTasks(models.Model):
 
     activity_category_code = models.CharField(max_length=100)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     activity_task = models.CharField(max_length=300)
     task_code = models.CharField(max_length=30)
 
 class Tasks(models.Model):
 
     company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     activity_task = models.CharField(max_length=300)
     activity_category_code = models.CharField(max_length=100)
 
 class TaskHeader(models.Model):
 
     company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     client = models.ForeignKey(Client)
     activity_task = models.CharField(max_length=300)
     start_date = models.DateField()
@@ -242,6 +261,7 @@ class TaskHeader(models.Model):
 class TaskSchedule(models.Model):
 
     company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     client = models.ForeignKey(Client)
     task_header = models.ForeignKey(TaskHeader,null=True) #NOTE: change before product to remove null
     activity_task = models.CharField(max_length=300)
@@ -259,6 +279,7 @@ class TaskSchedule(models.Model):
 class TaskComment(models.Model):
 
     company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     client = models.ForeignKey(Client)
     #caregiver = models.ForeignKey(Caregiver)
     user = models.ForeignKey(User,null=True) #change before final deployment
@@ -275,6 +296,7 @@ def get_task_attachment_upload_path(instance, filename):
 class TaskAttachment(models.Model):
 
     company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     client = models.ForeignKey(Client)
     user = models.ForeignKey(User)
     task_schedule = models.ForeignKey(TaskSchedule)
@@ -284,6 +306,7 @@ class TaskAttachment(models.Model):
 class TaskLink(models.Model):
 
     company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     client = models.ForeignKey(Client)
     user = models.ForeignKey(User)
     task_schedule = models.ForeignKey(TaskSchedule)
@@ -293,10 +316,12 @@ class TaskLink(models.Model):
 class AssessmentCategories(models.Model):
 
     category = models.CharField(max_length=500)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
 
 class AssessmentTask(models.Model):
 
     assessment_category = models.ForeignKey(AssessmentCategories)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     assessment_task = models.CharField(max_length=2000)
     is_default = models.BooleanField(default=False)
     company = models.ForeignKey(Company, blank=True, null=True)
@@ -304,12 +329,14 @@ class AssessmentTask(models.Model):
 class AssessmentTaskCustom(models.Model):
 
     company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     assessment_category = models.ForeignKey(AssessmentCategories)
     assessment_task = models.CharField(max_length=2000)
 
 class ClientAssessmentMap(models.Model):
 
     company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     client = models.ForeignKey(Client)
     assessment_category = models.ForeignKey(AssessmentCategories)
     assessment_task = models.ForeignKey(AssessmentTask)
@@ -318,12 +345,14 @@ class ClientAssessmentMap(models.Model):
 class ClientTabletRegister(models.Model):
 
     company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     client = models.OneToOneField(Client)
     device_id = models.CharField(max_length=100,unique=True)
 
 class CaregiverTimeSheet(models.Model):
 
     company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     caregiver = models.ForeignKey(Caregiver)
     client = models.ForeignKey(Client)
     clock_in_timestamp = models.DateTimeField(auto_now_add=True)
@@ -335,6 +364,7 @@ class CaregiverTimeSheet(models.Model):
 class DefaultIncidents(models.Model):
 
     incident = models.CharField(max_length=150)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     #location = models.CharField(max_length=100, blank=True)
     #reason = models.CharField(max_Length=100, blank=True)
     #trigger_frequency = models.IntegerField()
@@ -347,9 +377,11 @@ class DefaultIncidents(models.Model):
 class IncidentLocations(models.Model):
 
     location = models.CharField(max_length=100)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
 
 class IncidentReport(models.Model):
     company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     client = models.ForeignKey(Client)
     reporter = models.ForeignKey(User)
     task = models.ForeignKey(TaskSchedule)
@@ -361,6 +393,7 @@ class IncidentReport(models.Model):
 
 class CaregiverScheduleHeader(models.Model):
     company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     caregiver = models.ForeignKey(Caregiver)
     client = models.ForeignKey(Client)
     start_date = models.DateField(null=True) #change b4 prod
@@ -370,6 +403,7 @@ class CaregiverScheduleHeader(models.Model):
 
 class CaregiverSchedule(models.Model):
     schedule_header = models.ForeignKey(CaregiverScheduleHeader,null=True) #change b4 production
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     company = models.ForeignKey(Company)
     caregiver = models.ForeignKey(Caregiver)
     client = models.ForeignKey(Client)
@@ -379,9 +413,11 @@ class CaregiverSchedule(models.Model):
 
 class ClientMatchCategory(models.Model):
     category = models.CharField(max_length=500)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
 
 class ClientMatchCriteria(models.Model):
     client_match_category = models.ForeignKey(ClientMatchCategory)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     criteria = models.CharField(max_length=2000)
     is_default = models.BooleanField(default=False)
     company = models.ForeignKey(Company, blank=True, null=True)
@@ -389,6 +425,7 @@ class ClientMatchCriteria(models.Model):
 class ClientCriteriaMap(models.Model):
 
     company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     client = models.ForeignKey(Client)
     client_match_category = models.ForeignKey(ClientMatchCategory)
     client_match_criteria = models.ForeignKey(ClientMatchCriteria)
@@ -397,6 +434,7 @@ class ClientCriteriaMap(models.Model):
 class CaregiverCriteriaMap(models.Model):
 
     company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     caregiver = models.ForeignKey(Caregiver)
     client_match_category = models.ForeignKey(ClientMatchCategory)
     client_match_criteria = models.ForeignKey(ClientMatchCriteria)
@@ -405,6 +443,7 @@ class CaregiverCriteriaMap(models.Model):
 class ClientCertificationMap(models.Model):
 
     company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     client = models.ForeignKey(Client)
     client_match_category = models.ForeignKey(ClientMatchCategory)
     client_match_criteria = models.ForeignKey(ClientMatchCriteria)
@@ -413,6 +452,7 @@ class ClientCertificationMap(models.Model):
 class CaregiverCertificationMap(models.Model):
 
     company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     caregiver = models.ForeignKey(Caregiver)
     client_match_category = models.ForeignKey(ClientMatchCategory)
     client_match_criteria = models.ForeignKey(ClientMatchCriteria)
@@ -429,6 +469,7 @@ class ClientTransferMap(models.Model):
     )
 
     company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     client = models.ForeignKey(Client)
     client_match_category = models.ForeignKey(ClientMatchCategory)
     client_match_criteria = models.ForeignKey(ClientMatchCriteria)
@@ -443,6 +484,7 @@ class CaregiverTransferMap(models.Model):
     )
 
     company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     caregiver = models.ForeignKey(Caregiver)
     client_match_category = models.ForeignKey(ClientMatchCategory)
     client_match_criteria = models.ForeignKey(ClientMatchCriteria)
