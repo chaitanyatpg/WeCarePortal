@@ -36,7 +36,8 @@ class FamilyDashboard(LoginRequiredMixin, View):
             client_caregivers = client.caregiver.all()
             related_caregivers += client_caregivers
         context["current_family_contact"] = family_contact
-        active_caregivers = CaregiverTimeSheet.objects.filter(company=current_company, client__in=related_clients, caregiver__in=related_caregivers, is_active=True)
+        active_caregivers = self.get_active_caregivers(current_company, related_clients, related_caregivers)
+        #active_caregivers = CaregiverTimeSheet.objects.filter(company=current_company, client__in=related_clients, caregiver__in=related_caregivers)
         context['active_caregivers'] = active_caregivers
         context['related_caregivers'] = related_caregivers
         #Get displayable family contact data
@@ -76,6 +77,18 @@ class FamilyDashboard(LoginRequiredMixin, View):
             self.save_task_comments(request, update_task_form, task, current_company, client, comment)
             messages.success(request, "Edited Task: {0}".format(task.activity_task))
         return redirect('family_dashboard')
+
+    def get_active_caregivers(self, current_company, related_clients, related_caregivers):
+        client_timezone = pytz.timezone(related_clients[0].time_zone)
+        current_date_time = timezone.now().astimezone(client_timezone)
+        active_caregivers = CaregiverTimeSheet.objects.filter(company=current_company,
+                    client__in=related_clients,
+                    caregiver__in=related_caregivers,
+                    clock_in_timestamp__year=current_date_time.year,
+                    clock_in_timestamp__month=current_date_time.month,
+                    clock_in_timestamp__day=current_date_time.day)
+        return active_caregivers
+
 
     def get_client_tasks(self, client_data, current_company):
         client_timezone = pytz.timezone(client_data.time_zone)

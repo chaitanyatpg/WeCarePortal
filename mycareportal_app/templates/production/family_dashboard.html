@@ -114,7 +114,10 @@
                               {% for client, tasks in client_tasks.items %}
                                 {% for active_caregiver in active_caregivers %}
                                   {% if active_caregiver.client == client %}
-                                    <h5 style="color:#1ABB9C;">Caregiver {{active_caregiver.caregiver.first_name|addstr_space:active_caregiver.caregiver.last_name}} has arrived</h5>
+                                    <h5 style="color:#1ABB9C;">Caregiver {{active_caregiver.caregiver.first_name|addstr_space:active_caregiver.caregiver.last_name}} arrived at {{active_caregiver.clock_in_timestamp}}</h5>
+                                    {% if not active_caregiver.is_active %}
+                                      <h5 style="color:#98AFC7;">Caregiver {{active_caregiver.caregiver.first_name|addstr_space:active_caregiver.caregiver.last_name}} departed at {{active_caregiver.clock_out_timestamp}}</h5>
+                                    {% endif %}
                                   {% endif %}
                                 {% endfor %}
                                 <center>
