@@ -33,6 +33,8 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
 from mycareportal_app.common import error_messaging as error_messaging
+
+from mycareportal_app.common.core.event import Event
 # Create your views here.
 
 #@receiver(pre_save, sender=User)
@@ -561,7 +563,7 @@ def date_filter_dashboard(request):
     dashboard_task_data['total_cancelled_tasks'] = total_cancelled_tasks
     return HttpResponse(json.dumps(dashboard_task_data),content_type="application/json")
 
-class ViewActionLog(LoginRequiredMixin, View):
+class ViewEventLog(LoginRequiredMixin, View):
 
     def get(self, request):
         context = {}
@@ -574,14 +576,59 @@ class ViewActionLog(LoginRequiredMixin, View):
         caregiver_schedule = CaregiverSchedule.objects.filter(company=company,date=current_date)
         (late_caregivers, not_clocked_out_caregivers) = self.get_late_caregivers(company, caregiver_schedule, active_caregivers, caregivers)
         #not_clocked_out_caregivers = self.get_not_clocked_out(company, caregiver_schedule, active_caregivers, caregivers)
-        context['caregivers'] = late_caregivers + not_clocked_out_caregivers
-        return render(request, "production/view_all_caregivers.html", context)
+
+
+        events = late_caregivers + not_clocked_out_caregivers
+        events.sort(key=lambda x: x.time, reverse=True)
+        context['events'] = events
+        return render(request, "production/event_log.html", context)
 
     def get_late_caregivers(self, company, caregiver_schedule, active_caregivers, caregivers):
 
         late_caregivers = []
         not_clocked_out_caregivers = []
-        for caregiver in caregivers:
+
+        for schedule in caregiver_schedule:
+            client = schedule.client
+
+            client_timezone = pytz.timezone(client.time_zone)
+            #current_date = datetime.date.today()
+            current_timestamp = (timezone.now().astimezone(client_timezone))
+            current_date = current_timestamp.date()
+            current_time = current_timestamp.time()
+
+            clock_in_date = schedule.date
+            clock_in_time = schedule.start_time
+            clock_out_time = schedule.end_time
+            if schedule.caregiver in active_caregivers:
+                late_time = clock_out_time.replace(minute=clock_out_time.minute+15)
+                if clock_in_date == current_date and current_time > late_time:
+                    event_name = "Late Clock Out"
+                    description = '''Caregiver {0} {1} has not clocked out from shift at
+                                    client {2} {3}. Expected
+                                    clock out was at {4}'''.format(schedule.caregiver.first_name,
+                                    schedule.caregiver.last_name,client.first_name,client.last_name,
+                                    clock_out_time.strftime("%I:%M %p"))
+                    status = "warning"
+                    date = clock_in_date
+                    time = late_time
+                    event = Event(event_name,description,status,date,time)
+                    not_clocked_out_caregivers.append(event)
+            else:
+                late_time = clock_in_time.replace(minute=clock_in_time.minute+15)
+                if clock_in_date == current_date and current_time > late_time:
+                    event_name = "Late Clock In"
+                    description = '''Caregiver {0} {1} has not clocked into shift at
+                                    client {2} {3}. Expected
+                                    clock in was at {4}'''.format(schedule.caregiver.first_name,
+                                    schedule.caregiver.last_name,client.first_name,client.last_name,
+                                    clock_in_time.strftime("%I:%M %p"))
+                    status = "warning"
+                    date = clock_in_date
+                    time = late_time
+                    event = Event(event_name,description,status,date,time)
+                    late_caregivers.append(event)
+        '''for caregiver in caregivers:
             if caregiver not in active_caregivers:
                 current_schedule = caregiver_schedule.filter(caregiver=caregiver)
                 for schedule in current_schedule:
@@ -617,6 +664,6 @@ class ViewActionLog(LoginRequiredMixin, View):
                     late_time = clock_out_time.replace(minute=clock_out_time.minute+15)
                     if clock_in_date == current_date and current_time > late_time:
                         if caregiver not in not_clocked_out_caregivers:
-                            not_clocked_out_caregivers.append(caregiver)
+                            not_clocked_out_caregivers.append(caregiver)'''
 
         return (late_caregivers, not_clocked_out_caregivers)
