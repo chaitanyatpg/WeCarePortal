@@ -85,6 +85,9 @@
                     {% if module_dict.REPORTING.VIEWALLCLIENTSWITHOUTCAREGIVERS %}
                       <li><a href={% url 'view_clients_without_caregivers' %}>View Clients without Assigned Caregiver</a></li>
                     {% endif %}
+                    {% if module_dict.DASHBOARD.ACTIONLOG %}
+                      <li><a href={% url 'action_log' %}>Late Caregivers</a></li>
+                    {% endif %}
                   </ul>
                 </li>
                 <li><a><i class="fa fa-home"></i>Client Portal<span class="fa fa-chevron-down"></span></a>

@@ -560,3 +560,42 @@ def date_filter_dashboard(request):
     dashboard_task_data['total_completed_tasks'] = total_completed_tasks
     dashboard_task_data['total_cancelled_tasks'] = total_cancelled_tasks
     return HttpResponse(json.dumps(dashboard_task_data),content_type="application/json")
+
+class ViewActionLog(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {}
+        company = request.user.company
+        company_timezone = pytz.timezone(company.time_zone)
+        current_timestamp = (timezone.now().astimezone(company_timezone))
+        current_date = current_timestamp.date()
+        caregivers = Caregiver.objects.filter(company=company)
+        active_caregivers = list(map(lambda x: x.caregiver, CaregiverTimeSheet.objects.filter(company=company,is_active=True)))
+        caregiver_schedule = CaregiverSchedule.objects.filter(company=company,date=current_date)
+        late_caregivers = self.get_late_caregivers(company, caregiver_schedule, active_caregivers, caregivers)
+        context['caregivers'] = late_caregivers
+        return render(request, "production/view_all_caregivers.html", context)
+
+    def get_late_caregivers(self, company, caregiver_schedule, active_caregivers, caregivers):
+
+        late_caregivers = []
+        for caregiver in caregivers:
+            if caregiver not in active_caregivers:
+                current_schedule = caregiver_schedule.filter(caregiver=caregiver)
+                for schedule in current_schedule:
+                    client = schedule.client
+
+                    client_timezone = pytz.timezone(client.time_zone)
+                    #current_date = datetime.date.today()
+                    current_timestamp = (timezone.now().astimezone(client_timezone))
+                    current_date = current_timestamp.date()
+                    current_time = current_timestamp.time()
+
+                    clock_in_date = schedule.date
+                    clock_in_time = schedule.start_time
+                    clock_out_time = schedule.end_time
+                    late_time = clock_in_time.replace(minute=clock_in_time.minute+15)
+                    if clock_in_date == current_date and current_time > late_time:
+                        if caregiver not in late_caregivers:
+                            late_caregivers.append(caregiver)
+        return late_caregivers

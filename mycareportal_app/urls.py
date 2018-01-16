@@ -34,6 +34,7 @@ urlpatterns = [
     url(r'^reset_password',views.reset_password,name='reset_password'),
     url(r'^edit_company', views.EditCompany.as_view(), name='edit_company'),
     url(r'^dashboard',views.dashboard,name='dashboard'),
+    url(r'^action_log',views.ViewActionLog.as_view(),name='action_log'),
     url(r'^date_filter_dashboard',views.date_filter_dashboard,name='date_filter_dashboard'),
     url(r'^view_active_caregivers',views.ViewActiveCaregivers.as_view(),name='view_active_caregivers'),
     url(r'^view_daily_incidents', views.ViewDailyIncidents.as_view(),name='view_daily_incidents'),
