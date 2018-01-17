@@ -18,6 +18,7 @@ class Company(models.Model):
     time_zone = models.CharField(max_length=50, blank=True)
     account_number = models.IntegerField(unique=True, null=True)
     parent_account = models.ForeignKey('self', null=True)
+    created = models.DateTimeField(auto_now_add=True)
 
 class User(AbstractUser):
 

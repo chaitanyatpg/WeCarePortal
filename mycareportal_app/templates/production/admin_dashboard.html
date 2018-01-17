@@ -40,37 +40,37 @@
           <div class="row tile_count">
             <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i>Total Scheduled Tasks</span>
-              <div class="count"><i id="total_scheduled_tasks" class="green">{{total_scheduled_tasks}}</i></div>
+              <div class="count"><a href="{% url 'view_tasks' 'scheduled' %}" id="total_scheduled_tasks" class="green">{{total_scheduled_tasks}}</a></div>
               <span id="total_scheduled_tasks_sub" class="count_bottom">{{total_scheduled_tasks}} scheduled tasks</span>
             </div>
             <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i>Total Pending Tasks</span>
-              <div class="count"><i id="total_pending_tasks" class="green">{{total_pending_tasks}}</i></div>
+              <div class="count"><a href="{% url 'view_tasks' 'pending' %}" id="total_pending_tasks" class="green">{{total_pending_tasks}}</a></div>
               <span id="total_pending_tasks_sub" class="count_bottom">{{total_pending_tasks}} pending tasks</span>
             </div>
             <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i>Total Tasks in Progress</span>
-              <div class="count"><i id="total_in_progress_tasks" class="green">{{total_in_progress_tasks}}</i></div>
+              <div class="count"><a href="{% url 'view_tasks' 'in_progress' %}" id="total_in_progress_tasks" class="green">{{total_in_progress_tasks}}</a></div>
               <span id="total_in_progress_tasks_sub" class="count_bottom">{{total_in_progress_tasks}} tasks in progress</span>
             </div>
             <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i>Total Completed Tasks</span>
-              <div class="count"><i id="total_completed_tasks" class="green">{{total_completed_tasks}}</i></div>
+              <div class="count"><a href="{% url 'view_tasks' 'completed' %}" id="total_completed_tasks" class="green">{{total_completed_tasks}}</a></div>
               <span id="total_completed_tasks_sub" class="count_bottom">{{total_completed_tasks}} completed tasks</span>
             </div>
             <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i>Total Cancelled Tasks</span>
-              <div class="count"><i id="total_cancelled_tasks" class="green">{{total_cancelled_tass}}</i></div>
-              <span id="total_cancelled_tasks_sub" class="count_bottom">{{total_cancelled_tass}} cancelled tasks</span>
+              <div class="count"><a href="{% url 'view_tasks' 'cancelled' %}" id="total_cancelled_tasks" class="green">{{total_cancelled_tasks}}</a></div>
+              <span id="total_cancelled_tasks_sub" class="count_bottom">{{total_cancelled_tasks}} cancelled tasks</span>
             </div>
             <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i>Total Default Tasks</span>
-              <div class="count"><i class="green">{{default_tasks}}</i></div>
+              <div class="count"><a href="{% url 'view_tasks' 'default' %}" class="green">{{default_tasks}}</a></div>
               <span class="count_bottom">{{default_tasks}} default tasks</span>
             </div>
             <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i>Total Custom Tasks</span>
-              <div class="count"><i class="green">{{custom_tasks}}</i></div>
+              <div class="count"><a href="{% url 'view_tasks' 'custom' %}" class="green">{{custom_tasks}}</a></div>
               <span class="count_bottom">{{custom_tasks}} custom tasks</span>
             </div>
           </div>
@@ -154,7 +154,7 @@
     };
 
     var optionSet1 = {
-      startDate: moment().subtract(29, 'days'),
+      startDate: moment().subtract({{days_since_company_created}}, 'days'),
       endDate: moment(),
       minDate: '01/01/2012',
       maxDate: '12/31/2020',
@@ -189,7 +189,7 @@
       }
     };
 
-    $('#reportrange_right span').html(moment().subtract(29, 'days').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+    $('#reportrange_right span').html(moment().subtract({{days_since_company_created}}, 'days').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
 
     $('#reportrange_right').daterangepicker(optionSet1, cb);
 

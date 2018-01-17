@@ -49,3 +49,25 @@ class ViewClientsWithoutCaregiver(LoginRequiredMixin, View):
         clients = Client.objects.filter(company=company,caregiver=None).order_by('last_name')
         context['clients'] = clients
         return render(request, "production/view_all_clients.html", context)
+
+class ViewTasks(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        task_type = self.kwargs['task_type']
+        if task_type=="scheduled":
+            tasks = TaskSchedule.objects.filter(company=request.user.company)
+        if task_type=="pending":
+            tasks = TaskSchedule.objects.filter(company=request.user.company,pending=True)
+        if task_type=="in_progress":
+            tasks = TaskSchedule.objects.filter(company=request.user.company,in_progress=True)
+        if task_type=="completed":
+            tasks = TaskSchedule.objects.filter(company=request.user.company,completed=True)
+        if task_type=="cancelled":
+            tasks = TaskSchedule.objects.filter(company=request.user.company,cancelled=True)
+        if task_type=="default":
+            tasks = TaskSchedule.objects.filter(company=request.user.company)
+        if task_type=="custom":
+            tasks = TaskSchedule.objects.filter(company=request.user.company)
+        context['tasks'] = tasks
+        return render(request, "production/view_tasks.html", context)

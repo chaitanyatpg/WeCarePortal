@@ -318,9 +318,13 @@ def dashboard(request):
     context['total_pending_tasks'] = total_pending_tasks
     context['total_in_progress_tasks'] = total_in_progress_tasks
     context['total_completed_tasks'] = total_completed_tasks
-    context['total_cancelled_tass'] = total_cancelled_tass
+    context['total_cancelled_tasks'] = total_cancelled_tass
     #Add company details to context
     context['company_details'] = company_details
+    context['company_created_date'] = current_company.created
+    days_since_company_created = (timezone.now() - current_company.created).days
+    context['days_since_company_created'] = days_since_company_created
+    print(days_since_company_created)
     return render(request, 'production/admin_dashboard.html', context)
 
 class AddCareManager(LoginRequiredMixin, View):
