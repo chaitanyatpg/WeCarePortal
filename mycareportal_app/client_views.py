@@ -543,6 +543,25 @@ class AssignTasks(LoginRequiredMixin, View):
                 end_minute = assign_task_form.cleaned_data["end_minute"]
                 description = assign_task_form.cleaned_data["description"]
                 link = assign_task_form.cleaned_data["link"]
+                monday = assign_task_form.cleaned_data["monday"]
+                tuesday = assign_task_form.cleaned_data["tuesday"]
+                wednesday = assign_task_form.cleaned_data["wednesday"]
+                thursday = assign_task_form.cleaned_data["thursday"]
+                friday = assign_task_form.cleaned_data["friday"]
+                saturday = assign_task_form.cleaned_data["saturday"]
+                sunday = assign_task_form.cleaned_data["sunday"]
+                day_filter = False
+                if (monday or tuesday or wednesday or thursday or friday or saturday or sunday):
+                    day_filter = True
+                day_dict = {
+                    0:monday,
+                    1:tuesday,
+                    2:wednesday,
+                    3:thursday,
+                    4:friday,
+                    5:saturday,
+                    6:sunday
+                }
                 #attachments = assign_task_form.cleaned_data["attachment"]
                 #attachments = request.FILES.getlist('attachment')
                 start_time = ""
@@ -566,17 +585,17 @@ class AssignTasks(LoginRequiredMixin, View):
                 #populate task schedule
                 current_user = request.user
                 if task_type == "One Time":
-                    self.save_one_time_task(new_task_header, attachments, current_user)
+                    self.save_one_time_task(new_task_header, attachments, current_user, day_dict, day_filter)
                 if task_type == "Daily":
-                    self.save_daily_task(new_task_header, attachments, current_user)
+                    self.save_daily_task(new_task_header, attachments, current_user, day_dict, day_filter)
                 if task_type == "Weekly":
-                    self.save_weekly_task(new_task_header, attachments, current_user)
+                    self.save_weekly_task(new_task_header, attachments, current_user, day_dict, day_filter)
                 if task_type == "Bi-Weekly":
-                    self.save_bi_weekly_task(new_task_header, attachments, current_user)
+                    self.save_bi_weekly_task(new_task_header, attachments, current_user, day_dict, day_filter)
                 if task_type == "Monthly":
-                    self.save_monthly_task(new_task_header, attachments, current_user)
+                    self.save_monthly_task(new_task_header, attachments, current_user, day_dict, day_filter)
                 if task_type == "Yearly":
-                    self.save_yearly_task(new_task_header, attachments, current_user)
+                    self.save_yearly_task(new_task_header, attachments, current_user, day_dict, day_filter)
                 messages.success(request, "Assigned task {0} to client {1} {2}".format(task, client.first_name, client.last_name))
             else:
                 form_errors = assign_task_form.errors.as_data()
@@ -651,102 +670,122 @@ class AssignTasks(LoginRequiredMixin, View):
         task_link.save()
         print("Saved task link")
 
-    def save_one_time_task(self, new_task_header, attachments, current_user):
-        schedule_entry = TaskSchedule(company=new_task_header.company,
-                                        client=new_task_header.client,
-                                        activity_task=new_task_header.activity_task,
-                                        date=new_task_header.start_date,
-                                        start_time=new_task_header.start_time,
-                                        end_time=new_task_header.end_time,
-                                        description = new_task_header.description,
-                                        link = new_task_header.link,
-                                        task_header = new_task_header)
-        schedule_entry.save()
-        self.save_task_attachments(new_task_header, attachments, current_user, schedule_entry)
-        link = new_task_header.link
-        if link != None and link!= "":
-            self.save_task_link(new_task_header, link, current_user, schedule_entry)
-
-    def save_daily_task(self, new_task_header, attachments, current_user):
-        start_date = new_task_header.start_date
-        end_date = new_task_header.end_date
-        date_range_num = end_date - start_date
-        uploaded_task_attachments = []
-        for i in range(date_range_num.days + 1):
-            new_date = (start_date + datetime.timedelta(days=i)).date()
+    def save_one_time_task(self, new_task_header, attachments, current_user, day_dict, day_filter):
+        save_task=True
+        if day_filter:
+            if not(day_dict[new_task_header.start_date.weekday()]):
+                save_task=False
+        if save_task:
             schedule_entry = TaskSchedule(company=new_task_header.company,
                                             client=new_task_header.client,
                                             activity_task=new_task_header.activity_task,
-                                            date=new_date,
+                                            date=new_task_header.start_date,
                                             start_time=new_task_header.start_time,
                                             end_time=new_task_header.end_time,
                                             description = new_task_header.description,
                                             link = new_task_header.link,
                                             task_header = new_task_header)
             schedule_entry.save()
-            if len(uploaded_task_attachments)==0:
-                uploaded_task_attachments = self.save_and_return_task_attachments(new_task_header, attachments, current_user, schedule_entry)
-            else:
-                self.save_existing_task_attachments(uploaded_task_attachments, schedule_entry)
+            self.save_task_attachments(new_task_header, attachments, current_user, schedule_entry)
             link = new_task_header.link
             if link != None and link!= "":
                 self.save_task_link(new_task_header, link, current_user, schedule_entry)
 
-    def save_weekly_task(self, new_task_header, attachments, current_user):
+    def save_daily_task(self, new_task_header, attachments, current_user, day_dict, day_filter):
+        start_date = new_task_header.start_date
+        end_date = new_task_header.end_date
+        date_range_num = end_date - start_date
+        uploaded_task_attachments = []
+        for i in range(date_range_num.days + 1):
+            save_task=True
+            new_date = (start_date + datetime.timedelta(days=i)).date()
+            if day_filter:
+                if not(day_dict[new_date.weekday()]):
+                    save_task=False
+            if save_task:
+                schedule_entry = TaskSchedule(company=new_task_header.company,
+                                                client=new_task_header.client,
+                                                activity_task=new_task_header.activity_task,
+                                                date=new_date,
+                                                start_time=new_task_header.start_time,
+                                                end_time=new_task_header.end_time,
+                                                description = new_task_header.description,
+                                                link = new_task_header.link,
+                                                task_header = new_task_header)
+                schedule_entry.save()
+                if len(uploaded_task_attachments)==0:
+                    uploaded_task_attachments = self.save_and_return_task_attachments(new_task_header, attachments, current_user, schedule_entry)
+                else:
+                    self.save_existing_task_attachments(uploaded_task_attachments, schedule_entry)
+                link = new_task_header.link
+                if link != None and link!= "":
+                    self.save_task_link(new_task_header, link, current_user, schedule_entry)
+
+    def save_weekly_task(self, new_task_header, attachments, current_user, day_dict, day_filter):
         start_date = new_task_header.start_date
         current_date = start_date
         end_date = new_task_header.end_date
         delta = datetime.timedelta(days=7) #per Week
         uploaded_task_attachments = []
         while current_date <= end_date:
+            save_task = True
             new_date = current_date
-            schedule_entry = TaskSchedule(company=new_task_header.company,
-                                            client=new_task_header.client,
-                                            activity_task=new_task_header.activity_task,
-                                            date=new_date,
-                                            start_time=new_task_header.start_time,
-                                            end_time=new_task_header.end_time,
-                                            description = new_task_header.description,
-                                            link = new_task_header.link,
-                                            task_header = new_task_header)
-            schedule_entry.save()
-            if len(uploaded_task_attachments)==0:
-                uploaded_task_attachments = self.save_and_return_task_attachments(new_task_header, attachments, current_user, schedule_entry)
-            else:
-                self.save_existing_task_attachments(uploaded_task_attachments, schedule_entry)
-            link = new_task_header.link
-            if link != None and link!= "":
-                self.save_task_link(new_task_header, link, current_user, schedule_entry)
-            current_date += delta
+            if day_filter:
+                if not(day_dict[new_date.weekday()]):
+                    save_task=False
+            if save_task:
+                schedule_entry = TaskSchedule(company=new_task_header.company,
+                                                client=new_task_header.client,
+                                                activity_task=new_task_header.activity_task,
+                                                date=new_date,
+                                                start_time=new_task_header.start_time,
+                                                end_time=new_task_header.end_time,
+                                                description = new_task_header.description,
+                                                link = new_task_header.link,
+                                                task_header = new_task_header)
+                schedule_entry.save()
+                if len(uploaded_task_attachments)==0:
+                    uploaded_task_attachments = self.save_and_return_task_attachments(new_task_header, attachments, current_user, schedule_entry)
+                else:
+                    self.save_existing_task_attachments(uploaded_task_attachments, schedule_entry)
+                link = new_task_header.link
+                if link != None and link!= "":
+                    self.save_task_link(new_task_header, link, current_user, schedule_entry)
+                current_date += delta
 
-    def save_bi_weekly_task(self, new_task_header, attachments, current_user):
+    def save_bi_weekly_task(self, new_task_header, attachments, current_user, day_dict, day_filter):
         start_date = new_task_header.start_date
         current_date = start_date
         end_date = new_task_header.end_date
         delta = datetime.timedelta(days=14) #per Week
         uploaded_task_attachments = []
         while current_date <= end_date:
+            save_task = True
             new_date = current_date
-            schedule_entry = TaskSchedule(company=new_task_header.company,
-                                            client=new_task_header.client,
-                                            activity_task=new_task_header.activity_task,
-                                            date=new_date,
-                                            start_time=new_task_header.start_time,
-                                            end_time=new_task_header.end_time,
-                                            description = new_task_header.description,
-                                            link = new_task_header.link,
-                                            task_header = new_task_header)
-            schedule_entry.save()
-            if len(uploaded_task_attachments)==0:
-                uploaded_task_attachments = self.save_and_return_task_attachments(new_task_header, attachments, current_user, schedule_entry)
-            else:
-                self.save_existing_task_attachments(uploaded_task_attachments, schedule_entry)
-            link = new_task_header.link
-            if link != None and link!= "":
-                self.save_task_link(new_task_header, link, current_user, schedule_entry)
-            current_date += delta
+            if day_filter:
+                if not(day_dict[new_date.weekday()]):
+                    save_task=False
+            if save_task:
+                schedule_entry = TaskSchedule(company=new_task_header.company,
+                                                client=new_task_header.client,
+                                                activity_task=new_task_header.activity_task,
+                                                date=new_date,
+                                                start_time=new_task_header.start_time,
+                                                end_time=new_task_header.end_time,
+                                                description = new_task_header.description,
+                                                link = new_task_header.link,
+                                                task_header = new_task_header)
+                schedule_entry.save()
+                if len(uploaded_task_attachments)==0:
+                    uploaded_task_attachments = self.save_and_return_task_attachments(new_task_header, attachments, current_user, schedule_entry)
+                else:
+                    self.save_existing_task_attachments(uploaded_task_attachments, schedule_entry)
+                link = new_task_header.link
+                if link != None and link!= "":
+                    self.save_task_link(new_task_header, link, current_user, schedule_entry)
+                current_date += delta
 
-    def save_monthly_task(self, new_task_header, attachments, current_user):
+    def save_monthly_task(self, new_task_header, attachments, current_user, day_dict, day_filter):
         start_date = new_task_header.start_date
         current_date = start_date
         end_date = new_task_header.end_date
@@ -754,26 +793,30 @@ class AssignTasks(LoginRequiredMixin, View):
         uploaded_task_attachments = []
         while current_date <= end_date:
             new_date = current_date
-            schedule_entry = TaskSchedule(company=new_task_header.company,
-                                            client=new_task_header.client,
-                                            activity_task=new_task_header.activity_task,
-                                            date=new_date,
-                                            start_time=new_task_header.start_time,
-                                            end_time=new_task_header.end_time,
-                                            description = new_task_header.description,
-                                            link = new_task_header.link,
-                                            task_header = new_task_header)
-            schedule_entry.save()
-            if len(uploaded_task_attachments)==0:
-                uploaded_task_attachments = self.save_and_return_task_attachments(new_task_header, attachments, current_user, schedule_entry)
-            else:
-                self.save_existing_task_attachments(uploaded_task_attachments, schedule_entry)
-            link = new_task_header.link
-            if link != None and link!= "":
-                self.save_task_link(new_task_header, link, current_user, schedule_entry)
-            current_date += delta
+            if day_filter:
+                if not(day_dict[new_date.weekday()]):
+                    save_task=False
+            if save_task:
+                schedule_entry = TaskSchedule(company=new_task_header.company,
+                                                client=new_task_header.client,
+                                                activity_task=new_task_header.activity_task,
+                                                date=new_date,
+                                                start_time=new_task_header.start_time,
+                                                end_time=new_task_header.end_time,
+                                                description = new_task_header.description,
+                                                link = new_task_header.link,
+                                                task_header = new_task_header)
+                schedule_entry.save()
+                if len(uploaded_task_attachments)==0:
+                    uploaded_task_attachments = self.save_and_return_task_attachments(new_task_header, attachments, current_user, schedule_entry)
+                else:
+                    self.save_existing_task_attachments(uploaded_task_attachments, schedule_entry)
+                link = new_task_header.link
+                if link != None and link!= "":
+                    self.save_task_link(new_task_header, link, current_user, schedule_entry)
+                current_date += delta
 
-    def save_yearly_task(self, new_task_header, attachments, current_user):
+    def save_yearly_task(self, new_task_header, attachments, current_user, day_dict, day_filter):
         start_date = new_task_header.start_date
         current_date = start_date
         end_date = new_task_header.end_date
@@ -781,24 +824,28 @@ class AssignTasks(LoginRequiredMixin, View):
         uploaded_task_attachments = []
         while current_date <= end_date:
             new_date = current_date
-            schedule_entry = TaskSchedule(company=new_task_header.company,
-                                            client=new_task_header.client,
-                                            activity_task=new_task_header.activity_task,
-                                            date=new_date,
-                                            start_time=new_task_header.start_time,
-                                            end_time=new_task_header.end_time,
-                                            description = new_task_header.description,
-                                            link = new_task_header.link,
-                                            task_header = new_task_header)
-            schedule_entry.save()
-            if len(uploaded_task_attachments)==0:
-                uploaded_task_attachments = self.save_and_return_task_attachments(new_task_header, attachments, current_user, schedule_entry)
-            else:
-                self.save_existing_task_attachments(uploaded_task_attachments, schedule_entry)
-            link = new_task_header.link
-            if link != None and link!= "":
-                self.save_task_link(new_task_header, link, current_user, schedule_entry)
-            current_date += delta
+            if day_filter:
+                if not(day_dict[new_date.weekday()]):
+                    save_task=False
+            if save_task:
+                schedule_entry = TaskSchedule(company=new_task_header.company,
+                                                client=new_task_header.client,
+                                                activity_task=new_task_header.activity_task,
+                                                date=new_date,
+                                                start_time=new_task_header.start_time,
+                                                end_time=new_task_header.end_time,
+                                                description = new_task_header.description,
+                                                link = new_task_header.link,
+                                                task_header = new_task_header)
+                schedule_entry.save()
+                if len(uploaded_task_attachments)==0:
+                    uploaded_task_attachments = self.save_and_return_task_attachments(new_task_header, attachments, current_user, schedule_entry)
+                else:
+                    self.save_existing_task_attachments(uploaded_task_attachments, schedule_entry)
+                link = new_task_header.link
+                if link != None and link!= "":
+                    self.save_task_link(new_task_header, link, current_user, schedule_entry)
+                current_date += delta
 
 class ViewIncidentsByClient(LoginRequiredMixin, View):
 
