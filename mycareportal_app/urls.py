@@ -96,6 +96,7 @@ urlpatterns = [
     url(r'^edit_caregiver', caregiver_views.EditCaregiver.as_view(),name='edit_caregiver'),
     url(r'^caregiver_dashboard',caregiver_views.CaregiverDashboard.as_view(),name=
     'caregiver_dashboard'),
+    url(r'^view_calendar',caregiver_views.ViewCalendar.as_view(),name='view_calendar'),
     url(r'^calendar',caregiver_views.calendar,name='calendar'),
     url(r'^family_dashboard',family_views.FamilyDashboard.as_view(),name=
     'family_dashboard'),

@@ -68,6 +68,7 @@ def add_roles_to_context(request):
         #CAREGIVER PERMISSIONS
         if 'CAREGIVER' in user_roles:
             module_dict['CAREGIVERPORTAL']['CAREGIVERDASHBOARD']=True
+            module_dict['CAREGIVERPORTAL']['VIEWCALENDAR']=True
             #module_dict['CAREGIVERPORTAL']['CALENDAR']=True
         if 'FAMILYUSER' in user_roles:
             module_dict['FAMILYPORTAL']['FAMILYDASHBOARD']=True
