@@ -61,8 +61,8 @@ class ViewTasks(LoginRequiredMixin, View):
             tasks = TaskSchedule.objects.filter(company=request.user.company,pending=True)
         if task_type=="in_progress":
             tasks = TaskSchedule.objects.filter(company=request.user.company,in_progress=True)
-        if task_type=="completed":
-            tasks = TaskSchedule.objects.filter(company=request.user.company,completed=True)
+        if task_type=="complete":
+            tasks = TaskSchedule.objects.filter(company=request.user.company,complete=True)
         if task_type=="cancelled":
             tasks = TaskSchedule.objects.filter(company=request.user.company,cancelled=True)
         if task_type=="default":
