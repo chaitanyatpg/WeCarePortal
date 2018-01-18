@@ -61,17 +61,16 @@
                 </thead>
                 <tbody>
                     {% for time_sheet in active_caregiver_timesheets %}
-                      <tr>
+                      <tr class="timesheet_row">
                         <td>{{time_sheet.caregiver_name}}</td>
                         <td>{{time_sheet.client_name}}</td>
                         <td>{{time_sheet.clock_in_time}}</td>
                         <td>{{time_sheet.time_worked}}</td>
+                        <input type="hidden" name="{{close_caregiver_session_form.caregiver_session_id.html_name}}" value={{time_sheet.id}}>
                         <td>
-                          <form method='post' action="{% url 'view_active_caregivers' %}" class="form-horizontal form-label-left">
-                            {% csrf_token %}
-                            <input type="hidden" name="{{close_caregiver_session_form.caregiver_session_id.html_name}}" value={{time_sheet.id}}>
-                            <button class="btn-danger" type="submit"><i class="fa fa-sign-out pull-right"></i>Close Session</a>
-                          </form>
+                          <input type="hidden" name="{{close_caregiver_session_form.caregiver_session_id.html_name}}" value={{time_sheet.id}}>
+                          <!--<button class="btn-danger" type="submit"><i class="fa fa-sign-out pull-right"></i>Close Session</a>-->
+                          <button type="button" class="btn btn-danger" onclick = closeSessionModal({{time_sheet.id}}) data-toggle="modal" data-target="#close_session_modal">Close Session</button>
                         </td>
                       </tr>
                     {% endfor %}
@@ -80,6 +79,90 @@
             </div>
           </div>
         </div>
+
+        <!-- Close session modal -->
+        <div id="close_session_modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Close session</h4>
+              </div>
+              <div class="modal-body">
+                <h5>Are you sure you want to close this session?</h5>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">New Clock out Time
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <select name="{{close_caregiver_session_form.end_hour.html_name}}">
+                          <option selected disabled>Hour</option>
+                          <option value="00">12 AM</option>
+                          <option value="01">1 AM</option>
+                          <option value="02">2 AM</option>
+                          <option value="03">3 AM</option>
+                          <option value="04">4 AM</option>
+                          <option value="05">5 AM</option>
+                          <option value="06">6 AM</option>
+                          <option value="07">7 AM</option>
+                          <option value="08">8 AM</option>
+                          <option value="09">9 AM</option>
+                          <option value="10">10 AM</option>
+                          <option value="11">11 AM</option>
+                          <option value="12">12 PM</option>
+                          <option value="13">1 PM</option>
+                          <option value="14">2 PM</option>
+                          <option value="15">3 PM</option>
+                          <option value="16">4 PM</option>
+                          <option value="17">5 PM</option>
+                          <option value="18">6 PM</option>
+                          <option value="19">7 PM</option>
+                          <option value="20">8 PM</option>
+                          <option value="21">9 PM</option>
+                          <option value="22">10 PM</option>
+                          <option value="23">11 PM</option>
+                        </select>
+                        <select name="{{close_caregiver_session_form.end_minute.html_name}}">
+                          <option selected disabled>Minute</option>
+                          <option value="00">00</option>
+                          <option value="10">10</option>
+                          <option value="20">20</option>
+                          <option value="30">30</option>
+                          <option value="40">40</option>
+                          <option value="50">50</option>
+                        </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Reason
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <select name="{{close_caregiver_session_form.reason.html_name}}">
+                          <option selected disabled>Reason</option>
+                          <option value="1">Failure to clock out</option>
+                          <option value="2">Internet connection issues</option>
+                          <option value="3">Other</option>
+                        </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <form id="close_session_form" enctype="multipart/form-data" action="{% url 'view_active_caregivers' %}" method="post" class="form-horizontal" role="form">
+
+                  <button type="button" class="btn btn-default antoclose2" data-dismiss="modal">Cancel</button>
+                  {% csrf_token %}
+                  <input type="hidden" id="caregiver_timesheet_id" name="{{close_caregiver_session_form.caregiver_session_id.html_name}}">
+                  <button type="submit" class="btn btn-danger edit_calendar_submit">Close Session</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- end delete family modal -->
+
 
       </div>
     </div>
@@ -110,6 +193,26 @@
 {% endblock %}
 
 {% block scripts %}
+
+<!-- modal -->
+
+<script type="text/javascript">
+  function closeSessionModal(id){
+    //var timesheet_id = $(this).children(':hidden').val();
+    console.log(id)
+    $('#caregiver_timesheet_id').val(id);
+  }
+
+
+
+  $(".timesheet_row").click(function(){
+    var timesheet_id = $(this).children(':hidden').val();
+
+    });
+</script>
+
+<!-- end modal -->
+
 
 <!-- DataTables -->
 <script>

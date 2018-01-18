@@ -72,6 +72,10 @@ class CompanyEditForm(forms.Form):
 class CloseCaregiverSessionForm(forms.Form):
 
     caregiver_session_id = forms.IntegerField()
+    clock_out_date = forms.DateField(required=False)
+    end_hour = forms.CharField(required=False)
+    end_minute = forms.CharField(required=False)
+    reason = forms.CharField(max_length=200,required=False)
 
     def clean(self):
 
