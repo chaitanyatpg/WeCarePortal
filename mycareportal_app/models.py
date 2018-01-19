@@ -25,6 +25,7 @@ class User(AbstractUser):
     company = models.ForeignKey(Company)
     uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     account_activated = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
 
 class UserRoles(models.Model):
 
@@ -39,6 +40,7 @@ class UserRoles(models.Model):
     company = models.ForeignKey(Company)
     user = models.ForeignKey(User)
     role = models.CharField(max_length=50,choices=ROLE_CHOICES)
+    created = models.DateTimeField(auto_now_add=True)
 
 class CareManager(models.Model):
 
@@ -47,6 +49,7 @@ class CareManager(models.Model):
     company = models.ForeignKey(Company)
     email_address = models.CharField(max_length = 100)
     can_add = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
         return self.user.username
@@ -57,6 +60,7 @@ class FamilyUser(models.Model):
     uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     company = models.ForeignKey(Company)
     email_address = models.CharField(max_length = 100)
+    created = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
         return self.user.username
@@ -67,6 +71,7 @@ class ProviderUser(models.Model):
     uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     company = models.ForeignKey(Company)
     email_address = models.CharField(max_length = 100)
+    created = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
         return self.user.username
@@ -95,6 +100,7 @@ class Caregiver(models.Model):
     referrer = models.CharField(max_length=100,blank=True)
     rating = models.IntegerField(default=0)
     profile_picture = models.ImageField(upload_to=get_caregiver_profile_picture_upload_path)
+    created = models.DateTimeField(auto_now_add=True)
     #add location
     #add tags
 
@@ -107,6 +113,7 @@ class HomeModificationUser(models.Model):
     uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     company = models.ForeignKey(Company)
     email_address = models.CharField(max_length = 100)
+    created = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
         return self.user.username
@@ -117,6 +124,7 @@ class MoveManager(models.Model):
     uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     company = models.ForeignKey(Company)
     email_address = models.CharField(max_length = 100)
+    created = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
         return self.user.username
@@ -141,6 +149,7 @@ class FamilyContact(models.Model):
     power_of_attorney = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     profile_picture = models.ImageField(upload_to=get_family_profile_picture_upload_path)
+    created = models.DateTimeField(auto_now_add=True)
 
 class Provider(models.Model):
 
@@ -155,6 +164,7 @@ class Provider(models.Model):
     phone_number = models.CharField(max_length=40)
     secondary_phone_number = models.CharField(max_length=40, blank=True)
     is_active = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True)
 
 class Pharmacy(models.Model):
 
@@ -170,6 +180,7 @@ class Pharmacy(models.Model):
     state = models.CharField(max_length=2, blank=True)
     zip_code = models.CharField(max_length=10, blank=True)
     is_active = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True)
 
 class Payer(models.Model):
 
@@ -188,6 +199,7 @@ class Payer(models.Model):
     state = models.CharField(max_length=2, blank=True)
     zip_code = models.CharField(max_length=10, blank=True)
     is_active = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True)
 
 def get_client_profile_picture_upload_path(instance, filename):
     return "company_{0}/client/client_{1}/profile_pictures/{2}".format(instance.company.company_id,instance.id,filename)
@@ -216,12 +228,14 @@ class Client(models.Model):
     provider = models.ManyToManyField(Provider, blank=True)
     pharmacy = models.ManyToManyField(Pharmacy, blank=True)
     payer = models.ManyToManyField(Payer, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
 
 class ActivityMaster(models.Model):
 
     activity_code = models.CharField(max_length=100)
     uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     activity_description = models.CharField(max_length=300)
+    created = models.DateTimeField(auto_now_add=True)
 
 class ActivitySubCategory(models.Model):
 
@@ -229,6 +243,7 @@ class ActivitySubCategory(models.Model):
     uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     activity_category_code = models.CharField(max_length=100)
     activity_category = models.CharField(max_length=300)
+    created = models.DateTimeField(auto_now_add=True)
 
 class DefaultTasks(models.Model):
 
@@ -236,6 +251,7 @@ class DefaultTasks(models.Model):
     uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     activity_task = models.CharField(max_length=300)
     task_code = models.CharField(max_length=30)
+    created = models.DateTimeField(auto_now_add=True)
 
 class Tasks(models.Model):
 
@@ -243,6 +259,7 @@ class Tasks(models.Model):
     uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     activity_task = models.CharField(max_length=300)
     activity_category_code = models.CharField(max_length=100)
+    created = models.DateTimeField(auto_now_add=True)
 
 class TaskHeader(models.Model):
 
@@ -258,6 +275,7 @@ class TaskHeader(models.Model):
     description = models.CharField(max_length=1000, blank=True)
     link = models.CharField(max_length=500, blank=True)
     attachment = models.FileField(upload_to="files/tasks", blank=True)
+    created = models.DateTimeField(auto_now_add=True)
 
 class TaskSchedule(models.Model):
 
@@ -276,6 +294,7 @@ class TaskSchedule(models.Model):
     description = models.CharField(max_length=1000, blank=True)
     link = models.CharField(max_length=500, blank=True)
     attachment = models.FileField(upload_to="files/tasks", blank=True)
+    created = models.DateTimeField(auto_now_add=True)
 
 class TaskComment(models.Model):
 
@@ -318,6 +337,7 @@ class AssessmentCategories(models.Model):
 
     category = models.CharField(max_length=500)
     uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    created = models.DateTimeField(auto_now_add=True)
 
 class AssessmentTask(models.Model):
 
@@ -326,6 +346,7 @@ class AssessmentTask(models.Model):
     assessment_task = models.CharField(max_length=2000)
     is_default = models.BooleanField(default=False)
     company = models.ForeignKey(Company, blank=True, null=True)
+    created = models.DateTimeField(auto_now_add=True)
 
 class AssessmentTaskCustom(models.Model):
 
@@ -333,6 +354,7 @@ class AssessmentTaskCustom(models.Model):
     uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     assessment_category = models.ForeignKey(AssessmentCategories)
     assessment_task = models.CharField(max_length=2000)
+    created = models.DateTimeField(auto_now_add=True)
 
 class ClientAssessmentMap(models.Model):
 
@@ -342,6 +364,7 @@ class ClientAssessmentMap(models.Model):
     assessment_category = models.ForeignKey(AssessmentCategories)
     assessment_task = models.ForeignKey(AssessmentTask)
     status = models.CharField(max_length=2)
+    created = models.DateTimeField(auto_now_add=True)
 
 class ClientTabletRegister(models.Model):
 
@@ -349,6 +372,7 @@ class ClientTabletRegister(models.Model):
     uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     client = models.OneToOneField(Client)
     device_id = models.CharField(max_length=100,unique=True)
+    created = models.DateTimeField(auto_now_add=True)
 
 class CaregiverTimeSheet(models.Model):
 
@@ -361,11 +385,13 @@ class CaregiverTimeSheet(models.Model):
     client_timezone = models.CharField(max_length=50)
     time_worked = models.DurationField(blank=True, null=True)
     is_active = models.BooleanField()
+    created = models.DateTimeField(auto_now_add=True)
 
 class DefaultIncidents(models.Model):
 
     incident = models.CharField(max_length=150)
     uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    created = models.DateTimeField(auto_now_add=True)
     #location = models.CharField(max_length=100, blank=True)
     #reason = models.CharField(max_Length=100, blank=True)
     #trigger_frequency = models.IntegerField()
@@ -379,6 +405,7 @@ class IncidentLocations(models.Model):
 
     location = models.CharField(max_length=100)
     uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    created = models.DateTimeField(auto_now_add=True)
 
 class IncidentReport(models.Model):
     company = models.ForeignKey(Company)
@@ -391,6 +418,7 @@ class IncidentReport(models.Model):
     incident_name = models.CharField(max_length=150)
     location_name = models.CharField(max_length=100)
     incident_timestamp = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
 
 class CaregiverScheduleHeader(models.Model):
     company = models.ForeignKey(Company)
@@ -401,6 +429,7 @@ class CaregiverScheduleHeader(models.Model):
     end_date = models.DateField(null=True) #change b4 prod
     start_time = models.TimeField()
     end_time = models.TimeField()
+    created = models.DateTimeField(auto_now_add=True)
 
 class CaregiverSchedule(models.Model):
     schedule_header = models.ForeignKey(CaregiverScheduleHeader,null=True) #change b4 production
@@ -411,10 +440,12 @@ class CaregiverSchedule(models.Model):
     date = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
+    created = models.DateTimeField(auto_now_add=True)
 
 class ClientMatchCategory(models.Model):
     category = models.CharField(max_length=500)
     uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    created = models.DateTimeField(auto_now_add=True)
 
 class ClientMatchCriteria(models.Model):
     client_match_category = models.ForeignKey(ClientMatchCategory)
@@ -422,6 +453,7 @@ class ClientMatchCriteria(models.Model):
     criteria = models.CharField(max_length=2000)
     is_default = models.BooleanField(default=False)
     company = models.ForeignKey(Company, blank=True, null=True)
+    created = models.DateTimeField(auto_now_add=True)
 
 class ClientCriteriaMap(models.Model):
 
@@ -431,6 +463,7 @@ class ClientCriteriaMap(models.Model):
     client_match_category = models.ForeignKey(ClientMatchCategory)
     client_match_criteria = models.ForeignKey(ClientMatchCriteria)
     status = models.CharField(max_length=2)
+    created = models.DateTimeField(auto_now_add=True)
 
 class CaregiverCriteriaMap(models.Model):
 
@@ -440,6 +473,7 @@ class CaregiverCriteriaMap(models.Model):
     client_match_category = models.ForeignKey(ClientMatchCategory)
     client_match_criteria = models.ForeignKey(ClientMatchCriteria)
     status = models.CharField(max_length=2)
+    created = models.DateTimeField(auto_now_add=True)
 
 class ClientCertificationMap(models.Model):
 
@@ -449,6 +483,7 @@ class ClientCertificationMap(models.Model):
     client_match_category = models.ForeignKey(ClientMatchCategory)
     client_match_criteria = models.ForeignKey(ClientMatchCriteria)
     status = models.CharField(max_length=2)
+    created = models.DateTimeField(auto_now_add=True)
 
 class CaregiverCertificationMap(models.Model):
 
@@ -460,6 +495,7 @@ class CaregiverCertificationMap(models.Model):
     start_date = models.DateField(null=True)
     end_date = models.DateField(null=True)
     status = models.CharField(max_length=2)
+    created = models.DateTimeField(auto_now_add=True)
 
 class ClientTransferMap(models.Model):
 
@@ -475,6 +511,7 @@ class ClientTransferMap(models.Model):
     client_match_category = models.ForeignKey(ClientMatchCategory)
     client_match_criteria = models.ForeignKey(ClientMatchCriteria)
     experience = models.IntegerField(EXPERIENCE_CHOICES,null=True)
+    created = models.DateTimeField(auto_now_add=True)
 
 class CaregiverTransferMap(models.Model):
 
@@ -490,3 +527,4 @@ class CaregiverTransferMap(models.Model):
     client_match_category = models.ForeignKey(ClientMatchCategory)
     client_match_criteria = models.ForeignKey(ClientMatchCriteria)
     experience = models.IntegerField(EXPERIENCE_CHOICES,null=True)
+    created = models.DateTimeField(auto_now_add=True)
