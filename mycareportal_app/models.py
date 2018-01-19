@@ -235,7 +235,6 @@ class ActivityMaster(models.Model):
     activity_code = models.CharField(max_length=100)
     uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     activity_description = models.CharField(max_length=300)
-    created = models.DateTimeField(auto_now_add=True)
 
 class ActivitySubCategory(models.Model):
 
@@ -243,7 +242,6 @@ class ActivitySubCategory(models.Model):
     uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     activity_category_code = models.CharField(max_length=100)
     activity_category = models.CharField(max_length=300)
-    created = models.DateTimeField(auto_now_add=True)
 
 class DefaultTasks(models.Model):
 
@@ -251,7 +249,6 @@ class DefaultTasks(models.Model):
     uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     activity_task = models.CharField(max_length=300)
     task_code = models.CharField(max_length=30)
-    created = models.DateTimeField(auto_now_add=True)
 
 class Tasks(models.Model):
 
@@ -337,7 +334,6 @@ class AssessmentCategories(models.Model):
 
     category = models.CharField(max_length=500)
     uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
-    created = models.DateTimeField(auto_now_add=True)
 
 class AssessmentTask(models.Model):
 
@@ -346,7 +342,6 @@ class AssessmentTask(models.Model):
     assessment_task = models.CharField(max_length=2000)
     is_default = models.BooleanField(default=False)
     company = models.ForeignKey(Company, blank=True, null=True)
-    created = models.DateTimeField(auto_now_add=True)
 
 class AssessmentTaskCustom(models.Model):
 
@@ -391,7 +386,6 @@ class DefaultIncidents(models.Model):
 
     incident = models.CharField(max_length=150)
     uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
-    created = models.DateTimeField(auto_now_add=True)
     #location = models.CharField(max_length=100, blank=True)
     #reason = models.CharField(max_Length=100, blank=True)
     #trigger_frequency = models.IntegerField()
@@ -405,7 +399,6 @@ class IncidentLocations(models.Model):
 
     location = models.CharField(max_length=100)
     uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
-    created = models.DateTimeField(auto_now_add=True)
 
 class IncidentReport(models.Model):
     company = models.ForeignKey(Company)
@@ -445,7 +438,6 @@ class CaregiverSchedule(models.Model):
 class ClientMatchCategory(models.Model):
     category = models.CharField(max_length=500)
     uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
-    created = models.DateTimeField(auto_now_add=True)
 
 class ClientMatchCriteria(models.Model):
     client_match_category = models.ForeignKey(ClientMatchCategory)
@@ -453,7 +445,6 @@ class ClientMatchCriteria(models.Model):
     criteria = models.CharField(max_length=2000)
     is_default = models.BooleanField(default=False)
     company = models.ForeignKey(Company, blank=True, null=True)
-    created = models.DateTimeField(auto_now_add=True)
 
 class ClientCriteriaMap(models.Model):
 
