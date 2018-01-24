@@ -872,8 +872,7 @@
                   title: "{{ task.activity_task }}",
                   start: "{{ task.date|date:'Y-m-d'|append_datetime:task.start_time}}",
                   end: "{{ task.date|date:'Y-m-d'|append_datetime:task.end_time}}",
-                  id: "{{ task.id }}",
-                  color: "#FFE4B5"
+                  id: "{{ task.id }}"
                 },
                 {% elif task.in_progress %}
                 {
@@ -881,7 +880,7 @@
                   start: "{{ task.date|date:'Y-m-d'|append_datetime:task.start_time}}",
                   end: "{{ task.date|date:'Y-m-d'|append_datetime:task.end_time}}",
                   id: "{{ task.id }}",
-                  color: "#A8D0E6"
+                  color: "#FF7F50"
                 },
                 {% elif task.complete %}
                 {
@@ -889,7 +888,7 @@
                   start: "{{ task.date|date:'Y-m-d'|append_datetime:task.start_time}}",
                   end: "{{ task.date|date:'Y-m-d'|append_datetime:task.end_time}}",
                   id: "{{ task.id }}",
-                  color: "#3AAFA9"
+                  color: "#3aaf6f"
                 },
                 {% elif task.cancelled %}
                 {
