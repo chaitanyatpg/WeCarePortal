@@ -83,6 +83,7 @@ def register(request):
     context = {}
     if request.method == 'GET':
         context['form'] = ManagerRegistrationForm();
+        context['all_timezones'] = pytz.all_timezones
         return render(request, 'production/wecare_register.html', context)
     elif request.method == 'POST':
         form = ManagerRegistrationForm(request.POST)
@@ -95,6 +96,7 @@ def register(request):
         city = form.cleaned_data['city']
         state = form.cleaned_data['state']
         zip_code = form.cleaned_data['zip_code']
+        time_zone = form.cleaned_data['time_zone']
         first_name = form.cleaned_data['first_name']
         last_name = form.cleaned_data['last_name']
         username = form.cleaned_data['email']
@@ -109,7 +111,8 @@ def register(request):
                                             address=address,
                                             city=city,
                                             state=state,
-                                            zip_code=zip_code)
+                                            zip_code=zip_code,
+                                            time_zone=time_zone)
                 new_company.save()
             except IntegrityError as e:
                 exception_flag = True

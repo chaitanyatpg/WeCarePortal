@@ -15,7 +15,7 @@ class Company(models.Model):
     city = models.CharField(max_length=100)
     state = models.CharField(max_length=2)
     zip_code = models.CharField(max_length=10)
-    time_zone = models.CharField(max_length=50, blank=True)
+    time_zone = models.CharField(max_length=50)
     account_number = models.IntegerField(unique=True, null=True)
     parent_account = models.ForeignKey('self', null=True)
     created = models.DateTimeField(auto_now_add=True)

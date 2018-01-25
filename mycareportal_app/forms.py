@@ -18,6 +18,7 @@ class ManagerRegistrationForm(forms.Form):
     contact_number = forms.CharField(max_length=20)
     password = forms.CharField(max_length=30)
     confirm_password = forms.CharField(max_length=30)
+    time_zone = forms.CharField(max_length=50)
 
     def clean(self):
 

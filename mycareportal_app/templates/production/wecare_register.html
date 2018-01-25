@@ -206,6 +206,23 @@
                   <input type="text" class="form-control" placeholder="Zip Code" name = "{{form.zip_code.html_name}}" required="" />
                 {% endif %}
               </div>
+              <div>
+                {% if not form.time_zone.value is None %}
+                  <select required class="select2_time_zone form-control" tabindex="-1" name={{form.time_zone.html_name}} value={{form.time_zone.value}}>
+                    <option selected=selected>{{form.time_zone.value}}</option>
+                    {% for timezone in all_timezones %}
+                      <option value='{{timezone}}'>{{timezone}}</option>
+                    {% endfor %}
+                  </select>
+                {% else %}
+                <select required class="select2_time_zone form-control" tabindex="-1" name={{form.time_zone.html_name}}>
+                  <option value="" disabled selected>Select Time Zone</option>
+                  {% for timezone in all_timezones %}
+                    <option value='{{timezone}}'>{{timezone}}</option>
+                  {% endfor %}
+                </select>
+                {% endif %}
+              </div>
               <h2>Care Manager Information</h2>
               <div>
                 {% if not form.first_name.value is None %}
@@ -254,6 +271,8 @@
     </div>
   </body>
 
+  <!-- jQuery -->
+  <script src="{% static 'vendors/jquery/dist/jquery.min.js' %}"></script>
   <!-- Select2 -->
   <script src="{% static 'vendors/select2/dist/js/select2.full.min.js' %}"></script>
 
@@ -262,6 +281,10 @@
         $(document).ready(function() {
           $(".select2_single").select2({
             placeholder: "Select a state",
+            allowClear: true
+          });
+          $(".select2_time_zone").select2({
+            placeholder: "Select a Time Zone",
             allowClear: true
           });
         });
