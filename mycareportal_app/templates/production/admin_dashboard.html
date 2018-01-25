@@ -154,7 +154,7 @@
     };
 
     var optionSet1 = {
-      startDate: moment().subtract({{days_since_company_created}}, 'days'),
+      startDate: moment(),
       endDate: moment(),
       minDate: '01/01/2012',
       maxDate: '12/31/2020',
@@ -189,7 +189,7 @@
       }
     };
 
-    $('#reportrange_right span').html(moment().subtract({{days_since_company_created}}, 'days').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+    $('#reportrange_right span').html(moment().format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
 
     $('#reportrange_right').daterangepicker(optionSet1, cb);
 

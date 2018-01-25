@@ -284,6 +284,8 @@ def pwd_activate_2(request, uidb64, token):
 def dashboard(request):
     context = {}
     current_company = request.user.company
+    company_timezone = pytz.timezone(current_company.time_zone)
+    current_date = (timezone.now().astimezone(company_timezone)).date()
     total_clients = Client.objects.filter(company=current_company).count()
     total_caregivers = Caregiver.objects.filter(company=current_company).count()
     total_family_users = FamilyContact.objects.filter(company=current_company).count()
@@ -292,11 +294,11 @@ def dashboard(request):
     registered_tablets = ClientTabletRegister.objects.filter(company=current_company).count()
     default_tasks = DefaultTasks.objects.count()
     custom_tasks = Tasks.objects.filter(company=current_company).count()
-    total_scheduled_tasks = TaskSchedule.objects.filter(company=current_company).count()
-    total_pending_tasks = TaskSchedule.objects.filter(company=current_company,pending=True).count()
-    total_in_progress_tasks = TaskSchedule.objects.filter(company=current_company,in_progress=True).count()
-    total_completed_tasks = TaskSchedule.objects.filter(company=current_company,complete=True).count()
-    total_cancelled_tass = TaskSchedule.objects.filter(company=current_company,cancelled=True).count()
+    total_scheduled_tasks = TaskSchedule.objects.filter(company=current_company,date=current_date).count()
+    total_pending_tasks = TaskSchedule.objects.filter(company=current_company,date=current_date,pending=True).count()
+    total_in_progress_tasks = TaskSchedule.objects.filter(company=current_company,date=current_date,in_progress=True).count()
+    total_completed_tasks = TaskSchedule.objects.filter(company=current_company,date=current_date,complete=True).count()
+    total_cancelled_tass = TaskSchedule.objects.filter(company=current_company,date=current_date,cancelled=True).count()
     company_details = {
         'company_name' : current_company.company_name,
         'contact_number' : current_company.contact_number,
@@ -324,7 +326,6 @@ def dashboard(request):
     context['company_created_date'] = current_company.created
     days_since_company_created = (timezone.now() - current_company.created).days
     context['days_since_company_created'] = days_since_company_created
-    print(days_since_company_created)
     return render(request, 'production/admin_dashboard.html', context)
 
 class AddCareManager(LoginRequiredMixin, View):
@@ -539,13 +540,10 @@ def end_caregiver_time_sheet_session(request):
 
 @login_required
 def date_filter_dashboard(request):
-    print("WERERWER")
     dashboard_task_data = {}
     current_company = request.user.company
     start_date = request.GET.get('start_date')
     end_date = request.GET.get('end_date')
-    print(start_date)
-    print(end_date)
     #company_time_zone = current_company.time_zone
     #company_time_zone = pytz.timezone(company_time_zone)
     #current_date = (timezone.now().astimezone(client_timezone)).date()
