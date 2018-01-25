@@ -40,70 +40,71 @@
                   </div>
                   <div class="x_content">
                     <br />
-                    <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
-                    	<div class="form-group">
-                        	<label class="control-label col-md-3 col-sm-3 col-xs-12">Select Client</label>
-	                        <div class="col-md-9 col-sm-9 col-xs-12">
-	                          <select id='client_dropdown' class="select2_single form-control" tabindex="-1">
-	                            <option value="nonon"></option>
-                              {% for client in all_clients %}
-                                <option value= {{client.email_address}}>{{client.first_name|addstr_space:client.last_name}}</option>
-                              {% endfor %}
-	                          </select>
-	                        </div>
-                      </div>
-                      <div id="client_detail_panel" style='display: none' class="col-md-9 col-sm-9 col-xs-12 profile_details pull-right">
-                        <div class="well profile_view">
-                          <div class="col-sm-12">
-                            <h4 class="brief"><i>Client</i></h4>
-                            <div class="left col-xs-7">
-                              <h2 id="client_detail_name"></h2>
-                              <ul class="list-unstyled">
-                                <li>
-                                  <i class="fa fa-building"></i>
-                                  <text id="client_detail_address"></text>
-                                </li>
-                                <li>
-                                  <i class="fa fa-phone"></i>
-                                  <text id="client_detail_phone_number"></text>
-                                </li>
-                                <li>
-                                  <i class="fa fa-calendar"></i>
-                                  <text id="client_detail_dob"></text>
-                                </li>
-                                <li>
-                                  <i class="fa fa-envelope"></i>
-                                  <text id="client_detail_email"></text>
-                                </li>
-                                <li>
-                                  <i class="fa fa-male"></i><i class="fa fa-female"></i>
-                                  <text id="client_detail_gender"></text>
-                                </li>
-                              </ul>
-                            </div>
-                            <div id="client_detail_img" class="right col-xs-5 text-center">
-                              <img src="" alt="" class="img-circle img-responsive">
+                    <div class="row">
+                      <div class="col-md-10 col-sm-10 col-xs-12">
+                        <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                        	<div class="form-group">
+                            	<label class="control-label col-md-2 col-sm-2 col-xs-12">Select Client</label>
+    	                        <div class="col-md-10 col-sm-10 col-xs-12">
+    	                          <select id='client_dropdown' class="select2_single form-control" tabindex="-1">
+    	                            <option value="nonon"></option>
+                                  {% for client in all_clients %}
+                                    <option value= {{client.email_address}}>{{client.first_name|addstr_space:client.last_name}}</option>
+                                  {% endfor %}
+    	                          </select>
+    	                        </div>
+                          </div>
+                          <div id="client_detail_panel" style='display: none' class="col-md-9 col-sm-9 col-xs-12 profile_details pull-right">
+                            <div class="well profile_view">
+                              <div class="col-sm-12">
+                                <h4 class="brief"><i>Client</i></h4>
+                                <div class="left col-xs-7">
+                                  <h2 id="client_detail_name"></h2>
+                                  <ul class="list-unstyled">
+                                    <li>
+                                      <i class="fa fa-building"></i>
+                                      <text id="client_detail_address"></text>
+                                    </li>
+                                    <li>
+                                      <i class="fa fa-phone"></i>
+                                      <text id="client_detail_phone_number"></text>
+                                    </li>
+                                    <li>
+                                      <i class="fa fa-calendar"></i>
+                                      <text id="client_detail_dob"></text>
+                                    </li>
+                                    <li>
+                                      <i class="fa fa-envelope"></i>
+                                      <text id="client_detail_email"></text>
+                                    </li>
+                                    <li>
+                                      <i class="fa fa-male"></i><i class="fa fa-female"></i>
+                                      <text id="client_detail_gender"></text>
+                                    </li>
+                                  </ul>
+                                </div>
+                                <div id="client_detail_img" class="right col-xs-5 text-center">
+                                  <img src="" alt="" class="img-circle img-responsive">
+                                </div>
+                              </div>
+                              <div class="col-xs-12 bottom text-center">
+                              </div>
                             </div>
                           </div>
-                          <div class="col-xs-12 bottom text-center">
-                          </div>
-                        </div>
+                        </form>
                       </div>
-                    </form>
+                      <div class="col-md-2 col-sm-2">
+                        <form method="GET" action="{% url 'edit_client' %}">
+            	              <div class="form-group">
+                                <input type="hidden" id="client_email_hidden" name="{{find_client_form.client_email.html_name}}">
+            	                  <button type="submit" class="btn btn-success">Edit Client</button>
+            	              </div>
+          	            </form>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-
-            <div class="row">
-              <form method="GET" action="{% url 'edit_client' %}">
-  	              <div class="form-group">
-  	                <div class="col-md-9 col-sm-9 col-xs-12">
-                      <input type="hidden" id="client_email_hidden" name="{{find_client_form.client_email.html_name}}">
-  	                  <button type="submit" class="btn btn-success">Edit Client</button>
-  	                </div>
-  	              </div>
-	          </form>
             </div>
           </div>
         </div>
