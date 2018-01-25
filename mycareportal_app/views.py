@@ -329,6 +329,8 @@ def dashboard(request):
     context['company_created_date'] = current_company.created
     days_since_company_created = (timezone.now() - current_company.created).days
     context['days_since_company_created'] = days_since_company_created
+    context['current_date'] = '{0}-{1}-{2}'.format(current_date.year,current_date.strftime('%m'),current_date.strftime('%d'))
+    print(context['current_date'])
     return render(request, 'production/admin_dashboard.html', context)
 
 class AddCareManager(LoginRequiredMixin, View):

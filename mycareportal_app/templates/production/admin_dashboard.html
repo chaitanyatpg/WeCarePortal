@@ -40,37 +40,37 @@
           <div class="row tile_count">
             <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i>Total Scheduled Tasks</span>
-              <div class="count"><a href="{% url 'view_tasks' 'scheduled' %}" id="total_scheduled_tasks" class="green">{{total_scheduled_tasks}}</a></div>
+              <div class="count"><a href="{% url 'view_tasks' task_type='scheduled' start_date=current_date end_date=current_date %}" id="total_scheduled_tasks" class="green">{{total_scheduled_tasks}}</a></div>
               <span id="total_scheduled_tasks_sub" class="count_bottom">{{total_scheduled_tasks}} scheduled tasks</span>
             </div>
             <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i>Total Pending Tasks</span>
-              <div class="count"><a href="{% url 'view_tasks' 'pending' %}" id="total_pending_tasks" class="green">{{total_pending_tasks}}</a></div>
+              <div class="count"><a href="{% url 'view_tasks' task_type='pending' start_date=current_date end_date=current_date %}" id="total_pending_tasks" class="green">{{total_pending_tasks}}</a></div>
               <span id="total_pending_tasks_sub" class="count_bottom">{{total_pending_tasks}} pending tasks</span>
             </div>
             <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i>Total Tasks in Progress</span>
-              <div class="count"><a href="{% url 'view_tasks' 'in_progress' %}" id="total_in_progress_tasks" class="green">{{total_in_progress_tasks}}</a></div>
+              <div class="count"><a href="{% url 'view_tasks' task_type='in_progress' start_date=current_date end_date=current_date %}" id="total_in_progress_tasks" class="green">{{total_in_progress_tasks}}</a></div>
               <span id="total_in_progress_tasks_sub" class="count_bottom">{{total_in_progress_tasks}} tasks in progress</span>
             </div>
             <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i>Total Completed Tasks</span>
-              <div class="count"><a href="{% url 'view_tasks' 'complete' %}" id="total_completed_tasks" class="green">{{total_completed_tasks}}</a></div>
+              <div class="count"><a href="{% url 'view_tasks' task_type='complete' start_date=current_date end_date=current_date %}" id="total_completed_tasks" class="green">{{total_completed_tasks}}</a></div>
               <span id="total_completed_tasks_sub" class="count_bottom">{{total_completed_tasks}} completed tasks</span>
             </div>
             <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i>Total Cancelled Tasks</span>
-              <div class="count"><a href="{% url 'view_tasks' 'cancelled' %}" id="total_cancelled_tasks" class="green">{{total_cancelled_tasks}}</a></div>
+              <div class="count"><a href="{% url 'view_tasks' task_type='cancelled' start_date=current_date end_date=current_date %}" id="total_cancelled_tasks" class="green">{{total_cancelled_tasks}}</a></div>
               <span id="total_cancelled_tasks_sub" class="count_bottom">{{total_cancelled_tasks}} cancelled tasks</span>
             </div>
             <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i>Total Default Tasks</span>
-              <div class="count"><a href="{% url 'view_tasks' 'default' %}" class="green">{{default_tasks}}</a></div>
+              <div class="count"><a href="{% url 'view_tasks' task_type='default' start_date=current_date end_date=current_date %}" class="green">{{default_tasks}}</a></div>
               <span class="count_bottom">{{default_tasks}} default tasks</span>
             </div>
             <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i>Total Custom Tasks</span>
-              <div class="count"><a href="{% url 'view_tasks' 'custom' %}" class="green">{{custom_tasks}}</a></div>
+              <div class="count"><a href="{% url 'view_tasks' task_type='custom' start_date=current_date end_date=current_date %}" class="green">{{custom_tasks}}</a></div>
               <span class="count_bottom">{{custom_tasks}} custom tasks</span>
             </div>
           </div>
@@ -224,6 +224,16 @@
           $('#total_in_progress_tasks_sub').html(dashboard_task_data.total_in_progress_tasks + " in progress tasks");
           $('#total_completed_tasks_sub').html(dashboard_task_data.total_completed_tasks + " completed tasks");
           $('#total_cancelled_tasks_sub').html(dashboard_task_data.total_cancelled_tasks + " cancelled tasks");
+          var schedule_url = '{% url "view_tasks" "scheduled" "2018-01-01" "2018-01-02" %}'.replace('2018-01-01',start_date).replace('2018-01-02',end_date);
+          var pending_url = '{% url "view_tasks" "pending" "2018-01-01" "2018-01-02" %}'.replace('2018-01-01',start_date).replace('2018-01-02',end_date);
+          var progress_url = '{% url "view_tasks" "in_progress" "2018-01-01" "2018-01-02" %}'.replace('2018-01-01',start_date).replace('2018-01-02',end_date);
+          var completed_url = '{% url "view_tasks" "complete" "2018-01-01" "2018-01-02" %}'.replace('2018-01-01',start_date).replace('2018-01-02',end_date);
+          var cancelled_url = '{% url "view_tasks" "cancelled" "2018-01-01" "2018-01-02" %}'.replace('2018-01-01',start_date).replace('2018-01-02',end_date);
+          $('#total_scheduled_tasks').attr("href", schedule_url);
+          $('#total_pending_tasks').attr("href", pending_url);
+          $('#total_in_progress_tasks').attr("href", progress_url);
+          $('#total_completed_tasks').attr("href", completed_url);
+          $('#total_cancelled_tasks').attr("href", cancelled_url);
           //$('#caregiver_detail_name').html(caregiver_data.name);
           //$('#caregiver_detail_address').html('Address: ' + caregiver_data.address);
           //$('#caregiver_detail_phone_number').html('Phone Number: ' + caregiver_data.phone_number);

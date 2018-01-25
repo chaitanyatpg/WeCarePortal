@@ -55,16 +55,22 @@ class ViewTasks(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         context = {}
         task_type = self.kwargs['task_type']
+        start_date = timezone.now()
+        end_date = timezone.now()
+        if 'start_date' in self.kwargs:
+            start_date = self.kwargs['start_date']
+        if 'end_date' in self.kwargs:
+            end_date = self.kwargs['end_date']
         if task_type=="scheduled":
-            tasks = TaskSchedule.objects.filter(company=request.user.company)
+            tasks = TaskSchedule.objects.filter(company=request.user.company,date__range=[start_date,end_date])
         if task_type=="pending":
-            tasks = TaskSchedule.objects.filter(company=request.user.company,pending=True)
+            tasks = TaskSchedule.objects.filter(company=request.user.company,date__range=[start_date,end_date],pending=True)
         if task_type=="in_progress":
-            tasks = TaskSchedule.objects.filter(company=request.user.company,in_progress=True)
+            tasks = TaskSchedule.objects.filter(company=request.user.company,date__range=[start_date,end_date],in_progress=True)
         if task_type=="complete":
-            tasks = TaskSchedule.objects.filter(company=request.user.company,complete=True)
+            tasks = TaskSchedule.objects.filter(company=request.user.company,date__range=[start_date,end_date],complete=True)
         if task_type=="cancelled":
-            tasks = TaskSchedule.objects.filter(company=request.user.company,cancelled=True)
+            tasks = TaskSchedule.objects.filter(company=request.user.company,date__range=[start_date,end_date],cancelled=True)
         if task_type=="default":
             tasks = TaskSchedule.objects.filter(company=request.user.company)
         if task_type=="custom":
