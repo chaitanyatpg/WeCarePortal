@@ -387,7 +387,7 @@ class ChooseCaregiver(LoginRequiredMixin, View):
             assigned_caregivers = client.caregiver.all()
             context["assigned_caregivers"] = assigned_caregivers
             all_caregivers = Caregiver.objects.filter(company=current_company).order_by('last_name')
-            all_caregivers = self.match_client_caregiver_criteria(all_caregivers,client,current_company)
+            all_caregivers = self.match_client_caregiver_criteria(all_caregivers,client,current_company,assigned_caregivers)
             context['all_caregivers'] = all_caregivers
         return render(request,'production/caregiver_tables.html',context)
 
@@ -414,20 +414,23 @@ class ChooseCaregiver(LoginRequiredMixin, View):
         else:
             return redirect('find_caregiver')
 
-    def match_client_caregiver_criteria(self, all_caregivers, client, company):
+    def match_client_caregiver_criteria(self, all_caregivers, client, company, assigned_caregivers):
         client_criteria = ClientCriteriaMap.objects.filter(company=company,client=client,status__in=['Y','N'])
         client_certifications = ClientCertificationMap.objects.filter(company=company,client=client,status__in=['Y','N'])
-        client_transfers = ClientTransferMap.objects.filter(company=company,client=client)
+        client_transfers = ClientTransferMap.objects.filter(company=company,client=client,experience__in=[1,2,3])
         matching_caregivers = []
         for caregiver in all_caregivers:
-            caregiver_criteria = CaregiverCriteriaMap.objects.filter(company=company,caregiver=caregiver)
-            caregiver_certifications = CaregiverCertificationMap.objects.filter(company=company,caregiver=caregiver)
-            caregiver_transfers = CaregiverTransferMap.objects.filter(company=company,caregiver=caregiver)
-            (criteria_score, criteria_does_match) = self.criteria_match(client_criteria,caregiver_criteria)
-            (certification_score, certification_does_match) = self.criteria_match(client_certifications,caregiver_certifications)
-            (transfer_score, transfer_does_match) = self.transfer_match(client_transfers, caregiver_transfers)
-            if (criteria_does_match and certification_does_match and transfer_does_match):
-                matching_caregivers.append((caregiver,criteria_score + certification_score + transfer_score))
+            if caregiver not in assigned_caregivers:
+                caregiver_criteria = CaregiverCriteriaMap.objects.filter(company=company,caregiver=caregiver)
+                caregiver_certifications = CaregiverCertificationMap.objects.filter(company=company,caregiver=caregiver)
+                caregiver_transfers = CaregiverTransferMap.objects.filter(company=company,caregiver=caregiver)
+                (criteria_score, criteria_does_match) = self.criteria_match(client_criteria,caregiver_criteria)
+                (certification_score, certification_does_match) = self.criteria_match(client_certifications,caregiver_certifications)
+                (transfer_score, transfer_does_match) = self.transfer_match(client_transfers, caregiver_transfers)
+                if (criteria_does_match and certification_does_match and transfer_does_match):
+                    matching_caregivers.append((caregiver,criteria_score + certification_score + transfer_score))
+            else:
+                matching_caregivers.append((caregiver,len(client_criteria)+len(client_certifications)+len(client_transfers)))
         matching_caregivers.sort(key=lambda x: x[1], reverse=True)
         matching_caregivers = map(lambda x: x[0], matching_caregivers)
         return matching_caregivers
@@ -472,7 +475,7 @@ class ChooseCaregiver(LoginRequiredMixin, View):
                 caregiver_experience = caregiver_criteria.experience
                 if caregiver_experience != None and client_experience != None and caregiver_experience >= client_experience:
                     score += 1
-                else:
+                elif client_experience != None and client_experience > 1:
                     does_match = False
             else:
                 if client_experience != None and client_experience > 1:
