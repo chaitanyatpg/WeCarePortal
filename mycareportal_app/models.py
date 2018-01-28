@@ -380,6 +380,8 @@ class CaregiverTimeSheet(models.Model):
     client_timezone = models.CharField(max_length=50)
     time_worked = models.DurationField(blank=True, null=True)
     is_active = models.BooleanField()
+    manual_clock_out = models.BooleanField(default=False)
+    reason = models.CharField(max_length=200,blank=True)
     created = models.DateTimeField(auto_now_add=True)
 
 class DefaultIncidents(models.Model):

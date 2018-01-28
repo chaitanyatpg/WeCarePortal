@@ -398,7 +398,11 @@ class ViewActiveCaregivers(LoginRequiredMixin, View):
         close_caregiver_session_form = CloseCaregiverSessionForm(request.POST)
         if close_caregiver_session_form.is_valid():
             caregiver_session_id = close_caregiver_session_form.cleaned_data['caregiver_session_id']
-            self.close_caregiver_time_sheet_session(current_company, caregiver_session_id)
+            clock_out_date = close_caregiver_session_form.cleaned_data['clock_out_date']
+            end_hour = close_caregiver_session_form.cleaned_data['end_hour']
+            end_minute = close_caregiver_session_form.cleaned_data['end_minute']
+            reason = close_caregiver_session_form.cleaned_data['reason']
+            self.close_caregiver_time_sheet_session(current_company, caregiver_session_id, clock_out_date, end_hour, end_minute, reason)
         return redirect('view_active_caregivers')
 
     def construct_timesheet_rows(self, active_caregiver_timesheets):
@@ -411,14 +415,24 @@ class ViewActiveCaregivers(LoginRequiredMixin, View):
                                                     }, active_caregiver_timesheets))
         return active_caregiver_timesheets
 
-    def close_caregiver_time_sheet_session(self, company, caregiver_session_id):
-        print("ENDED SESSION")
+    def close_caregiver_time_sheet_session(self, company, caregiver_session_id, clock_out_date, end_hour, end_minute, reason):
         current_time_sheet = CaregiverTimeSheet.objects.get(company=company, id=caregiver_session_id)
-        current_time_sheet.clock_out_timestamp = timezone.now()
+        if (clock_out_date and end_hour and end_minute):
+
+            clock_out_time = datetime.time(int(end_hour), int(end_minute))
+            clock_out_timestamp = datetime.datetime.combine(clock_out_date, clock_out_time)
+            clock_out_timestamp_local = clock_out_timestamp.astimezone(pytz.timezone(current_time_sheet.client_timezone))
+            current_time_sheet.clock_out_timestamp = clock_out_timestamp.astimezone(current_time_sheet.clock_in_timestamp.tzinfo)
+            utc_offset = clock_out_timestamp_local.utcoffset()
+            current_time_sheet.clock_out_timestamp -= utc_offset
+        else:
+            current_time_sheet.clock_out_timestamp = timezone.now()
         current_time_sheet.is_active = False
         time_worked = current_time_sheet.clock_out_timestamp - current_time_sheet.clock_in_timestamp
-        print(time_worked)
         current_time_sheet.time_worked = time_worked
+        current_time_sheet.manual_clock_out = True
+        if reason:
+            current_time_sheet.reason = reason
         current_time_sheet.save()
         print(current_time_sheet.time_worked)
 
@@ -522,17 +536,14 @@ def set_caregiver_time_sheet_session(request):
 
 @login_required
 def end_caregiver_time_sheet_session(request):
-    print("ENDED SESSION")
     current_time_sheet = CaregiverTimeSheet.objects.get(company=request.user.company, id=request.session['current_time_sheet'])
     current_time_sheet.clock_out_timestamp = timezone.now()
     current_time_sheet.is_active = False
     client = current_time_sheet.client
     current_caregiver = current_time_sheet.caregiver
     time_worked = current_time_sheet.clock_out_timestamp - current_time_sheet.clock_in_timestamp
-    print(time_worked)
     current_time_sheet.time_worked = time_worked
     current_time_sheet.save()
-    print(current_time_sheet.time_worked)
     # Send clock out email to care managers and family members of client
     care_managers = CareManager.objects.filter(company=request.user.company)
     family_members = client.family_contacts.filter(is_active=True)

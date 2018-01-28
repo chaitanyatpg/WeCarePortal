@@ -67,6 +67,8 @@
                     <th>Clock in time</th>
                     <th>Clock out time</th>
                     <th>Total Time Worked</th>
+                    <th>Manual Clock Out</th>
+                    <th>Reason</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -77,6 +79,8 @@
                         <td>{{time_sheet.clock_in_time}}</td>
                         <td>{{time_sheet.clock_out_time}}</td>
                         <td>{{time_sheet.time_worked}}</td>
+                        <td>{{time_sheet.manual_clock_out}}</td>
+                        <td>{{time_sheet.reason}}</td>
                       </tr>
                     {% endfor %}
                 </tbody>
