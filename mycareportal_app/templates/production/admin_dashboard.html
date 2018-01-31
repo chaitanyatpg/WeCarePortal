@@ -79,12 +79,12 @@
             <h2> Company details </h2>
             <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i>Total Clients</span>
-              <div class="count"><i class="green">{{total_clients}}</i></div>
+              <div class="count"><a href="{% url 'view_all_clients' %}" class="green">{{total_clients}}</a></div>
               <span class="count_bottom">{{total_clients}} registered clients</span>
             </div>
             <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i>Total Caregivers</span>
-              <div class="count"><i class="green">{{total_caregivers}}</i></div>
+              <div class="count"><a href="{% url 'view_all_caregivers' %}" class="green">{{total_caregivers}}</a></div>
               <span class="count_bottom">{{total_caregivers}} registered caregivers</span>
             </div>
             <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
