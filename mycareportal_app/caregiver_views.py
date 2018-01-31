@@ -150,6 +150,10 @@ class ViewCaregiverTimesheet(LoginRequiredMixin, View):
             caregiver_time_sheets = CaregiverTimeSheet.objects.filter(company=current_company, caregiver=caregiver, is_active=False)
             context['caregiver_time_sheets'] = self.construct_timesheet_rows(caregiver_time_sheets)
             return render(request, 'production/view_caregiver_timesheet.html', context)
+        else:
+            messages.error(request, "Could not find selected caregiver")
+            return redirect('choose_view_caregiver_timesheet')
+
 
     def construct_timesheet_rows(self, caregiver_time_sheets):
         caregiver_time_sheets = list(map(lambda x: {
