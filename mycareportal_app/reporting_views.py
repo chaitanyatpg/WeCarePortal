@@ -40,6 +40,15 @@ class ViewAllClients(LoginRequiredMixin, View):
         context['clients'] = clients
         return render(request, "production/view_all_clients.html", context)
 
+class ViewAllCareManagers(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        company = request.user.company
+        care_managers = CareManager.objects.filter(company=company)
+        context['care_managers'] = care_managers
+        return render(request, "production/view_all_care_managers.html", context)
+
 class ViewClientsWithoutCaregiver(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):

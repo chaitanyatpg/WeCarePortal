@@ -119,6 +119,7 @@ urlpatterns = [
     name='view_move_bids'),
     url(r'^view_all_caregivers', reporting_views.ViewAllCaregivers.as_view(),name='view_all_caregivers'),
     url(r'^view_all_clients', reporting_views.ViewAllClients.as_view(),name='view_all_clients'),
+    url(r'^view_all_care_managers', reporting_views.ViewAllCareManagers.as_view(),name='view_all_care_managers'),
     url(r'^view_clients_without_caregivers', reporting_views.ViewClientsWithoutCaregiver.as_view(),name='view_clients_without_caregivers'),
     url(r'^view_tasks/(?P<task_type>[\w\-]+)/$', reporting_views.ViewTasks.as_view(),name='view_tasks'),
     url(r'^view_tasks/(?P<task_type>[\w\-]+)/(?P<start_date>\d{4}-\d{2}-\d{2})/(?P<end_date>\d{4}-\d{2}-\d{2})/$', reporting_views.ViewTasks.as_view(),name='view_tasks')
