@@ -28,6 +28,7 @@ from mycareportal_app.common.tokens import account_activation_token
 from mycareportal_app.email.care_manager.care_manager_email_processor import CareManagerEmailProcessor
 from mycareportal_app.email.caregiver.caregiver_email_processor import CaregiverEmailProcessor
 from mycareportal_app.email.user.user_email_processor import UserEmailProcessor
+from mycareportal_app.email.admin.admin_email_processor import AdminEmailProcessor
 
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
@@ -155,6 +156,11 @@ def register(request):
             email_manager = CareManagerEmailProcessor()
             email_manager.send_verification_email(
             new_user, current_site.domain
+            )
+            #Send email to me and Linda
+            email_manager = AdminEmailProcessor()
+            email_manager.send_company_sign_up_email(
+                new_user, current_site.domain
             )
             #Authenticate new user and log in
             new_user = authenticate(username=username,
