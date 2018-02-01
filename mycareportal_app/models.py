@@ -230,6 +230,8 @@ class Client(models.Model):
     payer = models.ManyToManyField(Payer, blank=True)
     created = models.DateTimeField(auto_now_add=True)
 
+    referrer = models.CharField(max_length=100, blank=True)
+
 class ActivityMaster(models.Model):
 
     activity_code = models.CharField(max_length=100)
