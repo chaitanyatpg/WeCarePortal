@@ -110,9 +110,9 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Phone Number <span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not edit_client_form.phone_number.value is None %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name={{edit_client_form.phone_number.html_name}} value={{edit_client_form.phone_number.value}}>
+                        <input type="text" class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '(999)-999-9999'" required="required" name={{edit_client_form.phone_number.html_name}} value={{edit_client_form.phone_number.value}}>
                       {% else %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name={{edit_client_form.phone_number.html_name}}>
+                        <input type="text" class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '(999)-999-9999'" required="required" name={{edit_client_form.phone_number.html_name}}>
                       {% endif %}
                     </div>
                   </div>
@@ -120,9 +120,9 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Secondary Phone Number</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not edit_client_form.secondary_phone_number.value is None %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" name={{edit_client_form.secondary_phone_number.html_name}} value={{edit_client_form.secondary_phone_number.value}}>
+                        <input type="text" class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '(999)-999-9999'" name={{edit_client_form.secondary_phone_number.html_name}} value={{edit_client_form.secondary_phone_number.value}}>
                       {% else %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" name={{edit_client_form.secondary_phone_number.html_name}}>
+                        <input type="text" class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '(999)-999-9999'" name={{edit_client_form.secondary_phone_number.html_name}}>
                       {% endif %}
                     </div>
                   </div>
@@ -610,9 +610,9 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Phone Number <span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not family_details_form.phone_number.value is None %}
-                        <input type="text" id="family_phone_number" class="form-control col-md-7 col-xs-12" required="required" name={{family_details_form.phone_number.html_name}} value={{family_details_form.phone_number.value}}>
+                        <input type="text" id="family_phone_number" class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '(999)-999-9999'" required="required" name={{family_details_form.phone_number.html_name}} value={{family_details_form.phone_number.value}}>
                       {% else %}
-                        <input type="text" id="family_phone_number" class="form-control col-md-7 col-xs-12" required="required" name={{family_details_form.phone_number.html_name}}>
+                        <input type="text" id="family_phone_number" class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '(999)-999-9999'" required="required" name={{family_details_form.phone_number.html_name}}>
                       {% endif %}
                     </div>
                   </div>
@@ -875,13 +875,13 @@
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Phone Number <span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                      <input type="text" id="provider_phone_number" required="required" class="form-control col-md-7 col-xs-12" name="{{provider_details_form.phone_number.html_name}}">
+                      <input type="text" id="provider_phone_number" data-inputmask="'mask': '(999)-999-9999'" required="required" class="form-control col-md-7 col-xs-12" name="{{provider_details_form.phone_number.html_name}}">
                     </div>
                   </div>
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Emergency Phone Number</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                      <input type="text" id="provider_secondary_phone_number" class="form-control col-md-7 col-xs-12" name="{{provider_details_form.secondary_phone_number.html_name}}">
+                      <input type="text" id="provider_secondary_phone_number" class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '(999)-999-9999'" name="{{provider_details_form.secondary_phone_number.html_name}}">
                     </div>
                   </div>
                   <div class="form-group">
@@ -955,7 +955,7 @@
                     <input type="text" id="pharmacy_contact_name" class="form-control" placeholder="Contact Name" name={{pharmacy_details_form.contact_name.html_name}}>
                     <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span> </div>
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                    <input type="text" id="pharmacy_phone_number" class="form-control has-feedback-left" placeholder="Phone Number" name={{pharmacy_details_form.phone_number.html_name}}>
+                    <input type="text" id="pharmacy_phone_number" class="form-control has-feedback-left" data-inputmask="'mask': '(999)-999-9999'" placeholder="Phone Number" name={{pharmacy_details_form.phone_number.html_name}}>
                     <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span> </div>
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                     <input type="text" id="pharmacy_fax_number" class="form-control" placeholder="Fax Number" name={{pharmacy_details_form.fax_number.html_name}}>
@@ -1092,7 +1092,7 @@
                     <input type="text" class="form-control" id="payer_contact_name" name={{payer_details_form.contact_name.html_name}} placeholder="Contact Name">
                     <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span> </div>
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                    <input type="text" class="form-control has-feedback-left" id="payer_phone_number" name={{payer_details_form.phone_number.html_name}} placeholder="Phone Number">
+                    <input type="text" class="form-control has-feedback-left" id="payer_phone_number" data-inputmask="'mask': '(999)-999-9999'" name={{payer_details_form.phone_number.html_name}} placeholder="Phone Number">
                     <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span> </div>
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                     <input type="text" class="form-control" id="payer_fax_number" name={{payer_details_form.fax_number.html_name}} placeholder="Fax Number">
@@ -1367,6 +1367,8 @@
 <script src="{% static 'vendors/dropzone/dist/min/dropzone.min.js' %}"></script>
 <!-- Select2 -->
 <script src="{% static 'vendors/select2/dist/js/select2.full.min.js' %}"></script>
+<!-- jquery.inputmask -->
+<script src="{% static 'vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js' %}"></script>
 {% endblock %}
 
 {% block scripts %}
@@ -1708,4 +1710,11 @@
       });
     </script>
 <!-- /Select2 -->
+<!-- jquery.inputmask -->
+  <script>
+    $(document).ready(function(){
+      $(":input").inputmask();
+    });
+  </script>
+<!-- /jquery.inputmask -->
 {% endblock %}

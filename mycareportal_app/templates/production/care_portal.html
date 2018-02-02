@@ -117,9 +117,9 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Phone Number <span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not add_client_form.phone_number.value is None %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name={{add_client_form.phone_number.html_name}} value={{add_client_form.phone_number.value}}>
+                        <input type="text" class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '(999)-999-9999'" required="required" name={{add_client_form.phone_number.html_name}} value={{add_client_form.phone_number.value}}>
                       {% else %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name={{add_client_form.phone_number.html_name}}>
+                        <input type="text" class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '(999)-999-9999'" required="required" name={{add_client_form.phone_number.html_name}}>
                       {% endif %}
                     </div>
                   </div>
@@ -127,9 +127,9 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Secondary Phone Number</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not add_client_form.secondary_phone_number.value is None %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" name={{add_client_form.secondary_phone_number.html_name}} value={{add_client_form.secondary_phone_number.value}}>
+                        <input type="text" class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '(999)-999-9999'" name={{add_client_form.secondary_phone_number.html_name}} value={{add_client_form.secondary_phone_number.value}}>
                       {% else %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" name={{add_client_form.secondary_phone_number.html_name}}>
+                        <input type="text" class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '(999)-999-9999'" name={{add_client_form.secondary_phone_number.html_name}}>
                       {% endif %}
                     </div>
                   </div>
@@ -340,6 +340,8 @@
 <script src="{% static 'vendors/dropzone/dist/min/dropzone.min.js' %}"></script>
 <!-- Select2 -->
 <script src="{% static 'vendors/select2/dist/js/select2.full.min.js' %}"></script>
+<!-- jquery.inputmask -->
+<script src="{% static 'vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js' %}"></script>
 {% endblock %}
 
 {% block scripts %}
@@ -382,4 +384,11 @@
       });
     </script>
 <!-- /bootstrap-daterangepicker -->
+<!-- jquery.inputmask -->
+  <script>
+    $(document).ready(function(){
+      $(":input").inputmask();
+    });
+  </script>
+<!-- /jquery.inputmask -->
 {% endblock %}
