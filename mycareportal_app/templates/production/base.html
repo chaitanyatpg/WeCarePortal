@@ -162,6 +162,13 @@
                     {% endif %}
                   </ul>
                 </li>
+                <li><a><i class="fa fa-clone"></i>Settings<span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu">
+                    {% if module_dict.SETTINGS.EMAILSETTINGS %}
+                      <li><a href={% url 'email_settings' %}>Email Settings</a></li>
+                    {% endif %}
+                  </ul>
+                </li>
                 <li><a><i class="fa fa-clone"></i>Home Modification<span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu">
                     {% if module_dict.HOMEMODIFICATIONPORTAL.CONTRACTORDASHBOARD %}
@@ -188,6 +195,7 @@
                     {% endif %}
                   </ul>
                 </li>
+
               </ul>
             </div>
           </div>
