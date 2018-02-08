@@ -110,13 +110,13 @@
                                     {% for comment in task_comments %}
                                       <li>
                                         <a>
-                                          <span class="image">
+                                          <!--<span class="image">
                                             {% if comment.caregiver.profile_picture %}
                                               <img src="{{comment.caregiver.profile_picture.url}}" />
                                             {% endif %}
-                                          </span>
+                                          </span>-->
                                           <span>
-                                            <span>{{comment.caregiver.first_name|addstr_space:comment.caregiver.last_name}}</span>
+                                            <span>{{comment.user.first_name|addstr_space:comment.user.last_name}}</span>
                                             <span>{{comment.created}}</span>
                                           </span>
                                           <span class="message">
