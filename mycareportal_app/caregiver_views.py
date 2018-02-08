@@ -819,11 +819,12 @@ def export_all_caregiver_timesheets(request):
 
     caregiver_timesheets = CaregiverTimeSheet.objects.filter(company=request.user.company)
     for timesheet in caregiver_timesheets:
-        parsed_timesheet = ["{0} {1}".format(timesheet.caregiver.first_name,timesheet.caregiver.last_name),
-                            "{0} {1}".format(timesheet.client.first_name,timesheet.client.last_name),
-                            str(timesheet.clock_in_timestamp.astimezone(pytz.timezone(timesheet.client_timezone)).replace(tzinfo=None)).split(".")[0],
-                            str(timesheet.clock_out_timestamp.astimezone(pytz.timezone(timesheet.client_timezone)).replace(tzinfo=None)).split(".")[0],
-                            timesheet.client_timezone,
-                            str(timesheet.time_worked).split(".")[0]]
+        if (not (timesheet.is_active)):
+            parsed_timesheet = ["{0} {1}".format(timesheet.caregiver.first_name,timesheet.caregiver.last_name),
+                                "{0} {1}".format(timesheet.client.first_name,timesheet.client.last_name),
+                                str(timesheet.clock_in_timestamp.astimezone(pytz.timezone(timesheet.client_timezone)).replace(tzinfo=None)).split(".")[0],
+                                str(timesheet.clock_out_timestamp.astimezone(pytz.timezone(timesheet.client_timezone)).replace(tzinfo=None)).split(".")[0],
+                                timesheet.client_timezone,
+                                str(timesheet.time_worked).split(".")[0]]
         writer.writerow(parsed_timesheet)
     return response
