@@ -83,6 +83,8 @@ class ActivateTabletChooseClient(LoginRequiredMixin, View):
 
 class AddClient(LoginRequiredMixin, View):
 
+    MAX_FILE_SIZE = 104857600 #100mb in bytes
+
     def get(self, request):
         context = {}
         context['add_client_form'] = ClientRegistrationForm()

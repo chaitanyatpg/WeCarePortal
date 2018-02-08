@@ -232,6 +232,20 @@ class Client(models.Model):
 
     referrer = models.CharField(max_length=100, blank=True)
 
+    notes = models.CharField(max_length=1000, blank=True)
+
+def get_client_attachment_upload_path(instance, filename):
+    return "company_{0}/client/client_{1}/attachments/{2}".format(instance.company.company_id,instance.id,filename)
+
+class ClientAttachment(models.Model):
+
+    company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    client = models.ForeignKey(Client)
+    user = models.ForeignKey(User)
+    attachment = models.FileField(upload_to=get_client_attachment_upload_path)
+    created = models.DateTimeField(auto_now_add=True)
+
 class ActivityMaster(models.Model):
 
     activity_code = models.CharField(max_length=100)
