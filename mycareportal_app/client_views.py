@@ -115,6 +115,7 @@ class AddClient(LoginRequiredMixin, View):
             time_zone = add_client_form.cleaned_data['time_zone']
             profile_picture = add_client_form.cleaned_data['profile_picture']
             referrer = add_client_form.cleaned_data['referrer']
+            notes = add_client_form.cleaned_data['notes']
             company = request.user.company
             #Create Client object and save
             try:
@@ -132,7 +133,8 @@ class AddClient(LoginRequiredMixin, View):
                                     state = state,
                                     zip_code = zip_code,
                                     time_zone = time_zone,
-                                    referrer = referrer
+                                    referrer = referrer,
+                                    notes = notes
                                     )
                 new_client.save()
                 new_client.profile_picture = profile_picture
@@ -210,7 +212,8 @@ class EditClient(LoginRequiredMixin, View):
                 'zip_code': client.zip_code,
                 'time_zone': client.time_zone,
                 'profile_picture': client.profile_picture,
-                'referrer': client.referrer
+                'referrer': client.referrer,
+                'notes': client.notes
             })
             context['edit_client_form'] = edit_client_form
             client_attachments = self.get_client_attachments(current_company, client)
@@ -275,6 +278,7 @@ class EditClient(LoginRequiredMixin, View):
                 client.zip_code = edit_client_form.cleaned_data['zip_code']
                 client.time_zone = edit_client_form.cleaned_data['time_zone']
                 client.referrer = edit_client_form.cleaned_data['referrer']
+                client.notes = edit_client_form.cleaned_data['notes']
                 if edit_client_form.cleaned_data['profile_picture'] != None and client.profile_picture != edit_client_form.cleaned_data['profile_picture']:
                     client.profile_picture = edit_client_form.cleaned_data['profile_picture']
                 client.save()
