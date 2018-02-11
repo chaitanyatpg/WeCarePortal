@@ -142,12 +142,14 @@
                                         <label>Report Incident</label>
                                           <select name={{update_task_form.incident_id.html_name}}>
                                             <option value="" disabled selected>Select Incident</option>
+                                            <option value=""></option>
                                             {% for incident in default_incidents %}
                                               <option value="{{incident.id}}">{{incident.incident}}</option>
                                             {% endfor %}
                                           </select>
                                           <select name={{update_task_form.location_id.html_name}}>
                                             <option value="" disabled selected>Select Location</option>
+                                            <option value=""></option>
                                             {% for location in incident_locations %}
                                               <option value="{{location.id}}">{{location.location}}</option>
                                             {% endfor %}
