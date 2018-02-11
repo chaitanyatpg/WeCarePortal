@@ -235,7 +235,7 @@ class Client(models.Model):
     notes = models.CharField(max_length=1000, blank=True)
 
 def get_client_attachment_upload_path(instance, filename):
-    return "company_{0}/client/client_{1}/attachments/{2}".format(instance.company.company_id,instance.id,filename)
+    return "company_{0}/client/client_{1}/attachments/{2}".format(instance.company.company_id,instance.client.id,filename)
 
 class ClientAttachment(models.Model):
 

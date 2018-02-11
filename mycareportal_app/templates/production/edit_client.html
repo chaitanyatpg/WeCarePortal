@@ -318,6 +318,21 @@
                       {% endif %}
                     </div>
                   </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Attachments</label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{edit_client_form.attachment.label_tag}}{{edit_client_form.attachment}}
+                      <ul>
+                      {% for attachment in client_attachments %}
+                          <li>
+                            <a href="{{attachment.attachment.url}}"><i class="fa fa-paperclip"></i>{{attachment.attachment|trunc_path}}</a>
+                            <span>Uploaded on {{attachment.created}}</span>
+                            <span>by {{attachment.user.first_name|addstr_space:attachment.user.last_name}}</span>
+                          </li>
+                      {% endfor %}
+                      </ul>
+                    </div>
+                  </div>
                   <div class="ln_solid"></div>
                   <div class="form-group">
                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">

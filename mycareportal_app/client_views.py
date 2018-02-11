@@ -97,7 +97,9 @@ class AddClient(LoginRequiredMixin, View):
         add_client_form = ClientRegistrationForm(request.POST,request.FILES)
         context['add_client_form'] = add_client_form
         client_email = add_client_form.data['email']
-        if add_client_form.is_valid():
+        attachments = request.FILES.getlist('attachment')
+        are_attachments_valid = self.validate_attachments(request, attachments)
+        if are_attachments_valid and add_client_form.is_valid():
             first_name = add_client_form.cleaned_data['first_name']
             last_name = add_client_form.cleaned_data['last_name']
             middle_name = add_client_form.cleaned_data['middle_name']
@@ -135,6 +137,7 @@ class AddClient(LoginRequiredMixin, View):
                 new_client.save()
                 new_client.profile_picture = profile_picture
                 new_client.save()
+                self.save_client_attachments(company, new_client, attachments, request.user)
                 messages.success(request, "Client successfully added. Add additional Details Below.")
                 return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client_email)
             except IntegrityError as e:
@@ -152,6 +155,21 @@ class AddClient(LoginRequiredMixin, View):
         output_string = "{0}/{1}/{2}".format(output_month,output_day,output_year)
         return output_string
 
+    def validate_attachments(self, request, attachments):
+        for attachment in attachments:
+            if attachment._size > self.MAX_FILE_SIZE:
+                messages.error(request, "Attachment {0} is too large. All attachments must be under 100mb.".format(attachment))
+                return False
+        return True
+
+    def save_client_attachments(self, company, client, attachments, current_user):
+        for uploaded_file in attachments:
+            client_attachment = ClientAttachment(company=company,
+                                            client=client,
+                                            user=current_user,
+                                            attachment=uploaded_file)
+            client_attachment.save()
+
 class EditChooseClient(LoginRequiredMixin, View):
 
     def get(self, request):
@@ -164,6 +182,8 @@ class EditChooseClient(LoginRequiredMixin, View):
         return render(request,'production/edit_choose_client.html', context)
 
 class EditClient(LoginRequiredMixin, View):
+
+    MAX_FILE_SIZE = 104857600 #100mb in bytes
 
     def get(self, request):
         context = {}
@@ -193,6 +213,8 @@ class EditClient(LoginRequiredMixin, View):
                 'referrer': client.referrer
             })
             context['edit_client_form'] = edit_client_form
+            client_attachments = self.get_client_attachments(current_company, client)
+            context['client_attachments'] = client_attachments
             #initialize family contact forms
             family_details = client.family_contacts.filter(is_active=True)
             provider_details = client.provider.filter(is_active=True)
@@ -233,7 +255,9 @@ class EditClient(LoginRequiredMixin, View):
         edit_client_form = EditClientDetailsForm(request.POST, request.FILES)
         client_email = edit_client_form.data['email']
         context['all_timezones'] = pytz.all_timezones
-        if edit_client_form.is_valid():
+        attachments = request.FILES.getlist('attachment')
+        are_attachments_valid = self.validate_attachments(request, attachments)
+        if are_attachments_valid and edit_client_form.is_valid():
             try:
                 client_email = edit_client_form.cleaned_data['email']
                 client = Client.objects.get(company=current_company, email_address=client_email)
@@ -254,6 +278,7 @@ class EditClient(LoginRequiredMixin, View):
                 if edit_client_form.cleaned_data['profile_picture'] != None and client.profile_picture != edit_client_form.cleaned_data['profile_picture']:
                     client.profile_picture = edit_client_form.cleaned_data['profile_picture']
                 client.save()
+                self.save_client_attachments(current_company, client, attachments, request.user)
                 messages.success(request, "Client {0} {1} successfully edited!".format(client.first_name,client.last_name))
             except IntegrityError as e:
                 messages.error(request, "Client already exists. Please enter a new Client.")
@@ -308,6 +333,25 @@ class EditClient(LoginRequiredMixin, View):
                         criteria_map[category][criteria] = criteria_status
                         criteria_status.save()
         return criteria_map
+
+    def get_client_attachments(self, company, client):
+        client_attachments = ClientAttachment.objects.filter(company=company,client=client)
+        return client_attachments
+
+    def validate_attachments(self, request, attachments):
+        for attachment in attachments:
+            if attachment._size > self.MAX_FILE_SIZE:
+                messages.error(request, "Attachment {0} is too large. All attachments must be under 100mb.".format(attachment))
+                return False
+        return True
+
+    def save_client_attachments(self, company, client, attachments, current_user):
+        for uploaded_file in attachments:
+            client_attachment = ClientAttachment(company=company,
+                                            client=client,
+                                            user=current_user,
+                                            attachment=uploaded_file)
+            client_attachment.save()
 
 class AssignTasksChooseClient(LoginRequiredMixin, View):
 

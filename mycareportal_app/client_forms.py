@@ -26,6 +26,8 @@ class ClientRegistrationForm(forms.Form):
     password = forms.CharField(max_length=30, required=False)
     confirm_password = forms.CharField(max_length=30, required=False)
     referrer = forms.CharField(max_length=100, required=False)
+    attachment = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), label='Select files', required=False)
+
 
     def clean_picture(self):
         picture = self.cleaned_data['profile_picture']
@@ -73,6 +75,7 @@ class EditClientDetailsForm(forms.Form):
     password = forms.CharField(max_length=30, required=False)
     confirm_password = forms.CharField(max_length=30, required=False)
     referrer = forms.CharField(max_length=100, required=False)
+    attachment = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), label='Select files', required=False)
 
     def clean_picture(self):
         picture = self.cleaned_data['profile_picture']
