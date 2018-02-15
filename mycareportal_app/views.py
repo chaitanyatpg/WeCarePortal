@@ -534,9 +534,12 @@ def set_caregiver_time_sheet_session(request):
     # Send clock in email to care managers and family members of client
     care_managers = CareManager.objects.filter(company=current_company)
     family_members = client_data.family_contacts.filter(is_active=True)
+    # get clock in Timestamp
+    client_time_zone = pytz.timezone(client_data.time_zone)
+    clock_in_timestamp = timezone.now().astimezone(client_time_zone).replace(tzinfo=None)
     email_manager = CaregiverEmailProcessor()
     email_manager.send_clock_in_email(
-    client_data, current_caregiver, care_managers, family_members
+    client_data, current_caregiver, care_managers, family_members, clock_in_timestamp
     )
     request.session['current_time_sheet'] = current_time_sheet.id
 
@@ -553,9 +556,14 @@ def end_caregiver_time_sheet_session(request):
     # Send clock out email to care managers and family members of client
     care_managers = CareManager.objects.filter(company=request.user.company)
     family_members = client.family_contacts.filter(is_active=True)
+    # get clock out Timestamp
+    print(client.time_zone)
+    client_time_zone = pytz.timezone(client.time_zone)
+    clock_out_timestamp = timezone.now().astimezone(client_time_zone).replace(tzinfo=None)
+    print(clock_out_timestamp)
     email_manager = CaregiverEmailProcessor()
     email_manager.send_clock_out_email(
-    client, current_caregiver, care_managers, family_members
+    client, current_caregiver, care_managers, family_members, clock_out_timestamp
     )
     del request.session['current_time_sheet']
     request.session.modified = True
