@@ -678,6 +678,16 @@ class ScheduleShifts(LoginRequiredMixin, View):
                 caregiver_schedule.save()
         return HttpResponseRedirect(reverse('schedule_shifts') + "?caregiver_email=" + assigned_caregiver.email_address)
 
+class ViewShifts(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        current_company = request.user.company
+        caregiver = Caregiver.objects.get(company=current_company,user=request.user)
+        context['caregiver'] = caregiver
+        context['caregiver_shifts'] = CaregiverSchedule.objects.filter(company=current_company,caregiver=caregiver)
+        return render(request, 'production/view_shifts.html', context)
+
 class ViewCalendar(LoginRequiredMixin, View):
 
     def get(self, request):

@@ -400,8 +400,7 @@
                       title: "{{ client.first_name|addstr_space:client.last_name|addstr_space:task.activity_task }}",
                       start: "{{ task.date|date:'Y-m-d'|append_datetime:task.start_time}}",
                       end: "{{ task.date|date:'Y-m-d'|append_datetime:task.end_time}}",
-                      id: "{{ task.id }}",
-                      color: "#FFE4B5"
+                      id: "{{ task.id }}"
                     },
                     {% elif task.in_progress %}
                     {
