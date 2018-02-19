@@ -19,6 +19,9 @@ class ClientEmailProcessor(EmailProcessor):
                 'location': location,
                 'task':task,
             })
+        care_managers = list(filter(lambda x: x.user.incident_emails,care_managers))
+        family_details = list(filter(lambda x: x.user.incident_emails,family_details))
+        provider_details = list(filter(lambda x: x.user.incident_emails,provider_details))
         to_list = list(map(lambda x: x.email_address, (list(care_managers) + list(family_details) + list(provider_details))))
         to_list.append(user.email)
         email = EmailMultiAlternatives(

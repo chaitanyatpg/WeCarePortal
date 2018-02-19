@@ -38,21 +38,72 @@
                 <form method='post' action="{% url 'email_settings' %}" class="form-horizontal form-label-left">
                   {% csrf_token %}
                   <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Incident Emails</label>
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12"></label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                      <input type="checkbox" class="form-control"/>
+                      <div class="col-md-3 col-sm-3 col-xs-12">
+                        Yes
+                      </div>
+                      <div class="col-md-3 col-sm-3 col-xs-12">
+                        No
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Incident Emails</label>
+
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <div class="col-md-3 col-sm-3 col-xs-12">
+                        {% if user.incident_emails %}
+                          <input type="radio" checked="checked" class="form-control" name="{{email_settings_form.incident_emails.html_name}}" value='true'/>
+                        {% else %}
+                          <input type="radio" class="form-control" name="{{email_settings_form.incident_emails.html_name}}" value='true'/>
+                        {% endif %}
+                      </div>
+                      <div class="col-md-3 col-sm-3 col-xs-12">
+                        {% if not user.incident_emails %}
+                          <input type="radio" checked="checked" class="form-control" name="{{email_settings_form.incident_emails.html_name}}" value='false'/>
+                        {% else %}
+                          <input type="radio" class="form-control" name="{{email_settings_form.incident_emails.html_name}}" value='false'/>
+                        {% endif %}
+                      </div>
                     </div>
                   </div>
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Clock in Emails</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                      <input type="checkbox" class="form-control"/>
+                      <div class="col-md-3 col-sm-3 col-xs-12">
+                        {% if user.clock_in_emails %}
+                          <input type="radio" checked="checked" class="form-control" name="{{email_settings_form.clock_in_emails.html_name}}" value='true'>
+                        {% else %}
+                          <input type="radio" class="form-control" name="{{email_settings_form.clock_in_emails.html_name}}" value='true'/>
+                        {% endif %}
+                      </div>
+                      <div class="col-md-3 col-sm-3 col-xs-12">
+                        {% if not user.clock_in_emails %}
+                          <input type="radio" checked="checked" class="form-control" name="{{email_settings_form.clock_in_emails.html_name}}" value='false'/>
+                        {% else %}
+                          <input type="radio" class="form-control" name="{{email_settings_form.clock_in_emails.html_name}}" value='false'/>
+                        {% endif %}
+                      </div>
                     </div>
                   </div>
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Clock out Emails</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                      <input type="checkbox" class="form-control"/>
+                      <div class="col-md-3 col-sm-3 col-xs-12">
+                        {% if user.clock_out_emails %}
+                          <input type="radio" checked="checked" class="form-control" name="{{email_settings_form.clock_out_emails.html_name}}" value='true'/>
+                        {% else %}
+                          <input type="radio" class="form-control" name="{{email_settings_form.clock_out_emails.html_name}}" value='true'/>
+                        {% endif %}
+                      </div>
+                      <div class="col-md-3 col-sm-3 col-xs-12">
+                        {% if not user.clock_out_emails %}
+                          <input type="radio" checked="checked" class="form-control" name="{{email_settings_form.clock_out_emails.html_name}}" value='false'/>
+                        {% else %}
+                          <input type="radio" class="form-control" name="{{email_settings_form.clock_out_emails.html_name}}" value='false'/>
+                        {% endif %}
+                      </div>
                     </div>
                   </div>
                   <div class="ln_solid"></div>

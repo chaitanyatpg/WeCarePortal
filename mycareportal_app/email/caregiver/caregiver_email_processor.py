@@ -32,6 +32,8 @@ class CaregiverEmailProcessor(EmailProcessor):
                 'caregiver': caregiver,
                 'timestamp': clock_in_timestamp
             })
+        care_managers = list(filter(lambda x: x.user.clock_in_emails,care_managers))
+        family_members = list(filter(lambda x: x.user.clock_in_emails,family_members))
         to_list = list(map(lambda x: x.email_address, (list(care_managers) + list(family_members))))
         email = EmailMultiAlternatives(
                     mail_subject, message, self.sender_email, to=to_list
@@ -47,6 +49,8 @@ class CaregiverEmailProcessor(EmailProcessor):
                 'caregiver': caregiver,
                 'timestamp': clock_out_timestamp
             })
+        care_managers = list(filter(lambda x: x.user.clock_out_emails,care_managers))
+        family_members = list(filter(lambda x: x.user.clock_out_emails,family_members))
         to_list = list(map(lambda x: x.email_address, (list(care_managers) + list(family_members))))
         email = EmailMultiAlternatives(
                     mail_subject, message, self.sender_email, to=to_list

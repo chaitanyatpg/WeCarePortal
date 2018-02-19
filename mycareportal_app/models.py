@@ -27,6 +27,11 @@ class User(AbstractUser):
     account_activated = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
 
+    #email settings
+    incident_emails = models.BooleanField(default=True)
+    clock_in_emails = models.BooleanField(default=True)
+    clock_out_emails = models.BooleanField(default=True)
+
 class UserRoles(models.Model):
 
     ROLE_CHOICES = (

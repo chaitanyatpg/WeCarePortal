@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.db import transaction
 from mycareportal_app.forms import *
+from mycareportal_app.settings_forms import *
 from mycareportal_app.models import *
 #from django.contrib.auth.models import User
 from django.views.generic import View
@@ -41,9 +42,35 @@ class EmailSettings(LoginRequiredMixin, View):
 
     def get(self, request):
         context = {}
+
+        email_settings_form = EmailSettingsForm(initial=
+        {
+            'incident_emails': request.user.incident_emails,
+            'clock_in_emails': request.user.clock_in_emails,
+            'clock_out_emails': request.user.clock_out_emails
+        })
+        context['email_settings_form'] = email_settings_form
+        context['user'] = request.user
         return render(request, "production/email_settings.html", context)
 
     def post(self, request):
         context = {}
-        messages.error(request, "Doesn't work yet. Sorry")
-        return render(request, "production/email_settings.html", context)
+        email_settings_form = EmailSettingsForm(request.POST)
+        if email_settings_form.is_valid():
+            incident_emails = email_settings_form.cleaned_data['incident_emails']
+            clock_in_emails = email_settings_form.cleaned_data['clock_in_emails']
+            clock_out_emails = email_settings_form.cleaned_data['clock_out_emails']
+            #user = User.objects.get(company=request.user.company, id=request.user.id)
+            #user.incident_emails = incident_emails
+            #user.clock_in_emails = clock_in_emails
+            #user.clock_out_emails = clock_out_emails
+            #user.save()
+            request.user.incident_emails = incident_emails
+            request.user.clock_in_emails = clock_in_emails
+            request.user.clock_out_emails = clock_out_emails
+            request.user.save()
+            #request.user.refresh_from_db()
+            messages.success(request, "Saved Email Settings")
+        else:
+            messages.error(request, "Error saving email settings")
+        return redirect('email_settings')
