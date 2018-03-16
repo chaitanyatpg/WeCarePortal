@@ -63,16 +63,6 @@
               <div class="count"><a href="{% url 'view_tasks' task_type='cancelled' start_date=current_date end_date=current_date %}" id="total_cancelled_tasks" class="green">{{total_cancelled_tasks}}</a></div>
               <span id="total_cancelled_tasks_sub" class="count_bottom">{{total_cancelled_tasks}} cancelled tasks</span>
             </div>
-            <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
-              <span class="count_top"><i class="fa fa-user"></i>Total Default Tasks</span>
-              <div class="count"><a href="{% url 'view_tasks' task_type='default' start_date=current_date end_date=current_date %}" class="green">{{default_tasks}}</a></div>
-              <span class="count_bottom">{{default_tasks}} default tasks</span>
-            </div>
-            <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
-              <span class="count_top"><i class="fa fa-user"></i>Total Custom Tasks</span>
-              <div class="count"><a href="{% url 'view_tasks' task_type='custom' start_date=current_date end_date=current_date %}" class="green">{{custom_tasks}}</a></div>
-              <span class="count_bottom">{{custom_tasks}} custom tasks</span>
-            </div>
           </div>
           <hr>
           <div class="row tile_count">
@@ -106,6 +96,16 @@
               <span class="count_top"><i class="fa fa-user"></i>Total Registered Tablets</span>
               <div class="count"><i class="green">{{registered_tablets}}</i></div>
               <span class="count_bottom">{{registered_tablets}} registered tablets</span>
+            </div>
+            <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top"><i class="fa fa-user"></i>Total Default Tasks</span>
+              <div class="count"><a href="{% url 'view_tasks' task_type='default' start_date=current_date end_date=current_date %}" class="green">{{default_tasks}}</a></div>
+              <span class="count_bottom">{{default_tasks}} default tasks</span>
+            </div>
+            <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top"><i class="fa fa-user"></i>Total Custom Tasks</span>
+              <div class="count"><a href="{% url 'view_tasks' task_type='custom' start_date=current_date end_date=current_date %}" class="green">{{custom_tasks}}</a></div>
+              <span class="count_bottom">{{custom_tasks}} custom tasks</span>
             </div>
           </div>
           <!-- /top tiles -->
