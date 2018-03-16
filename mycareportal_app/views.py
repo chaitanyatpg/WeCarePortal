@@ -80,6 +80,12 @@ def logout_view(request):
     logout(request)
     return redirect('login')
 
+@login_required
+def caregiver_logout_view(request):
+    current_company = request.user.company
+    user = request.user
+    return redirect('logout')
+
 def register(request):
     context = {}
     if request.method == 'GET':
