@@ -398,6 +398,8 @@ class CaregiverTimeSheet(models.Model):
     client = models.ForeignKey(Client)
     clock_in_timestamp = models.DateTimeField(auto_now_add=True)
     clock_out_timestamp = models.DateTimeField(blank=True, null=True)
+    adjusted_clock_out_timestamp = models.DateTimeField(blank=True,null=True)
+    adjusted_time_worked = models.DurationField(blank=True,null=True)
     client_timezone = models.CharField(max_length=50)
     time_worked = models.DurationField(blank=True, null=True)
     is_active = models.BooleanField()

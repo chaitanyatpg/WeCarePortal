@@ -424,15 +424,15 @@ class ViewActiveCaregivers(LoginRequiredMixin, View):
     def close_caregiver_time_sheet_session(self, company, caregiver_session_id, clock_out_date, end_hour, end_minute, reason):
         current_time_sheet = CaregiverTimeSheet.objects.get(company=company, id=caregiver_session_id)
         if (clock_out_date and end_hour and end_minute):
-
             clock_out_time = datetime.time(int(end_hour), int(end_minute))
             clock_out_timestamp = datetime.datetime.combine(clock_out_date, clock_out_time)
             clock_out_timestamp_local = clock_out_timestamp.astimezone(pytz.timezone(current_time_sheet.client_timezone))
-            current_time_sheet.clock_out_timestamp = clock_out_timestamp.astimezone(current_time_sheet.clock_in_timestamp.tzinfo)
+            current_time_sheet.adjusted_clock_out_timestamp = clock_out_timestamp.astimezone(current_time_sheet.clock_in_timestamp.tzinfo)
             utc_offset = clock_out_timestamp_local.utcoffset()
-            current_time_sheet.clock_out_timestamp -= utc_offset
-        else:
-            current_time_sheet.clock_out_timestamp = timezone.now()
+            current_time_sheet.adjusted_clock_out_timestamp -= utc_offset
+            adjusted_time_worked = current_time_sheet.adjusted_clock_out_timestamp - current_time_sheet.clock_in_timestamp
+            current_time_sheet.adjusted_time_worked = adjusted_time_worked
+        current_time_sheet.clock_out_timestamp = timezone.now()
         current_time_sheet.is_active = False
         time_worked = current_time_sheet.clock_out_timestamp - current_time_sheet.clock_in_timestamp
         current_time_sheet.time_worked = time_worked
