@@ -837,6 +837,7 @@ def export_all_caregiver_timesheets(request):
                                 str(timesheet.clock_out_timestamp.astimezone(pytz.timezone(timesheet.client_timezone)).replace(tzinfo=None)).split(".")[0],
                                 timesheet.client_timezone,
                                 str(timesheet.time_worked).split(".")[0],
+                                str(timesheet.reason)
                                 ]
             if timesheet.adjusted_clock_out_timestamp:
                 parsed_timesheet.append(str(timesheet.adjusted_clock_out_timestamp.astimezone(pytz.timezone(timesheet.client_timezone)).replace(tzinfo=None)).split(".")[0])
