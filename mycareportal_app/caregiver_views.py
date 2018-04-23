@@ -163,7 +163,7 @@ class ViewCaregiverTimesheet(LoginRequiredMixin, View):
                                                         "clock_out_time": (x.clock_out_timestamp.astimezone(pytz.timezone(x.client_timezone))).replace(tzinfo=None),
                                                         "time_worked": str(x.time_worked).split(".")[0],
                                                         "manual_clock_out": x.adjusted_clock_out_timestamp,
-                                                        "manual_time_worked": x.adjusted_time_worked,
+                                                        "manual_time_worked": str(x.adjusted_time_worked).split(".")[0],
                                                         "reason": x.reason
                                                     }, caregiver_time_sheets))
         return caregiver_time_sheets
@@ -826,20 +826,50 @@ def export_all_caregiver_timesheets(request):
     response['Content-Disposition'] = 'attachment; filename="all_caregiver_timesheets.csv"'
 
     writer = csv.writer(response)
-    writer.writerow(['Caregiver', 'Client', 'Clock in Timestamp', 'Clock out Timestamp', 'Client Timezone', 'Time Worked', 'Adjusted Clock out Timestamp', 'Adjusted Time Worked', 'Reason'])
+    writer.writerow(['Caregiver', 'Client', 'Clock in Date',
+    'Clock in Time', 'Clock out Date', 'Clock out Time' 'Client Timezone',
+    'Time Worked', 'Adjusted Clock out Date', 'Adjusted Clock out Time'
+    'Adjusted Time Worked', 'Reason'])
 
     caregiver_timesheets = CaregiverTimeSheet.objects.filter(company=request.user.company)
     for timesheet in caregiver_timesheets:
         if (not (timesheet.is_active)):
-            parsed_timesheet = ["{0} {1}".format(timesheet.caregiver.first_name,timesheet.caregiver.last_name),
+            parsed_timesheet = []
+            parsed_timesheet.append("{0} {1}".format(timesheet.caregiver.first_name,timesheet.caregiver.last_name))
+            parsed_timesheet.append("{0} {1}".format(timesheet.client.first_name,timesheet.client.last_name))
+            current_clock_in_timestamp = str(timesheet.clock_in_timestamp.astimezone(pytz.timezone(timesheet.client_timezone)).replace(tzinfo=None)).split(".")[0]
+            current_clock_in_date = current_clock_in_timestamp.split(" ")[0]
+            current_clock_in_time = current_clock_in_timestamp.split(" ")[1]
+            parsed_timesheet.append(current_clock_in_date)
+            parsed_timesheet.append(current_clock_in_time)
+
+            current_clock_out_timestamp = str(timesheet.clock_out_timestamp.astimezone(pytz.timezone(timesheet.client_timezone)).replace(tzinfo=None)).split(".")[0]
+            current_clock_out_date = current_clock_out_timestamp.split(" ")[0]
+            current_clock_out_time = current_clock_out_timestamp.split(" ")[1]
+            parsed_timesheet.append(current_clock_out_date)
+            parsed_timesheet.append(current_clock_out_time)
+
+            parsed_timesheet.append(timesheet.client_timezone)
+
+            current_time_worked = str(timesheet.time_worked).split(".")[0]
+            parsed_timesheet.append(current_time_worked)
+
+            """parsed_timesheet = ["{0} {1}".format(timesheet.caregiver.first_name,timesheet.caregiver.last_name),
                                 "{0} {1}".format(timesheet.client.first_name,timesheet.client.last_name),
                                 str(timesheet.clock_in_timestamp.astimezone(pytz.timezone(timesheet.client_timezone)).replace(tzinfo=None)).split(".")[0],
                                 str(timesheet.clock_out_timestamp.astimezone(pytz.timezone(timesheet.client_timezone)).replace(tzinfo=None)).split(".")[0],
                                 timesheet.client_timezone,
                                 str(timesheet.time_worked).split(".")[0]
-                                ]
+                                ]"""
             if timesheet.adjusted_clock_out_timestamp:
-                parsed_timesheet.append(str(timesheet.adjusted_clock_out_timestamp.astimezone(pytz.timezone(timesheet.client_timezone)).replace(tzinfo=None)).split(".")[0])
+
+                current_adjusted_clock_out_timestamp = str(timesheet.adjusted_clock_out_timestamp.astimezone(pytz.timezone(timesheet.client_timezone)).replace(tzinfo=None)).split(".")[0]
+                current_adjusted_clock_out_date= current_adjusted_clock_out_timestamp.split(" ")[0]
+                current_adjusted_clock_out_time = current_adjusted_clock_out_timestamp.split(" ")[1]
+                parsed_timesheet.append(current_adjusted_clock_out_date)
+                parsed_timesheet.append(current_adjusted_clock_out_time)
+
+                #parsed_timesheet.append(str(timesheet.adjusted_clock_out_timestamp.astimezone(pytz.timezone(timesheet.client_timezone)).replace(tzinfo=None)).split(".")[0])
                 parsed_timesheet.append(str(timesheet.adjusted_time_worked).split(".")[0])
                 parsed_timesheet.append(str(timesheet.reason))
         writer.writerow(parsed_timesheet)
