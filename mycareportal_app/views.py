@@ -54,8 +54,12 @@ def home(request):
         return redirect('dashboard')
     elif "CAREGIVER" in user_roles:
         if "tablet_id" in request.session:
-            #if "current_time_sheet" not in request.session:
-            set_caregiver_time_sheet_session(request)
+            if ClientTabletRegister.objects.filter(company=request.user.company,device_id=request.session["tablet_id"]).exists():
+                #if "current_time_sheet" not in request.session:
+                set_caregiver_time_sheet_session(request)
+            else:
+                messages.error(request, "Tablet is not registered. Please register the tablet to a client.")
+                return redirect('login')
         return redirect('caregiver_dashboard')
     elif "FAMILYUSER" in user_roles:
         return redirect('family_dashboard')
