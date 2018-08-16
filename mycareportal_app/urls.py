@@ -126,6 +126,11 @@ urlpatterns = [
     url(r'^view_clients_without_caregivers', reporting_views.ViewClientsWithoutCaregiver.as_view(),name='view_clients_without_caregivers'),
     url(r'^view_tasks/(?P<task_type>[\w\-]+)/$', reporting_views.ViewTasks.as_view(),name='view_tasks'),
     url(r'^view_tasks/(?P<task_type>[\w\-]+)/(?P<start_date>\d{4}-\d{2}-\d{2})/(?P<end_date>\d{4}-\d{2}-\d{2})/$', reporting_views.ViewTasks.as_view(),name='view_tasks'),
-    url(r'^settings/email_settings', settings_views.EmailSettings.as_view(),name='email_settings')
+    url(r'^settings/email_settings', settings_views.EmailSettings.as_view(),name='email_settings'),
+    url(r'^home_modification/add_home_modification_manager', home_mod_views.AddHomeModManager.as_view(),name='add_home_mod_manager'),
+    url(r'^home_modification/edit_choose_home_mod_user',home_mod_views.EditChooseHomeModUser.as_view(),name='edit_choose_home_mod_user'),
+    url(r'^home_modification/get_home_mod_with_email', home_mod_views.get_home_mod_with_email,name='get_home_mod_with_email'),
+    url(r'^home_modification/edit_home_mod_user', home_mod_views.EditHomeModUser.as_view(),name='edit_home_mod_user')
+
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

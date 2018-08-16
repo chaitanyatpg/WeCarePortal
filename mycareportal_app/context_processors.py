@@ -57,6 +57,8 @@ def add_roles_to_context(request):
             #module_dict['PROVIDERPORTAL']['PROVIDERDASHBOARD']=True
             module_dict['HOMEASSESSMENTPORTAL']['ASSESSMENTTOOL']=True
             #module_dict['HOMEASSESSMENTPORTAL']['VIEWALERTS']=True
+            module_dict['HOMEMODIFICATIONPORTAL']['ADDHOMEMODMANAGER'] = True
+            module_dict['HOMEMODIFICATIONPORTAL']['EDITHOMEMODMANAGER'] = True
             #module_dict['HOMEMODIFICATIONPORTAL']['CONTRACTORDASHBOARD']=True
             #module_dict['HOMEMODIFICATIONPORTAL']['VIEWALLPROJECTS']=True
             #module_dict['HOMEMODIFICATIONPORTAL']['VIEWBIDS']=True
