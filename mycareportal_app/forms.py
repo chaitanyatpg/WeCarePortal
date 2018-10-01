@@ -122,3 +122,15 @@ class ForgotPasswordForm(forms.Form):
     def clean(self):
         cleaned_data = super(ForgotPasswordForm, self).clean()
         return cleaned_data
+
+class CreateHomeModTaskForm(forms.Form):
+
+    client_uid = forms.UUIDField(required=True)
+    assessment_category_uid = forms.UUIDField(required=True)
+    task_name= forms.CharField(max_length = 100,required=True)
+    task_description = forms.CharField(max_length = 500,required=True)
+
+    def clean(self):
+
+        cleaned_data = super(CreateHomeModTaskForm, self).clean()
+        return cleaned_data

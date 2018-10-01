@@ -558,3 +558,19 @@ class CaregiverTransferMap(models.Model):
     client_match_criteria = models.ForeignKey(ClientMatchCriteria)
     experience = models.IntegerField(EXPERIENCE_CHOICES,null=True)
     created = models.DateTimeField(auto_now_add=True)
+
+class HomeModificationTask(models.Model):
+
+    company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    client = models.ForeignKey(Client)
+    assessment_category = models.ForeignKey(AssessmentCategories)
+    task_name = models.CharField(max_length = 100)
+    task_description = models.CharField(max_length = 500)
+    created = models.DateTimeField(auto_now_add=True)
+
+    chosen_contractors = models.ManyToManyField(HomeModificationUser, blank=True)
+    assigned_contractor = models.ForeignKey(HomeModificationUser, related_name="assigned_contractor", null=True)
+    start_date = models.DateTimeField(null=True)
+    end_date = models.DateTimeField(null=True)
+    cost = models.IntegerField(null=True)

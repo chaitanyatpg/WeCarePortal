@@ -1,5 +1,6 @@
 {% extends "production/base.html" %}
 {% block title %} View Alerts {% endblock %}
+{% load mycareportal_app_extras%}
 {% block headlibs %}
 {% load static %}
 {% endblock %}
@@ -15,6 +16,7 @@
 
             <div class="clearfix"></div>
             {{block.super}}
+            <!--
             <div class="row">
               <div class="col-md-12">
                 <div class="x_panel">
@@ -46,7 +48,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div>-->
 
 
 
@@ -58,19 +60,36 @@
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
-                      <li><a class="close-link"><i class="fa fa-close"></i></a>
-                      </li>
                     </ul>
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
+                    <form method='post' action="{% url 'home_dashboard' %}" class="form-horizontal form-label-left">
+                    {% csrf_token %}
                     <div class="row">
                       <div class="form-group">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12">Choose an Existing Task</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Client</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <select required id='client_dropdown' class="select2_group form-control" name={{create_task_form.client_uid.html_name}} tabindex="-1">
+                            <option disabled selected value> -- select an option -- </option>
+                            {% for client in all_clients %}
+                              <option value= {{client.uid}}>{{client.first_name|addstr_space:client.last_name}}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <label></label>
+                    <div class="row">
+                      <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">Choose Category</label>
                           <div class="col-md-9 col-sm-9 col-xs-12">
-                            <select class="select2_group form-control">
+                            <select required class="select2_group form-control" name={{create_task_form.assessment_category_uid.html_name}}>
                               <option disabled selected value> -- select an option -- </option>
-                              <optgroup label="Home Exterior">
+                              {% for category in home_mod_categories %}
+                                <option value= {{category.uid}}>{{category.category}}</option>
+                              {% endfor %}
+                              <!--<optgroup label="Home Exterior">
                                 <option>Low-Maintenance exterior(vinyl, brick) </option>
                                 <option>Low-Maintenance shrubs and plants </option>
                                 <option>Deck, patio, or balcony surfaces are no more than 1/2 inch below interior floor level if made of wood </option>
@@ -94,12 +113,12 @@
                                 <option>Lowered windows or taller windows with lower sill height</option>
                                 <option>Low maintenance exterior and interior finishes</option>
                                 <option>Easy to operate hardware</option>
-                              </optgroup>
+                              </optgroup>-->
                             </select>
                           </div>
                         </div>
                       </div>
-                      <label></label>
+                      <!--<label></label>
                       <div class="row">
                         <div class="form-group">
                           <label class="control-label col-md-3 col-sm-3 col-xs-12">Choose Existing/Create new category</label>
@@ -107,29 +126,37 @@
                             <input type="text" name="category" id="autocomplete-custom-append" class="form-control col-md-10"/>
                           </div>
                         </div>
-                      </div>
+                      </div>-->
                       <label></label>
                       <div class="row">
                         <div class="form-group">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12">Create New Task</label>
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">Task Name</label>
                           <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="text" class="form-control col-md-10"/>
+                            <input type="text" class="form-control col-md-10" name="{{create_task_form.task_name.html_name}}" required="required" />
                           </div>
                         </div>
                       </div>
                       <label></label>
                       <div class="row">
+                        <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">Task Description</label>
+                          <div class="col-md-9 col-sm-9 col-xs-12">
+                            <textarea type="text" class="form-control col-md-10" required="required" name={{create_task_form.task_description.html_name}}></textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <label></label>
+                      <!--<div class="row">
                         <div class="form-group">
                           <label class="control-label col-md-3 col-sm-3 col-xs-12">Set Difficulty</label>
                           <div class="col-md-9 col-sm-9 col-xs-12">
                             <input type="text" class="form-control col-md-10"/>
                           </div>
                         </div>
-                      </div>
+                      </div>-->
                       <br />
-                      <form action="enter_alert.html">
                         <div class="form-group">
-                          <button type="submit" class="btn btn-info">Add Description</button>
+                          <button type="submit" class="btn btn-success">Create Task</button>
                         </div>
                       </form>
                     </div>
@@ -137,16 +164,14 @@
                 </div>
               </div>
 
-
+            {% for task in existing_home_mod_tasks %}
             <div class="row">
               <div class="col-md-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Home Exterior<small>Low-Maintenance exterior(vinyl, brick) </small></h2>
+                    <h2>{{task.task_name}}</h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                      </li>
-                      <li><a class="close-link"><i class="fa fa-close"></i></a>
                       </li>
                     </ul>
                     <div class="clearfix"></div>
@@ -154,26 +179,22 @@
                   <div class="x_content">
 
                     <div class="col-md-12 col-lg-12 col-sm-12">
-                      <!-- blockquote -->
+                      <h5>Client: {{task.client.first_name|addstr_space:task.client.last_name}}</h5>
+                      <h5>Date Created: {{task.created}} </h5>
                       <blockquote>
-                        <p>Current plywood home exterior is not maintainable and prone to degradation. Should be replaced
-                        with brick.</p>
+                        {{task.task_description}}
                       </blockquote>
-                      <label>Difficulty:</label>
-                      <div class="progress">
-                        <div class="progress-bar progress-bar-danger" data-transitiongoal="80"></div>
-                      </div>
                       <div class="form-group">
                         <form action="contractor_tables.html" style="float: left;">
                           <button type="submit" class="btn btn-success">Choose Contractor</button>
                         </form>
                         <form action="enter_alert.html" style="float: left;">
-                          <button type="submit" class="btn btn-info">Edit Description</button>
+                          <button type="submit" class="btn btn-info">Edit</button>
                         </form>
                         <form action="view_bids.html" style="float: left;">
                           <button type="submit" class="btn btn-warning">View Bids</button>
                         </form>
-                        <button type="submit" class="btn btn-danger">Ignore</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
                       </div>
                     </div>
 
@@ -183,7 +204,9 @@
                 </div>
               </div>
             </div>
+            {% endfor %}
 
+            <!--
             <div class="row">
               <div class="col-md-12">
                 <div class="x_panel">
@@ -200,7 +223,6 @@
                   <div class="x_content">
 
                     <div class="col-md-12 col-lg-12 col-sm-12">
-                      <!-- blockquote -->
                       <blockquote>
                         <p>Current windows are impossible to open! Additionally, the crank for opening and closing the blinds
                         are unintuitive. Should be replaced with a more modern installation. </p>
@@ -237,7 +259,6 @@
                   <div class="x_content">
 
                     <div class="col-md-12 col-lg-12 col-sm-12">
-                      <!-- blockquote -->
                       <blockquote>
                         <p>There are currently no entries without steps. Need to build a ramp to the left of the main
                         entrance with handrails on the sides. </p>
@@ -274,7 +295,6 @@
                   <div class="x_content">
 
                     <div class="col-md-12 col-lg-12 col-sm-12">
-                      <!-- blockquote -->
                       <blockquote>
                         <p>The microwave is currently located 17 meters above the ground. Needs to be lowered to a more
                         manageable level, ideally on the counter next to the refridgerator.
@@ -309,7 +329,6 @@
                   </div>
                   <div class="x_content">
                     <div class="col-md-12 col-lg-12 col-sm-12">
-                      <!-- blockquote -->
                       <blockquote>
                         <p>The client's house has 6 floors and, as he is confined to his wheelchair, traversing the floors has become
                         odious. A resedential elevator is to be installed in the main foyer adjacent to the main staircase. </p>
@@ -328,6 +347,9 @@
                 </div>
               </div>
             </div>
+            -->
+
+
           </div>
         </div>
         <!-- /page content -->

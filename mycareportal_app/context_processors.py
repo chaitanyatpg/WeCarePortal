@@ -56,6 +56,7 @@ def add_roles_to_context(request):
             #module_dict['FAMILYPORTAL']['FAMILYDASHBOARD']=True
             #module_dict['PROVIDERPORTAL']['PROVIDERDASHBOARD']=True
             module_dict['HOMEASSESSMENTPORTAL']['ASSESSMENTTOOL']=True
+            module_dict['HOMEASSESSMENTPORTAL']['HOMEDASHBOARD']=True
             #module_dict['HOMEASSESSMENTPORTAL']['VIEWALERTS']=True
             module_dict['HOMEMODIFICATIONPORTAL']['ADDHOMEMODMANAGER'] = True
             module_dict['HOMEMODIFICATIONPORTAL']['EDITHOMEMODMANAGER'] = True
@@ -76,6 +77,8 @@ def add_roles_to_context(request):
             #module_dict['CAREGIVERPORTAL']['CALENDAR']=True
         if 'FAMILYUSER' in user_roles:
             module_dict['FAMILYPORTAL']['FAMILYDASHBOARD']=True
+        if 'HOMEMODUSER' in user_roles:
+            module_dict['HOMEMODIFICATIONPORTAL']['CONTRACTORDASHBOARD']=True
         module_dict['SETTINGS']['EMAILSETTINGS']=True
         context['user_roles'] = user_roles
         context['module_dict']= module_dict

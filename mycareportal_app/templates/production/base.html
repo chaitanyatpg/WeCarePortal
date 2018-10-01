@@ -163,6 +163,9 @@
                     {% if module_dict.HOMEASSESSMENTPORTAL.VIEWALERTS %}
                       <li><a href={% url 'view_alerts' %}>View Alerts</a></li>
                     {% endif %}
+                    {% if module_dict.HOMEASSESSMENTPORTAL.HOMEDASHBOARD %}
+                      <li><a href={% url 'home_dashboard' %}>Home Dashboard</a></li>
+                    {% endif %}
                   </ul>
                 </li>
                 <li><a><i class="fa fa-clone"></i>Settings<span class="fa fa-chevron-down"></span></a>

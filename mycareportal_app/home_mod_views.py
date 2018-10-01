@@ -209,6 +209,13 @@ class EditHomeModUser(LoginRequiredMixin, View):
         output_string = "{0}/{1}/{2}".format(output_month,output_day,output_year)
         return output_string
 
+class Dashboard(LoginRequiredMixin, View):
+
+    def get(self, request):
+
+        context = {}
+        return render(request, 'production/update_projects.html', context)
+
 @login_required
 def get_home_mod_with_email(request):
     if request.method == 'GET':

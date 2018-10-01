@@ -65,6 +65,8 @@ def home(request):
         return redirect('family_dashboard')
     elif "PROVIDERUSER" in user_roles:
         return redirect('provider_dashboard')
+    elif "HOMEMODUSER" in user_roles:
+        return redirect('contractor_dashboard')
     else:
         return redirect('login')
 
@@ -709,3 +711,51 @@ class ViewEventLog(LoginRequiredMixin, View):
                             not_clocked_out_caregivers.append(caregiver)'''
 
         return (late_caregivers, not_clocked_out_caregivers)
+
+class HomeDashboard(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {}
+        current_company = request.user.company
+        all_clients = Client.objects.filter(company=current_company).order_by('last_name')
+        home_mod_categories = AssessmentCategories.objects.all()
+        existing_home_mod_tasks = HomeModificationTask.objects.filter(company=current_company).order_by('created')
+
+        tzname = current_company.time_zone
+        timezone.activate(pytz.timezone(tzname))
+
+        context['all_clients'] = all_clients
+        context['home_mod_categories'] = home_mod_categories
+        context['create_task_form'] = CreateHomeModTaskForm()
+        context['existing_home_mod_tasks'] = existing_home_mod_tasks
+        return render(request, "production/view_alerts.html", context)
+
+    @transaction.atomic
+    def post(self, request):
+        context = {}
+        current_company = request.user.company
+        home_mod_task_form = CreateHomeModTaskForm(request.POST)
+        #print(request.POST)
+        #print(home_mod_task_form.data['client_uid'])
+        #print(home_mod_task_form.data['assessment_category_uid'])
+        #print(home_mod_task_form.data['task_name'])
+        #print(home_mod_task_form.data['task_description'])
+        if home_mod_task_form.is_valid():
+            client_uid = home_mod_task_form.cleaned_data['client_uid']
+            client = Client.objects.get(company=current_company, uid = client_uid)
+            category_uid = home_mod_task_form.cleaned_data['assessment_category_uid']
+            home_mod_category = AssessmentCategories.objects.get(uid=category_uid)
+            task_name = home_mod_task_form.cleaned_data['task_name']
+            task_description = home_mod_task_form.cleaned_data['task_description']
+            new_task = HomeModificationTask(company=current_company,
+                                            client=client,
+                                            assessment_category=home_mod_category,
+                                            task_name=task_name,
+                                            task_description=task_description)
+
+            new_task.save()
+            messages.success(request, "Task Successfully Added")
+        else:
+            form_errors = home_mod_task_form.errors.as_data()
+            error_messaging.render_error_messages(request, form_errors)
+        return redirect('home_dashboard')

@@ -130,7 +130,9 @@ urlpatterns = [
     url(r'^home_modification/add_home_modification_manager', home_mod_views.AddHomeModManager.as_view(),name='add_home_mod_manager'),
     url(r'^home_modification/edit_choose_home_mod_user',home_mod_views.EditChooseHomeModUser.as_view(),name='edit_choose_home_mod_user'),
     url(r'^home_modification/get_home_mod_with_email', home_mod_views.get_home_mod_with_email,name='get_home_mod_with_email'),
-    url(r'^home_modification/edit_home_mod_user', home_mod_views.EditHomeModUser.as_view(),name='edit_home_mod_user')
+    url(r'^home_modification/edit_home_mod_user', home_mod_views.EditHomeModUser.as_view(),name='edit_home_mod_user'),
+    url(r'^home_modification/dashboard', home_mod_views.Dashboard.as_view(), name='contractor_dashboard'),
+    url(r'^home_dashboard', views.HomeDashboard.as_view(), name='home_dashboard')
 
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
