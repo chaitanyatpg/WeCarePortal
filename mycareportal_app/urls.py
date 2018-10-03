@@ -110,8 +110,8 @@ urlpatterns = [
     'assessment_tool'),
     url(r'^post_assessment_status',assessment_views.post_assessment_status,name='post_assessment_status'),
     url(r'^view_alerts',assessment_views.view_alerts,name='view_alerts'),
-    url(r'^contractor_dashboard',home_mod_views.contractor_dashboard,name=
-    'contractor_dashboard'),
+    #url(r'^contractor_dashboard',home_mod_views.contractor_dashboard,name=
+    #'contractor_dashboard'),
     url(r'^view_projects',home_mod_views.view_projects,name='view_projects'),
     url(r'^view_bids',home_mod_views.view_bids,name='view_bids'),
     url(r'^move_manager_dashboard',move_manage_views.move_manager_dashboard,
@@ -132,7 +132,9 @@ urlpatterns = [
     url(r'^home_modification/get_home_mod_with_email', home_mod_views.get_home_mod_with_email,name='get_home_mod_with_email'),
     url(r'^home_modification/edit_home_mod_user', home_mod_views.EditHomeModUser.as_view(),name='edit_home_mod_user'),
     url(r'^home_modification/dashboard', home_mod_views.Dashboard.as_view(), name='contractor_dashboard'),
-    url(r'^home_dashboard', views.HomeDashboard.as_view(), name='home_dashboard')
+    url(r'^home_dashboard', views.HomeDashboard.as_view(), name='home_dashboard'),
+    url(r'^choose_contractor/(?P<task_id>[0-9a-f-]+)/$', views.ChooseContractorForTask.as_view(), name='choose_contractor'),
+    url(r'^choose_contractor/(?P<task_id>[0-9a-f-]+)/(?P<contractor_id>[0-9a-f-]+)/$', views.ChooseContractorForTask.as_view(), name='choose_contractor')
 
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

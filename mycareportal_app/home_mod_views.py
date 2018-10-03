@@ -214,7 +214,14 @@ class Dashboard(LoginRequiredMixin, View):
     def get(self, request):
 
         context = {}
-        return render(request, 'production/update_projects.html', context)
+        current_company = request.user.company
+        home_mod_user = HomeModificationUser.objects.get(company=current_company,
+                                                        user=request.user)
+        contractor_tasks = HomeModificationTask.objects.filter(company=current_company,
+                                                            chosen_contractors=home_mod_user)
+        context['home_mod_user'] = home_mod_user
+        context['contractor_tasks'] = contractor_tasks
+        return render(request, 'production/contractor_dashboard.html', context)
 
 @login_required
 def get_home_mod_with_email(request):

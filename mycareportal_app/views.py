@@ -712,6 +712,37 @@ class ViewEventLog(LoginRequiredMixin, View):
 
         return (late_caregivers, not_clocked_out_caregivers)
 
+class ChooseContractorForTask(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        current_company = request.user.company
+        task_id = self.kwargs['task_id']
+        task = HomeModificationTask.objects.get(company=current_company, uid=task_id)
+        all_home_mod_managers = HomeModificationUser.objects.filter(company=current_company).order_by('last_name')
+
+        context['all_home_mod_managers'] = all_home_mod_managers
+        context['task_id'] = task_id
+        context['task'] = task
+        return render(request, "production/contractor_tables.html", context)
+
+    def post(self, request, *args, **kwargs):
+
+        context = {}
+        current_company = request.user.company
+        task_id = self.kwargs['task_id']
+        contractor_id = self.kwargs['contractor_id']
+        print(task_id)
+        print(contractor_id)
+        task = HomeModificationTask.objects.get(company=current_company, uid=task_id)
+        contractor = HomeModificationUser.objects.get(company=current_company, uid=contractor_id)
+        print(task.uid)
+        print(contractor.uid)
+        task.chosen_contractors.add(contractor)
+        task.save()
+        return redirect('choose_contractor', task_id=task_id)
+
+
 class HomeDashboard(LoginRequiredMixin, View):
 
     def get(self, request):
