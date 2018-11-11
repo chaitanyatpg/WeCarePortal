@@ -79,6 +79,7 @@ def add_roles_to_context(request):
             module_dict['FAMILYPORTAL']['FAMILYDASHBOARD']=True
         if 'HOMEMODUSER' in user_roles:
             module_dict['HOMEMODIFICATIONPORTAL']['CONTRACTORDASHBOARD']=True
+            module_dict['HOMEMODIFICATIONPORTAL']['VIEWALLPROJECTS']=True
         module_dict['SETTINGS']['EMAILSETTINGS']=True
         context['user_roles'] = user_roles
         context['module_dict']= module_dict

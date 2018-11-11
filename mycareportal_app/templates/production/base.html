@@ -186,11 +186,11 @@
                     {% if module_dict.HOMEMODIFICATIONPORTAL.CONTRACTORDASHBOARD %}
                       <li><a href={% url 'contractor_dashboard' %}>Contractor Dashboard</a></li>
                     {% endif %}
-                    {% if module_dict.HOMEMODIFICATIONPORTAL.VIEWALLPROJECTS %}
-                      <li><a href={% url 'view_projects' %}>View All Projects</a></li>
-                    {% endif %}
                     {% if module_dict.HOMEMODIFICATIONPORTAL.VIEWBIDS %}
                       <li><a href={% url 'view_bids' %}>View Bids</a></li>
+                    {% endif %}
+                    {% if module_dict.HOMEMODIFICATIONPORTAL.VIEWALLPROJECTS %}
+                      <li><a href={% url 'update_projects' %}>View All Projects</a></li>
                     {% endif %}
                   </ul>
                 </li>

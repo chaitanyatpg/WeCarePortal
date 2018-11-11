@@ -571,6 +571,46 @@ class HomeModificationTask(models.Model):
 
     chosen_contractors = models.ManyToManyField(HomeModificationUser, blank=True)
     assigned_contractor = models.ForeignKey(HomeModificationUser, related_name="assigned_contractor", null=True)
-    start_date = models.DateTimeField(null=True)
-    end_date = models.DateTimeField(null=True)
+    start_date = models.DateField(null=True)
+    end_date = models.DateField(null=True)
     cost = models.IntegerField(null=True)
+
+    #bid = models.ForeignKey(HomeModTaskBid, null=true)
+    chosen_bid = models.OneToOneField('HomeModTaskBid', null=True)
+
+class HomeModTaskBid(models.Model):
+
+    company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    created = models.DateTimeField(auto_now_add=True)
+    home_mod_task = models.ForeignKey(HomeModificationTask)
+    contractor = models.ForeignKey(HomeModificationUser)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    cost = models.IntegerField()
+
+class HomeModProject(models.Model):
+
+    ongoing = "Ongoing"
+    on_hold = "On Hold"
+    cancelled = "Cancelled"
+    completed = "Completed"
+
+    STATUS_CHOICES = (
+    (ongoing, "Ongoing"),
+    (on_hold, "On Hold"),
+    (cancelled, "Cancelled"),
+    (completed, "Completed")
+    )
+
+    company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    created = models.DateTimeField(auto_now_add=True)
+    home_mod_task = models.OneToOneField(HomeModificationTask)
+    contractor = models.ForeignKey(HomeModificationUser, null=True)
+    client = models.ForeignKey(Client, null=True)
+    progress = models.IntegerField(default = 0)
+    status = models.CharField(STATUS_CHOICES, max_length = 10, default = ongoing)
+    estimated_budget = models.IntegerField()
+    total_amount_spent = models.IntegerField(default = 0)
+    project_duration = models.IntegerField(default = 0)

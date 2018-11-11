@@ -113,7 +113,7 @@ urlpatterns = [
     #url(r'^contractor_dashboard',home_mod_views.contractor_dashboard,name=
     #'contractor_dashboard'),
     url(r'^view_projects',home_mod_views.view_projects,name='view_projects'),
-    url(r'^view_bids',home_mod_views.view_bids,name='view_bids'),
+    #url(r'^view_bids',home_mod_views.view_bids,name='view_bids'),
     url(r'^move_manager_dashboard',move_manage_views.move_manager_dashboard,
     name='move_manager_dashboard'),
     url(r'^view_move_projects',move_manage_views.view_move_projects,
@@ -134,7 +134,11 @@ urlpatterns = [
     url(r'^home_modification/dashboard', home_mod_views.Dashboard.as_view(), name='contractor_dashboard'),
     url(r'^home_dashboard', views.HomeDashboard.as_view(), name='home_dashboard'),
     url(r'^choose_contractor/(?P<task_id>[0-9a-f-]+)/$', views.ChooseContractorForTask.as_view(), name='choose_contractor'),
-    url(r'^choose_contractor/(?P<task_id>[0-9a-f-]+)/(?P<contractor_id>[0-9a-f-]+)/$', views.ChooseContractorForTask.as_view(), name='choose_contractor')
-
+    url(r'^choose_contractor/(?P<task_id>[0-9a-f-]+)/(?P<contractor_id>[0-9a-f-]+)/$', views.ChooseContractorForTask.as_view(), name='choose_contractor'),
+    url(r'^view_bids/(?P<task_id>[0-9a-f-]+)/$', home_mod_views.ViewBids.as_view(), name='view_bids'),
+    url(r'^view_bids', home_mod_views.ViewBids.as_view(), name='view_bids'),
+    url(r'^modify_bid', home_mod_views.ModifyBid.as_view(), name="modify_bid"),
+    url(r'^accept_bid/(?P<bid_id>[0-9a-f-]+)/$', home_mod_views.AcceptBid.as_view(), name="accept_bid"),
+    url(r'^update_projects', home_mod_views.UpdateProjects.as_view(), name='update_projects')
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

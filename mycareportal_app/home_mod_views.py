@@ -221,7 +221,86 @@ class Dashboard(LoginRequiredMixin, View):
                                                             chosen_contractors=home_mod_user)
         context['home_mod_user'] = home_mod_user
         context['contractor_tasks'] = contractor_tasks
+        context['bid_form'] = BidForm()
         return render(request, 'production/contractor_dashboard.html', context)
+
+    def post(self, request):
+
+        context = {}
+        current_company = request.user.company
+        bid_form = BidForm(request.POST)
+        if bid_form.is_valid():
+            task_uid = bid_form.cleaned_data['task_uid']
+            start_date = bid_form.cleaned_data['start_date']
+            end_date = bid_form.cleaned_data['end_date']
+            cost = bid_form.cleaned_data['cost']
+            contractor = HomeModificationUser.objects.get(company=current_company,
+                                                            user=request.user)
+            home_mod_task = HomeModificationTask.objects.get(company=current_company,
+                                                            uid=task_uid)
+            home_mod_task_bid = HomeModTaskBid(company=current_company,
+                                            home_mod_task=home_mod_task,
+                                            contractor=contractor,
+                                            start_date = start_date,
+                                            end_date = end_date,
+                                            cost = cost)
+            home_mod_task_bid.save()
+            messages.success(request, "Bid sent!")
+        else:
+            messages.error(request, "Error sending bid")
+        return redirect('contractor_dashboard')
+
+class ViewBids(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+
+        context={}
+        current_company = request.user.company
+        task_id = self.kwargs['task_id']
+        task = HomeModificationTask.objects.get(company=current_company, uid=task_id)
+        bids = HomeModTaskBid.objects.filter(company=current_company, home_mod_task=task)
+        context['task'] = task
+        context['task_id'] = task_id
+        context['bids'] = bids
+        return render(request, "production/view_bids.html", context)
+
+class ModifyBid(LoginRequiredMixin, View):
+
+    def post(self, request):
+        return redirect('view_bids')
+
+class AcceptBid(LoginRequiredMixin, View):
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        context={}
+        current_company = request.user.company
+        bid_id = self.kwargs['bid_id']
+        bid = HomeModTaskBid.objects.get(company=current_company, uid=bid_id)
+        task = bid.home_mod_task
+        # Set chosen bid of the task
+        task.chosen_bid = bid
+        task.save()
+        # Create new Home Mod project
+        home_mod_project = HomeModProject(company=current_company,
+                                            home_mod_task = task,
+                                            estimated_budget = bid.cost,
+                                            contractor = bid.contractor,
+                                            client = task.client)
+        home_mod_project.save()
+        messages.success(request, "Accepted Bid from {0} {1} for task {2} and created project".format(bid.contractor.first_name, bid.contractor.last_name, task.task_name))
+        return redirect('view_bids', task_id=bid.home_mod_task.uid)
+
+class UpdateProjects(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {}
+        current_company = request.user.company
+        home_mod_user = HomeModificationUser.objects.get(company=current_company,
+                                                        user=request.user)
+        projects = HomeModProject.objects.filter(company=current_company, contractor=home_mod_user)
+        context['projects'] = projects
+        return render(request, "production/update_projects.html", context)
 
 @login_required
 def get_home_mod_with_email(request):

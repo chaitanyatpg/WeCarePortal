@@ -81,3 +81,11 @@ class FindHomeModUserForm(forms.Form):
 
         cleaned_data = super(FindHomeModUserForm, self).clean()
         return cleaned_data
+
+class BidForm(forms.Form):
+
+    #contractor_uid = forms.UUIDField(required=true)
+    task_uid = forms.UUIDField(required=True)
+    start_date = forms.DateField(required=True)
+    end_date = forms.DateField(required=True)
+    cost = forms.IntegerField(required=True)
