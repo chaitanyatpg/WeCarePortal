@@ -22,7 +22,7 @@
               <div class="col-md-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Client Name</h2>
+                    <h2>{{project.client.first_name}} {{project.client.last_name}}</h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
@@ -42,13 +42,13 @@
                           <div class="clearfix"></div>
                         </div>
                         <div class="panel-body">
-                          <h3 class="green"><i class="fa fa-building"></i>Home Exterior</h3>
-                          <small class="green">Low-Maintenance exterior(vinyl, brick)</small>
+                          <h3 class="green"><i class="fa fa-building"></i>{{ project.home_mod_task.task_name }}</h3>
+                          <small class="green">{{ project.home_mod_task.assessment_category.category}}</small>
 
-                          <p>Current plywood home exterior is not maintainable and prone to degradation. Should be replaced with brick.</p>
+                          <p>{{project.home_mod_task.task_description}}</p>
                           <br />
 
-                          <h5>Project files</h5>
+                          <!--<h5>Project files</h5>
                           <ul class="list-unstyled project_files">
                             <li><a href=""><i class="fa fa-file-word-o"></i> Functional-requirements.docx</a>
                             </li>
@@ -59,7 +59,7 @@
                             <li><a href=""><i class="fa fa-file-word-o"></i> Contract-10_12_2014.docx</a>
                             </li>
                           </ul>
-                          <br />
+                          <br />-->
 
                           <div class="text-center mtop20">
                             <a href="#" class="btn btn-sm btn-primary">Add files</a>
@@ -79,7 +79,7 @@
                         <li>
                           <span class="name"> Estimated budget </span>
                           <div class="input-group">
-                            <input type="text" value="2300" class="form-control">
+                            <input type="text" value="{{project.estimated_budget}}" class="form-control">
                             <span class="input-group-btn">
                               <button type="button" class="btn btn-primary">Update</button>
                             </span>
@@ -88,7 +88,7 @@
                         <li>
                           <span class="name"> Total amount spent </span>
                           <div class="input-group">
-                            <input type="text" value="2000" class="form-control">
+                            <input type="text" value="{{project.total_amount_spent}}" class="form-control">
                             <span class="input-group-btn">
                               <button type="button" class="btn btn-primary">Update</button>
                             </span>
@@ -97,7 +97,7 @@
                         <li>
                           <span class="name">Project Duration (length)</span>
                           <div class="input-group">
-                            <input type="text" value="20" class="form-control">
+                            <input type="text" value="{{project.project_duration}}" class="form-control">
                             <span class="input-group-btn">
                               <button type="button" class="btn btn-primary">Update</button>
                             </span>
@@ -109,7 +109,7 @@
                         <li>
                           <span class="name">Progress</span>
                           <div class="input-group">
-                            <input type="text" value="55%" class="form-control">
+                            <input type="text" value="{{project.progress}}" class="form-control">
                             <span class="input-group-btn">
                               <button type="button" class="btn btn-primary">Update</button>
                             </span>
@@ -119,7 +119,7 @@
                           <span class="name">Status</span>
                           <div class="input-group">
                             <div class="form-group">
-                                <select class="form-control">
+                                <select class="form-control" value="{{project.status}}">
                                   <option>Ongoing</option>
                                   <option>On Hold</option>
                                   <option>Canceled</option>
@@ -133,13 +133,13 @@
                       </ul>
                       <br />
 
-                      <div id="mainb" style="height:350px;"></div>
+                      <!--<div id="mainb" style="height:350px;"></div>-->
 
-                      <div>
+                      <!--<div>
 
                         <h4>Recent Activity</h4>
 
-                        <!-- end of user messages -->
+
                         <ul class="messages">
                           <li>
                             <div class="message_date">
@@ -187,7 +187,7 @@
                             </div>
                           </li>
                         </ul>
-                        <!-- end of user messages -->
+
 
                         <div class="item form-group col-md-12">
                           <h4>Update</h4>
@@ -199,7 +199,7 @@
                             <a href="#" class="btn btn-lg btn-warning">Attach</a>
                           </div>
                         </div>
-                      </div>
+                      </div>-->
 
 
                     </div>

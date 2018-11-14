@@ -302,6 +302,17 @@ class UpdateProjects(LoginRequiredMixin, View):
         context['projects'] = projects
         return render(request, "production/update_projects.html", context)
 
+class ViewProject(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        current_company = request.user.company
+        home_mod_project_id = self.kwargs['home_mod_project_id']
+        home_mod_project = HomeModProject.objects.get(company = current_company,
+                                                    uid = home_mod_project_id)
+        context['project'] = home_mod_project
+        return render(request, "production/project_view.html", context)
+
 @login_required
 def get_home_mod_with_email(request):
     if request.method == 'GET':
