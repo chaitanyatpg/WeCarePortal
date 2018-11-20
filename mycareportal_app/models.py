@@ -113,7 +113,7 @@ class Caregiver(models.Model):
         return self.user.username
 
 def get_home_mod_user_profile_picture_upload_path(instance, filename):
-    return "company_{0}/home_mod/home_mod{1}/profile_pictures/{2}".format(instance.company.company_id,instance.id,filename)
+    return "company_{0}/home_mod/home_mod_{1}/profile_pictures/{2}".format(instance.company.company_id,instance.id,filename)
 
 class HomeModificationUser(models.Model):
 
