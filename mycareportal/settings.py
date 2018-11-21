@@ -48,7 +48,8 @@ SECURE_SSL_REDIRECT = True
 
 #Email Settings (Sendgrid)
 EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
-SENDGRID_API_KEY = "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"
+#SENDGRID_API_KEY = "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"
+SENDGRID_API_KEY = "SG.VqsAk6c6TOCOo1lrrhYqmQ.cDlIins6gkpl_VDaETyT2hNh4gPiOp6Nl6GnVnVIhZ4"
 
 #Custom - email sending active_caregivers
 CAN_SEND_EMAILS = True
