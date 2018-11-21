@@ -47,9 +47,15 @@ AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 SECURE_SSL_REDIRECT = True
 
 #Email Settings (Sendgrid)
-EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+#EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
 #SENDGRID_API_KEY = "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"
-SENDGRID_API_KEY = "SG.VqsAk6c6TOCOo1lrrhYqmQ.cDlIins6gkpl_VDaETyT2hNh4gPiOp6Nl6GnVnVIhZ4"
+#SENDGRID_API_KEY = "SG.VqsAk6c6TOCOo1lrrhYqmQ.cDlIins6gkpl_VDaETyT2hNh4gPiOp6Nl6GnVnVIhZ4"
+
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'dranjanwecare'
+EMAIL_HOST_PASSWORD = 'thepianoman2342'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 #Custom - email sending active_caregivers
 CAN_SEND_EMAILS = True
