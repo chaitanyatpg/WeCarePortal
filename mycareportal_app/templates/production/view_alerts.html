@@ -184,18 +184,34 @@
                       <blockquote>
                         {{task.task_description}}
                       </blockquote>
+                      {% if not task.chosen_bid %}
+                        <div class="form-group">
+                          <form action="{% url 'choose_contractor' task_id=task.uid %}" style="float: left;">
+                            <button type="submit" class="btn btn-success">Choose Contractor</button>
+                          </form>
+                          <form action="enter_alert.html" style="float: left;">
+                            <button type="submit" class="btn btn-info">Edit</button>
+                          </form>
+                          <form action="{% url 'view_bids' task_id=task.uid %}" style="float: left;">
+                            <button type="submit" class="btn btn-warning">View Bids</button>
+                          </form>
+                          <button type="submit" class="btn btn-danger">Delete</button>
+                        </div>
+                      {% else %}
                       <div class="form-group">
-                        <form action="{% url 'choose_contractor' task_id=task.uid %}" style="float: left;">
-                          <button type="submit" class="btn btn-success">Choose Contractor</button>
+                        <form action="" style="float: left;">
+                          <button type="submit" class="btn btn-success" disabled>Choose Contractor</button>
                         </form>
-                        <form action="enter_alert.html" style="float: left;">
-                          <button type="submit" class="btn btn-info">Edit</button>
+                        <form action="" style="float: left;">
+                          <button type="submit" class="btn btn-info" disabled>Edit</button>
                         </form>
-                        <form action="{% url 'view_bids' task_id=task.uid %}" style="float: left;">
-                          <button type="submit" class="btn btn-warning">View Bids</button>
+                        <form action="" style="float: left;">
+                          <button type="submit" class="btn btn-warning" disabled>View Bids</button>
                         </form>
-                        <button type="submit" class="btn btn-danger">Delete</button>
+                        <button type="submit" class="btn btn-danger" disabled>Delete</button>
+                        <a href="{% url 'view_project_disabled' task_id=task.uid %}" class="btn btn-success"> View Project</a>
                       </div>
+                      {% endif %}
                     </div>
 
                     <div class="clearfix"></div>

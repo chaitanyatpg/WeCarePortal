@@ -218,7 +218,7 @@ class Dashboard(LoginRequiredMixin, View):
         home_mod_user = HomeModificationUser.objects.get(company=current_company,
                                                         user=request.user)
         contractor_tasks = HomeModificationTask.objects.filter(company=current_company,
-                                                            chosen_contractors=home_mod_user)
+                                                            chosen_contractors=home_mod_user).order_by('-created')
         context['home_mod_user'] = home_mod_user
         context['contractor_tasks'] = contractor_tasks
         context['bid_form'] = BidForm()
@@ -310,6 +310,18 @@ class ViewProject(LoginRequiredMixin, View):
         home_mod_project_id = self.kwargs['home_mod_project_id']
         home_mod_project = HomeModProject.objects.get(company = current_company,
                                                     uid = home_mod_project_id)
+        context['project'] = home_mod_project
+        return render(request, "production/project_view.html", context)
+
+class ViewProjectDisabled(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        current_company = request.user.company
+        task_id = self.kwargs['task_id']
+        task = HomeModificationTask.objects.get(company=current_company, uid = task_id)
+        home_mod_project = HomeModProject.objects.get(company = current_company,
+                                                    home_mod_task=task)
         context['project'] = home_mod_project
         return render(request, "production/project_view.html", context)
 
