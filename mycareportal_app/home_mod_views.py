@@ -349,3 +349,34 @@ def get_home_mod_with_email(request):
         context["home_mod_user_data"] = home_mod_user_data
         #return JsonResponse(caregiver_data)
         return HttpResponse(json.dumps(home_mod_user_data), content_type="application/json")
+
+# AJAX FUNCTIONS BELOW HERE
+
+@login_required
+@transaction.atomic
+def save_project_budget(request):
+
+    if request.method == "POST":
+        context = {}
+        company = request.user.company
+        budget = request.POST.get('budget')
+        project_id = request.POST.get('project_id')
+        if budget and project_id:
+            project = HomeModProject.objects.get(company = company, uid = project_id)
+            project.estimated_budget = budget
+            project.save()
+            return HttpResponse("Saved Budget")
+        else:
+            return HttpResponse("Please Enter Budget Amount")
+
+def save_project_total_amount_spent(request):
+    raise NotImplementedError
+
+def save_project_duration(request):
+    raise NotImplementedError
+
+def save_progress(request):
+    raise NotImplementedError
+
+def save_status(request):
+    raise NotImplementedError

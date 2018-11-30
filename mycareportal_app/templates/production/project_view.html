@@ -79,9 +79,9 @@
                         <li>
                           <span class="name"> Estimated budget </span>
                           <div class="input-group">
-                            <input type="text" value="{{project.estimated_budget}}" class="form-control">
+                            <input type="text" id="project_budget" value="{{project.estimated_budget}}" class="form-control">
                             <span class="input-group-btn">
-                              <button type="button" class="btn btn-primary">Update</button>
+                              <button type="button" id="project_budget_button" class="btn btn-primary">Update</button>
                             </span>
                           </div>
                         </li>
@@ -511,4 +511,62 @@
       });
     </script>
     <!-- /ECharts -->
+
+    <!--get cookie -->
+      <script>
+      function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+      }
+    </script>
+    <!-- end -->
+
+    <!-- Post project budget radio -->
+      <script type="text/javascript">
+          $(document).ready(function(){
+            var csrftoken = getCookie('csrftoken');
+            $('#project_budget_button').click(function(){
+              var project_budget = $('#project_budget').val()
+              console.log(project_budget)
+              $.ajax({
+                url: '{% url "save_project_budget" %}',
+                beforeSend: function(jqXHR, settings){
+                  jqXHR.setRequestHeader("x-csrftoken",csrftoken);
+                },
+                type: 'POST',
+                data: {project_id: "{{project.uid}}", budget: project_budget},
+                success: function(message){
+                  var msg = "<div class='alert alert-success'>" +
+                              "<strong>" + message + "</strong>"
+                            "</div>"
+                  var msg_div = $('.messages');
+                  msg_div.empty();
+                  msg_div.append(msg);
+                },
+                failure: function(message){
+                  var msg = "<div class='alert alert-warning'>" +
+                              "<strong>" + message + "</strong>"
+                            "</div>"
+                  var msg_div = $('.messages');
+                  msg_div.empty();
+                  msg_div.append(msg);
+                }
+              })
+
+            });
+          });
+
+      </script>
+    <!-- end -->
 {% endblock %}

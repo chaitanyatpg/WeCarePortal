@@ -141,6 +141,7 @@ urlpatterns = [
     url(r'^accept_bid/(?P<bid_id>[0-9a-f-]+)/$', home_mod_views.AcceptBid.as_view(), name="accept_bid"),
     url(r'^update_projects', home_mod_views.UpdateProjects.as_view(), name='update_projects'),
     url(r'^home_modification/view_project/(?P<home_mod_project_id>[0-9a-f-]+)/$', home_mod_views.ViewProject.as_view(), name="view_project"),
-    url(r'^home_modification/view_project_no_edit/(?P<task_id>[0-9a-f-]+)/$', home_mod_views.ViewProjectDisabled.as_view(), name="view_project_disabled")
+    url(r'^home_modification/view_project_no_edit/(?P<task_id>[0-9a-f-]+)/$', home_mod_views.ViewProjectDisabled.as_view(), name="view_project_disabled"),
+    url(r'^home_modification/save_project_budget', home_mod_views.save_project_budget, name="save_project_budget")
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
