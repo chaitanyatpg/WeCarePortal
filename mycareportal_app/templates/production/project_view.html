@@ -135,7 +135,6 @@
                       </ul>
                       <br />
 
-                      <!--<div id="mainb" style="height:350px;"></div>-->
 
                       <!--<div>
 
@@ -212,6 +211,29 @@
                 </div>
               </div>
             </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Project Statistics (Cumulative)</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+
+                  <div class="x_content">
+                    <div id="progress_chart" style="height:350px; width: 700px;"></div>
+                    <div id="amount_spent_chart" style="height:350px; width: 700px;"></div>
+                    <div id="budget_chart" style="height:350px; width: 700px;"></div>
+                    <div id="duration_chart" style="height:350px; width: 700px;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
         <!-- /page content -->
@@ -435,14 +457,16 @@
           }
       };
 
-      var echartBarLine = echarts.init(document.getElementById('mainb'), theme);
+      var echartBarLine = echarts.init(document.getElementById('progress_chart'), theme);
+
+      var progress_x = {{progress_x_list | safe}}
 
       echartBarLine.setOption({
         title: {
           x: 'center',
           y: 'top',
           padding: [0, 0, 20, 0],
-          text: 'Home Exterior Project: Date vs Amount Spent vs Budget vs Time Spent',
+          text: 'Date vs Project Progress',
           textStyle: {
             fontSize: 15,
             fontWeight: 'normal'
@@ -481,37 +505,216 @@
         },
         xAxis: [{
           type: 'category',
-          data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+          data: progress_x
         }],
         yAxis: [{
           type: 'value',
-          name: 'Amount',
+          name: 'Progress',
           axisLabel: {
-            formatter: '${value}'
-          }
-        }, {
-          type: 'value',
-          name: 'Hours',
-          axisLabel: {
-            formatter: '{value} hours'
+            formatter: '{value}%'
           }
         }],
         series: [{
-          name: 'Spent',
-          type: 'bar',
-          data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3]
-        }, {
-          name: 'Budget',
-          type: 'bar',
-          data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3]
-        }, {
-          name: 'Time',
+          name: 'Progress',
           type: 'line',
-          yAxisIndex: 1,
-          data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
+          data: {{progress_list}}
+        }]
+      });
+
+      var echartBarLine = echarts.init(document.getElementById('amount_spent_chart'), theme);
+
+      var amount_spent_x = {{amount_spent_x_list | safe}}
+
+      echartBarLine.setOption({
+        title: {
+          x: 'center',
+          y: 'top',
+          padding: [0, 0, 20, 0],
+          text: 'Date vs Amount spent',
+          textStyle: {
+            fontSize: 15,
+            fontWeight: 'normal'
+          }
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            dataView: {
+              show: true,
+              readOnly: false,
+              title: "Text View",
+              lang: [
+                "Text View",
+                "Close",
+                "Refresh",
+              ],
+            },
+            restore: {
+              show: true,
+              title: 'Restore'
+            },
+            saveAsImage: {
+              show: true,
+              title: 'Save'
+            }
+          }
+        },
+        calculable: true,
+        legend: {
+          data: ['Spent', 'Budget', 'Time'],
+          y: 'bottom'
+        },
+        xAxis: [{
+          type: 'category',
+          data: amount_spent_x
+        }],
+        yAxis: [{
+          type: 'value',
+          name: 'Amount Spent',
+          axisLabel: {
+            formatter: '${value}'
+          }
+        }],
+        series: [{
+          name: 'Amount Spent',
+          type: 'line',
+          data: {{amount_spent_list}}
+        }]
+      });
+
+      var echartBarLine = echarts.init(document.getElementById('budget_chart'), theme);
+
+      var budget_x = {{budget_x_list | safe}}
+
+      echartBarLine.setOption({
+        title: {
+          x: 'center',
+          y: 'top',
+          padding: [0, 0, 20, 0],
+          text: 'Date vs Estimated Budget',
+          textStyle: {
+            fontSize: 15,
+            fontWeight: 'normal'
+          }
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            dataView: {
+              show: true,
+              readOnly: false,
+              title: "Text View",
+              lang: [
+                "Text View",
+                "Close",
+                "Refresh",
+              ],
+            },
+            restore: {
+              show: true,
+              title: 'Restore'
+            },
+            saveAsImage: {
+              show: true,
+              title: 'Save'
+            }
+          }
+        },
+        calculable: true,
+        legend: {
+          data: ['Spent', 'Budget', 'Time'],
+          y: 'bottom'
+        },
+        xAxis: [{
+          type: 'category',
+          data: budget_x
+        }],
+        yAxis: [{
+          type: 'value',
+          name: 'Budget',
+          axisLabel: {
+            formatter: '${value}'
+          }
+        }],
+        series: [{
+          name: 'Estimated Budget',
+          type: 'line',
+          data: {{budget_list}}
+        }]
+      });
+
+      var echartBarLine = echarts.init(document.getElementById('duration_chart'), theme);
+
+      var duration_x = {{duration_x_list | safe}}
+
+      echartBarLine.setOption({
+        title: {
+          x: 'center',
+          y: 'top',
+          padding: [0, 0, 20, 0],
+          text: 'Date vs Duration',
+          textStyle: {
+            fontSize: 15,
+            fontWeight: 'normal'
+          }
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            dataView: {
+              show: true,
+              readOnly: false,
+              title: "Text View",
+              lang: [
+                "Text View",
+                "Close",
+                "Refresh",
+              ],
+            },
+            restore: {
+              show: true,
+              title: 'Restore'
+            },
+            saveAsImage: {
+              show: true,
+              title: 'Save'
+            }
+          }
+        },
+        calculable: true,
+        legend: {
+          data: ['Spent', 'Budget', 'Time'],
+          y: 'bottom'
+        },
+        xAxis: [{
+          type: 'category',
+          data: duration_x
+        }],
+        yAxis: [{
+          type: 'value',
+          name: 'Duration',
+          axisLabel: {
+            formatter: '{value}h'
+          }
+        }],
+        series: [{
+          name: 'Duration',
+          type: 'line',
+          data: {{duration_list}}
         }]
       });
     </script>
+
+
     <!-- /ECharts -->
 
     <!--get cookie -->
