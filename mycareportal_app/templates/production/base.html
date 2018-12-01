@@ -303,9 +303,10 @@
 <script src="{% static 'vendors/fastclick/lib/fastclick.js' %}"></script>
 <!-- NProgress -->
 <script src="{% static 'vendors/nprogress/nprogress.js' %}"></script>
+
+{% block footlibs %}{% endblock %}
 <!-- Custom Theme Scripts -->
 <script src="{% static 'build/js/custom.min.js' %}"></script>
-{% block footlibs %}{% endblock %}
 <!-- Get Android Tablet ID if Android interface exists -->
 <script type="text/javascript">
   function get_android_tablet_id(){

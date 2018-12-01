@@ -88,18 +88,18 @@
                         <li>
                           <span class="name"> Total amount spent </span>
                           <div class="input-group">
-                            <input type="text" value="{{project.total_amount_spent}}" class="form-control">
+                            <input type="text" id="project_total_amount_spent" value="{{project.total_amount_spent}}" class="form-control">
                             <span class="input-group-btn">
-                              <button type="button" class="btn btn-primary">Update</button>
+                              <button type="button" id="project_total_amount_spent_button" class="btn btn-primary">Update</button>
                             </span>
                           </div>
                         </li>
                         <li>
                           <span class="name">Project Duration (length)</span>
                           <div class="input-group">
-                            <input type="text" value="{{project.project_duration}}" class="form-control">
+                            <input type="text" id="project_duration" value="{{project.project_duration}}" class="form-control">
                             <span class="input-group-btn">
-                              <button type="button" class="btn btn-primary">Update</button>
+                              <button type="button" id="project_duration_button" class="btn btn-primary">Update</button>
                             </span>
                           </div>
                         </li>
@@ -109,9 +109,9 @@
                         <li>
                           <span class="name">Progress</span>
                           <div class="input-group">
-                            <input type="text" value="{{project.progress}}" class="form-control">
+                            <input type="text" id="project_progress" value="{{project.progress}}" class="form-control">
                             <span class="input-group-btn">
-                              <button type="button" class="btn btn-primary">Update</button>
+                              <button type="button" id="project_progress_button" class="btn btn-primary">Update</button>
                             </span>
                           </div>
                         </li>
@@ -119,14 +119,16 @@
                           <span class="name">Status</span>
                           <div class="input-group">
                             <div class="form-group">
-                                <select class="form-control" value="{{project.status}}">
-                                  <option>Ongoing</option>
-                                  <option>On Hold</option>
-                                  <option>Canceled</option>
+                                <select class="form-control" id="project_status" value="{{project.status}}">
+                                  <option value="{{project.status}}">{{project.status}}</option>
+                                  <option value="Ongoing">Ongoing</option>
+                                  <option value="On Hold">On Hold</option>
+                                  <option value="Cancelled">Cancelled</option>
+                                  <option value="Completed">Completed</option>
                                 </select>
                             </div>
                             <span class="input-group-btn">
-                              <button type="button" class="btn btn-primary">Update</button>
+                              <button type="button" id="project_status_button" class="btn btn-primary">Update</button>
                             </span>
                           </div>
                         </li>
@@ -532,7 +534,7 @@
     </script>
     <!-- end -->
 
-    <!-- Post project budget radio -->
+    <!-- Post project budget -->
       <script type="text/javascript">
           $(document).ready(function(){
             var csrftoken = getCookie('csrftoken');
@@ -569,4 +571,157 @@
 
       </script>
     <!-- end -->
+
+    <!-- Post Total Amount Spent -->
+      <script type="text/javascript">
+          $(document).ready(function(){
+            var csrftoken = getCookie('csrftoken');
+            $('#project_total_amount_spent_button').click(function(){
+              var project_total_amount_spent = $('#project_total_amount_spent').val()
+              console.log(project_total_amount_spent)
+              $.ajax({
+                url: '{% url "save_project_total_amount_spent" %}',
+                beforeSend: function(jqXHR, settings){
+                  jqXHR.setRequestHeader("x-csrftoken",csrftoken);
+                },
+                type: 'POST',
+                data: {project_id: "{{project.uid}}", total_amount_spent: project_total_amount_spent},
+                success: function(message){
+                  var msg = "<div class='alert alert-success'>" +
+                              "<strong>" + message + "</strong>"
+                            "</div>"
+                  var msg_div = $('.messages');
+                  msg_div.empty();
+                  msg_div.append(msg);
+                },
+                failure: function(message){
+                  var msg = "<div class='alert alert-warning'>" +
+                              "<strong>" + message + "</strong>"
+                            "</div>"
+                  var msg_div = $('.messages');
+                  msg_div.empty();
+                  msg_div.append(msg);
+                }
+              })
+
+            });
+          });
+
+      </script>
+    <!-- end -->
+
+    <!-- Post Duration -->
+      <script type="text/javascript">
+          $(document).ready(function(){
+            var csrftoken = getCookie('csrftoken');
+            $('#project_duration_button').click(function(){
+              var project_duration = $('#project_duration').val()
+              console.log(project_duration)
+              $.ajax({
+                url: '{% url "save_project_duration" %}',
+                beforeSend: function(jqXHR, settings){
+                  jqXHR.setRequestHeader("x-csrftoken",csrftoken);
+                },
+                type: 'POST',
+                data: {project_id: "{{project.uid}}", project_duration: project_duration},
+                success: function(message){
+                  var msg = "<div class='alert alert-success'>" +
+                              "<strong>" + message + "</strong>"
+                            "</div>"
+                  var msg_div = $('.messages');
+                  msg_div.empty();
+                  msg_div.append(msg);
+                },
+                failure: function(message){
+                  var msg = "<div class='alert alert-warning'>" +
+                              "<strong>" + message + "</strong>"
+                            "</div>"
+                  var msg_div = $('.messages');
+                  msg_div.empty();
+                  msg_div.append(msg);
+                }
+              })
+
+            });
+          });
+
+      </script>
+    <!-- end -->
+
+    <!-- Post Progress -->
+      <script type="text/javascript">
+          $(document).ready(function(){
+            var csrftoken = getCookie('csrftoken');
+            $('#project_progress_button').click(function(){
+              var project_progress = $('#project_progress').val()
+              console.log(project_progress)
+              $.ajax({
+                url: '{% url "save_project_progress" %}',
+                beforeSend: function(jqXHR, settings){
+                  jqXHR.setRequestHeader("x-csrftoken",csrftoken);
+                },
+                type: 'POST',
+                data: {project_id: "{{project.uid}}", project_progress: project_progress},
+                success: function(message){
+                  var msg = "<div class='alert alert-success'>" +
+                              "<strong>" + message + "</strong>"
+                            "</div>"
+                  var msg_div = $('.messages');
+                  msg_div.empty();
+                  msg_div.append(msg);
+                },
+                failure: function(message){
+                  var msg = "<div class='alert alert-warning'>" +
+                              "<strong>" + message + "</strong>"
+                            "</div>"
+                  var msg_div = $('.messages');
+                  msg_div.empty();
+                  msg_div.append(msg);
+                }
+              })
+
+            });
+          });
+
+      </script>
+    <!-- end -->
+
+    <!-- Post Status -->
+      <script type="text/javascript">
+          $(document).ready(function(){
+            var csrftoken = getCookie('csrftoken');
+            $('#project_status_button').click(function(){
+              var project_status = $('#project_status').val()
+              console.log(project_status)
+              $.ajax({
+                url: '{% url "save_project_status" %}',
+                beforeSend: function(jqXHR, settings){
+                  jqXHR.setRequestHeader("x-csrftoken",csrftoken);
+                },
+                type: 'POST',
+                data: {project_id: "{{project.uid}}", project_status: project_status},
+                success: function(message){
+                  var msg = "<div class='alert alert-success'>" +
+                              "<strong>" + message + "</strong>"
+                            "</div>"
+                  var msg_div = $('.messages');
+                  msg_div.empty();
+                  msg_div.append(msg);
+                },
+                failure: function(message){
+                  var msg = "<div class='alert alert-warning'>" +
+                              "<strong>" + message + "</strong>"
+                            "</div>"
+                  var msg_div = $('.messages');
+                  msg_div.empty();
+                  msg_div.append(msg);
+                }
+              })
+
+            });
+          });
+
+      </script>
+    <!-- end -->
+
 {% endblock %}

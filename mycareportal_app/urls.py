@@ -142,6 +142,10 @@ urlpatterns = [
     url(r'^update_projects', home_mod_views.UpdateProjects.as_view(), name='update_projects'),
     url(r'^home_modification/view_project/(?P<home_mod_project_id>[0-9a-f-]+)/$', home_mod_views.ViewProject.as_view(), name="view_project"),
     url(r'^home_modification/view_project_no_edit/(?P<task_id>[0-9a-f-]+)/$', home_mod_views.ViewProjectDisabled.as_view(), name="view_project_disabled"),
-    url(r'^home_modification/save_project_budget', home_mod_views.save_project_budget, name="save_project_budget")
+    url(r'^home_modification/save_project_budget', home_mod_views.save_project_budget, name="save_project_budget"),
+    url(r'^home_modification/save_project_total_amount_spent', home_mod_views.save_project_total_amount_spent, name="save_project_total_amount_spent"),
+    url(r'^home_modification/save_project_duration', home_mod_views.save_project_duration, name="save_project_duration"),
+    url(r'^home_modification/save_project_progress', home_mod_views.save_progress, name="save_project_progress"),
+    url(r'^home_modification/save_project_status', home_mod_views.save_status, name="save_project_status"),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

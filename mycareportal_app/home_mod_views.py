@@ -365,18 +365,94 @@ def save_project_budget(request):
             project = HomeModProject.objects.get(company = company, uid = project_id)
             project.estimated_budget = budget
             project.save()
+            home_mod_budget_log = HomeModProjectBudgetLog(company=company,
+                                                            home_mod_project = project,
+                                                            estimated_budget = budget)
+            home_mod_budget_log.save()
             return HttpResponse("Saved Budget")
         else:
             return HttpResponse("Please Enter Budget Amount")
 
+@login_required
+@transaction.atomic
 def save_project_total_amount_spent(request):
-    raise NotImplementedError
 
+    if request.method == "POST":
+        context = {}
+        company = request.user.company
+        total_amount_spent = request.POST.get('total_amount_spent')
+        project_id = request.POST.get('project_id')
+        if total_amount_spent and project_id:
+            project = HomeModProject.objects.get(company = company, uid = project_id)
+            project.total_amount_spent = total_amount_spent
+            project.save()
+            home_mod_amount_spent_log = HomeModProjectAmountSpentLog(company=company,
+                                        home_mod_project = project,
+                                        total_amount_spent = total_amount_spent)
+            home_mod_amount_spent_log.save()
+            return HttpResponse("Saved total amount spent")
+        else:
+            return HttpResponse("Please Enter total amount spent")
+
+@login_required
+@transaction.atomic
 def save_project_duration(request):
-    raise NotImplementedError
 
+    if request.method == "POST":
+        context = {}
+        company = request.user.company
+        project_duration = request.POST.get('project_duration')
+        project_id = request.POST.get('project_id')
+        if project_duration and project_id:
+            project = HomeModProject.objects.get(company = company, uid = project_id)
+            project.project_duration = project_duration
+            project.save()
+            home_mod_project_duration = HomeModProjectDurationLog(company=company,
+                                        home_mod_project = project,
+                                        project_duration = project_duration)
+            home_mod_project_duration.save()
+            return HttpResponse("Saved Project Duration")
+        else:
+            return HttpResponse("Please Enter Project Duration")
+
+@login_required
+@transaction.atomic
 def save_progress(request):
-    raise NotImplementedError
 
+    if request.method == "POST":
+        context = {}
+        company = request.user.company
+        progress = request.POST.get('project_progress')
+        project_id = request.POST.get('project_id')
+        if progress and project_id:
+            project = HomeModProject.objects.get(company = company, uid = project_id)
+            project.progress = progress
+            project.save()
+            home_mod_project_progress = HomeModProjectProgressLog(company=company,
+                                        home_mod_project = project,
+                                        progress = progress)
+            home_mod_project_progress.save()
+            return HttpResponse("Saved Progress")
+        else:
+            return HttpResponse("Please Enter Progress")
+
+@login_required
+@transaction.atomic
 def save_status(request):
-    raise NotImplementedError
+
+    if request.method == "POST":
+        context = {}
+        company = request.user.company
+        status = request.POST.get('project_status')
+        project_id = request.POST.get('project_id')
+        if status and project_id:
+            project = HomeModProject.objects.get(company = company, uid = project_id)
+            project.status = status
+            project.save()
+            home_mod_project_status = HomeModProjectStatusLog(company = company,
+                                        home_mod_project = project,
+                                        status = status)
+            home_mod_project_status.save()
+            return HttpResponse("Saved Status")
+        else:
+            return HttpResponse("Please Enter Status")

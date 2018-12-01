@@ -614,3 +614,55 @@ class HomeModProject(models.Model):
     estimated_budget = models.IntegerField()
     total_amount_spent = models.IntegerField(default = 0)
     project_duration = models.IntegerField(default = 0)
+
+class HomeModProjectProgressLog(models.Model):
+
+    company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    created = models.DateTimeField(auto_now_add=True)
+    home_mod_project = models.ForeignKey(HomeModProject)
+    progress = models.IntegerField()
+
+class HomeModProjectBudgetLog(models.Model):
+
+    company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    created = models.DateTimeField(auto_now_add=True)
+    home_mod_project = models.ForeignKey(HomeModProject)
+    estimated_budget = models.IntegerField()
+
+class HomeModProjectAmountSpentLog(models.Model):
+
+    company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    created = models.DateTimeField(auto_now_add=True)
+    home_mod_project = models.ForeignKey(HomeModProject)
+    total_amount_spent = models.IntegerField()
+
+class HomeModProjectDurationLog(models.Model):
+
+    company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    created = models.DateTimeField(auto_now_add=True)
+    home_mod_project = models.ForeignKey(HomeModProject)
+    project_duration = models.IntegerField()
+
+class HomeModProjectStatusLog(models.Model):
+
+    ongoing = "Ongoing"
+    on_hold = "On Hold"
+    cancelled = "Cancelled"
+    completed = "Completed"
+
+    STATUS_CHOICES = (
+    (ongoing, "Ongoing"),
+    (on_hold, "On Hold"),
+    (cancelled, "Cancelled"),
+    (completed, "Completed")
+    )
+
+    company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    created = models.DateTimeField(auto_now_add=True)
+    home_mod_project = models.ForeignKey(HomeModProject)
+    status = models.CharField(STATUS_CHOICES, max_length = 10)
