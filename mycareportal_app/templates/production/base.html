@@ -196,6 +196,12 @@
                 </li>
                 <li><a><i class="fa fa-clone"></i>Move Management<span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu">
+                    {% if module_dict.MOVEMANAGEMENTPORTAL.ADDMOVEMANAGER %}
+                      <li><a href={% url 'add_move_manager' %}>Add Move Manager</a></li>
+                    {% endif %}
+                    {%if module_dict.MOVEMANAGEMENTPORTAL.EDITMOVEMANAGER %}
+                      <li><a href={% url 'edit_choose_move_manager' %}>Edit Move Manager</a></li>
+                    {% endif %}
                     {% if module_dict.MOVEMANAGEMENTPORTAL.MOVEMANAGERDASHBOARD %}
                       <li><a href={% url 'move_manager_dashboard' %}>Move Manager Dashboard</a></li>
                     {% endif %}

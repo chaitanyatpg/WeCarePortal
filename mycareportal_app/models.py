@@ -137,6 +137,9 @@ class HomeModificationUser(models.Model):
     def __unicode__(self):
         return self.user.username
 
+def get_move_manager_profile_picture_upload_path(instance, filename):
+    return "company_{0}/move_manager/move_manager_{1}/profile_pictures/{2}".format(instance.company.company_id,instance.id,filename)
+
 class MoveManager(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -144,6 +147,17 @@ class MoveManager(models.Model):
     company = models.ForeignKey(Company)
     email_address = models.CharField(max_length = 100)
     created = models.DateTimeField(auto_now_add=True)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    middle_name = models.CharField(max_length=100, blank=True)
+    gender = models.CharField(max_length=1)
+    address = models.CharField(max_length=400)
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=2)
+    zip_code = models.CharField(max_length=10)
+    date_of_birth = models.DateTimeField()
+    phone_number = models.CharField(max_length=40)
+    profile_picture = models.ImageField(upload_to=get_move_manager_profile_picture_upload_path)
 
     def __unicode__(self):
         return self.user.username

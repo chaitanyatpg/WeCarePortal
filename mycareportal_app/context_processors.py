@@ -66,6 +66,9 @@ def add_roles_to_context(request):
             #module_dict['MOVEMANAGEMENTPORTAL']['MOVEMANAGERDASHBOARD']=True
             #module_dict['MOVEMANAGEMENTPORTAL']['VIEWMOVEPROJECTS']=True
             #module_dict['MOVEMANAGEMENTPORTAL']['VIEWMOVEBIDS']=True
+            module_dict['MOVEMANAGEMENTPORTAL']['ADDMOVEMANAGER'] = True
+            module_dict['MOVEMANAGEMENTPORTAL']['EDITMOVEMANAGER'] = True
+
             module_dict['REPORTING']['VIEWALLCLIENTS']=True
             module_dict['REPORTING']['VIEWALLCAREGIVERS']=True
             module_dict['REPORTING']['VIEWALLCLIENTSWITHOUTCAREGIVERS']=True

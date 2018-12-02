@@ -147,5 +147,9 @@ urlpatterns = [
     url(r'^home_modification/save_project_duration', home_mod_views.save_project_duration, name="save_project_duration"),
     url(r'^home_modification/save_project_progress', home_mod_views.save_progress, name="save_project_progress"),
     url(r'^home_modification/save_project_status', home_mod_views.save_status, name="save_project_status"),
+    url(r'^move_management/add_move_manager', move_manage_views.AddMoveManager.as_view(), name='add_move_manager'),
+    url(r'^move_management/edit_choose_move_manager',move_manage_views.EditChooseMoveManager.as_view(),name='edit_choose_move_manager'),
+    url(r'^move_management/get_move_manager_email', move_manage_views.get_move_manager_with_email,name='get_move_manager_with_email'),
+    url(r'^move_management/edit_move_manager', move_manage_views.EditMoveManager.as_view(),name='edit_move_manager')
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
