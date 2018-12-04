@@ -1,8 +1,11 @@
 {% extends "production/base.html" %}
 {% block title %} Move Management Wizard {% endblock %}
+{% load mycareportal_app_extras%}
 {% load static %}
 {% block headlibs %}
 {% load static %}
+  <!-- SmartWizard -->
+  <link href="{% static 'vendors/jQuery-Smart-Wizard/styles/smart_wizard.css' %}" rel="stylesheet">
 {% endblock %}
 {% block pagecontent %}
         <!-- page content -->
@@ -32,6 +35,8 @@
 
                     <!-- Smart Wizard -->
                     <p></p>
+                    <form method='post' action="{% url 'move_manage_wizard' %}" class="form-horizontal form-label-left">
+                    {% csrf_token %}
                     <div id="wizard" class="form_wizard wizard_horizontal">
                       <ul class="wizard_steps">
                         <li>
@@ -61,7 +66,7 @@
                                           </span>
                           </a>
                         </li>
-                        <li>
+                        <!--<li>
                           <a href="#step-4">
                             <span class="step_no">4</span>
                             <span class="step_descr">
@@ -69,95 +74,103 @@
                                               <small>Summary</small>
                                           </span>
                           </a>
-                        </li>
+                        </li>-->
                       </ul>
                       <div id="step-1">
-                        <form class="form-horizontal form-label-left">
-
-                          <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Current Address<span class="required">*</span>
-                            </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                              <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12">
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Maximum Distance of New Address<span class="required">*</span>
-                            </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                              <input type="text" id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
-                            </div>
-                          </div>
-                          <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Type of Home</label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                          <select class="form-control">
-                            <option>House</option>
-                            <option>Townhouse</option>
-                            <option>Apartment</option>
-                            <option>Senior Facility</option>
-                          </select>
-                        </div>
-                      </div>
-                          <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Provides Move Assistance</label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                              <div id="gender" class="btn-group" data-toggle="buttons">
-                                <label class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-                                  <input type="radio" name="gender" value="male"> &nbsp; Yes &nbsp;
-                                </label>
-                                <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-                                  <input type="radio" name="gender" value="female"> No
-                                </label>
+                        <div class="row">
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Client</label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                <select required id='client_dropdown' class="select2_group form-control" name={{create_move_task_form.client_uid.html_name}} tabindex="-1">
+                                  <option disabled selected value> -- select an option -- </option>
+                                  {% for client in all_clients %}
+                                    <option value= {{client.uid}}>{{client.first_name|addstr_space:client.last_name}}</option>
+                                  {% endfor %}
+                                </select>
                               </div>
                             </div>
                           </div>
-
-                        </form>
-
+                          <div class="row">
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Maximum Distance of New Address<span class="required">*</span>
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="text" name={{create_move_task_form.new_address_max_distance.html_name}} required="required" class="form-control col-md-7 col-xs-12">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">Type of Home</label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                <select required class="form-control" name={{create_move_task_form.type_of_home.html_name}}>
+                                  <option disabled selected value> -- select an option -- </option>
+                                  <option value="HOUSE">House</option>
+                                  <option value="TOWNHOUSE">Townhouse</option>
+                                  <option value="APARTMENT">Apartment</option>
+                                  <option value="SENIORFACILITY">Senior Facility</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">Provides Move Assistance</label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div id="gender" class="btn-group" data-toggle="buttons">
+                                  <label class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                                    <input type="radio" name="{{create_move_task_form.provides_assistance.html_name}}" value="Y"> &nbsp; Yes &nbsp;
+                                  </label>
+                                  <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                                    <input type="radio" name="{{create_move_task_form.provides_assistance.html_name}}" value="N"> No
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                       </div>
                       <div id="step-2">
-                        <form class="form-horizontal form-label-left">
+
 
                           <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Minimum Cost<span class="required">*</span>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Minimum Cost<span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                              <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12">
+                              <input type="text" id="first-name" name="{{create_move_task_form.minimum_cost.html_name}}" required="required" class="form-control col-md-7 col-xs-12">
                             </div>
                           </div>
                           <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Maximum Cost<span class="required">*</span>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Maximum Cost<span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                              <input type="text" id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
+                              <input type="text" id="last-name" name="{{create_move_task_form.maximum_cost.html_name}}" required="required" class="form-control col-md-7 col-xs-12">
                             </div>
                           </div>
 
-                        </form>
                       </div>
                       <div id="step-3">
-                        <form class="form-horizontal form-label-left">
+
                           <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Type of Area</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <select class="form-control">
-                            <option>City</option>
-                            <option>Urban</option>
-                            <option>Suburban</option>
-                            <option>Rural</option>
+                          <select class="form-control" required name="{{create_move_task_form.type_of_area.html_name}}">
+                            <option disabled selected value> -- select an option -- </option>
+                            <option value="CITY">City</option>
+                            <option value="URBAN">Urban</option>
+                            <option value="SUBURBAN">Suburban</option>
+                            <option value="RURAL">Rural</option>
                           </select>
                         </div>
                       </div>
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Handicap Friendly</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <div id="gender" class="btn-group" data-toggle="buttons">
+                          <div class="btn-group" data-toggle="buttons">
                             <label class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-                              <input type="radio" name="gender" value="male"> &nbsp; Yes &nbsp;
+                              <input type="radio" name="{{create_move_task_form.handicap_friendly.html_name}}" value="Y"> &nbsp; Yes &nbsp;
                             </label>
                             <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-                              <input type="radio" name="gender" value="female"> No
+                              <input type="radio" name="{{create_move_task_form.handicap_friendly.html_name}}" value="N"> No
                             </label>
                           </div>
                         </div>
@@ -167,23 +180,21 @@
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Furnished</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <div id="gender" class="btn-group" data-toggle="buttons">
+                          <div class="btn-group" data-toggle="buttons">
                             <label class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-                              <input type="radio" name="gender" value="male"> &nbsp; Yes &nbsp;
+                              <input type="radio" name="{{create_move_task_form.furnished.html_name}}" value="Y"> &nbsp; Yes &nbsp;
                             </label>
                             <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-                              <input type="radio" name="gender" value="female"> No
+                              <input type="radio" name="{{create_move_task_form.furnished.html_name}}" value="N"> No
                             </label>
                           </div>
                         </div>
                       </div>
-
-                      </form>
                     </div>
 
-                    <div id="step-4">
+                    <!--<div id="step-4">
 
-                      <form class="form-horizontal form-label-left">
+
 
                           <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Current Address<span class="required">*</span>
@@ -224,9 +235,6 @@
                             </div>
                           </div>
 
-                        </form>
-
-                        <form class="form-horizontal form-label-left">
 
                           <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Minimum Cost<span class="required">*</span>
@@ -243,9 +251,7 @@
                             </div>
                           </div>
 
-                        </form>
 
-                        <form class="form-horizontal form-label-left">
                           <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Type of Area</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -286,21 +292,9 @@
                         </div>
                       </div>
 
-
-
-                      </form>
-
-                      <form action="move_management_tables.html">
-                        <div class="form-group">
-                          <div class="col-md-9 col-sm-9 col-xs-12">
-                            <button type="submit" class="btn btn-success">Find Move Managers</button>
-                          </div>
-                        </div>
-                      </form>
-
+                    </div>-->
                     </div>
-
-                    </div>
+                  </form>
                     <!-- End SmartWizard Content -->
                   </div>
                 </div>
@@ -327,13 +321,14 @@
         $('.buttonNext').addClass('btn btn-success');
         $('.buttonPrevious').addClass('btn btn-primary');
         $('.buttonFinish').addClass('btn btn-default');
+        $('.buttonFinish').attr("type", "submit");
       });
     </script>
     <!-- /jQuery Smart Wizard -->
 
-    <script>
-      document.getElementById("buttonFinish").onclick = function() {
-        location.href = "move_management_tables.html";
+    <!--<script>
+      document.getElementById("buttonFinish").onclick = function({
+        this.submit();
       });
-    </script>
+    </script>-->
 {% endblock %}

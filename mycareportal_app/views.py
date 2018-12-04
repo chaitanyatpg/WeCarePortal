@@ -751,7 +751,7 @@ class HomeDashboard(LoginRequiredMixin, View):
         all_clients = Client.objects.filter(company=current_company).order_by('last_name')
         home_mod_categories = AssessmentCategories.objects.all()
         existing_home_mod_tasks = HomeModificationTask.objects.filter(company=current_company).order_by('-created')
-
+        existing_move_manage_tasks = MoveManageTask.objects.filter(company=current_company).order_by('-created')
         tzname = current_company.time_zone
         timezone.activate(pytz.timezone(tzname))
 
@@ -759,6 +759,7 @@ class HomeDashboard(LoginRequiredMixin, View):
         context['home_mod_categories'] = home_mod_categories
         context['create_task_form'] = CreateHomeModTaskForm()
         context['existing_home_mod_tasks'] = existing_home_mod_tasks
+        context['existing_move_manage_tasks'] = existing_move_manage_tasks
         return render(request, "production/view_alerts.html", context)
 
     @transaction.atomic

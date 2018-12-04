@@ -208,6 +208,80 @@ class EditMoveManager(LoginRequiredMixin, View):
         output_string = "{0}/{1}/{2}".format(output_month,output_day,output_year)
         return output_string
 
+class MoveManageWizard(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {}
+        current_company = request.user.company
+        all_clients = Client.objects.filter(company=current_company).order_by('last_name')
+        context['all_clients'] = all_clients
+        context['create_move_task_form'] = CreateMoveTaskForm()
+        return render(request, "production/move_management_wizard.html", context)
+
+    def post(self, request):
+        context = {}
+        current_company = request.user.company
+        create_move_task_form = CreateMoveTaskForm(request.POST)
+        if create_move_task_form.is_valid():
+            client_uid = create_move_task_form.cleaned_data['client_uid']
+            new_address_max_distance = create_move_task_form.cleaned_data['new_address_max_distance']
+            type_of_home = create_move_task_form.cleaned_data['type_of_home']
+            provides_assistance = create_move_task_form.cleaned_data['provides_assistance']
+            minimum_cost = create_move_task_form.cleaned_data['minimum_cost']
+            maximum_cost = create_move_task_form.cleaned_data['maximum_cost']
+            type_of_area = create_move_task_form.cleaned_data['type_of_area']
+            handicap_friendly = create_move_task_form.cleaned_data['handicap_friendly']
+            furnished = create_move_task_form.cleaned_data['furnished']
+
+            client = Client.objects.get(company=current_company, uid = client_uid)
+            print(client)
+
+            move_task = MoveManageTask(company=current_company,
+                                        client=client,
+                                        address=client.address,
+                                        city=client.city,
+                                        state=client.state,
+                                        zip_code=client.zip_code,
+                                        new_address_max_distance=new_address_max_distance,
+                                        type_of_home=type_of_home,
+                                        provides_assistance=provides_assistance,
+                                        minimum_cost=minimum_cost,
+                                        maximum_cost=maximum_cost,
+                                        type_of_area=type_of_area,
+                                        handicap_friendly=handicap_friendly,
+                                        furnished=furnished)
+            move_task.save()
+            messages.success(request, "Created relocation task")
+        else:
+            print(create_move_task_form.errors)
+            messages.error(request, "Error creating relocation task")
+        return redirect('home_dashboard')
+
+class ChooseMoveContractorForTask(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        current_company = request.user.company
+        task_id = self.kwargs['task_id']
+        task = MoveManageTask.objects.get(company=current_company, uid=task_id)
+        all_move_managers = MoveManager.objects.filter(company=current_company).order_by('last_name')
+
+        context['all_move_managers'] = all_move_managers
+        context['task_id'] = task_id
+        context['task'] = task
+        return render(request, "production/move_management_tables.html", context)
+
+    def post(self, request, *args, **kwargs):
+        context = {}
+        current_company = request.user.company
+        task_id = self.kwargs['task_id']
+        move_manager_id = self.kwargs['manager_id']
+        task = MoveManageTask.objects.get(company=current_company, uid=task_id)
+        move_manager = MoveManager.objects.get(company=current_company, uid=move_manager_id)
+        task.chosen_manager.add(move_manager)
+        task.save()
+        return redirect('choose_move_contractor', task_id=task_id)
+
 @login_required
 def get_move_manager_with_email(request):
     if request.method == 'GET':

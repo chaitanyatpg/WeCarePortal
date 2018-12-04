@@ -680,3 +680,55 @@ class HomeModProjectStatusLog(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     home_mod_project = models.ForeignKey(HomeModProject)
     status = models.CharField(STATUS_CHOICES, max_length = 10)
+
+class MoveManageTask(models.Model):
+
+    type_house = "HOUSE"
+    type_townhouse = "TOWNHOUSE"
+    type_apartment = "APARTMENT"
+    type_senior_facility = "SENIORFACILITY"
+
+    HOME_TYPE_CHOICES = (
+    (type_house, "House"),
+    (type_townhouse, "Townhouse"),
+    (type_apartment, "Apartment"),
+    (type_senior_facility, "Senior Facility")
+    )
+
+    type_city = "CITY"
+    type_urban = "URBAN"
+    type_suburban = "SUBURBAN"
+    type_rural = "RURAL"
+
+    AREA_TYPE_CHOICES = (
+    (type_city, "City"),
+    (type_urban, "Urban"),
+    (type_suburban, "Suburban"),
+    (type_rural, "Rural")
+    )
+
+    company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    created = models.DateTimeField(auto_now_add=True)
+    client = models.ForeignKey(Client)
+    address = models.CharField(max_length=400)
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=2)
+    zip_code = models.CharField(max_length=10)
+    new_address_max_distance = models.IntegerField()
+    type_of_home = models.CharField(HOME_TYPE_CHOICES, max_length=20)
+    provides_assistance = models.BooleanField()
+    minimum_cost = models.IntegerField()
+    maximum_cost = models.IntegerField()
+    type_of_area = models.CharField(AREA_TYPE_CHOICES, max_length = 40)
+    handicap_friendly = models.BooleanField()
+    furnished = models.BooleanField()
+
+    chosen_manager = models.ManyToManyField(MoveManager, blank=True)
+    assigned_manager = models.ForeignKey(MoveManager, related_name="assigned_manager", null=True)
+    start_date = models.DateField(null=True)
+    end_date = models.DateField(null=True)
+    cost = models.IntegerField(null=True)
+
+    #bid = models.ForeignKey(HomeModTaskBid, null=true)
+    #chosen_bid = models.OneToOneField('HomeModTaskBid', null=True)

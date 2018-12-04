@@ -16,16 +16,14 @@
 
             <div class="clearfix"></div>
             {{block.super}}
-            <!--
+
             <div class="row">
               <div class="col-md-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Relocation<small></small></h2>
+                    <h2>Move Management<small></small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                      </li>
-                      <li><a class="close-link"><i class="fa fa-close"></i></a>
                       </li>
                     </ul>
                     <div class="clearfix"></div>
@@ -41,14 +39,12 @@
                       </div>
                       <label></label>
                       <br />
-                      <form action="move_management_wizard.html" style="float: left">
-                        <button type="submit" class="btn btn-success">Start Relocation</button>
-                      </form>
-                      <button type="button" class="btn btn-danger">Ignore</button>
+                        <a href="{% url 'move_manage_wizard' %}" class="btn btn-success">Start Relocation</a>
+                      <!--<button type="button" class="btn btn-danger">Ignore</button>-->
                     </div>
                   </div>
                 </div>
-              </div>-->
+              </div>
 
 
 
@@ -164,12 +160,58 @@
                 </div>
               </div>
 
+            {% for task in existing_move_manage_tasks %}
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Move Management - {{task.client.first_name}} {{task.client.last_name}}</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <div class="col-md-12 col-lg-12 col-sm-12">
+                      <h5>Client: {{task.client.first_name|addstr_space:task.client.last_name}}</h5>
+                      <h5>Date Created: {{task.created}} </h5>
+                      <h5>Address: {{task.address}}</h5>
+                      <h5>City: {{task.city}} </h5>
+                      <h5>State: {{task.state}} </h5>
+                      <h5>Zip Code: {{task.zip_code}} </h5>
+                      <h5>New address maximum distance: {{task.new_address_max_distance}} </h5>
+                      <h5>Type of home: {{ task.type_of_home }} </h5>
+                      <h5>Provides Assistance: {{ task.provides_assistance }} </h5>
+                      <h5>Minimum Cost: {{task.minimum_cost}} </h5>
+                      <h5>Maximum Cost: {{task.maximum_cost}} </h5>
+                      <h5>Type of area: {{task.type_of_area}} </h5>
+                      <h5>Handicap Friendly: {{task.handicap_friendly}} </h5>
+                      <h5>Furnished: {{task.furnished}} </h5>
+                      <div class="clearfix"></div>
+
+                      <div class="form-group">
+                        <form action="{% url 'choose_move_contractor' task_id=task.uid %}" style="float: left;">
+                          <button type="submit" class="btn btn-success">Choose Contractor</button>
+                        </form>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {% endfor %}
+
             {% for task in existing_home_mod_tasks %}
             <div class="row">
               <div class="col-md-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>{{task.task_name}}</h2>
+                    <h2>Home Modification - {{task.task_name}}</h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>

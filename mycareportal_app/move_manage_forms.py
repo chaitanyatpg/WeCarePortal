@@ -82,6 +82,43 @@ class FindMoveManagerForm(forms.Form):
         cleaned_data = super(FindMoveManagerForm, self).clean()
         return cleaned_data
 
+class CreateMoveTaskForm(forms.Form):
+
+    type_house = "HOUSE"
+    type_townhouse = "TOWNHOUSE"
+    type_apartment = "APARTMENT"
+    type_senior_facility = "SENIORFACILITY"
+
+    HOME_TYPE_CHOICES = (
+    (type_house, "House"),
+    (type_townhouse, "Townhouse"),
+    (type_apartment, "Apartment"),
+    (type_senior_facility, "Senior Facility")
+    )
+
+    type_city = "CITY"
+    type_urban = "URBAN"
+    type_suburban = "SUBURBAN"
+    type_rural = "RURAL"
+
+    AREA_TYPE_CHOICES = (
+    (type_city, "City"),
+    (type_urban, "Urban"),
+    (type_suburban, "Suburban"),
+    (type_rural, "Rural")
+    )
+
+    client_uid = forms.UUIDField(required=True)
+    new_address_max_distance = forms.IntegerField(required=True)
+    type_of_home = forms.ChoiceField(HOME_TYPE_CHOICES,required=True)
+    provides_assistance = forms.BooleanField(required=True)
+    minimum_cost = forms.IntegerField(required=True)
+    maximum_cost = forms.IntegerField(required=True)
+    type_of_area = forms.ChoiceField(AREA_TYPE_CHOICES,required=True)
+    handicap_friendly = forms.BooleanField(required=True)
+    furnished = forms.BooleanField(required=True)
+
+
 class BidForm(forms.Form):
 
     #contractor_uid = forms.UUIDField(required=true)

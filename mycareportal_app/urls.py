@@ -150,6 +150,9 @@ urlpatterns = [
     url(r'^move_management/add_move_manager', move_manage_views.AddMoveManager.as_view(), name='add_move_manager'),
     url(r'^move_management/edit_choose_move_manager',move_manage_views.EditChooseMoveManager.as_view(),name='edit_choose_move_manager'),
     url(r'^move_management/get_move_manager_email', move_manage_views.get_move_manager_with_email,name='get_move_manager_with_email'),
-    url(r'^move_management/edit_move_manager', move_manage_views.EditMoveManager.as_view(),name='edit_move_manager')
+    url(r'^move_management/edit_move_manager', move_manage_views.EditMoveManager.as_view(),name='edit_move_manager'),
+    url(r'^move_management/move_manage_wizard', move_manage_views.MoveManageWizard.as_view(),name='move_manage_wizard'),
+    url(r'^move_management/choose_move_contractor/(?P<task_id>[0-9a-f-]+)/$', move_manage_views.ChooseMoveContractorForTask.as_view(), name='choose_move_contractor'),
+    url(r'^move_management/choose_move_contractor/(?P<task_id>[0-9a-f-]+)/(?P<manager_id>[0-9a-f-]+)/$', move_manage_views.ChooseMoveContractorForTask.as_view(), name='choose_move_contractor')
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
