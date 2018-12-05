@@ -118,6 +118,11 @@ class CreateMoveTaskForm(forms.Form):
     handicap_friendly = forms.BooleanField(required=True)
     furnished = forms.BooleanField(required=True)
 
+class AddMoveInventoryForm(forms.Form):
+
+    move_task_uid = forms.UUIDField(required=True)
+    item = forms.CharField(max_length=50,required=True)
+    item_quantity = forms.IntegerField()
 
 class BidForm(forms.Form):
 

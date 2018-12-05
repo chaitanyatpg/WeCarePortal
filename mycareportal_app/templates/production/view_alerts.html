@@ -196,7 +196,9 @@
                         <form action="{% url 'choose_move_contractor' task_id=task.uid %}" style="float: left;">
                           <button type="submit" class="btn btn-success">Choose Contractor</button>
                         </form>
-
+                        <form action="{% url 'move_inventory' task_id=task.uid %}" style="float: left;">
+                          <button type="submit" class="btn btn-info">Inventory</button>
+                        </form>
                       </div>
                     </div>
                   </div>

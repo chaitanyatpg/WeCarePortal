@@ -282,6 +282,39 @@ class ChooseMoveContractorForTask(LoginRequiredMixin, View):
         task.save()
         return redirect('choose_move_contractor', task_id=task_id)
 
+class MoveInventory(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        current_company = request.user.company
+        task_id = self.kwargs['task_id']
+        task = MoveManageTask.objects.get(company=current_company, uid=task_id)
+        inventory = MoveManageTaskInventory.objects.filter(company=current_company,move_manage_task=task)
+        context['inventory'] = inventory
+        context['move_task'] = task
+        context['add_move_inventory_form'] = AddMoveInventoryForm()
+        return render(request, "production/move_inventory.html", context)
+
+    def post(self, request):
+        context = {}
+        current_company = request.user.company
+        add_move_inventory_form = AddMoveInventoryForm(request.POST)
+        move_task_uid = request.POST['move_task_uid']
+        if add_move_inventory_form.is_valid():
+            item = add_move_inventory_form.cleaned_data['item']
+            item_quantity = add_move_inventory_form.cleaned_data['item_quantity']
+            move_task_uid = add_move_inventory_form.cleaned_data['move_task_uid']
+            move_task = MoveManageTask.objects.get(company=current_company, uid=move_task_uid)
+            inventory = MoveManageTaskInventory(company=current_company,
+                                                move_manage_task=move_task,
+                                                item=item,
+                                                item_quantity=item_quantity)
+            inventory.save()
+            messages.success(request, "Added item {0} to inventory".format(item))
+        else:
+            messages.error(request, "Error adding item to inventory")
+        return redirect("move_inventory", task_id=move_task_uid)
+
 @login_required
 def get_move_manager_with_email(request):
     if request.method == 'GET':
