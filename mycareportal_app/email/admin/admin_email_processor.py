@@ -15,7 +15,7 @@ class AdminEmailProcessor(EmailProcessor):
         message = render_to_string('notify_company_sign_up.html', {
                 'user': user
         })
-        to_list = ['dhruv.ranjan@gmail.com','dranjan@wecareportal.com','lewald@wecareportal.com']
+        to_list = ['dhruv.ranjan@gmail.com','dranjan@wecareportal.com']
         email = EmailMessage(
                     mail_subject, message, self.sender_email,to=to_list
         )
