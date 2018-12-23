@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from PIL import Image
 import uuid
+import shortuuid
 # Create your models here.
 
 class Company(models.Model):
@@ -741,3 +742,9 @@ class MoveManageTaskInventory(models.Model):
     move_manage_task = models.ForeignKey(MoveManageTask)
     item = models.CharField(max_length=100)
     item_quantity = models.IntegerField()
+
+class ActivationCode(models.Model):
+
+    created = models.DateTimeField(auto_now_add=True)
+    activation_code = models.CharField(unique=True, max_length = 22, default=shortuuid.uuid, editable=False)
+    activated = models.BooleanField(default=False)

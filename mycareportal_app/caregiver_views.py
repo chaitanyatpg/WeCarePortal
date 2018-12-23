@@ -63,6 +63,9 @@ class AddCaregiver(LoginRequiredMixin, View):
             #Create caregiver user auth model and save
             try:
                 with transaction.atomic():
+                    #if User.objects.filter(username=email, email=email).exists():
+                    #    new_user = User.Objects.get(username=email)
+                    #else:
                     new_user = User.objects.create_user(username=email,
                                                         email=email,
                                                         first_name=first_name,

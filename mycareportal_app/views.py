@@ -115,9 +115,23 @@ def register(request):
         username = form.cleaned_data['email']
         email = form.cleaned_data['email']
         password = form.cleaned_data['password']
+        activation_code = form.cleaned_data['activation_code']
         exception_flag = False
+        #Check Activation code
+        if ActivationCode.objects.filter(activation_code = activation_code).exists():
+            activation_flag = True
+        else:
+            activation_flag = False
+
+        if not activation_flag:
+            messages.error(request, "Invalid Activation Code. Please enter a valid activation code.")
+            return render(request, 'production/wecare_register.html', context)
+
         #Create company object and save
         with transaction.atomic():
+            activation_code_data = ActivationCode.objects.get(activation_code=activation_code)
+            activation_code_data.activated = True
+            activation_code_data.save()
             try:
                 new_company = Company(company_name=company_name,
                                             contact_number=contact_number,
