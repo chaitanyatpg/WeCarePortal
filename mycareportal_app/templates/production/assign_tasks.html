@@ -71,7 +71,7 @@
                           <select required id="master_dropdown" class="select2_single" tabindex="-1" name="{{assign_task_form.task.html_name}}">
                             <option value="" selected></option>
                             {% for task in all_tasks %}
-                            <option value="{{ task.activity_task }}">{{task.activity_task}}</option>
+                            <option value="{{ task.activity_task }}">{{task.activity_category_code}} - {{task.activity_task}}</option>
                             {% endfor %}
                           </select>
                         </div>
