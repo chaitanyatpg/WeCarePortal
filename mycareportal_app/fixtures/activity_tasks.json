@@ -268,5 +268,419 @@
 			"activity_task": "Avoiding Scams",
 			"task_code": "IADL007FAV"
 		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 31,
+		"fields": {
+			"activity_category_code": "AUT001ABA",
+			"activity_task": "Perform Routine ABA",
+			"task_code": "AUT001ABAPR"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 32,
+		"fields": {
+			"activity_category_code": "AUT001ABA",
+			"activity_task": "Review ABA With Specialist",
+			"task_code": "AUT001ABARS"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 33,
+		"fields": {
+			"activity_category_code": "AUT001CBT",
+			"activity_task": "Perform Routine CBT",
+			"task_code": "AUT001CBTPR"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 34,
+		"fields": {
+			"activity_category_code": "AUT001CBT",
+			"activity_task": "Review CBT With Specialist",
+			"task_code": "AUT001CBTRS"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 35,
+		"fields": {
+			"activity_category_code": "AUT001CBT",
+			"activity_task": "Positive Activity",
+			"task_code": "AUT001CBTPA"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 36,
+		"fields": {
+			"activity_category_code": "AUT001ST",
+			"activity_task": "Perform Speech Therapy",
+			"task_code": "AUT001STPST"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 37,
+		"fields": {
+			"activity_category_code": "AUT001ST",
+			"activity_task": "Language Intervention Activity",
+			"task_code": "AUT001STLIA"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 38,
+		"fields": {
+			"activity_category_code": "AUT001ST",
+			"activity_task": "Articulation Therapy",
+			"task_code": "AUT001ST"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 39,
+		"fields": {
+			"activity_category_code": "AUT001ST",
+			"activity_task": "Feeding and Swallowing Therapy",
+			"task_code": "AUT001ST"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 40,
+		"fields": {
+			"activity_category_code": "AUT001OT",
+			"activity_task": "Play Therapy",
+			"task_code": "AUT001OTPT"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 41,
+		"fields": {
+			"activity_category_code": "AUT001OT",
+			"activity_task": "Daily Living Skills Activity",
+			"task_code": "AUT001OTDLSA"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 42,
+		"fields": {
+			"activity_category_code": "AUT001OT",
+			"activity_task": "Fine Motor Skills Activity",
+			"task_code": "AUT001OTFMSA"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 43,
+		"fields": {
+			"activity_category_code": "AUT001OT",
+			"activity_task": "Gross Motor Skills Activity",
+			"task_code": "AUT001OTGMSA"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 44,
+		"fields": {
+			"activity_category_code": "AUT001OT",
+			"activity_task": "Visual Skill Activity",
+			"task_code": "AUT001OTVSA"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 45,
+		"fields": {
+			"activity_category_code": "AUT001SIT",
+			"activity_task": "Sensory Integration Therapy",
+			"task_code": "AUT001SITSIT"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 46,
+		"fields": {
+			"activity_category_code": "AUT001SSC",
+			"activity_task": "Social Behavior Activity",
+			"task_code": "AUT001SSCSBA"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 47,
+		"fields": {
+			"activity_category_code": "AUT001TD",
+			"activity_task": "Dog Play Time",
+			"task_code": "AUT001TDDPT"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 48,
+		"fields": {
+			"activity_category_code": "AUT001HBRT",
+			"activity_task": "Horse Back Riding Activity",
+			"task_code": "AUT001HBRTHBRA"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 49,
+		"fields": {
+			"activity_category_code": "DIA001MP",
+			"activity_task": "Monitor or Perform Blood Sugar Test",
+			"task_code": "DIA001MPMPBST"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 50,
+		"fields": {
+			"activity_category_code": "DIA001MP",
+			"activity_task": "Monitor or Perform Fasting Plasma Glucose",
+			"task_code": "DIA001MPMPFPG"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 51,
+		"fields": {
+			"activity_category_code": "DIA001MP",
+			"activity_task": "Monitor or Perform A1C Test",
+			"task_code": "DIA001MPMPAT"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 52,
+		"fields": {
+			"activity_category_code": "DIA001MP",
+			"activity_task": "Foot and Skin Review Task",
+			"task_code": "DIA001MPFSTY"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 53,
+		"fields": {
+			"activity_category_code": "DIA001MP",
+			"activity_task": "Eye Care Review Task",
+			"task_code": "DIA001MPECRT"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 54,
+		"fields": {
+			"activity_category_code": "DIA001EP",
+			"activity_task": "Brisk Walking Tasks",
+			"task_code": "DIA001EPBWT"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 55,
+		"fields": {
+			"activity_category_code": "DIA001EP",
+			"activity_task": "Biking Task",
+			"task_code": "DIA001EPBT"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 56,
+		"fields": {
+			"activity_category_code": "DIA001EP",
+			"activity_task": "Weight Training Task",
+			"task_code": "DIA001EPWTT"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 57,
+		"fields": {
+			"activity_category_code": "DIA001EP",
+			"activity_task": "Daily 30 Minutes Physical Activity",
+			"task_code": "DIA001EPDMPA"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 58,
+		"fields": {
+			"activity_category_code": "DIA001DP",
+			"activity_task": "Prepare or Order Low GI Diet",
+			"task_code": "DIA001DPPOLGD"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 59,
+		"fields": {
+			"activity_category_code": "DIA001DP",
+			"activity_task": "Prepare or Order High Fiber Diet Preparation",
+			"task_code": "DIA001DPPOHFDP"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 60,
+		"fields": {
+			"activity_category_code": "DIA001DP",
+			"activity_task": "Create Portion for Food Consumption",
+			"task_code": "DIA001DPCPFC"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 61,
+		"fields": {
+			"activity_category_code": "DEM001TM",
+			"activity_task": "Schedule Music Therapy",
+			"task_code": "DEM001TMSMT"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 62,
+		"fields": {
+			"activity_category_code": "DEM001TM",
+			"activity_task": "Schedule Pet Therapy",
+			"task_code": "DEM001TMSPT"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 63,
+		"fields": {
+			"activity_category_code": "DEM001TM",
+			"activity_task": "Schedule Aromatherapy",
+			"task_code": "DEM001TMSA"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 64,
+		"fields": {
+			"activity_category_code": "DEM001TM",
+			"activity_task": "Schedule Massage Therapy",
+			"task_code": "DEM001TMSMT"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 65,
+		"fields": {
+			"activity_category_code": "DEM001TM",
+			"activity_task": "Schedule Art Therapy",
+			"task_code": "DEM001TMSAT"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 66,
+		"fields": {
+			"activity_category_code": "DEM001CM",
+			"activity_task": "Enhanced Communication Therapy",
+			"task_code": "DEM001CMECT"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 67,
+		"fields": {
+			"activity_category_code": "DEM001PAM",
+			"activity_task": "Brisk Walking Task",
+			"task_code": "DEM001PAMBWT"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 68,
+		"fields": {
+			"activity_category_code": "DEM001PAM",
+			"activity_task": "Biking Task",
+			"task_code": "DEM001PAMBT"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 69,
+		"fields": {
+			"activity_category_code": "DEM001PAM",
+			"activity_task": "Weight Training Task",
+			"task_code": "DEM001PAMWTT"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 70,
+		"fields": {
+			"activity_category_code": "DEM001PAM",
+			"activity_task": "Daily Physical Activity",
+			"task_code": "DEM001PAMDPA"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 71,
+		"fields": {
+			"activity_category_code": "DEM001DM",
+			"activity_task": "Monitor Time Duration on any Activity",
+			"task_code": "DEM001DMMTDA"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 72,
+		"fields": {
+			"activity_category_code": "DEM001DIM",
+			"activity_task": "Simple Table Setup for Food",
+			"task_code": "DEM001DIMSTSF"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 73,
+		"fields": {
+			"activity_category_code": "DEM001DIM",
+			"activity_task": "Monitor and Manage Temperature of Food",
+			"task_code": "DEM001DIMMMTF"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 74,
+		"fields": {
+			"activity_category_code": "DEM001DIM",
+			"activity_task": "Prepare or Order Organic Meal",
+			"task_code": "DEM001DIMPOOM"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 75,
+		"fields": {
+			"activity_category_code": "DEM001DIM",
+			"activity_task": "Prepare or Order Low Sodium and Low Sugar Food",
+			"task_code": "DEM001DIMPMLSLSF"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 76,
+		"fields": {
+			"activity_category_code": "DEM001CAM",
+			"activity_task": "Review Daily Calendar Update",
+			"task_code": "DEM001CAMRDCU"
+		}
 	}
 ]

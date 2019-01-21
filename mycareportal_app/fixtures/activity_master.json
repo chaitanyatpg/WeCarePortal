@@ -22,5 +22,29 @@
 			"activity_code": "MISC001",
 			"activity_description": "Miscellaneous Tasks"
 		}
+	},
+	{
+		"model": "mycareportal_app.activitymaster",
+		"pk": 4,
+		"fields": {
+			"activity_code": "AUT001",
+			"activity_description": "Autism Template"
+		}
+	},
+	{
+		"model": "mycareportal_app.activitymaster",
+		"pk": 5,
+		"fields": {
+			"activity_code": "DIA001",
+			"activity_description": "Diabetes Template"
+		}
+	},
+	{
+		"model": "mycareportal_app.activitymaster",
+		"pk": 6,
+		"fields": {
+			"activity_code": "DEM001",
+			"activity_description": "Dementia Template"
+		}
 	}
 ]

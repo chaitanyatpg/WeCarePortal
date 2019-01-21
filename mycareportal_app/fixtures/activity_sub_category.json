@@ -223,5 +223,158 @@
 			"activity_category_code": "MISC0000",
       "activity_category": "Miscellaneous"
 		}
+	},
+	{
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 26,
+		"fields": {
+			"activity_code": "AUT001",
+			"activity_category_code": "AUT001ABA",
+      "activity_category": "Applied Behavior Analysis"
+		}
+	},
+	{
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 27,
+		"fields": {
+			"activity_code": "AUT001",
+			"activity_category_code": "AUT001CBT",
+      "activity_category": "Cognitive Behavior Therapy"
+		}
+	},
+	{
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 28,
+		"fields": {
+			"activity_code": "AUT001",
+			"activity_category_code": "AUT001ST",
+      "activity_category": "Speech Therapy"
+		}
+	},
+	{
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 29,
+		"fields": {
+			"activity_code": "AUT001",
+			"activity_category_code": "AUT001OT",
+      "activity_category": "Occupational Therapy"
+		}
+	},
+	{
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 30,
+		"fields": {
+			"activity_code": "AUT001",
+			"activity_category_code": "AUT001SIT",
+      "activity_category": "Sensory Integration Therapy"
+		}
+	},
+	{
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 31,
+		"fields": {
+			"activity_code": "AUT001",
+			"activity_category_code": "AUT001SSC",
+      "activity_category": "Social Skills Classes"
+		}
+	},
+	{
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 32,
+		"fields": {
+			"activity_code": "AUT001",
+			"activity_category_code": "AUT001TD",
+      "activity_category": "Therapy Dog"
+		}
+	},
+	{
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 33,
+		"fields": {
+			"activity_code": "AUT001",
+			"activity_category_code": "AUT001HBRT",
+      "activity_category": "Horse Back Riding Therapy"
+		}
+	},
+	{
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 34,
+		"fields": {
+			"activity_code": "DIA001",
+			"activity_category_code": "DIA001MP",
+      "activity_category": "Monitoring Plan"
+		}
+	},
+	{
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 35,
+		"fields": {
+			"activity_code": "DIA001",
+			"activity_category_code": "DIA001EP",
+      "activity_category": "Exercise Plan"
+		}
+	},
+	{
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 36,
+		"fields": {
+			"activity_code": "DIA001",
+			"activity_category_code": "DIA001DP",
+      "activity_category": "Diet Plan"
+		}
+	},
+	{
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 37,
+		"fields": {
+			"activity_code": "DEM001",
+			"activity_category_code": "DEM001TM",
+      "activity_category": "Therapy Management"
+		}
+	},
+	{
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 38,
+		"fields": {
+			"activity_code": "DEM001",
+			"activity_category_code": "DEM001CM",
+      "activity_category": "Communication Management"
+		}
+	},
+	{
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 39,
+		"fields": {
+			"activity_code": "DEM001",
+			"activity_category_code": "DEM001PAM",
+      "activity_category": "Physical Activity Management"
+		}
+	},
+	{
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 40,
+		"fields": {
+			"activity_code": "DEM001",
+			"activity_category_code": "DEM001DM",
+      "activity_category": "Distractions Management"
+		}
+	},
+	{
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 41,
+		"fields": {
+			"activity_code": "DEM001",
+			"activity_category_code": "DEM001DIM",
+      "activity_category": "Diet Management"
+		}
+	},
+	{
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 42,
+		"fields": {
+			"activity_code": "DEM001",
+			"activity_category_code": "DEM001CAM",
+      "activity_category": "Calendar Management"
+		}
 	}
 ]

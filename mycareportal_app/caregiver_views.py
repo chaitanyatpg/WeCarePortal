@@ -5,6 +5,7 @@ from django.core import serializers
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from mycareportal_app.models import *
+from mycareportal_app.models import User as User
 from mycareportal_app.caregiver_forms import *
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
@@ -63,17 +64,19 @@ class AddCaregiver(LoginRequiredMixin, View):
             #Create caregiver user auth model and save
             try:
                 with transaction.atomic():
-                    #if User.objects.filter(username=email, email=email).exists():
-                    #    new_user = User.Objects.get(username=email)
-                    #else:
-                    new_user = User.objects.create_user(username=email,
-                                                        email=email,
-                                                        first_name=first_name,
-                                                        last_name=last_name,
-                                                        company=company)
-                    new_user.is_active = False
-                    new_user.set_unusable_password()
-                    new_user.save()
+                    existing_user_flag = False
+                    if User.objects.filter(username=email, email=email).exists():
+                        new_user = User.objects.get(username=email)
+                        existing_user_flag = True
+                    else:
+                        new_user = User.objects.create_user(username=email,
+                                                            email=email,
+                                                            first_name=first_name,
+                                                            last_name=last_name,
+                                                            company=company)
+                        new_user.is_active = False
+                        new_user.set_unusable_password()
+                        new_user.save()
                     #Create caregiver object and save
                     new_caregiver = Caregiver(user = new_user,
                                               first_name = first_name,
@@ -101,13 +104,17 @@ class AddCaregiver(LoginRequiredMixin, View):
                                             role='CAREGIVER')
                     new_role.save()
                     #Send verification email
-                    current_site = get_current_site(request)
-                    email_manager = CaregiverEmailProcessor()
-                    email_manager.send_verification_email(
-                    new_user, current_site.domain
-                    )
+                    if not existing_user_flag:
+                        current_site = get_current_site(request)
+                        email_manager = CaregiverEmailProcessor()
+                        email_manager.send_verification_email(
+                        new_user, current_site.domain
+                        )
                     #Add messages
-                    messages.success(request, "Caregiver {0} {1} successfully added!".format(first_name, last_name))
+                    if not existing_user_flag:
+                        messages.success(request, "Caregiver {0} {1} successfully added!".format(first_name, last_name))
+                    else:
+                        messages.success(request, "Caregiver role added to user {0} {1}".format(first_name, last_name))
                     return redirect('add_caregiver')
             except IntegrityError as e:
                 messages.error(request, "Caregiver has already been registered. Please enter a new email address.")
