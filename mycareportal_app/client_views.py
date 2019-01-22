@@ -858,6 +858,7 @@ class AssignTasks(LoginRequiredMixin, View):
         delta = relativedelta.relativedelta(months=1) #per Month
         uploaded_task_attachments = []
         while current_date <= end_date:
+            save_task = True
             new_date = current_date
             if day_filter:
                 if not(day_dict[new_date.weekday()]):
@@ -889,6 +890,7 @@ class AssignTasks(LoginRequiredMixin, View):
         delta = relativedelta.relativedelta(months=12) #per Year
         uploaded_task_attachments = []
         while current_date <= end_date:
+            save_task = True
             new_date = current_date
             if day_filter:
                 if not(day_dict[new_date.weekday()]):
