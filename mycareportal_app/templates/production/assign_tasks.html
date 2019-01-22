@@ -66,12 +66,25 @@
                     {% csrf_token %}
                     <div class="form-group">
                       <div class="row">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Activity Master<span class="required"></span> </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <select id="activity_master_dropdown" class="select2_single" tabindex="-1" name="activity_master_dropdown">
+                            <option value="" selected></option>
+                            {% for activity_master in activity_masters %}
+                            <option value="{{activity_master.activity_code}}">{{activity_master.activity_description}}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="row">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Task<span class="required">*</span> </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <select required id="master_dropdown" class="select2_single" tabindex="-1" name="{{assign_task_form.task.html_name}}">
                             <option value="" selected></option>
                             {% for task in all_tasks %}
-                            <option value="{{ task.activity_task }}">{{task.activity_category_code}} - {{task.activity_task}}</option>
+                            <option value="{{ task.activity_task }}">{{task.activity_category_name}} - {{task.activity_task}}</option>
                             {% endfor %}
                           </select>
                         </div>
@@ -687,6 +700,35 @@
     });
     </script>
 
+    <!--ajax for activity master dropdown-->
+    <script>
+    $(document).ready(function(){
+      $('#activity_master_dropdown').change(function(){
+        var master_code = $(this).val();
+        $.ajax({
+          type: "GET",
+          url: '{% url "get_tasks_from_master" %}',
+          data: { master_code: master_code},
+          dataType: "json",
+          contentType: "application/json",
+          success: function(task_data){
+            var $sub_dropdown = $("#master_dropdown");
+            $sub_dropdown.empty()
+            //console.log(task_data);
+            $.each(task_data, function(j, i){
+              $sub_dropdown.append($("<option></option>")
+                            .attr("value",i.activity_task)
+                            .text(i.activity_category_name + ' - ' + i.activity_task));
+            });
+          },
+          failure: function(task_data){
+            alert('error fetching client data');
+          }
+        });
+      });
+    });
+    </script>
+    <!-- end ajax for for activity master dropdown -->
     <!-- bootstrap-daterangepicker -->
     <script>
       $(document).ready(function() {

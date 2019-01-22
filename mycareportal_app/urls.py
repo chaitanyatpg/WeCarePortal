@@ -82,6 +82,7 @@ urlpatterns = [
     url(r'^get_assigned_clients_with_caregiver_with_id', caregiver_views.get_assigned_clients_with_caregiver_with_id,name='get_assigned_clients_with_caregiver_with_id'),
     url(r'^get_client_with_email', client_views.get_client_with_email,name='get_client_with_email'),
     url(r'^get_sub_categories', client_views.get_sub_categories,name='get_sub_categories'),
+    url(r'^get_tasks_from_master', client_views.get_tasks_from_master,name='get_tasks_from_master'),
     url(r'^assign_choose_client', client_views.AssignTasksChooseClient.as_view(),name='assign_choose_client'),
     url(r'^assign_tasks',client_views.AssignTasks.as_view(),name='assign_tasks'),
     url(r'^create_tasks', client_views.CreateTasks.as_view(),name='create_tasks'),

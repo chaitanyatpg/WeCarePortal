@@ -548,12 +548,21 @@ class AssignTasks(LoginRequiredMixin, View):
             #Get all default tasks and Company specific tasks
             existing_tasks = Tasks.objects.filter(company=current_company).order_by('activity_task')
             default_tasks = DefaultTasks.objects.all().order_by('activity_task')
+            activity_masters = ActivityMaster.objects.all().order_by('activity_description')
             all_tasks = []
             for i in existing_tasks:
                 all_tasks.append(i)
             for i in default_tasks:
                 all_tasks.append(i)
+            for task in all_tasks:
+                sub_category_name = ActivitySubCategory.objects.filter(activity_category_code=task.activity_category_code)
+                if sub_category_name:
+                    task.activity_category_name = sub_category_name[0].activity_category
+                else:
+                    task.activity_category_name = task.activity_category_code
+            all_tasks.sort(key=lambda x: x.activity_category_name)
             context["all_tasks"] = all_tasks
+            context["activity_masters"] = activity_masters
             #Populate client email
             client_email = find_client_form.cleaned_data['client_email']
             context["client_email"] = client_email
@@ -1731,6 +1740,37 @@ def get_sub_categories(request):
         sub_categories = ActivitySubCategory.objects.filter(activity_code=master_code)
         sub_categories = serializers.serialize('json',sub_categories)
         return HttpResponse(json.dumps(sub_categories), content_type="application/json")
+
+@login_required
+def get_tasks_from_master(request):
+    if request.method == 'GET':
+        context = {}
+        master_code = request.GET.get('master_code')
+        sub_categories = ActivitySubCategory.objects.filter(activity_code=master_code)
+        sub_categories_codes = [x.activity_category_code for x in sub_categories]
+        default_tasks = DefaultTasks.objects.filter(activity_category_code__in = sub_categories_codes)
+        existing_tasks = Tasks.objects.filter(company = request.user.company, activity_category_code__in = sub_categories_codes)
+        all_tasks = []
+        new_tasks = []
+        for i in existing_tasks:
+            all_tasks.append(i)
+        for i in default_tasks:
+            all_tasks.append(i)
+        for task in all_tasks:
+            sub_category_name = ActivitySubCategory.objects.get(activity_category_code=task.activity_category_code)
+            #print(sub_category_name.activity_category)
+            task.activity_category_name = sub_category_name.activity_category
+            new_task = {
+                "activity_task": task.activity_task,
+                "activity_category_name": task.activity_category_name
+            }
+            new_tasks.append(new_task)
+            #print(task.activity_category_name)
+        new_tasks.sort(key=lambda x: x["activity_category_name"])
+        #for i in all_tasks:
+        #    print(i.activity_category_name)
+        #all_tasks = serializers.serialize('json',all_tasks)
+        return HttpResponse(json.dumps(new_tasks), content_type="application/json")
 
 @login_required
 def find_caregiver(request):
