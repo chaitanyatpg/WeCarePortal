@@ -736,12 +736,28 @@ class MoveManageTask(models.Model):
 
 class MoveManageTaskInventory(models.Model):
 
+    type_home = "Home"
+    type_store = "Store"
+    type_charity = "Charity"
+    type_other = "Other"
+
+    DESTINATION_CHOICES = (
+    (type_home, "Home"),
+    (type_store, "Store"),
+    (type_charity, "Charity"),
+    (type_other, "Other")
+    )
+
     company = models.ForeignKey(Company)
     uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     created = models.DateTimeField(auto_now_add=True)
     move_manage_task = models.ForeignKey(MoveManageTask)
     item = models.CharField(max_length=100)
     item_quantity = models.IntegerField()
+    item_price = models.IntegerField(null=True)
+    item_sale_price = models.IntegerField(null=True)
+    item_destination = models.CharField(DESTINATION_CHOICES, max_length=10, blank=True)
+    item_sold = models.BooleanField(default=False)
 
 class ActivationCode(models.Model):
 

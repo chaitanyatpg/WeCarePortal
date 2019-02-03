@@ -123,6 +123,19 @@ class AddMoveInventoryForm(forms.Form):
     move_task_uid = forms.UUIDField(required=True)
     item = forms.CharField(max_length=50,required=True)
     item_quantity = forms.IntegerField()
+    item_price = forms.IntegerField(required=False)
+    #item_sales_price = forms.IntegerField(required=False)
+    item_destination = forms.CharField(max_length=20, required=False)
+
+class EditMoveInventoryForm(forms.Form):
+
+    inventory_uid = forms.UUIDField(required=True)
+    item = forms.CharField(max_length=50,required=True)
+    item_quantity = forms.IntegerField()
+    item_price = forms.IntegerField(required=False)
+    item_sale_price = forms.IntegerField(required=False)
+    item_destination = forms.CharField(max_length=20, required=False)
+    item_sold = forms.BooleanField(required=False)
 
 class BidForm(forms.Form):
 

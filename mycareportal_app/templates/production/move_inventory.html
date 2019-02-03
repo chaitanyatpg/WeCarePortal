@@ -57,9 +57,27 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Amount<span class="required">*</span> </label>
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Item Quantity<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         <input type="text" class="form-control col-md-7 col-xs-12" required="required" name={{add_move_inventory_form.item_quantity.html_name}}>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Price per unit</label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input type="text" class="form-control col-md-7 col-xs-12" name={{add_move_inventory_form.item_price.html_name}}>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Item Destination</label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <select class="form-control" name="{{add_move_inventory_form.item_destination.html_name}}">
+                        <option disabled selected value> -- select an option -- </option>
+                        <option value="Home">Home</option>
+                        <option value="Store">Store</option>
+                        <option value="Charity">Charity</option>
+                        <option value="Other">Other</option>
+                      </select>
                     </div>
                   </div>
                   <input type="hidden" name={{add_move_inventory_form.move_task_uid.html_name}} value="{{move_task.uid}}">
@@ -92,6 +110,11 @@
                   <tr>
                     <th>Item</th>
                     <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Destination</th>
+                    <th>Sale Price</th>
+                    <th>Sold</th>
+                    <th>Edit</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -99,6 +122,11 @@
                       <tr>
                         <td>{{item.item}}</td>
                         <td>{{item.item_quantity}}</td>
+                        <td>{{item.item_price|default_if_none:""}}</td>
+                        <td>{{item.item_destination}}</td>
+                        <td>{{item.item_sale_price|default_if_none:""}}</td>
+                        <td>{{item.item_sold|yesno:"Yes,No"}}</td>
+                        <td><a href="{% url 'edit_move_inventory' inventory_id=item.uid %}">Edit</a></td>
                       </tr>
                     {% endfor %}
                 </tbody>

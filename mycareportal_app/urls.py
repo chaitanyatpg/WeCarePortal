@@ -156,6 +156,9 @@ urlpatterns = [
     url(r'^move_management/choose_move_contractor/(?P<task_id>[0-9a-f-]+)/$', move_manage_views.ChooseMoveContractorForTask.as_view(), name='choose_move_contractor'),
     url(r'^move_management/choose_move_contractor/(?P<task_id>[0-9a-f-]+)/(?P<manager_id>[0-9a-f-]+)/$', move_manage_views.ChooseMoveContractorForTask.as_view(), name='choose_move_contractor'),
     url(r'^move_management/move_inventory/(?P<task_id>[0-9a-f-]+)/$', move_manage_views.MoveInventory.as_view(), name='move_inventory'),
-    url(r'^move_management/move_inventory', move_manage_views.MoveInventory.as_view(), name='move_inventory')
+    url(r'^move_management/move_inventory', move_manage_views.MoveInventory.as_view(), name='move_inventory'),
+    url(r'^move_management/edit_move_inventory/(?P<inventory_id>[0-9a-f-]+)/$', move_manage_views.EditMoveInventory.as_view(), name='edit_move_inventory'),
+    url(r'^move_management/edit_move_inventory', move_manage_views.EditMoveInventory.as_view(), name='edit_move_inventory')
+
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -303,17 +303,67 @@ class MoveInventory(LoginRequiredMixin, View):
         if add_move_inventory_form.is_valid():
             item = add_move_inventory_form.cleaned_data['item']
             item_quantity = add_move_inventory_form.cleaned_data['item_quantity']
+            item_price = add_move_inventory_form.cleaned_data['item_price']
+            item_destination = add_move_inventory_form.cleaned_data['item_destination']
             move_task_uid = add_move_inventory_form.cleaned_data['move_task_uid']
             move_task = MoveManageTask.objects.get(company=current_company, uid=move_task_uid)
             inventory = MoveManageTaskInventory(company=current_company,
                                                 move_manage_task=move_task,
                                                 item=item,
-                                                item_quantity=item_quantity)
+                                                item_quantity=item_quantity,
+                                                item_price = item_price,
+                                                item_destination = item_destination)
             inventory.save()
             messages.success(request, "Added item {0} to inventory".format(item))
         else:
             messages.error(request, "Error adding item to inventory")
         return redirect("move_inventory", task_id=move_task_uid)
+
+class EditMoveInventory(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        current_company = request.user.company
+        inventory_id = self.kwargs['inventory_id']
+        inventory_item = MoveManageTaskInventory.objects.get(company=current_company, uid=inventory_id)
+        edit_inventory_form = EditMoveInventoryForm(initial=
+        {
+            'inventory_uid': inventory_item.uid,
+            'item': inventory_item.item,
+            'item_quantity': inventory_item.item_quantity,
+            'item_price': inventory_item.item_price,
+            'item_sale_price': inventory_item.item_sale_price,
+            'item_destination': inventory_item.item_destination,
+            'item_sold': inventory_item.item_sold
+        })
+        context['inventory_item'] = inventory_item
+        context['edit_inventory_form'] = edit_inventory_form
+        return render(request, "production/edit_move_inventory.html", context)
+
+    def post(self, request):
+        context = {}
+        current_company = request.user.company
+        edit_inventory_form = EditMoveInventoryForm(request.POST)
+        if edit_inventory_form.is_valid():
+            item = edit_inventory_form.cleaned_data['item']
+            item_quantity = edit_inventory_form.cleaned_data['item_quantity']
+            item_price = edit_inventory_form.cleaned_data['item_price']
+            item_sale_price = edit_inventory_form.cleaned_data['item_sale_price']
+            item_destination = edit_inventory_form.cleaned_data['item_destination']
+            item_sold = edit_inventory_form.cleaned_data['item_sold']
+            inventory_uid = edit_inventory_form.cleaned_data['inventory_uid']
+            inventory_item = MoveManageTaskInventory.objects.get(company=current_company, uid=inventory_uid)
+            inventory_item.item = item
+            inventory_item.item_quantity = item_quantity
+            inventory_item.item_price = item_price
+            inventory_item.item_sale_price = item_sale_price
+            inventory_item.item_destination = item_destination
+            inventory_item.item_sold = item_sold
+            inventory_item.save()
+            messages.success(request, "Saved Inventory Item {0}".format(item))
+        else:
+            messages.error(request, "Error saving inventory item")
+        return redirect('edit_move_inventory', inventory_id=inventory_uid)
 
 @login_required
 def get_move_manager_with_email(request):
