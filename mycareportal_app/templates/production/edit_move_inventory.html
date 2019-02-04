@@ -1,5 +1,6 @@
 {% extends "production/base.html" %}
 {% block title %} Edit Move Inventory {% endblock %}
+{% load mycareportal_app_extras%}
 {% block headlibs %}
 {% load static %}
 <!-- iCheck -->
@@ -35,7 +36,7 @@
               {{block.super}}
               <div class="x_content"> <br />
 
-                <form method='post' action="{% url 'edit_move_inventory' %}" class="form-horizontal form-label-left">
+                <form enctype="multipart/form-data" method='post' action="{% url 'edit_move_inventory' %}" class="form-horizontal form-label-left">
                   {% csrf_token %}
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Item Name<span class="required">*</span> </label>
@@ -58,12 +59,12 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Price per Unit<span class="required">*</span> </label>
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Price per Unit</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not edit_inventory_form.item_price.value is None %}
-                        <input type="text" class="form-control" name="{{edit_inventory_form.item_price.html_name}}" value="{{edit_inventory_form.item_price.value}}" required="" />
+                        <input type="text" class="form-control" name="{{edit_inventory_form.item_price.html_name}}" value="{{edit_inventory_form.item_price.value}}"/>
                       {% else %}
-                        <input type="text" class="form-control" name="{{edit_inventory_form.item_price.html_name}}" required="" />
+                        <input type="text" class="form-control" name="{{edit_inventory_form.item_price.html_name}}" />
                       {% endif %}
                     </div>
                   </div>
@@ -90,12 +91,18 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Item sale price<span class="required">*</span> </label>
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Item Image</label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{edit_inventory_form.item_image.label_tag}}{{edit_inventory_form.item_image}}
+                      </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Item sale price</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not edit_inventory_form.item_sale_price.value is None %}
-                        <input type="text" class="form-control" name = "{{edit_inventory_form.item_sale_price.html_name}}" value = "{{edit_inventory_form.item_sale_price.value}}" required="" />
+                        <input type="text" class="form-control" name = "{{edit_inventory_form.item_sale_price.html_name}}" value = "{{edit_inventory_form.item_sale_price.value}}"/>
                       {% else %}
-                        <input type="text" class="form-control" name = "{{edit_inventory_form.item_sale_price.html_name}}" required="" />
+                        <input type="text" class="form-control" name = "{{edit_inventory_form.item_sale_price.html_name}}" />
                       {% endif %}
                     </div>
                   </div>

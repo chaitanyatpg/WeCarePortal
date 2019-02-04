@@ -298,13 +298,14 @@ class MoveInventory(LoginRequiredMixin, View):
     def post(self, request):
         context = {}
         current_company = request.user.company
-        add_move_inventory_form = AddMoveInventoryForm(request.POST)
+        add_move_inventory_form = AddMoveInventoryForm(request.POST, request.FILES)
         move_task_uid = request.POST['move_task_uid']
         if add_move_inventory_form.is_valid():
             item = add_move_inventory_form.cleaned_data['item']
             item_quantity = add_move_inventory_form.cleaned_data['item_quantity']
             item_price = add_move_inventory_form.cleaned_data['item_price']
             item_destination = add_move_inventory_form.cleaned_data['item_destination']
+            item_image = add_move_inventory_form.cleaned_data['item_image']
             move_task_uid = add_move_inventory_form.cleaned_data['move_task_uid']
             move_task = MoveManageTask.objects.get(company=current_company, uid=move_task_uid)
             inventory = MoveManageTaskInventory(company=current_company,
@@ -313,6 +314,9 @@ class MoveInventory(LoginRequiredMixin, View):
                                                 item_quantity=item_quantity,
                                                 item_price = item_price,
                                                 item_destination = item_destination)
+            inventory.save()
+            # Add Image
+            inventory.item_image = item_image
             inventory.save()
             messages.success(request, "Added item {0} to inventory".format(item))
         else:
@@ -334,7 +338,8 @@ class EditMoveInventory(LoginRequiredMixin, View):
             'item_price': inventory_item.item_price,
             'item_sale_price': inventory_item.item_sale_price,
             'item_destination': inventory_item.item_destination,
-            'item_sold': inventory_item.item_sold
+            'item_sold': inventory_item.item_sold,
+            'item_image': inventory_item.item_image,
         })
         context['inventory_item'] = inventory_item
         context['edit_inventory_form'] = edit_inventory_form
@@ -343,7 +348,7 @@ class EditMoveInventory(LoginRequiredMixin, View):
     def post(self, request):
         context = {}
         current_company = request.user.company
-        edit_inventory_form = EditMoveInventoryForm(request.POST)
+        edit_inventory_form = EditMoveInventoryForm(request.POST, request.FILES)
         if edit_inventory_form.is_valid():
             item = edit_inventory_form.cleaned_data['item']
             item_quantity = edit_inventory_form.cleaned_data['item_quantity']
@@ -352,6 +357,7 @@ class EditMoveInventory(LoginRequiredMixin, View):
             item_destination = edit_inventory_form.cleaned_data['item_destination']
             item_sold = edit_inventory_form.cleaned_data['item_sold']
             inventory_uid = edit_inventory_form.cleaned_data['inventory_uid']
+            item_image = edit_inventory_form.cleaned_data['item_image']
             inventory_item = MoveManageTaskInventory.objects.get(company=current_company, uid=inventory_uid)
             inventory_item.item = item
             inventory_item.item_quantity = item_quantity
@@ -359,6 +365,8 @@ class EditMoveInventory(LoginRequiredMixin, View):
             inventory_item.item_sale_price = item_sale_price
             inventory_item.item_destination = item_destination
             inventory_item.item_sold = item_sold
+            if item_image is not None:
+                inventory_item.item_image = item_image
             inventory_item.save()
             messages.success(request, "Saved Inventory Item {0}".format(item))
         else:

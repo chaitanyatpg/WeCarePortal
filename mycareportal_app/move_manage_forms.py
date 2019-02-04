@@ -120,14 +120,31 @@ class CreateMoveTaskForm(forms.Form):
 
 class AddMoveInventoryForm(forms.Form):
 
+    MAX_UPLOAD_SIZE = 5242880
+
     move_task_uid = forms.UUIDField(required=True)
     item = forms.CharField(max_length=50,required=True)
     item_quantity = forms.IntegerField()
     item_price = forms.IntegerField(required=False)
     #item_sales_price = forms.IntegerField(required=False)
     item_destination = forms.CharField(max_length=20, required=False)
+    item_image = forms.ImageField(label='Select file', required=False)
+
+    def clean_picture(self):
+        picture = self.cleaned_data['item_image']
+        if picture:
+            if picture._size > self.MAX_UPLOAD_SIZE:
+                raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
+
+    def clean(self):
+
+        cleaned_data = super(AddMoveInventoryForm, self).clean()
+        self.clean_picture()
+        return cleaned_data
 
 class EditMoveInventoryForm(forms.Form):
+
+    MAX_UPLOAD_SIZE = 5242880
 
     inventory_uid = forms.UUIDField(required=True)
     item = forms.CharField(max_length=50,required=True)
@@ -136,6 +153,19 @@ class EditMoveInventoryForm(forms.Form):
     item_sale_price = forms.IntegerField(required=False)
     item_destination = forms.CharField(max_length=20, required=False)
     item_sold = forms.BooleanField(required=False)
+    item_image = forms.ImageField(label='Select file', required=False)
+
+    def clean_picture(self):
+        picture = self.cleaned_data['item_image']
+        if picture:
+            if picture._size > self.MAX_UPLOAD_SIZE:
+                raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
+
+    def clean(self):
+
+        cleaned_data = super(EditMoveInventoryForm, self).clean()
+        self.clean_picture()
+        return cleaned_data
 
 class BidForm(forms.Form):
 

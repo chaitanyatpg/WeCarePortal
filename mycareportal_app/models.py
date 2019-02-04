@@ -734,6 +734,9 @@ class MoveManageTask(models.Model):
     #bid = models.ForeignKey(HomeModTaskBid, null=true)
     #chosen_bid = models.OneToOneField('HomeModTaskBid', null=True)
 
+def get_move_inventory_upload_path(instance, filename):
+    return "company_{0}/move_inventory/client_{1}/move_task_{2}/inventory/{3}".format(instance.company.company_id,instance.move_manage_task.client.id,instance.move_manage_task.id,filename)
+
 class MoveManageTaskInventory(models.Model):
 
     type_home = "Home"
@@ -758,6 +761,7 @@ class MoveManageTaskInventory(models.Model):
     item_sale_price = models.IntegerField(null=True)
     item_destination = models.CharField(DESTINATION_CHOICES, max_length=10, blank=True)
     item_sold = models.BooleanField(default=False)
+    item_image = models.ImageField(upload_to=get_move_inventory_upload_path, null=True)
 
 class ActivationCode(models.Model):
 
