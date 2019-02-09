@@ -120,12 +120,12 @@ WSGI_APPLICATION = 'mycareportal.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
-'''DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
-}'''
+}
 
 '''DATABASES = {
     'default': {
@@ -138,7 +138,7 @@ WSGI_APPLICATION = 'mycareportal.wsgi.application'
     }
 }'''
 
-DATABASES = {
+'''DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'ddasri915aj4lm',
@@ -147,7 +147,7 @@ DATABASES = {
         'HOST': 'ec2-23-23-111-171.compute-1.amazonaws.com',
         'PORT': '5432',
     }
-}
+}'''
 
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
