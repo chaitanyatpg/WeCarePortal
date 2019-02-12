@@ -211,7 +211,12 @@ $(document).ready(function(){
 <!-- DataTables -->
 <script>
   $(document).ready(function(){
-    $('#custom_tasks_table').DataTable();
+    $('#custom_tasks_table').DataTable({
+      dom: "Bfrtip",
+      buttons: [
+        'copy', 'csv', 'excel', 'pdf', 'print'
+      ]
+    });
   });
 </script>
 
