@@ -67,6 +67,8 @@ def home(request):
         return redirect('provider_dashboard')
     elif "HOMEMODUSER" in user_roles:
         return redirect('contractor_dashboard')
+    elif "MOVEMANAGER" in user_roles:
+        return redirect('move_manager_dashboard')
     else:
         return redirect('login')
 

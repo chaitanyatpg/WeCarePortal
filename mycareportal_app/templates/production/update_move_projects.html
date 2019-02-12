@@ -1,5 +1,5 @@
 {% extends "production/base.html" %}
-{% block title %} View Move Projects {% endblock %}
+{% block title %} Update Move Projects {% endblock %}
 {% load static %}
 {% block headlibs %}
 {% load static %}
@@ -22,7 +22,7 @@
               <div class="col-md-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2></h2>
+                    <h2>Projects</h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
@@ -35,17 +35,39 @@
                     <table class="table table-striped projects">
                       <thead>
                         <tr>
-                          <th style="width: 20%">Client Name</th>
-                          <th>Reasons for move</th>
+                          <th style="width: 20%">Project Name</th>
                           <th>Progress</th>
                           <th>Status</th>
                           <th style="width: 10%">Edit</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
+                        {% for project in projects %}
+                          <tr>
+                            <td>
+                              <a>{{project.move_manage_task.client.first_name}} {{project.move_manage_task.client.last_name}}</a>
+                              <br />
+                              <small>{{project.created}}</small>
+                            </td>
+                            <td class="project_progress">
+                              <div class="progress">
+                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="{{project.progress}}"></div>
+                              </div>
+                              <small>{{project.progress}}% Complete</small>
+                            </td>
+                            <td>
+                              <button type="button" class="btn btn-info btn-xs">{{project.status}}</button>
+                            </td>
+                            <td>
+                              <a href="{% url 'view_move_project' move_project_id=project.uid %}" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                            </td>
+                          </tr>
+                        {% endfor %}
+                        <!--<tr>
                           <td>
-                            <a>Dhruv Ranjan</a>
+                            <a>Home Exterior</a>
+                            <br />
+                            <small>Low-Maintenance exterior(vinyl, brick)</small>
                             <br />
                             <small>Started 01.01.2015</small>
                           </td>
@@ -64,12 +86,14 @@
                             <button type="button" class="btn btn-info btn-xs">Ongoing</button>
                           </td>
                           <td>
-                            <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                            <a href="project_view.html" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i> Edit </a>
                           </td>
                         </tr>
                         <tr>
                           <td>
-                            <a>Dhruv Ranjan</a>
+                            <a>Windows</a>
+                            <br />
+                            <small>Easy to operate hardware</small>
                             <br />
                             <small>Started 01.01.2015</small>
                           </td>
@@ -93,7 +117,9 @@
                         </tr>
                         <tr>
                           <td>
-                            <a>Dhruv Ranjan</a>
+                            <a>Entry</a>
+                            <br />
+                            <small>At least one no-step entry with a cover</small>
                             <br />
                             <small>Started 01.01.2015</small>
                           </td>
@@ -117,7 +143,9 @@
                         </tr>
                         <tr>
                           <td>
-                            <a>Dhruv Ranjan</a>
+                            <a>Appliances</a>
+                            <br />
+                            <small>Microwave oven at counter height or in wall</small>
                             <br />
                             <small>Started 01.01.2015</small>
                           </td>
@@ -141,7 +169,9 @@
                         </tr>
                         <tr>
                           <td>
-                            <a>Dhruv Ranjan</a>
+                            <a>Stairways, Lifts, and Elevators</a>
+                            <br />
+                            <small>Residential elevator or lift</small>
                             <br />
                             <small>Started 01.01.2015</small>
                           </td>
@@ -162,7 +192,7 @@
                           <td>
                             <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i> Edit </a>
                           </td>
-                        </tr>
+                        </tr>-->
                       </tbody>
                     </table>
                     <!-- end project list -->

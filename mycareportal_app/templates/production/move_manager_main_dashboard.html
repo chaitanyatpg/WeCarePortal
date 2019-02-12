@@ -1,0 +1,243 @@
+{% extends "production/base.html" %}
+{% block title %} Move Management Dashboard {% endblock %}
+{% load static %}
+{% load mycareportal_app_extras%}
+{% block headlibs %}
+{% load static %}
+    <!-- bootstrap-daterangepicker -->
+    <link href="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+{% endblock %}
+{% block pagecontent %}
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>Move Management Dashboard</h3>
+              </div>
+            </div>
+
+            <div class="clearfix"></div>
+            {{block.super}}
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
+                      <div class="profile_img">
+                        <div id="crop-avatar">
+                          <!-- Current avatar -->
+                          {% if move_manage_user.profile_picture %}
+                            <img class="img-responsive avatar-view" src={{move_manage_user.profile_picture.url}}>
+                          {% else %}
+                            <img class="img-responsive avatar-view" src="{% static 'pictures/img.png' %}">
+                          {% endif %}
+                        </div>
+                      </div>
+                      <h3>Contractor Picture</h3>
+
+                      <ul class="list-unstyled user_data">
+                        <li><i class="fa fa-phone user-profile-icon"></i> {{move_manage_user.phone_number}}
+                        </li>
+
+                        <li><i class="fa fa-map-marker user-profile-icon"></i> {{move_manage_user.address}}
+                        </li>
+
+                        <li><i class="fa fa-map-marker user-profile-icon"></i> {{move_manage_user.email_address}}
+                        </li>
+
+                        <!--<li class="m-top-xs">
+                          <i class="fa fa-external-link user-profile-icon"></i>
+                          <a href="http://www.wecareportal.com" target="_blank">www.wecare.com</a>
+                        </li>-->
+                      </ul>
+                      <br />
+
+                      <!-- start skills -->
+                      <!--<h4>Skills</h4>
+                      <ul class="list-unstyled user_data">
+                        <li>
+                          <p>Home Exterior</p>
+                          <div class="progress progress_sm">
+                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="50"></div>
+                          </div>
+                        </li>
+                        <li>
+                          <p>Windows</p>
+                          <div class="progress progress_sm">
+                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="70"></div>
+                          </div>
+                        </li>
+                        <li>
+                          <p>Ramps</p>
+                          <div class="progress progress_sm">
+                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="100"></div>
+                          </div>
+                        </li>
+                        <li>
+                          <p>Entry</p>
+                          <div class="progress progress_sm">
+                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="50"></div>
+                          </div>
+                        </li>
+                      </ul>-->
+                      <!-- end of skills -->
+
+                    </div>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                      <h2> View Tasks </h2>
+                      {% for task in move_manage_tasks %}
+                      {% if not task.chosen_bid %}
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="x_panel">
+                            <div class="x_title">
+                              <h2>{{task.task_name}}</h2>
+                              <ul class="nav navbar-right panel_toolbox">
+                                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                </li>
+                              </ul>
+                              <div class="clearfix"></div>
+                            </div>
+                            <div class="x_content">
+
+                              <div class="col-md-12 col-lg-12 col-sm-12">
+                                <form class="form-horizontal form-label-left" method="post" action="{% url 'move_manager_dashboard' %}">
+                                  {% csrf_token %}
+                                  <h5>Client: {{task.client.first_name|addstr_space:task.client.last_name}}</h5>
+                                  <h5>Date Created: {{task.created}} </h5>
+                                  <blockquote>
+                                    <h5>Address: {{task.address}}, {{task.city}}, {{task.state}}, {{task.zip_code}}</h5>
+                                    <h5>Max Relocation Distance: {{task.new_address_max_distance}}</h5>
+                                    <h5>New Home Type: {{task.type_of_home}}</h5>
+                                    <h5>Minimum Cost: {{task.minimum_cost}}</h5>
+                                    <h5>Maximum Cost: {{task.maximum_cost}}</h5>
+                                    <h5>Handicap Friendly: {{task.handicap_friendly}}</h5>
+                                    <h5>Furnished: {{task.furnished}}</h5>
+                                  </blockquote>
+                                  <div>
+                                    <div class="form-group col-md-4 col-lg-4 col-sm-12">
+                                      <label class="control-label">Start Date<span class="required">*</span>
+                                      </label>
+                                      <input id="project_date" class="date-picker form-control" required="required" name={{bid_form.start_date.html_name}} type="text">
+                                    </div>
+                                    <div class="form-group col-md-4 col-lg-4 col-sm-12">
+                                      <label class="control-label">End Date<span class="required">*</span>
+                                      </label>
+                                      <input id="project_date" class="date-picker form-control" required="required" name={{bid_form.end_date.html_name}} type="text">
+                                    </div>
+                                    <div class="form-group col-md-4 col-lg-4 col-sm-12">
+                                      <label class="control-label">Cost<span class="required">*</span>
+                                      </label>
+                                      <input type="text" class="form-control" name={{bid_form.cost.html_name}} required="required">
+                                    </div>
+                                  </div>
+                                  <input type="hidden" name={{bid_form.task_uid.html_name}} value={{task.uid}}>
+                                  <button type="submit" class="btn btn-success">Place Bid</button>
+                                  <button type="button" class="btn btn-danger">Ignore</button>
+                                </form>
+                              </div>
+
+                              <div class="clearfix"></div>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      {% endif %}
+                      {% endfor %}
+
+
+                      <!--<div class="row">
+                      <div class="col-md-12">
+                        <div class="x_panel">
+                          <div class="x_title">
+                            <h2>Home Exterior<small>Low-Maintenance exterior(vinyl, brick) </small></h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                              </li>
+                              <li><a class="close-link"><i class="fa fa-close"></i></a>
+                              </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                          </div>
+                          <div class="x_content">
+
+                            <div class="col-md-12 col-lg-12 col-sm-12">
+                              <blockquote>
+                                <p>Current plywood home exterior is not maintainable and prone to degradation. Should be replaced
+                                with brick.</p>
+                              </blockquote>
+                              <label>Difficulty:</label>
+                              <div class="progress">
+                                <div class="progress-bar progress-bar-danger" data-transitiongoal="80"></div>
+                              </div>
+                              <div>
+                                <div class="form-group col-md-4 col-lg-4 col-sm-12">
+                                  <label class="control-label">Start Date<span class="required">*</span>
+                                  </label>
+                                  <input id="project_date" class="date-picker form-control" required="required" type="text">
+                                </div>
+                                <div class="form-group col-md-4 col-lg-4 col-sm-12">
+                                  <label class="control-label">End Date<span class="required">*</span>
+                                  </label>
+                                  <input id="project_date" class="date-picker form-control" required="required" type="text">
+                                </div>
+                                <div class="form-group col-md-4 col-lg-4 col-sm-12">
+                                  <label class="control-label">Cost<span class="required">*</span>
+                                  </label>
+                                  <input type="text" class="form-control" required="required">
+                                </div>
+                              </div>
+                              <button type="button" class="btn btn-success">Place Bid</button>
+                              <button type="button" class="btn btn-danger">Ignore</button>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>-->
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /page content -->
+{% endblock %}
+{% block footlibs %}
+    <!-- morris.js -->
+    <script src="{% static 'vendors/raphael/raphael.min.js' %}"></script>
+    <script src="{% static 'vendors/morris.js/morris.min.js' %}"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="{% static 'vendors/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+{% endblock %}
+{% block scripts %}
+    <!-- bootstrap-daterangepicker -->
+    <script>
+      $(document).ready(function() {
+        $('[id^=project_date]').daterangepicker({
+          singleDatePicker: true,
+          calender_style: "picker_4"
+        }, function(start, end, label) {
+          console.log(start.toISOString(), end.toISOString(), label);
+        });
+      });
+    </script>
+    <!-- /bootstrap-daterangepicker -->
+{% endblock %}

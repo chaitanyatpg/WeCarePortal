@@ -158,7 +158,18 @@ urlpatterns = [
     url(r'^move_management/move_inventory/(?P<task_id>[0-9a-f-]+)/$', move_manage_views.MoveInventory.as_view(), name='move_inventory'),
     url(r'^move_management/move_inventory', move_manage_views.MoveInventory.as_view(), name='move_inventory'),
     url(r'^move_management/edit_move_inventory/(?P<inventory_id>[0-9a-f-]+)/$', move_manage_views.EditMoveInventory.as_view(), name='edit_move_inventory'),
-    url(r'^move_management/edit_move_inventory', move_manage_views.EditMoveInventory.as_view(), name='edit_move_inventory')
-
+    url(r'^move_management/edit_move_inventory', move_manage_views.EditMoveInventory.as_view(), name='edit_move_inventory'),
+    url(r'^move_management/move_manager_dashboard', move_manage_views.MoveManagerDashboard.as_view(), name='move_manager_dashboard'),
+    url(r'^move_management/view_move_bids/(?P<task_id>[0-9a-f-]+)/$', move_manage_views.ViewMoveBids.as_view(), name='view_move_bids'),
+    url(r'^move_management/view_move_bids', move_manage_views.ViewMoveBids.as_view(), name='view_move_bids'),
+    url(r'^move_management/accept_move_bid/(?P<bid_id>[0-9a-f-]+)/$', move_manage_views.AcceptMoveBid.as_view(), name="accept_move_bid"),
+    url(r'^move_management/update_move_projects', move_manage_views.UpdateMoveProjects.as_view(), name="update_move_projects"),
+    url(r'^move_management/view_move_project/(?P<move_project_id>[0-9a-f-]+)/$', move_manage_views.ViewMoveProject.as_view(), name="view_move_project"),
+    url(r'^move_management/view_move_project_no_edit/(?P<task_id>[0-9a-f-]+)/$', move_manage_views.ViewMoveProjectDisabled.as_view(), name="view_move_project_disabled"),
+    url(r'^move_management/save_move_project_budget', move_manage_views.save_move_project_budget, name="save_move_project_budget"),
+    url(r'^move_management/save_move_project_total_amount_spent', move_manage_views.save_move_project_total_amount_spent, name="save_move_project_total_amount_spent"),
+    url(r'^move_management/save_move_project_duration', move_manage_views.save_move_project_duration, name="save_move_project_duration"),
+    url(r'^move_management/save_move_project_progress', move_manage_views.save_move_progress, name="save_move_project_progress"),
+    url(r'^move_management/save_move_project_status', move_manage_views.save_move_status, name="save_move_project_status")
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

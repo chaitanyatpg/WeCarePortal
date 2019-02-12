@@ -349,7 +349,31 @@ class ViewProjectDisabled(LoginRequiredMixin, View):
         home_mod_project = HomeModProject.objects.get(company = current_company,
                                                     home_mod_task=task)
         context['project'] = home_mod_project
+        (progress_list, budget_list, amount_spent_list,
+            duration_list, status_list) = self.get_graph_series(home_mod_project, current_company)
+
+        context['progress_list'] = [x.progress for x in progress_list]
+        context['progress_x_list'] = [x.created.strftime("%Y-%m-%d %H:%M:%S") for x in progress_list]
+
+        context['amount_spent_list'] = [x.total_amount_spent for x in amount_spent_list]
+        context['amount_spent_x_list'] = [x.created.strftime("%Y-%m-%d %H:%M:%S") for x in amount_spent_list]
+
+        context['budget_list'] = [x.estimated_budget for x in budget_list]
+        context['budget_x_list'] = [x.created.strftime("%Y-%m-%d %H:%M:%S") for x in budget_list]
+
+        context['duration_list'] = [x.project_duration for x in duration_list]
+        context['duration_x_list'] = [x.created.strftime("%Y-%m-%d %H:%M:%S") for x in duration_list]
         return render(request, "production/project_view.html", context)
+
+    def get_graph_series(self, home_mod_project, current_company):
+
+        progress_list = HomeModProjectProgressLog.objects.filter(company=current_company, home_mod_project=home_mod_project).order_by('created')
+        budget_list = HomeModProjectBudgetLog.objects.filter(company=current_company, home_mod_project=home_mod_project).order_by('created')
+        amount_spent_list = HomeModProjectAmountSpentLog.objects.filter(company=current_company, home_mod_project=home_mod_project).order_by('created')
+        duration_list = HomeModProjectDurationLog.objects.filter(company=current_company, home_mod_project=home_mod_project).order_by('created')
+        status_list = HomeModProjectStatusLog.objects.filter(company=current_company, home_mod_project=home_mod_project).order_by('created')
+
+        return (progress_list, budget_list, amount_spent_list, duration_list, status_list)
 
 @login_required
 def get_home_mod_with_email(request):

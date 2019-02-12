@@ -205,8 +205,9 @@
                     {% if module_dict.MOVEMANAGEMENTPORTAL.MOVEMANAGERDASHBOARD %}
                       <li><a href={% url 'move_manager_dashboard' %}>Move Manager Dashboard</a></li>
                     {% endif %}
-                    {% if module_dict.MOVEMANAGEMENTPORTAL.VIEWMOVEPROJECTS %}
-                      <li><a href={% url 'view_move_projects' %}>View all Move Projects</a></li>
+
+                    {% if module_dict.MOVEMANAGEMENTPORTAL.UPDATEMOVEPROJECTS %}
+                      <li><a href={% url 'update_move_projects' %}>Update Move Projects</a></li>
                     {% endif %}
                     {% if module_dict.MOVEMANAGEMENTPORTAL.VIEWMOVEBIDS %}
                       <li><a href={% url 'view_move_bids' %}>View Move Bids</a></li>

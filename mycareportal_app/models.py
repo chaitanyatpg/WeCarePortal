@@ -732,7 +732,7 @@ class MoveManageTask(models.Model):
     cost = models.IntegerField(null=True)
 
     #bid = models.ForeignKey(HomeModTaskBid, null=true)
-    #chosen_bid = models.OneToOneField('HomeModTaskBid', null=True)
+    chosen_bid = models.OneToOneField('MoveManageTaskBid', null=True)
 
 def get_move_inventory_upload_path(instance, filename):
     return "company_{0}/move_inventory/client_{1}/move_task_{2}/inventory/{3}".format(instance.company.company_id,instance.move_manage_task.client.id,instance.move_manage_task.id,filename)
@@ -762,6 +762,95 @@ class MoveManageTaskInventory(models.Model):
     item_destination = models.CharField(DESTINATION_CHOICES, max_length=10, blank=True)
     item_sold = models.BooleanField(default=False)
     item_image = models.ImageField(upload_to=get_move_inventory_upload_path, null=True)
+
+class MoveManageTaskBid(models.Model):
+
+    company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    created = models.DateTimeField(auto_now_add=True)
+    move_manage_task = models.ForeignKey(MoveManageTask)
+    move_manager = models.ForeignKey(MoveManager)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    cost = models.IntegerField()
+
+class MoveManagementProject(models.Model):
+
+    ongoing = "Ongoing"
+    on_hold = "On Hold"
+    cancelled = "Cancelled"
+    completed = "Completed"
+
+    STATUS_CHOICES = (
+    (ongoing, "Ongoing"),
+    (on_hold, "On Hold"),
+    (cancelled, "Cancelled"),
+    (completed, "Completed")
+    )
+
+    company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    created = models.DateTimeField(auto_now_add=True)
+    move_manage_task = models.OneToOneField(MoveManageTask)
+    move_manager = models.ForeignKey(MoveManager, null=True)
+    client = models.ForeignKey(Client, null=True)
+    progress = models.IntegerField(default = 0)
+    status = models.CharField(STATUS_CHOICES, max_length = 10, default = ongoing)
+    estimated_budget = models.IntegerField()
+    total_amount_spent = models.IntegerField(default = 0)
+    project_duration = models.IntegerField(default = 0)
+
+class MoveProjectProgressLog(models.Model):
+
+    company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    created = models.DateTimeField(auto_now_add=True)
+    move_management_project = models.ForeignKey(MoveManagementProject)
+    progress = models.IntegerField()
+
+class MoveProjectBudgetLog(models.Model):
+
+    company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    created = models.DateTimeField(auto_now_add=True)
+    move_management_project = models.ForeignKey(MoveManagementProject)
+    estimated_budget = models.IntegerField()
+
+class MoveProjectAmountSpentLog(models.Model):
+
+    company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    created = models.DateTimeField(auto_now_add=True)
+    move_management_project = models.ForeignKey(MoveManagementProject)
+    total_amount_spent = models.IntegerField()
+
+class MoveProjectDurationLog(models.Model):
+
+    company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    created = models.DateTimeField(auto_now_add=True)
+    move_management_project = models.ForeignKey(MoveManagementProject)
+    project_duration = models.IntegerField()
+
+class MoveProjectStatusLog(models.Model):
+
+    ongoing = "Ongoing"
+    on_hold = "On Hold"
+    cancelled = "Cancelled"
+    completed = "Completed"
+
+    STATUS_CHOICES = (
+    (ongoing, "Ongoing"),
+    (on_hold, "On Hold"),
+    (cancelled, "Cancelled"),
+    (completed, "Completed")
+    )
+
+    company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    created = models.DateTimeField(auto_now_add=True)
+    move_management_project = models.ForeignKey(MoveManagementProject)
+    status = models.CharField(STATUS_CHOICES, max_length = 10)
 
 class ActivationCode(models.Model):
 

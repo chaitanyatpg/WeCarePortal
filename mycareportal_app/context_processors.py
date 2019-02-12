@@ -83,6 +83,10 @@ def add_roles_to_context(request):
         if 'HOMEMODUSER' in user_roles:
             module_dict['HOMEMODIFICATIONPORTAL']['CONTRACTORDASHBOARD']=True
             module_dict['HOMEMODIFICATIONPORTAL']['VIEWALLPROJECTS']=True
+        if 'MOVEMANAGER' in user_roles:
+            module_dict['MOVEMANAGEMENTPORTAL']['UPDATEMOVEPROJECTS'] = True
+            module_dict['MOVEMANAGEMENTPORTAL']['MOVEMANAGERDASHBOARD'] = True
+            module_dict['MOVEMANAGEMENTPORTAL']['VIEWMOVEPROJECTS'] = True
         module_dict['SETTINGS']['EMAILSETTINGS']=True
         context['user_roles'] = user_roles
         context['module_dict']= module_dict

@@ -11,15 +11,170 @@
           <div class="">
             <div class="page-title">
               <div class="title_left">
-                <h3>View Move Offers</h3>
+                <h3>View Move Bids</h3>
               </div>
             </div>
 
             <div class="clearfix"></div>
 
             {{block.super}}
-
             <div class="row">
+              <div class="col-md-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>{{task.client.first_name}} {{task.client.last_name}}</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <div class="col-md-12 col-lg-12 col-sm-12">
+                      <!-- blockquote -->
+                      <blockquote>
+                        <h5>Address: {{task.address}}, {{task.city}}, {{task.state}}, {{task.zip_code}}</h5>
+                        <h5>Max Relocation Distance: {{task.new_address_max_distance}}</h5>
+                        <h5>New Home Type: {{task.type_of_home}}</h5>
+                        <h5>Minimum Cost: {{task.minimum_cost}}</h5>
+                        <h5>Maximum Cost: {{task.maximum_cost}}</h5>
+                        <h5>Handicap Friendly: {{task.handicap_friendly}}</h5>
+                        <h5>Furnished: {{task.furnished}}</h5>
+                      </blockquote>
+
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                  </div>
+                </div>
+              </div>
+          </div>
+
+
+          {% for bid in bids %}
+          <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="x_panel">
+                <div class="x_title">
+                  <h2></h2>
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                  </ul>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+
+                  <div class="row">
+                    <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
+                      <div class="profile_img">
+                        <div id="crop-avatar">
+                          <!-- Current avatar -->
+                          {% if bid.move_manager.profile_picture %}
+                            <div class="img-responsive avatar-view"> <img src="{{bid.contractor.profile_picture.url}}"> </div>
+                          {% else %}
+                            <div class="img-responsive avatar-view"> <img src="{% static 'pictures/img.png' %}"> </div>
+                          {% endif %}
+                        </div>
+                      </div>
+                      <h3>{{ bid.move_manager.first_name }} {{bid.move_manager.last_name}}</h3>
+
+                      <ul class="list-unstyled user_data">
+                        <li><i class="fa fa-phone user-profile-icon"></i> {{bid.move_manager.phone_number}}
+                        </li>
+
+                        <li><i class="fa fa-map-marker user-profile-icon"></i> {{bid.move_manager.address}}, {{bid.move_manager.city}} {{bid.move_manager.state}}, {{bid.move_manager.zip_code}}
+                        </li>
+
+
+                      </ul>
+                    </div>
+                    <div class="col-md-3 col-sm-3 col-xs-12">
+
+                      <!-- start skills -->
+                      <!--<h4>Skills</h4>
+                      <ul class="list-unstyled user_data">
+                        <li>
+                          <p>Home Exterior</p>
+                          <div class="progress progress_sm">
+                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="50"></div>
+                          </div>
+                        </li>
+                        <li>
+                          <p>Windows</p>
+                          <div class="progress progress_sm">
+                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="70"></div>
+                          </div>
+                        </li>
+                        <li>
+                          <p>Ramps</p>
+                          <div class="progress progress_sm">
+                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="100"></div>
+                          </div>
+                        </li>
+                        <li>
+                          <p>Entry</p>
+                          <div class="progress progress_sm">
+                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="50"></div>
+                          </div>
+                        </li>
+                        <li>
+                          <p>Rating</p>
+                          <span class="fa fa-star"></span>
+                          <span class="fa fa-star"></span>
+                          <span class="fa fa-star"></span>
+                          <span class="fa fa-star"></span>
+                          <span class="fa fa-star"></span>
+                        </li>
+                      </ul>-->
+                      <!-- end of skills -->
+                    </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        <form method="post" action="{% url 'modify_bid' %}" class="form-horizontal form-label-left input_mask" style="float: left;">
+                          {% csrf_token %}
+                          <div>
+                            <div class="form-group col-md-12 col-lg-12 col-sm-12">
+                              <label class="control-label">Bid Sent Timestamp<span class="required">*</span>
+                              </label>
+                              <input type="text" class="form-control" value="{{bid.created}}" disabled>
+                            </div>
+                            <div class="form-group col-md-12 col-lg-12 col-sm-12">
+                              <label class="control-label">Start Date<span class="required">*</span>
+                              </label>
+                              <input id="project_date" class="date-picker form-control" required="required" type="text" value="{{bid.start_date|date:'m/d/Y'}}">
+                            </div>
+                            <div class="form-group col-md-12 col-lg-12 col-sm-12">
+                              <label class="control-label">End Date<span class="required">*</span>
+                              </label>
+                              <input id="project_date" class="date-picker form-control" required="required" type="text" value="{{bid.end_date|date:'m/d/Y'}}">
+                            </div>
+                            <div class="form-group col-md-12 col-lg-12 col-sm-12">
+                              <label class="control-label">Cost<span class="required">*</span>
+                              </label>
+                              <input type="text" value={{bid.cost}} class="form-control" required="required">
+                            </div>
+                          </div>
+                          <input type="hidden" value={{bid.uid}}>
+                          <!--<button type="button" class="btn btn-warning">Modify</button>-->
+                        </form>
+                        <form method="post" action="{%url 'accept_move_bid' bid_id=bid.uid %}" class="form-horizontal form-label-left input_mask" style="float: left;">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-success">Accept</button>
+                        </form>
+                        <button type="button" class="btn btn-danger">Reject</button>
+                      </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {% endfor %}
+            <!--<div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
@@ -36,11 +191,11 @@
                       <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
                         <div class="profile_img">
                           <div id="crop-avatar">
-                            <!-- Current avatar -->
-                            <img class="img-responsive avatar-view" src="images/img.png" alt="Avatar">
+
+                            <img class="img-responsive avatar-view" src="images/img.png" alt="Avatar" title="Change the avatar">
                           </div>
                         </div>
-                        <h3>Moving Company Name</h3>
+                        <h3>Contractor Name</h3>
 
                         <ul class="list-unstyled user_data">
                           <li><i class="fa fa-phone user-profile-icon"></i> 732-540-4335
@@ -54,6 +209,46 @@
                             <a href="http://www.wecareportal.com" target="_blank">www.wecare.com</a>
                           </li>
                         </ul>
+                      </div>
+                      <div class="col-md-3 col-sm-3 col-xs-12">
+
+
+                        <h4>Skills</h4>
+                        <ul class="list-unstyled user_data">
+                          <li>
+                            <p>Home Exterior</p>
+                            <div class="progress progress_sm">
+                              <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="50"></div>
+                            </div>
+                          </li>
+                          <li>
+                            <p>Windows</p>
+                            <div class="progress progress_sm">
+                              <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="70"></div>
+                            </div>
+                          </li>
+                          <li>
+                            <p>Ramps</p>
+                            <div class="progress progress_sm">
+                              <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="100"></div>
+                            </div>
+                          </li>
+                          <li>
+                            <p>Entry</p>
+                            <div class="progress progress_sm">
+                              <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="50"></div>
+                            </div>
+                          </li>
+                          <li>
+                            <p>Rating</p>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                          </li>
+                        </ul>
+
                       </div>
                       <div class="col-md-6 col-sm-6 col-xs-12">
                         <div>
@@ -81,137 +276,7 @@
                   </div>
                 </div>
               </div>
-            </div>
-
-          <div class="row">
-              <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2></h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                      </li>
-                    </ul>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-
-                    <div class="row">
-                      <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
-                        <div class="profile_img">
-                          <div id="crop-avatar">
-                            <!-- Current avatar -->
-                            <img class="img-responsive avatar-view" src="images/img.png" alt="Avatar">
-                          </div>
-                        </div>
-                        <h3>Moving Company Name</h3>
-
-                        <ul class="list-unstyled user_data">
-                          <li><i class="fa fa-phone user-profile-icon"></i> 732-540-4335
-                          </li>
-
-                          <li><i class="fa fa-map-marker user-profile-icon"></i> Somerville, New Jersey, USA
-                          </li>
-
-                          <li class="m-top-xs">
-                            <i class="fa fa-external-link user-profile-icon"></i>
-                            <a href="http://www.wecareportal.com" target="_blank">www.wecare.com</a>
-                          </li>
-                        </ul>
-                      </div>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        <div>
-                          <div class="form-group col-md-12 col-lg-12 col-sm-12">
-                            <label class="control-label">Start Date<span class="required">*</span>
-                            </label>
-                            <input id="project_date" class="date-picker form-control" required="required" type="text">
-                          </div>
-                          <div class="form-group col-md-12 col-lg-12 col-sm-12">
-                            <label class="control-label">End Date<span class="required">*</span>
-                            </label>
-                            <input id="project_date" class="date-picker form-control" required="required" type="text">
-                          </div>
-                          <div class="form-group col-md-12 col-lg-12 col-sm-12">
-                            <label class="control-label">Cost<span class="required">*</span>
-                            </label>
-                            <input type="text" value="$18,000" class="form-control" required="required">
-                          </div>
-                        </div>
-                        <button type="button" class="btn btn-success">Accept</button>
-                        <button type="button" class="btn btn-warning">Modify</button>
-                        <button type="button" class="btn btn-danger">Reject</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2></h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                      </li>
-                    </ul>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-
-                    <div class="row">
-                      <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
-                        <div class="profile_img">
-                          <div id="crop-avatar">
-                            <!-- Current avatar -->
-                            <img class="img-responsive avatar-view" src="images/img.png" alt="Avatar">
-                          </div>
-                        </div>
-                        <h3>Moving Company Name</h3>
-
-                        <ul class="list-unstyled user_data">
-                          <li><i class="fa fa-phone user-profile-icon"></i> 732-540-4335
-                          </li>
-
-                          <li><i class="fa fa-map-marker user-profile-icon"></i> Somerville, New Jersey, USA
-                          </li>
-
-                          <li class="m-top-xs">
-                            <i class="fa fa-external-link user-profile-icon"></i>
-                            <a href="http://www.wecareportal.com" target="_blank">www.wecare.com</a>
-                          </li>
-                        </ul>
-                      </div>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        <div>
-                          <div class="form-group col-md-12 col-lg-12 col-sm-12">
-                            <label class="control-label">Start Date<span class="required">*</span>
-                            </label>
-                            <input id="project_date" class="date-picker form-control" required="required" type="text">
-                          </div>
-                          <div class="form-group col-md-12 col-lg-12 col-sm-12">
-                            <label class="control-label">End Date<span class="required">*</span>
-                            </label>
-                            <input id="project_date" class="date-picker form-control" required="required" type="text">
-                          </div>
-                          <div class="form-group col-md-12 col-lg-12 col-sm-12">
-                            <label class="control-label">Cost<span class="required">*</span>
-                            </label>
-                            <input type="text" value="$24,000" class="form-control" required="required">
-                          </div>
-                        </div>
-                        <button type="button" class="btn btn-success">Accept</button>
-                        <button type="button" class="btn btn-warning">Modify</button>
-                        <button type="button" class="btn btn-danger">Reject</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-
+            </div>-->
 
           </div>
         </div>

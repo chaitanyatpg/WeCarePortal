@@ -190,7 +190,7 @@
                       <h5>Handicap Friendly: {{task.handicap_friendly}} </h5>
                       <h5>Furnished: {{task.furnished}} </h5>
                       <div class="clearfix"></div>
-
+                      {% if not task.chosen_bid %}
                       <div class="form-group">
                         <form action="{% url 'choose_move_contractor' task_id=task.uid %}" style="float: left;">
                           <button type="submit" class="btn btn-success">Choose Contractor</button>
@@ -198,7 +198,24 @@
                         <form action="{% url 'move_inventory' task_id=task.uid %}" style="float: left;">
                           <button type="submit" class="btn btn-info">Inventory</button>
                         </form>
+                        <form action="{% url 'view_move_bids' task_id=task.uid %}" style="float: left;">
+                          <button type="submit" class="btn btn-warning">View Bids</button>
+                        </form>
                       </div>
+                      {% else %}
+                      <div class="form-group">
+                        <form action="" style="float: left;">
+                          <button type="submit" class="btn btn-success" disabled>Choose Contractor</button>
+                        </form>
+                        <form action="{% url 'move_inventory' task_id=task.uid %}" style="float: left;">
+                          <button type="submit" class="btn btn-info">Inventory</button>
+                        </form>
+                        <form action="" style="float: left;">
+                          <button type="submit" class="btn btn-warning" disabled>View Bids</button>
+                        </form>
+                        <a href="{% url 'view_move_project_disabled' task_id=task.uid %}" class="btn btn-success"> View Project</a>
+                      </div>
+                      {% endif %}
                     </div>
                   </div>
                 </div>

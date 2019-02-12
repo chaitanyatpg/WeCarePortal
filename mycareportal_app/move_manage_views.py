@@ -32,6 +32,83 @@ def view_move_projects(request):
 def view_move_bids(request):
     return render(request, 'production/view_move_bids.html')
 
+class MoveManagerDashboard(LoginRequiredMixin, View):
+
+    def get(self, request):
+
+        context = {}
+        current_company = request.user.company
+        move_manage_user = MoveManager.objects.get(company=current_company,
+                                                        user=request.user)
+        move_manage_tasks = MoveManageTask.objects.filter(company=current_company,
+                                                            chosen_manager=move_manage_user).order_by('-created')
+        context['move_manage_user'] = move_manage_user
+        context['move_manage_tasks'] = move_manage_tasks
+        context['bid_form'] = BidForm()
+        return render(request, 'production/move_manager_main_dashboard.html', context)
+
+    def post(self, request):
+
+        context = {}
+        current_company = request.user.company
+        bid_form = BidForm(request.POST)
+        if bid_form.is_valid():
+            task_uid = bid_form.cleaned_data['task_uid']
+            start_date = bid_form.cleaned_data['start_date']
+            end_date = bid_form.cleaned_data['end_date']
+            cost = bid_form.cleaned_data['cost']
+            contractor = MoveManager.objects.get(company=current_company,
+                                                            user=request.user)
+            move_manage_task = MoveManageTask.objects.get(company=current_company,
+                                                            uid=task_uid)
+            move_manage_task_bid = MoveManageTaskBid(company=current_company,
+                                            move_manage_task=move_manage_task,
+                                            move_manager=contractor,
+                                            start_date = start_date,
+                                            end_date = end_date,
+                                            cost = cost)
+            move_manage_task_bid.save()
+            messages.success(request, "Bid sent!")
+        else:
+            messages.error(request, "Error sending bid")
+        return redirect('move_manager_dashboard')
+
+class ViewMoveBids(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+
+        context={}
+        current_company = request.user.company
+        task_id = self.kwargs['task_id']
+        task = MoveManageTask.objects.get(company=current_company, uid=task_id)
+        bids = MoveManageTaskBid.objects.filter(company=current_company, move_manage_task=task)
+        context['task'] = task
+        context['task_id'] = task_id
+        context['bids'] = bids
+        return render(request, "production/view_move_bids.html", context)
+
+class AcceptMoveBid(LoginRequiredMixin, View):
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        context={}
+        current_company = request.user.company
+        bid_id = self.kwargs['bid_id']
+        bid = MoveManageTaskBid.objects.get(company=current_company, uid=bid_id)
+        task = bid.move_manage_task
+        # Set chosen bid of the task
+        task.chosen_bid = bid
+        task.save()
+        # Create new Move Management project
+        move_manage_project = MoveManagementProject(company=current_company,
+                                            move_manage_task = task,
+                                            estimated_budget = bid.cost,
+                                            move_manager = bid.move_manager,
+                                            client = task.client)
+        move_manage_project.save()
+        messages.success(request, "Accepted Bid from {0} {1} and created Move Management project".format(bid.move_manager.first_name, bid.move_manager.last_name))
+        return redirect('view_move_bids', task_id=bid.move_manage_task.uid)
+
 class AddMoveManager(LoginRequiredMixin, View):
 
     def get(self, request):
@@ -373,6 +450,89 @@ class EditMoveInventory(LoginRequiredMixin, View):
             messages.error(request, "Error saving inventory item")
         return redirect('edit_move_inventory', inventory_id=inventory_uid)
 
+class UpdateMoveProjects(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {}
+        current_company = request.user.company
+        move_manager = MoveManager.objects.get(company=current_company,
+                                                        user=request.user)
+        projects = MoveManagementProject.objects.filter(company=current_company, move_manager=move_manager)
+        context['projects'] = projects
+        return render(request, "production/update_move_projects.html", context)
+
+class ViewMoveProject(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        current_company = request.user.company
+        move_project_id = self.kwargs['move_project_id']
+        move_project = MoveManagementProject.objects.get(company = current_company,
+                                                    uid = move_project_id)
+        context['project'] = move_project
+        (progress_list, budget_list, amount_spent_list,
+            duration_list, status_list) = self.get_graph_series(move_project, current_company)
+
+        context['progress_list'] = [x.progress for x in progress_list]
+        context['progress_x_list'] = [x.created.strftime("%Y-%m-%d %H:%M:%S") for x in progress_list]
+
+        context['amount_spent_list'] = [x.total_amount_spent for x in amount_spent_list]
+        context['amount_spent_x_list'] = [x.created.strftime("%Y-%m-%d %H:%M:%S") for x in amount_spent_list]
+
+        context['budget_list'] = [x.estimated_budget for x in budget_list]
+        context['budget_x_list'] = [x.created.strftime("%Y-%m-%d %H:%M:%S") for x in budget_list]
+
+        context['duration_list'] = [x.project_duration for x in duration_list]
+        context['duration_x_list'] = [x.created.strftime("%Y-%m-%d %H:%M:%S") for x in duration_list]
+
+        return render(request, "production/move_project_view.html", context)
+
+    def get_graph_series(self, move_project, current_company):
+
+        progress_list = MoveProjectProgressLog.objects.filter(company=current_company, move_management_project=move_project).order_by('created')
+        budget_list = MoveProjectBudgetLog.objects.filter(company=current_company, move_management_project=move_project).order_by('created')
+        amount_spent_list = MoveProjectAmountSpentLog.objects.filter(company=current_company, move_management_project=move_project).order_by('created')
+        duration_list = MoveProjectDurationLog.objects.filter(company=current_company, move_management_project=move_project).order_by('created')
+        status_list = MoveProjectStatusLog.objects.filter(company=current_company, move_management_project=move_project).order_by('created')
+
+        return (progress_list, budget_list, amount_spent_list, duration_list, status_list)
+
+class ViewMoveProjectDisabled(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        current_company = request.user.company
+        task_id = self.kwargs['task_id']
+        task = MoveManageTask.objects.get(company=current_company, uid = task_id)
+        move_project = MoveManagementProject.objects.get(company = current_company,
+                                                    move_manage_task=task)
+        context['project'] = move_project
+        (progress_list, budget_list, amount_spent_list,
+            duration_list, status_list) = self.get_graph_series(move_project, current_company)
+
+        context['progress_list'] = [x.progress for x in progress_list]
+        context['progress_x_list'] = [x.created.strftime("%Y-%m-%d %H:%M:%S") for x in progress_list]
+
+        context['amount_spent_list'] = [x.total_amount_spent for x in amount_spent_list]
+        context['amount_spent_x_list'] = [x.created.strftime("%Y-%m-%d %H:%M:%S") for x in amount_spent_list]
+
+        context['budget_list'] = [x.estimated_budget for x in budget_list]
+        context['budget_x_list'] = [x.created.strftime("%Y-%m-%d %H:%M:%S") for x in budget_list]
+
+        context['duration_list'] = [x.project_duration for x in duration_list]
+        context['duration_x_list'] = [x.created.strftime("%Y-%m-%d %H:%M:%S") for x in duration_list]
+        return render(request, "production/move_project_view.html", context)
+
+    def get_graph_series(self, move_project, current_company):
+
+        progress_list = MoveProjectProgressLog.objects.filter(company=current_company, move_management_project=move_project).order_by('created')
+        budget_list = MoveProjectBudgetLog.objects.filter(company=current_company, move_management_project=move_project).order_by('created')
+        amount_spent_list = MoveProjectAmountSpentLog.objects.filter(company=current_company, move_management_project=move_project).order_by('created')
+        duration_list = MoveProjectDurationLog.objects.filter(company=current_company, move_management_project=move_project).order_by('created')
+        status_list = MoveProjectStatusLog.objects.filter(company=current_company, move_management_project=move_project).order_by('created')
+
+        return (progress_list, budget_list, amount_spent_list, duration_list, status_list)
+
 @login_required
 def get_move_manager_with_email(request):
     if request.method == 'GET':
@@ -397,3 +557,108 @@ def get_move_manager_with_email(request):
         context["move_manager_data"] = move_manager_data
         #return JsonResponse(caregiver_data)
         return HttpResponse(json.dumps(move_manager_data), content_type="application/json")
+
+@login_required
+@transaction.atomic
+def save_move_project_budget(request):
+
+    if request.method == "POST":
+        context = {}
+        company = request.user.company
+        budget = request.POST.get('budget')
+        project_id = request.POST.get('project_id')
+        if budget and project_id:
+            project = MoveManagementProject.objects.get(company = company, uid = project_id)
+            project.estimated_budget = budget
+            project.save()
+            move_budget_log = MoveProjectBudgetLog(company=company,
+                                                            move_management_project = project,
+                                                            estimated_budget = budget)
+            move_budget_log.save()
+            return HttpResponse("Saved Budget")
+        else:
+            return HttpResponse("Please Enter Budget Amount")
+
+@login_required
+@transaction.atomic
+def save_move_project_total_amount_spent(request):
+
+    if request.method == "POST":
+        context = {}
+        company = request.user.company
+        total_amount_spent = request.POST.get('total_amount_spent')
+        project_id = request.POST.get('project_id')
+        if total_amount_spent and project_id:
+            project = MoveManagementProject.objects.get(company = company, uid = project_id)
+            project.total_amount_spent = total_amount_spent
+            project.save()
+            move_amount_spent_log = MoveProjectAmountSpentLog(company=company,
+                                        move_management_project = project,
+                                        total_amount_spent = total_amount_spent)
+            move_amount_spent_log.save()
+            return HttpResponse("Saved total amount spent")
+        else:
+            return HttpResponse("Please Enter total amount spent")
+
+@login_required
+@transaction.atomic
+def save_move_project_duration(request):
+
+    if request.method == "POST":
+        context = {}
+        company = request.user.company
+        project_duration = request.POST.get('project_duration')
+        project_id = request.POST.get('project_id')
+        if project_duration and project_id:
+            project = MoveManagementProject.objects.get(company = company, uid = project_id)
+            project.project_duration = project_duration
+            project.save()
+            move_project_duration = MoveProjectDurationLog(company=company,
+                                        move_management_project = project,
+                                        project_duration = project_duration)
+            move_project_duration.save()
+            return HttpResponse("Saved Project Duration")
+        else:
+            return HttpResponse("Please Enter Project Duration")
+
+@login_required
+@transaction.atomic
+def save_move_progress(request):
+
+    if request.method == "POST":
+        context = {}
+        company = request.user.company
+        progress = request.POST.get('project_progress')
+        project_id = request.POST.get('project_id')
+        if progress and project_id:
+            project = MoveManagementProject.objects.get(company = company, uid = project_id)
+            project.progress = progress
+            project.save()
+            move_project_progress = MoveProjectProgressLog(company=company,
+                                        move_management_project = project,
+                                        progress = progress)
+            move_project_progress.save()
+            return HttpResponse("Saved Progress")
+        else:
+            return HttpResponse("Please Enter Progress")
+
+@login_required
+@transaction.atomic
+def save_move_status(request):
+
+    if request.method == "POST":
+        context = {}
+        company = request.user.company
+        status = request.POST.get('project_status')
+        project_id = request.POST.get('project_id')
+        if status and project_id:
+            project = MoveManagementProject.objects.get(company = company, uid = project_id)
+            project.status = status
+            project.save()
+            move_project_status = MoveProjectStatusLog(company = company,
+                                        move_management_project = project,
+                                        status = status)
+            move_project_status.save()
+            return HttpResponse("Saved Status")
+        else:
+            return HttpResponse("Please Enter Status")
