@@ -201,6 +201,9 @@
                         <form action="{% url 'view_move_bids' task_id=task.uid %}" style="float: left;">
                           <button type="submit" class="btn btn-warning">View Bids</button>
                         </form>
+                        <form action="{% url 'delete_move_task' task_id=task.uid %}" style="float: left;">
+                          <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
                       </div>
                       {% else %}
                       <div class="form-group">

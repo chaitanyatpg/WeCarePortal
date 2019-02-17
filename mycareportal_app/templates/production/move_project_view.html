@@ -84,15 +84,6 @@
                     <div class="col-md-9 col-sm-9 col-xs-12">
                       <div class="container">
                         <div class="row">
-                          {% if 'CAREMANAGER' in user_roles %}
-                            <form action="{% url 'home_dashboard' %} " style="text-align: center;">
-                              <button type="submit" class="btn btn-success">Back</button>
-                            </form>
-                          {% elif 'MOVEMANAGER' in user_roles %}
-                            <form action="{% url 'update_move_projects' %} " style="text-align: center;">
-                              <button type="submit" class="btn btn-success">Back</button>
-                            </form>
-                          {% endif %}
                           <form action="{% url 'move_inventory' task_id=project.move_manage_task.uid %}" style="text-align: center;">
                             <button type="submit" class="btn btn-info">Inventory</button>
                           </form>
@@ -157,7 +148,15 @@
                         </li>
                       </ul>
                       <br />
-
+                      {% if 'CAREMANAGER' in user_roles %}
+                        <form action="{% url 'home_dashboard' %} " style="text-align: center;">
+                          <button type="submit" class="btn btn-success">Back</button>
+                        </form>
+                      {% elif 'MOVEMANAGER' in user_roles %}
+                        <form action="{% url 'update_move_projects' %} " style="text-align: center;">
+                          <button type="submit" class="btn btn-success">Back</button>
+                        </form>
+                      {% endif %}
 
                       <!--<div>
 

@@ -533,6 +533,17 @@ class ViewMoveProjectDisabled(LoginRequiredMixin, View):
 
         return (progress_list, budget_list, amount_spent_list, duration_list, status_list)
 
+class DeleteMoveTask(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        current_company = request.user.company
+        task_id = self.kwargs['task_id']
+        task = MoveManageTask.objects.get(company=current_company, uid = task_id)
+        task.delete()
+        messages.success(request, "Deleted move task")
+        return redirect('home_dashboard')
+
 @login_required
 def get_move_manager_with_email(request):
     if request.method == 'GET':
