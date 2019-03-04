@@ -118,6 +118,8 @@
   $(document).ready(function(){
     $('#caregiver_table').DataTable({
       dom: "Bfrtip",
+      sScrollX: "100%",
+      bScrollCollapse: false,
       buttons: [
         'copy', 'csv', 'excel', 'pdf', 'print'
       ]
