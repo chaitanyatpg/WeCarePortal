@@ -207,7 +207,12 @@
     <script>
       $(document).ready(function(){
         $('#datatable').DataTable({
-          "aaSorting": []
+          dom: "Bfrtip",
+          sScrollX: "100%",
+          bScrollCollapse: false,
+          buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+          ]
         });
       });
     </script>

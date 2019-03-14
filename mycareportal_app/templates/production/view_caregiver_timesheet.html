@@ -131,17 +131,12 @@
   $(document).ready(function(){
     $('#active_caregiver_table').DataTable({
       dom: "Bfrtip",
+      sScrollX: "100%",
+      bScrollCollapse: false,
       buttons: [
         'copy', 'csv', 'excel', 'pdf', 'print'
       ]
     });
-
-    /*var table = $('#example').DataTable();
-
-    // Event listener to the two range filtering inputs to redraw on input
-    $('#min, #max').keyup( function() {
-        table.draw();
-    } );*/
   });
 </script>
 <!-- end -->

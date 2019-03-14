@@ -196,7 +196,14 @@
           };
         }();
 
-        $('#datatable').dataTable();
+        $('#datatable').DataTable({
+          dom: "Bfrtip",
+          sScrollX: "100%",
+          bScrollCollapse: false,
+          buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+          ]
+        });
 
         $('#datatable-keytable').DataTable({
           keys: true

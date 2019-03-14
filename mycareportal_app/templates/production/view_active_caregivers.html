@@ -224,7 +224,14 @@
 <!-- DataTables -->
 <script>
   $(document).ready(function(){
-    $('#active_caregiver_table').DataTable();
+    $('#active_caregiver_table').DataTable({
+      dom: "Bfrtip",
+      sScrollX: "100%",
+      bScrollCollapse: false,
+      buttons: [
+        'copy', 'csv', 'excel', 'pdf', 'print'
+      ]
+    });
   });
 </script>
 <!-- end -->
