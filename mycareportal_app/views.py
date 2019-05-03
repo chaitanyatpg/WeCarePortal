@@ -120,7 +120,7 @@ def register(request):
         activation_code = form.cleaned_data['activation_code']
         exception_flag = False
         #Check Activation code
-        if ActivationCode.objects.filter(activation_code = activation_code).exists():
+        if ActivationCode.objects.filter(activation_code = activation_code, activated=False).exists():
             activation_flag = True
         else:
             activation_flag = False
