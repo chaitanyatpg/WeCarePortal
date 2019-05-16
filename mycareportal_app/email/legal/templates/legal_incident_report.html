@@ -1,0 +1,17 @@
+{% autoescape off %}
+<h3>Incident report for {{ client.first_name }} {{ client.last_name}} registered with {{client.company.company_name}}</h3>
+<ul>
+  <li>Incident: {{ incident.incident }} </li>
+  <li>Location: {{ location.location }} </li>
+  <li>Task: {{ task.activity_task }} </li>
+  <li>Reported By: {{ reporter.first_name }} {{ reporter.last_name}} </li>
+</ul>
+<h3> Please contact a care manager from the below list for further details </h3>
+<ul>
+{% for care_manager in care_managers %}
+  <li>
+    {{care_manager.user.first_name}} {{care_manager.user.last_name}}: {{care_manager.email_address}}
+  </li>
+{% endfor %}
+</ul>
+{% endautoescape %}

@@ -99,7 +99,8 @@ TEMPLATES = [
                 'mycareportal_app/email/user/templates',
                 'mycareportal_app/email/admin/templates',
                 'mycareportal_app/email/home_mod_manager/templates',
-                'mycareportal_app/email/move_manager/templates'],
+                'mycareportal_app/email/move_manager/templates',
+                'mycareportal_app/email/legal/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

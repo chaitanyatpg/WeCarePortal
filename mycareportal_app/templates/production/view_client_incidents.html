@@ -61,6 +61,7 @@
                     <th>Home Modification</th>
                     <th>Move Management</th>
                     <th>Additional Care</th>
+                    <th>Notify Legal Team</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -75,6 +76,7 @@
                         <td><button type="button" class="btn btn-success">Start</button></td>
                         <td><button type="button" class="btn btn-success">Start</button></td>
                         <td><button type="button" class="btn btn-success">Start</button></td>
+                        <td><button type="button" onClick="sendLegalEmail('{{incident.uid}}')" class="btn btn-success">Send</button></td>
                       </tr>
                     {% endfor %}
                 </tbody>
@@ -127,5 +129,59 @@
   });
 </script>
 <!-- end -->
+
+<!--get cookie -->
+  <script>
+  function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+  }
+</script>
+<!-- end -->
+
+<!-- Post legal email details -->
+<script type="text/javascript">
+  function sendLegalEmail(report_uid){
+    var csrftoken = getCookie('csrftoken');
+      /*$.ajax({
+        type: post_family_form.attr('method'),
+        url: post_family_form.attr('action'),
+        data: post_family_form.serialize(),
+        success: function(family_contacts){
+          console.log(family_contacts[0].first_name);
+        },
+        error: function(family_contacts){
+          console.log("FAILURE");
+        }
+      });
+      return false;
+    });*/
+    $.ajax({
+      url: 'send_legal_email_incident',
+      beforeSend: function(jqXHR, settings){
+        jqXHR.setRequestHeader("x-csrftoken",csrftoken);
+      },
+      type: 'POST',
+      data: {report_uid: report_uid},
+      success: function() {
+        location.reload();
+      },
+      error: function() {
+        location.reload();
+      }
+    });
+  }
+</script>
 
 {% endblock %}

@@ -171,6 +171,7 @@ urlpatterns = [
     url(r'^move_management/save_move_project_duration', move_manage_views.save_move_project_duration, name="save_move_project_duration"),
     url(r'^move_management/save_move_project_progress', move_manage_views.save_move_progress, name="save_move_project_progress"),
     url(r'^move_management/save_move_project_status', move_manage_views.save_move_status, name="save_move_project_status"),
-    url(r'^move_management/delete_move_task/(?P<task_id>[0-9a-f-]+)/$', move_manage_views.DeleteMoveTask.as_view(), name="delete_move_task")
+    url(r'^move_management/delete_move_task/(?P<task_id>[0-9a-f-]+)/$', move_manage_views.DeleteMoveTask.as_view(), name="delete_move_task"),
+    url(r'^send_legal_email_incident', client_views.send_legal_email_incident, name="send_legal_email_incident")
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

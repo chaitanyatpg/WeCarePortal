@@ -27,6 +27,7 @@ from mycareportal_app.common import error_messaging as error_messaging
 from django.contrib.sites.shortcuts import get_current_site
 from mycareportal_app.email.family.family_email_processor import FamilyEmailProcessor
 from mycareportal_app.email.provider.provider_email_processor import ProviderEmailProcessor
+from mycareportal_app.email.legal.legal_email_processor import LegalEmailProcessor
 
 @login_required
 def add_client(request):
@@ -1822,3 +1823,21 @@ def post_transfer(request):
         transfer_map.experience = experience
         transfer_map.save()
     return HttpResponse("Changed Status")
+
+@login_required
+def send_legal_email_incident(request):
+    if request.method == "POST":
+        company = request.user.company
+        report_uid = request.POST['report_uid']
+        report = IncidentReport.objects.get(company=company,uid=report_uid)
+        care_managers = CareManager.objects.filter(company = request.user.company)
+        #Send verification email
+        current_site = get_current_site(request)
+        email_manager = LegalEmailProcessor()
+        email_manager.send_incident_email(
+        report, care_managers
+        )
+        messages.success(request, "Successfully sent email to legal team. You will be contacted shortly with further details.")
+    else:
+        messages.error(request, "Error sending email: Please contact customer support")
+    return HttpResponse("Sent legal email")
