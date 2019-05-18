@@ -50,6 +50,12 @@ def home(request):
     user = request.user
     user_roles = UserRoles.objects.filter(company=current_company, user=user)
     user_roles = [x.role for x in user_roles]
+    if current_company.is_on_free_trial:
+        current = datetime.datetime.now()
+        current = current.replace(tzinfo=None)
+        company_created = current_company.created.replace(tzinfo=None)
+        free_trial_days = (current - company_created).days
+        messages.info(request, "Currently on day {0} of free trial".format(free_trial_days))
     if "CAREMANAGER" in user_roles:
         return redirect('dashboard')
     elif "CAREGIVER" in user_roles:
@@ -125,15 +131,16 @@ def register(request):
         else:
             activation_flag = False
 
-        if not activation_flag:
-            messages.error(request, "Invalid Activation Code. Please enter a valid activation code.")
-            return render(request, 'production/wecare_register.html', context)
+        #if not activation_flag:
+            #messages.error(request, "Invalid Activation Code. Please enter a valid activation code.")
+            #return render(request, 'production/wecare_register.html', context)
 
         #Create company object and save
         with transaction.atomic():
-            activation_code_data = ActivationCode.objects.get(activation_code=activation_code)
-            activation_code_data.activated = True
-            activation_code_data.save()
+            if activation_flag:
+                activation_code_data = ActivationCode.objects.get(activation_code=activation_code)
+                activation_code_data.activated = True
+                activation_code_data.save()
             try:
                 new_company = Company(company_name=company_name,
                                             contact_number=contact_number,
@@ -143,6 +150,15 @@ def register(request):
                                             zip_code=zip_code,
                                             time_zone=time_zone)
                 new_company.save()
+                if activation_flag:
+                    new_company.activated = True
+                    activation_code_data = ActivationCode.objects.get(activation_code=activation_code)
+                    new_company.activation_code = activation_code_data
+                    new_company.is_on_free_trial = False
+                    new_company.save()
+                else:
+                    new_company.is_on_free_trial = True
+                    new_company.save()
             except IntegrityError as e:
                 exception_flag = True
                 messages.error(request, "Company has already been registered. Please enter a new company name.")

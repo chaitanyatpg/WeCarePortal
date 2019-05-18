@@ -6,6 +6,12 @@ import uuid
 import shortuuid
 # Create your models here.
 
+class ActivationCode(models.Model):
+
+    created = models.DateTimeField(auto_now_add=True)
+    activation_code = models.CharField(unique=True, max_length = 22, default=shortuuid.uuid, editable=False)
+    activated = models.BooleanField(default=False)
+
 class Company(models.Model):
 
     company_id = models.AutoField(primary_key=True)
@@ -20,6 +26,9 @@ class Company(models.Model):
     account_number = models.IntegerField(unique=True, null=True)
     parent_account = models.ForeignKey('self', null=True)
     created = models.DateTimeField(auto_now_add=True)
+    activation_code = models.OneToOneField(ActivationCode, null=True)
+    activated = models.BooleanField(default=True)
+    is_on_free_trial = models.BooleanField(default=False)
 
 class User(AbstractUser):
 
@@ -851,9 +860,3 @@ class MoveProjectStatusLog(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     move_management_project = models.ForeignKey(MoveManagementProject)
     status = models.CharField(STATUS_CHOICES, max_length = 10)
-
-class ActivationCode(models.Model):
-
-    created = models.DateTimeField(auto_now_add=True)
-    activation_code = models.CharField(unique=True, max_length = 22, default=shortuuid.uuid, editable=False)
-    activated = models.BooleanField(default=False)
