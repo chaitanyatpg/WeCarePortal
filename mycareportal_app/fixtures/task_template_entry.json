@@ -1,0 +1,79 @@
+[
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 1,
+		"fields": {
+			"name": "Blood Pressure",
+			"description": "",
+			"task_template_code": "VIT001",
+			"task_template_entry_code": "VIT001BP",
+			"entry_type": "TEXT"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 2,
+		"fields": {
+			"name": "Heart Rate",
+			"description": "",
+			"task_template_code": "VIT001",
+			"task_template_entry_code": "VIT001HR",
+			"entry_type": "TEXT"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 3,
+		"fields": {
+			"name": "Pulse",
+			"description": "",
+			"task_template_code": "VIT001",
+			"task_template_entry_code": "VIT001P",
+			"entry_type": "TEXT"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 4,
+		"fields": {
+			"name": "Body Temperature",
+			"description": "",
+			"task_template_code": "VIT001",
+			"task_template_entry_code": "VIT001BT",
+			"entry_type": "TEXT"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 5,
+		"fields": {
+			"name": "Blood Sugar Fasting",
+			"description": "",
+			"task_template_code": "VIT001",
+			"task_template_entry_code": "VIT001BSF",
+			"entry_type": "TEXT"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 6,
+		"fields": {
+			"name": "Blood Sugar Non-Fasting",
+			"description": "",
+			"task_template_code": "VIT001",
+			"task_template_entry_code": "VIT001BSNF",
+			"entry_type": "TEXT"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 7,
+		"fields": {
+			"name": "A1C",
+			"description": "",
+			"task_template_code": "VIT001",
+			"task_template_entry_code": "VIT001A1C",
+			"entry_type": "TEXT"
+		}
+	}
+]

@@ -29,6 +29,8 @@ from mycareportal_app.email.family.family_email_processor import FamilyEmailProc
 from mycareportal_app.email.provider.provider_email_processor import ProviderEmailProcessor
 from mycareportal_app.email.legal.legal_email_processor import LegalEmailProcessor
 
+from django.db.models import Q
+
 @login_required
 def add_client(request):
     return render(request, 'production/care_portal.html')
@@ -564,6 +566,12 @@ class AssignTasks(LoginRequiredMixin, View):
             all_tasks.sort(key=lambda x: x.activity_category_name)
             context["all_tasks"] = all_tasks
             context["activity_masters"] = activity_masters
+            # Get template client_match_categories
+            task_templates = TaskTemplate.objects.filter(
+                Q(global_template=True) |
+                Q(company=current_company)
+            )
+            context["task_templates"] = task_templates
             #Populate client email
             client_email = find_client_form.cleaned_data['client_email']
             context["client_email"] = client_email
@@ -617,6 +625,11 @@ class AssignTasks(LoginRequiredMixin, View):
                 friday = assign_task_form.cleaned_data["friday"]
                 saturday = assign_task_form.cleaned_data["saturday"]
                 sunday = assign_task_form.cleaned_data["sunday"]
+                template_uid = assign_task_form.cleaned_data["template"]
+                if template_uid:
+                    template = TaskTemplate.objects.get(uid=template_uid)
+                else:
+                    template = None
                 day_filter = False
                 if (monday or tuesday or wednesday or thursday or friday or saturday or sunday):
                     day_filter = True
@@ -663,6 +676,8 @@ class AssignTasks(LoginRequiredMixin, View):
                     self.save_monthly_task(new_task_header, attachments, current_user, day_dict, day_filter)
                 if task_type == "Yearly":
                     self.save_yearly_task(new_task_header, attachments, current_user, day_dict, day_filter)
+                if template:
+                    self.populate_task_templates(new_task_header, template)
                 messages.success(request, "Assigned task {0} to client {1} {2}".format(task, client.first_name, client.last_name))
             else:
                 form_errors = assign_task_form.errors.as_data()
@@ -689,6 +704,25 @@ class AssignTasks(LoginRequiredMixin, View):
         #client_schedule = TaskSchedule.objects.filter(company=current_company,client=current_client)
         #context["client_schedule"] = client_schedule
         #return render(request,'production/assign_tasks.html',context)
+
+    def populate_task_templates(self, new_task_header, template):
+        task_schedules = TaskSchedule.objects.filter(company=new_task_header.company,
+                                                    task_header=new_task_header)
+        task_template_entries = TaskTemplateEntry.objects.filter(task_template_code=template.template_code)
+        for schedule in task_schedules:
+            template_instance = TaskTemplateInstance(
+                company=new_task_header.company,
+                task_template = template,
+                task_schedule = schedule
+            )
+            template_instance.save()
+            for template_entry in task_template_entries:
+                template_entry_instance = TaskTemplateEntryInstance(
+                    company=new_task_header.company,
+                    task_template_entry=template_entry,
+                    task_template_instance=template_instance
+                )
+                template_entry_instance.save()
 
     def validate_attachments(self, request, attachments):
         for attachment in attachments:

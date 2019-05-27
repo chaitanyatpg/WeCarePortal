@@ -286,7 +286,7 @@ class AssignTaskForm(forms.Form):
     link = forms.CharField(required=False, max_length=500)
     #attachment = forms.FileField(label='Select file', required=False)
     attachment = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), label='Select files', required=False)
-
+    template = forms.UUIDField(required=False)
     #def clean_attachment(self):
     #    attachments = self.cleaned_data.get('attachment')
     #    for attachment in attachments:

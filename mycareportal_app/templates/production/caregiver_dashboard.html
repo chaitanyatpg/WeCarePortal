@@ -75,7 +75,7 @@
                               </center>
                               </br>
                               <hr>
-                                {% for task, task_comments, task_attachments, task_links in tasks %}
+                                {% for task, task_comments, task_attachments, task_links, task_templates in tasks %}
                                 <li>
 
 
@@ -89,7 +89,6 @@
                                     <h4 class="heading">{{task.activity_task}}</h4>
                                     <blockquote class="message">{{task.description}}</blockquote>
                                     <br />
-
                                     <ul>
                                     {% for attachment in task_attachments %}
                                         <li>
@@ -130,6 +129,26 @@
                                     </ul>
                                     <form enctype="multipart/form-data" method="post" role="form" action="{% url 'caregiver_dashboard' %}">
                                       {% csrf_token %}
+                                      {% for template, entries in task_templates %}
+                                        <h3>{{template.task_template.name}}<span><small> - {{template.task_template.description}}</small></span></h3>
+                                        <div class="container">
+                                        {% for entry in entries %}
+                                          <div class="row">
+                                            <div class="form-group">
+                                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{entry.task_template_entry.name}}</label>
+                                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                                  {% if entry.entry_value %}
+                                                    <input type="text" class="form-control col-md-7 col-xs-12" name="{{update_task_form.template_entries.html_name}}" value="{{entry.entry_value}}">
+                                                  {% else %}
+                                                    <input type="text" class="form-control col-md-7 col-xs-12" name="{{update_task_form.template_entries.html_name}}">
+                                                  {% endif %}
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <br />
+                                        {% endfor %}
+                                        </div>
+                                      {% endfor %}
                                       <p>
                                         <label>New Attachments</label>
                                             {{update_task_form.attachment.label_tag}}{{update_task_form.attachment}}
@@ -295,7 +314,7 @@
                 There are remaining Pending or in progress tasks. Are you sure you want to log out?
                 {% for client, tasks in client_tasks.items %}
                   <h3> {{client.first_name|addstr_space:client.last_name}} </h3>
-                  {% for task, task_comments, task_attachments, task_links in tasks %}
+                  {% for task, task_comments, task_attachments, task_links, task_templates in tasks %}
                     {% if task.pending or task.in_progress %}
                       <h5 class="heading">{{task.activity_task}}</h5>
                       <label class="message">{{task.description}}</label>

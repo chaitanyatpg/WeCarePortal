@@ -1,0 +1,11 @@
+[
+	{
+		"model": "mycareportal_app.tasktemplate",
+		"pk": 1,
+		"fields": {
+			"name": "Vitals",
+			"description": "Used to report various essential vitals",
+			"template_code": "VIT001"
+		}
+	}
+]

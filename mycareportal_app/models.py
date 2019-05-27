@@ -389,6 +389,49 @@ class TaskLink(models.Model):
     task_url = models.CharField(max_length=500)
     created = models.DateTimeField(auto_now_add=True)
 
+class TaskTemplate(models.Model):
+
+    company = models.ForeignKey(Company, null=True)
+    global_template = models.BooleanField(default=True)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    template_code = models.CharField(max_length=100)
+    name = models.CharField(max_length=500)
+    description = models.CharField(max_length=500)
+
+class TaskTemplateEntry(models.Model):
+
+    ENTRY_TYPE_CHOICES = (
+    ("TEXT", "TEXT"),
+    ("CHECK", "CHECK"),
+    ("RADIO", "RADIO"),
+    ("NUMBER", "NUMBER")
+    )
+
+    company = models.ForeignKey(Company, null=True)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    task_template_code = models.CharField(max_length=100)
+    task_template_entry_code = models.CharField(max_length=100)
+    entry_type = models.CharField(ENTRY_TYPE_CHOICES, max_length=100)
+    name = models.CharField(max_length=100)
+    description = models.CharField(max_length=500)
+
+class TaskTemplateInstance(models.Model):
+
+    company = models.ForeignKey(Company)
+    task_template = models.ForeignKey(TaskTemplate)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    created = models.DateTimeField(auto_now_add=True)
+    task_schedule = models.ForeignKey(TaskSchedule)
+
+class TaskTemplateEntryInstance(models.Model):
+
+    company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    created = models.DateTimeField(auto_now_add=True)
+    task_template_entry = models.ForeignKey(TaskTemplateEntry)
+    task_template_instance = models.ForeignKey(TaskTemplateInstance)
+    entry_value = models.CharField(max_length=500, blank=True)
+
 class AssessmentCategories(models.Model):
 
     category = models.CharField(max_length=500)

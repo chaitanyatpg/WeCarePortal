@@ -490,8 +490,22 @@ class CaregiverDashboard(LoginRequiredMixin, View):
                 status = update_task_form.cleaned_data["status"]
                 incident_id = update_task_form.cleaned_data["incident_id"]
                 location_id = update_task_form.cleaned_data["location_id"]
+                #template_entries = update_task_form.cleaned_data["template_entries"]
+                template_entries = request.POST.getlist('template_entries')
+                print(template_entries)
+
+
                 #attachments = request.FILES.getlist('attachment')
                 task = TaskSchedule.objects.get(company=current_company,client=client,id=task_id)
+
+                if template_entries:
+                    task_template_instance = TaskTemplateInstance.objects.get(company=current_company,
+                                                                task_schedule=task)
+                    entry_instances = list(TaskTemplateEntryInstance.objects.filter(company=current_company,
+                                                                task_template_instance=task_template_instance).order_by('created'))
+                    for i in range(len(template_entries)):
+                        entry_instances[i].entry_value = template_entries[i]
+                        entry_instances[i].save()
                 #task.comment = comment
                 if status == "pending":
                     task.pending = True
@@ -589,7 +603,8 @@ class CaregiverDashboard(LoginRequiredMixin, View):
                 client_tasks = list(map(lambda x: (x,
                 TaskComment.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created'),
                 TaskAttachment.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created'),
-                TaskLink.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created')),client_tasks))
+                TaskLink.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created'),
+                TaskTemplateInstance.objects.filter(company=request.user.company,task_schedule=x).order_by('created')),client_tasks))
                 return client_tasks
             else:
                 return None
@@ -598,7 +613,10 @@ class CaregiverDashboard(LoginRequiredMixin, View):
             client_tasks = list(map(lambda x: (x,
             TaskComment.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created'),
             TaskAttachment.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created'),
-            TaskLink.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created')),client_tasks))
+            TaskLink.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created'),
+            map(lambda y: (y,
+                TaskTemplateEntryInstance.objects.filter(company=request.user.company,task_template_instance=y).order_by('created')),
+                TaskTemplateInstance.objects.filter(company=request.user.company,task_schedule=x).order_by('created'))),client_tasks))
             return client_tasks
 
     def check_task_complete_status(self, current_client_tasks):

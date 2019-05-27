@@ -91,6 +91,19 @@
                       </div>
                     </div>
                     <div class="form-group">
+                      <div class="row">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Task Template</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <select id="template_dropdown" class="select2_single" tabindex="-1" name="{{assign_task_form.template.html_name}}">
+                            <option value="" selected></option>
+                            {% for template in task_templates %}
+                            <option value="{{ template.uid }}">{{template.name}} - {{template.description}}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
                       <label class="control-label col-md-3 col-sm-3 col-xs-12">Start Date<span class="required">*</span>
                       </label>
                       <div class="col-md-6 col-sm-6 col-xs-12">
@@ -1057,8 +1070,26 @@
     <!-- Select2 -->
     <script>
       $(document).ready(function() {
-        $(".select2_single").select2({
+        $("#activity_master_dropdown").select2({
+          placeholder: "-------- Select a Category--------",
+          allowClear: true
+        });
+      });
+    </script>
+
+    <script>
+      $(document).ready(function() {
+        $("#master_dropdown").select2({
           placeholder: "---------- Select a Task ----------",
+          allowClear: true
+        });
+      });
+    </script>
+
+    <script>
+      $(document).ready(function() {
+        $("#template_dropdown").select2({
+          placeholder: "---------- Select a Template ----------",
           allowClear: true
         });
       });
