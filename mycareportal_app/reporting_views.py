@@ -86,3 +86,71 @@ class ViewTasks(LoginRequiredMixin, View):
             tasks = TaskSchedule.objects.filter(company=request.user.company)
         context['tasks'] = tasks
         return render(request, "production/view_tasks.html", context)
+
+class ViewDailyActivityReport(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        company = request.user.company
+        company_timezone = pytz.timezone(company.time_zone)
+        #current_date = datetime.date.today()
+        start_date = (timezone.now().astimezone(company_timezone)).date()
+        end_date = start_date
+        if 'start_date' in self.kwargs:
+            start_date = self.kwargs['start_date']
+        if 'end_date' in self.kwargs:
+            end_date = self.kwargs['end_date']
+        print(start_date)
+        print(end_date)
+        tasks = TaskSchedule.objects.filter(company=company, date__range=[start_date, end_date])
+        context['tasks'] = self.create_task_objects(tasks, company)
+        return render(request, "production/view_daily_tasks.html", context)
+
+    def create_task_objects(self, tasks, company):
+
+        new_tasks = []
+        for task in tasks:
+            new_task = {
+                "task_date": task.date,
+                "first_name": task.client.first_name,
+                "last_name": task.client.last_name,
+                "task_name": task.activity_task,
+                "start_time": task.start_time,
+                "end_time": task.end_time
+            }
+            if task.complete:
+                new_task['status'] = "COMPLETE"
+            elif task.in_progress:
+                new_task['status'] = "IN PROGRESS"
+            elif task.cancelled:
+                new_task['status'] = "CANCELLED"
+            else:
+                new_task['status'] = "PENDING"
+            # Get assigned caregivers
+            caregivers = task.client.caregiver.all()
+            caregivers = map(lambda x: "{0} {1}".format(x.first_name, x.last_name), caregivers)
+            new_task["caregivers"] = ", ".join(caregivers)
+            # Get incidents
+            incidents = IncidentReport.objects.filter(company=company, task=task)
+            incidents = map(lambda x: x.incident_name, incidents)
+            new_task["incidents"] = ", ".join(incidents)
+            # Get templates
+            templates = TaskTemplateInstance.objects.filter(company=company, task_schedule=task)
+            template_items = []
+            for template in templates:
+                if template.task_template.template_code == "VIT001":
+                    entries = TaskTemplateEntryInstance.objects.filter(company=company,task_template_instance=template)
+                    for entry in entries:
+                        entry_text = "{0}: {1}".format(entry.task_template_entry.name,
+                                                entry.entry_value)
+                        template_items.append(entry_text)
+            template_items = ", ".join(template_items)
+            new_task["vitals"] = template_items
+            comments = list(TaskComment.objects.filter(company=company, task_schedule=task))
+            if len(comments) > 0:
+                latest_comment = comments[-1].comment
+            else:
+                latest_comment = ""
+            new_task["latest_comment"] = latest_comment
+            new_tasks.append(new_task)
+        return new_tasks

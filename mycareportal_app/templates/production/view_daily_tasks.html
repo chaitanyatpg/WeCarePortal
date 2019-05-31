@@ -1,0 +1,224 @@
+{% extends "production/base.html" %}
+{% block title %} Daily Activity Report {% endblock %}
+{% load mycareportal_app_extras%}
+{% block headlibs %}
+{% load static %}
+<!-- iCheck -->
+<link href="{% static 'vendors/iCheck/skins/flat/green.css' %}" rel="stylesheet">
+<!-- bootstrap-wysiwyg -->
+<link href="{% static 'vendors/google-code-prettify/bin/prettify.min.css' %}" rel="stylesheet">
+<!-- Select2 -->
+<link href="{% static 'vendors/select2/dist/css/select2.min.css' %}" rel="stylesheet">
+<!-- Switchery -->
+<link href="{% static 'vendors/switchery/dist/switchery.min.css' %}" rel="stylesheet">
+<!-- starrr -->
+<link href="{% static 'vendors/starrr/dist/starrr.css' %}" rel="stylesheet">
+<!-- bootstrap-daterangepicker -->
+<link href="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+<!-- Select2 -->
+<link href="{% static 'vendors/select2/dist/css/select2.min.css' %}" rel="stylesheet">
+<!-- Datatables -->
+<link href="{% static 'vendors/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css' %}" rel="stylesheet">
+{% endblock %}
+{% block pagecontent %}
+    <!-- page content -->
+    <div class="right_col" role="main">
+      <div class="">
+        <div class="page-title">
+          <div class="title_left">
+            <h3>Tasks</h3>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+        {{block.super}}
+        <!--Patient Personal Details form-->
+        <div class="clearfix"></div>
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              <h2>Tasks<small></small></h2>
+              <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+              </ul>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-4 col-sm-12">
+                    <div id="reportrange_right" class="pull-left" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                      <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                      <span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <table id="task_table" class="table table-striped table-bordered">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Client</th>
+                    <th>Task</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Status</th>
+                    <th>Caregivers</th>
+                    <th>Incidents</th>
+                    <th>Vitals</th>
+                    <th>Latest Comment</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for task in tasks %}
+                      <tr>
+                        <td>{{task.task_date}}</td>
+                        <td>{{task.first_name}} {{task.last_name}}</td>
+                        <td>{{task.task_name}}</td>
+                        <td>{{task.start_time}}</td>
+                        <td>{{task.end_time}}</td>
+                        <td>{{task.status}}</td>
+                        <td>{{task.caregivers}}</td>
+                        <td>{{task.incidents}}</td>
+                        <td>{{task.vitals}}</td>
+                        <td>{{task.latest_comment}}</td>
+                      </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- /page content -->
+    {% endblock %}
+
+{% block footlibs %}
+<!-- bootstrap-daterangepicker -->
+<script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
+<script src="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+<!-- Dropzone.js -->
+<script src="{% static 'vendors/dropzone/dist/min/dropzone.min.js' %}"></script>
+<!-- Select2 -->
+<script src="{% static 'vendors/select2/dist/js/select2.full.min.js' %}"></script>
+<!-- Datatables -->
+<script src="{% static 'vendors/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+<script src="{% static 'vendors/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js' %}"></script>
+<script src="{% static 'vendors/datatables.net-buttons/js/buttons.flash.min.js' %}"></script>
+<script src="{% static 'vendors/datatables.net-buttons/js/buttons.html5.min.js' %}"></script>
+<script src="{% static 'vendors/datatables.net-buttons/js/buttons.print.min.js' %}"></script>
+<script src="{% static 'vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js' %}"></script>
+<script src="{% static 'vendors/datatables.net-keytable/js/dataTables.keyTable.min.js' %}"></script>
+<script src="{% static 'vendors/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js' %}"></script>
+<script src="{% static 'vendors/datatables.net-scroller/js/datatables.scroller.min.js' %}"></script>
+{% endblock %}
+
+{% block scripts %}
+
+<!-- DataTables -->
+<script>
+  $(document).ready(function(){
+    $('#task_table').DataTable({
+      dom: "Bfrtip",
+      sScrollX: "100%",
+      bScrollCollapse: false,
+      buttons: [
+        'copy', 'csv', 'excel', 'pdf', 'print'
+      ]
+    });
+  });
+</script>
+<!-- end -->
+
+<script>
+$(document).ready(function() {
+  var cb = function(start, end, label) {
+    console.log(start.toISOString(), end.toISOString(), label);
+    $('#reportrange_right span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+  };
+
+  var optionSet1 = {
+    startDate: moment(),
+    endDate: moment(),
+    minDate: '01/01/2012',
+    maxDate: '12/31/2020',
+    showDropdowns: true,
+    showWeekNumbers: true,
+    timePicker: false,
+    timePickerIncrement: 1,
+    timePicker12Hour: true,
+    ranges: {
+      'Today': [moment(), moment()],
+      'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+      'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+      'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+      'This Month': [moment().startOf('month'), moment().endOf('month')],
+      'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+    },
+    opens: 'right',
+    buttonClasses: ['btn btn-default'],
+    applyClass: 'btn-small btn-primary',
+    cancelClass: 'btn-small',
+    format: 'MM/DD/YYYY',
+    separator: ' to ',
+    locale: {
+      applyLabel: 'Submit',
+      cancelLabel: 'Clear',
+      fromLabel: 'From',
+      toLabel: 'To',
+      customRangeLabel: 'Custom',
+      daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+      monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+      firstDay: 1
+    }
+  };
+
+  $('#reportrange_right span').html(moment().format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+
+  $('#reportrange_right').daterangepicker(optionSet1, cb);
+
+  $('#reportrange_right').on('show.daterangepicker', function() {
+    console.log("show event fired");
+  });
+  $('#reportrange_right').on('hide.daterangepicker', function() {
+    console.log("hide event fired");
+  });
+  $('#reportrange_right').on('apply.daterangepicker', function(ev, picker) {
+    console.log("apply event fired, start/end dates are " + picker.startDate.format('MMMM D, YYYY') + " to " + picker.endDate.format('MMMM D, YYYY'));
+    var start_date = picker.startDate.format('YYYY-MM-DD');
+    var end_date = picker.endDate.format('YYYY-MM-DD');
+    console.log(start_date);
+    console.log(end_date);
+    var new_url = '{% url "daily_activity_report" "2018-01-01" "2018-01-02" %}'.replace('2018-01-01',start_date).replace('2018-01-02',end_date);
+    window.location.replace(new_url)
+  });
+  $('#reportrange_right').on('cancel.daterangepicker', function(ev, picker) {
+    console.log("cancel event fired");
+  });
+
+  $('#options1').click(function() {
+    $('#reportrange_right').data('daterangepicker').setOptions(optionSet1, cb);
+  });
+
+  $('#options2').click(function() {
+    $('#reportrange_right').data('daterangepicker').setOptions(optionSet2, cb);
+  });
+
+  $('#destroy').click(function() {
+    $('#reportrange_right').data('daterangepicker').remove();
+  });
+});
+</script>
+<!-- /bootstrap-daterangepicker -->
+</script>
+
+{% endblock %}

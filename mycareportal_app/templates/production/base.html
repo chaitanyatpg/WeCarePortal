@@ -91,6 +91,9 @@
                     {% if module_dict.REPORTING.VIEWALLCLIENTSWITHOUTCAREGIVERS %}
                       <li><a href={% url 'view_clients_without_caregivers' %}>View Clients without Assigned Caregiver</a></li>
                     {% endif %}
+                    {% if module_dict.REPORTING.VIEWDAILYACTIVITYREPORT %}
+                      <li><a href={% url 'daily_activity_report' %}>View Daily Activity Report</a></li>
+                    {% endif %}
 
                   </ul>
                 </li>
