@@ -32,3 +32,20 @@ class LegalEmailProcessor(EmailProcessor):
         )
         email.attach_alternative(message, "text/html")
         email.send()
+
+    def send_generic_legal_email(self, client, subject, content, user, company):
+        message = render_to_string('generic_legal_email.html', {
+            'client': client,
+            'content': content,
+            'user': user,
+            'company': company
+        })
+        to_list = []
+        #to_list.append("mkumar@wecareportal.com")
+        #to_list.append("dranjan@wecareportal.com")
+        to_list.append("dhruv.ranjan@gmail.com")
+        email = EmailMultiAlternatives(
+                    subject, message, self.sender_email, to=to_list
+        )
+        email.attach_alternative(message, "text/html")
+        email.send()

@@ -1,0 +1,7 @@
+{% autoescape off %}
+<h3>Legal help requested from {{user.first_name}} {{user.last_name}}
+  regarding client {{client.first_name}} {{client.last_name}} from company {{company.company_name}}</h3>
+<p>{{content}}</p>
+<h4>Contact: {{user.email}}<h4>
+
+{% endautoescape %}

@@ -48,6 +48,7 @@ def add_roles_to_context(request):
             module_dict['CLIENTPORTAL']['FINDCAREGIVER']=True
             module_dict['CLIENTPORTAL']['ASSIGN_TASKS']=True
             module_dict['CLIENTPORTAL']['CREATE_TASKS']=True
+            module_dict['CLIENTPORTAL']['LEGAL_EMAIL']=True
             module_dict['CAREGIVERPORTAL']['CAREGIVERONBOARDING']=True
             module_dict['CAREGIVERPORTAL']['CAREGIVEREDIT']=True
             module_dict['CAREGIVERPORTAL']['SCHEDULESHIFTS']=True

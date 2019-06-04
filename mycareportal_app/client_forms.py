@@ -350,3 +350,13 @@ class RegisterClientTabletForm(forms.Form):
     def clean(self):
         cleaned_data = super(RegisterClientTabletForm, self).clean()
         return cleaned_data
+
+class LegalEmailForm(forms.Form):
+
+    client_uid = forms.UUIDField()
+    subject = forms.CharField(max_length=100)
+    content = forms.CharField(max_length=1000)
+
+    def clean(self):
+        cleaned_data = super(LegalEmailForm, self).clean()
+        return cleaned_data

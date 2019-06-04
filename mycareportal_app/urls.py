@@ -174,6 +174,8 @@ urlpatterns = [
     url(r'^move_management/delete_move_task/(?P<task_id>[0-9a-f-]+)/$', move_manage_views.DeleteMoveTask.as_view(), name="delete_move_task"),
     url(r'^send_legal_email_incident', client_views.send_legal_email_incident, name="send_legal_email_incident"),
     url(r'^reporting/daily_activity_report/(?P<start_date>\d{4}-\d{2}-\d{2})/(?P<end_date>\d{4}-\d{2}-\d{2})/$', reporting_views.ViewDailyActivityReport.as_view(), name='daily_activity_report'),
-    url(r'^reporting/daily_activity_report', reporting_views.ViewDailyActivityReport.as_view(), name='daily_activity_report')
+    url(r'^reporting/daily_activity_report', reporting_views.ViewDailyActivityReport.as_view(), name='daily_activity_report'),
+    url(r'^legal/choose_client_for_legal', client_views.ChooseClientForLegal.as_view(), name='choose_client_for_legal'),
+    url(r'^legal/legal_email', client_views.LegalEmail.as_view(), name='legal_email')
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

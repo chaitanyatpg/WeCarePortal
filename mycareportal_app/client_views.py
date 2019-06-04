@@ -976,6 +976,53 @@ class ChooseViewClientIncidents(LoginRequiredMixin, View):
         context['find_client_form'] = FindClientForm()
         return render(request,'production/choose_view_client_incidents.html', context)
 
+class ChooseClientForLegal(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {}
+        current_company = request.user.company
+        #context['add_client_form'] = ClientRegistrationForm()
+        all_clients = Client.objects.filter(company=current_company).order_by('last_name')
+        context['all_clients'] = all_clients
+        context['find_client_form'] = FindClientForm()
+        return render(request, 'production/choose_client_legal.html', context)
+
+class LegalEmail(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {}
+        current_company = request.user.company
+        find_client_form = FindClientForm(request.GET)
+        context['all_timezones'] = pytz.all_timezones
+        if find_client_form.is_valid():
+            client_email = find_client_form.cleaned_data['client_email']
+            client = Client.objects.get(company=current_company, email_address=client_email)
+            context['legal_email_form'] = LegalEmailForm()
+            context['client'] = client
+            return render(request, 'production/send_legal_email.html', context)
+        else:
+            return redirect('choose_client_for_legal')
+
+    def post(self, request):
+        context = {}
+        current_company = request.user.company
+        legal_email_form = LegalEmailForm(request.POST)
+        if legal_email_form.is_valid():
+            client_uid = legal_email_form.cleaned_data['client_uid']
+            client = Client.objects.get(company=current_company,uid=client_uid)
+            subject = legal_email_form.cleaned_data['subject']
+            content = legal_email_form.cleaned_data['content']
+
+            current_site = get_current_site(request)
+            email_manager = LegalEmailProcessor()
+            email_manager.send_generic_legal_email(
+                client, subject, content, request.user, current_company
+            )
+            messages.success(request, "Successfully sent email to legal team. You will be contacted shortly with further details.")
+        else:
+            messages.error(request, "Error sending email: Please contact customer support")
+        return HttpResponseRedirect(reverse('legal_email') + "?client_email=" + client.email_address)
+
 @login_required
 def get_client_with_email(request):
     if request.method == 'GET':
