@@ -141,11 +141,14 @@ class ViewDailyActivityReport(LoginRequiredMixin, View):
                 if template.task_template.template_code == "VIT001":
                     entries = TaskTemplateEntryInstance.objects.filter(company=company,task_template_instance=template)
                     for entry in entries:
-                        entry_text = "{0}: {1}".format(entry.task_template_entry.name,
-                                                entry.entry_value)
-                        template_items.append(entry_text)
-            template_items = ", ".join(template_items)
-            new_task["vitals"] = template_items
+                        if entry.entry_value:
+                            entry_text = (entry.task_template_entry.name,
+                                        entry.entry_value)
+                            #entry_text = "{0}: {1}".format(entry.task_template_entry.name,
+                            #                        entry.entry_value)
+                            template_items.append(entry_text)
+            #template_items = ", ".join(template_items)
+            new_task["vitals"] = dict(template_items)
             comments = list(TaskComment.objects.filter(company=company, task_schedule=task))
             if len(comments) > 0:
                 latest_comment = comments[-1].comment

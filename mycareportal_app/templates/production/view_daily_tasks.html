@@ -84,7 +84,13 @@
                         <td>{{task.status}}</td>
                         <td>{{task.caregivers}}</td>
                         <td>{{task.incidents}}</td>
-                        <td>{{task.vitals}}</td>
+                        <!--<td>{{task.vitals}}</td>-->
+                        <td>
+                          {% for key, value in task.vitals.items %}
+                            <strong>{{key}}</strong>: {{value}}
+                            <br />
+                          {% endfor %}
+                        </td>
                         <td>{{task.latest_comment}}</td>
                       </tr>
                     {% endfor %}
