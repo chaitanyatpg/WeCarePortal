@@ -1,0 +1,502 @@
+{% extends "production/base.html" %}
+{% block title %} Client Task Dashboard {% endblock %}
+{% load mycareportal_app_extras%}
+{% block headlibs %}
+{% load static %}
+    <!-- iCheck -->
+    <link href="{% static 'vendors/iCheck/skins/flat/green.css' %}" rel="stylesheet">
+    <!-- bootstrap-wysiwyg -->
+    <link href="{% static 'vendors/google-code-prettify/bin/prettify.min.css' %}" rel="stylesheet">
+    <!-- Select2 -->
+    <link href="{% static 'vendors/select2/dist/css/select2.min.css' %}" rel="stylesheet">
+    <!-- Switchery -->
+    <link href="{% static 'vendors/switchery/dist/switchery.min.css' %}" rel="stylesheet">
+    <!-- starrr -->
+    <link href="{% static 'vendors/starrr/dist/starrr.css' %}" rel="stylesheet">
+    <!-- bootstrap-daterangepicker -->
+    <link href="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+    <!-- FullCalendar -->
+    <link href="{% static 'vendors/fullcalendar/dist/fullcalendar.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/fullcalendar/dist/fullcalendar.print.css' %}" rel="stylesheet" media="print">
+    <!-- Dropzone.js -->
+    <link href="{% static 'vendors/dropzone/dist/min/dropzone.min.css' %}" rel="stylesheet">
+    <!-- FineUploader -->
+    <link href="{% static 'vendors/fine-uploader/fine-uploader-new.min.css' %}" rel="stylesheet">
+{% endblock %}
+{% block pagecontent %}
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>Client Task Dashboard</h3>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+            {{block.super}}
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <div id="calendar"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /page content -->
+        <!-- calendar modal -->
+        <!--<div id="CalenderModalNew" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">New Calendar Entry</h4>
+              </div>
+              <div class="modal-body">
+                <div id="testmodal" style="padding: 5px 20px;">
+                  <form id="antoform" class="form-horizontal calender" role="form">
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">Title</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" id="title" name="title">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">Description</label>
+                      <div class="col-sm-9">
+                        <textarea class="form-control" style="height:55px;" id="descr" name="descr"></textarea>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default antoclose" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary antosubmit">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>-->
+        <div id="CalenderModalEdit" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel2">Edit Task</h4>
+              </div>
+              <form id="edit_task_details" enctype="multipart/form-data" method="post" action="{% url 'edit_task_with_id' %}" class="form-horizontal calender" role="form">
+              {% csrf_token %}
+              <div class="modal-body">
+                <div id="testmodal2" style="padding: 5px 20px;">
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">Task</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" id="task_name" name="task_name" disabled="true">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">Start Time</label>
+                      <div class="col-sm-9">
+                        <select id="task_start_hour" name="{{edit_task_form.start_hour.html_name}}">
+                          <option value="00">12 AM</option>
+                          <option value="01">1 AM</option>
+                          <option value="02">2 AM</option>
+                          <option value="03">3 AM</option>
+                          <option value="04">4 AM</option>
+                          <option value="05">5 AM</option>
+                          <option value="06">6 AM</option>
+                          <option value="07">7 AM</option>
+                          <option value="08">8 AM</option>
+                          <option value="09">9 AM</option>
+                          <option value="10">10 AM</option>
+                          <option value="11">11 AM</option>
+                          <option value="12">12 PM</option>
+                          <option value="13">1 PM</option>
+                          <option value="14">2 PM</option>
+                          <option value="15">3 PM</option>
+                          <option value="16">4 PM</option>
+                          <option value="17">5 PM</option>
+                          <option value="18">6 PM</option>
+                          <option value="19">7 PM</option>
+                          <option value="20">8 PM</option>
+                          <option value="21">9 PM</option>
+                          <option value="22">10 PM</option>
+                          <option value="23">11 PM</option>
+                        </select>
+                        <select id="task_start_minute" name="{{edit_task_form.start_minute.html_name}}">
+                          <option value="00">00</option>
+                          <option value="10">10</option>
+                          <option value="20">20</option>
+                          <option value="30">30</option>
+                          <option value="40">40</option>
+                          <option value="50">50</option>
+                        </select>
+                      </div>
+                    </div>
+                    <!--<div class="form-group">
+                      <label class="col-sm-3 control-label">Start Time</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" id="task_start_time" name="task_start_time">
+                      </div>
+                    </div>-->
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">End Time</label>
+                      <div class="col-sm-9">
+                        <select id="task_end_hour" name="{{edit_task_form.end_hour.html_name}}">
+                          <option value="00">12 AM</option>
+                          <option value="01">1 AM</option>
+                          <option value="02">2 AM</option>
+                          <option value="03">3 AM</option>
+                          <option value="04">4 AM</option>
+                          <option value="05">5 AM</option>
+                          <option value="06">6 AM</option>
+                          <option value="07">7 AM</option>
+                          <option value="08">8 AM</option>
+                          <option value="09">9 AM</option>
+                          <option value="10">10 AM</option>
+                          <option value="11">11 AM</option>
+                          <option value="12">12 PM</option>
+                          <option value="13">1 PM</option>
+                          <option value="14">2 PM</option>
+                          <option value="15">3 PM</option>
+                          <option value="16">4 PM</option>
+                          <option value="17">5 PM</option>
+                          <option value="18">6 PM</option>
+                          <option value="19">7 PM</option>
+                          <option value="20">8 PM</option>
+                          <option value="21">9 PM</option>
+                          <option value="22">10 PM</option>
+                          <option value="23">11 PM</option>
+                        </select>
+                        <select id="task_end_minute" name="{{edit_task_form.end_minute.html_name}}">
+                          <option value="00">00</option>
+                          <option value="10">10</option>
+                          <option value="20">20</option>
+                          <option value="30">30</option>
+                          <option value="40">40</option>
+                          <option value="50">50</option>
+                        </select>
+                      </div>
+                    </div>
+                    <!--<div class="form-group">
+                      <label class="col-sm-3 control-label">End Time</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" id="task_end_time" name="task_end_time">
+                      </div>
+                    </div>-->
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">Description</label>
+                      <div class="col-sm-9">
+                        <textarea class="form-control" style="height:55px;" id="task_description" name="{{edit_task_form.description.html_name}}"></textarea>
+                      </div>
+                    </div>
+                    <label class="control-label">Comments</label>
+                    <div class="task_comments" id="task_comments">
+                    </div>
+                    <label class="control-label">Attachments</label>
+                    <div>
+                      {{edit_task_form.attachment.label_tag}}{{edit_task_form.attachment}}
+                    </div>
+                    <div class="task_attachments" id="task_attachments">
+                    </div>
+                    <label class="control-label">Links</label>
+                    <div class="task_links" id="task_links">
+                    </div>
+                    <!--<div class="form-group">
+                      <label class="col-sm-3 control-label">Task Attachment</label>
+                      <div class="col-sm-9">
+                        <a href="" id="task_attachment" name="task_attachment"></a>
+                      </div>
+                    </div>-->
+                    <!--<div class="form-group">
+                      <label class="col-sm-3 control-label">Task Link</label>
+                      <div class="col-sm-9">
+                        <a href="" id="task_link" name="task_link"></a>
+                      </div>
+                    </div>-->
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">Status</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" id="task_status" name="task_status" disabled="true">
+                      </div>
+                    </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <input type="hidden" id="task_id_edit" name="{{edit_task_form.task_id.html_name}}">
+                <input type="hidden" name="{{edit_task_form.client_id.html_name}}" value={{client_id}}>
+                <button type="button" class="btn btn-default antoclose2" data-dismiss="modal">Close</button>
+                <div>
+                  <button type="submit" class="btn btn-success edit_calendar_submit">Save changes</button>
+                </div>
+              </form>
+              <form id="delete_task_details" enctype="multipart/form-data" action="{% url 'delete_task_with_id' %}" method="post" class="form-horizontal" role="form">
+                {% csrf_token %}
+                <input type="hidden" id="task_id_delete" name="{{delete_task_form.task_id.html_name}}">
+                <button type="submit" class="btn btn-danger edit_calendar_submit">Delete Task</button>
+              </form>
+              <form id="delete_recurring_task_details" enctype="multipart/form-data" action="{% url 'delete_recurring_task_with_id' %}" method="post" class="form-horizontal" role="form">
+                {% csrf_token %}
+                <input type="hidden" id="recurring_task_id_delete" name="{{delete_task_form.task_id.html_name}}">
+                <label id='recurring_task_header_details'></label>
+                <button type="submit" class="btn btn-danger edit_calendar_submit">Delete Recurring Task</button>
+              </form>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div id="fc_create" data-toggle="modal" data-target="#CalenderModalNew"></div>
+        <div id="fc_edit" data-toggle="modal" data-target="#CalenderModalEdit"></div>
+{% endblock %}
+{% block footlibs %}
+    <!-- FullCalendar -->
+    <script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'vendors/fullcalendar/dist/fullcalendar.min.js' %}"></script>
+
+{% endblock %}
+{% block scripts %}
+
+    <!-- FullCalendar -->
+    <script>
+          $(window).load(function() {
+            var date = new Date(),
+                d = date.getDate(),
+                m = date.getMonth(),
+                y = date.getFullYear(),
+                started,
+                categoryClass;
+
+            var calendar = $('#calendar').fullCalendar({
+              header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+              },
+              selectable: true,
+              selectHelper: true,
+              /*select: function(start, end, allDay) {
+                $('#fc_create').click();
+
+                started = start;
+                ended = end;
+
+                $(".antosubmit").on("click", function() {
+                  var title = $("#title").val();
+                  if (end) {
+                    ended = end;
+                  }
+
+                  categoryClass = $("#event_type").val();
+
+                  if (title) {
+                    calendar.fullCalendar('renderEvent', {
+                        title: title,
+                        start: started,
+                        end: end,
+                        allDay: allDay
+                      },
+                      true // make the event "stick"
+                    );
+                  }
+
+                  $('#title').val('');
+
+                  calendar.fullCalendar('unselect');
+
+                  $('.antoclose').click();
+
+                  return false;
+                });
+              },*/
+              /*eventClick: function(calEvent, jsEvent, view) {
+                $('#fc_edit').click();
+                //$('#task_name').val(calEvent.title);
+                var task_id = calEvent.id;
+                $.ajax({
+                  type: "GET",
+                  url: '{% url "get_task_with_id" %}',
+                  data: { task_id: task_id },
+                  dataType: "json",
+                  contentType: "application/json",
+                  success: function(task_data){
+                    $('#recurring_task_header_details').html("");
+                    if(task_data.hasOwnProperty('task_type'))
+                    {
+                      var task_header_details = 'Occurs ' + task_data.task_type + ' from ' + task_data.start_date + ' to ' + task_data.end_date
+                      $('#recurring_task_header_details').html(task_header_details);
+                    }
+                    $('#task_id_delete').val(task_data.task_id);
+                    $('#recurring_task_id_delete').val(task_data.task_id);
+                    $('#task_id_edit').val(task_data.task_id);
+                    $('#task_name').val(task_data.task_name);
+                    //$('#task_start_time').val(task_data.start_time);
+                    //$('#task_end_time').val(task_data.end_time);
+                    $('#task_start_hour').val(task_data.start_hour);
+                    $('#task_start_minute').val(task_data.start_minute);
+                    $('#task_end_hour').val(task_data.end_hour);
+                    $('#task_end_minute').val(task_data.end_minute);
+                    $('#task_description').val(task_data.description);
+                    //$('#task_comment').val(task_data.comment);
+                    $('#task_link').html(task_data.link);
+                    $('#task_link').attr("href", task_data.link);
+                    $('#task_attachment').html(task_data.attachment);
+                    $('#task_attachment').attr("href", task_data.attachment);
+                    var status = task_data.status;
+                    $('#task_status').val(task_data.status);
+                    task_comments = task_data.comments;
+                    task_attachments = task_data.attachments;
+                    task_links = task_data.links;
+                    $(".task_comments").empty();
+                    for(var i=0;i<task_comments.length;i++){
+                      var comment_str = $('<div class="form-group task_comments_div">\
+                      <label class="col-sm-3 control-label">' + task_comments[i][1] + ' : ' + task_comments[i][2] + '</label>\
+                      <div class="col-sm-9">\
+                      <textarea class="form-control" style="height:55px;" name="task_comment" disabled="true">' + task_comments[i][0] + '</textarea></div></div>');
+                      $('#task_comments').append(comment_str);
+                    }
+                    $(".task_attachments").empty();
+                    for(var i=0;i<task_attachments.length;i++){
+                      var attachment_str = $('<div class="form-group task_attachments_div">\
+                      <label class="col-sm-3 control-label">' + task_attachments[i][1] + ' : ' + task_attachments[i][2] + '</label>\
+                      <div class="col-sm-9">\
+                      <a href=' + task_attachments[i][0] + '><i class="fa fa-paperclip"></i>' + task_attachments[i][0] + '</a>');
+                      $('#task_attachments').append(attachment_str);
+                    }
+                    $(".task_links").empty();
+                    for(var i=0;i<task_links.length;i++){
+                      var link_str = $('<div class="form-group task_links_div">\
+                      <label class="col-sm-3 control-label">' + task_links[i][1] + ' : ' + task_links[i][2] + '</label>\
+                      <div class="col-sm-9">\
+                      <a href=' + '"' + task_links[i][0] + '"' + '>' + task_links[i][0] + '</a>');
+                      $('#task_links').append(link_str);
+                    }
+                  },
+                  failure: function(client_data){
+                    alert('error fetching client data');
+                  }
+                });
+
+                if(calEvent.allDay === false)
+                {
+                  var event_start_time = moment.utc(calEvent.start).format("h:mma");
+                  if(calEvent.end != null)
+                  {
+                    var event_end_time = moment.utc(calEvent.end).format("h:mma");
+                  }
+                  else
+                  {
+                    var event_end_time = null;
+                  }
+                  $('#task_start_time').val(event_start_time)
+                  $('#task_end_time').val(event_end_time)
+                }
+                else
+                {
+                  var event_start_time = null;
+                  var event_end_time = null;
+                  $('#task_start_time').val(event_start_time)
+                  $('#task_end_time').val(event_end_time)
+                }
+                categoryClass = $("#event_type").val();
+
+                $(".edit_calendar_submit").on("click", function() {
+                  var event_title = $("#task_name").val()
+                  calEvent.title = $("#task_name").val();
+
+                  calendar.fullCalendar('updateEvent', calEvent);
+                  $('.antoclose2').click();
+                });
+
+                calendar.fullCalendar('unselect');
+              },*/
+              editable: true,
+              events : [
+                {% for task in client_tasks %}
+                  {% if task.pending %}
+                  {
+                    title: "{{ task.activity_task }}",
+                    start: "{{ task.date|date:'Y-m-d'|append_datetime:task.start_time}}",
+                    end: "{{ task.date|date:'Y-m-d'|append_datetime:task.end_time}}",
+                    id: "{{ task.id }}"
+                  },
+                  {% elif task.in_progress %}
+                  {
+                    title: "{{ task.activity_task }}",
+                    start: "{{ task.date|date:'Y-m-d'|append_datetime:task.start_time}}",
+                    end: "{{ task.date|date:'Y-m-d'|append_datetime:task.end_time}}",
+                    id: "{{ task.id }}",
+                    color: "#FF7F50"
+                  },
+                  {% elif task.complete %}
+                  {
+                    title: "{{ task.activity_task }}",
+                    start: "{{ task.date|date:'Y-m-d'|append_datetime:task.start_time}}",
+                    end: "{{ task.date|date:'Y-m-d'|append_datetime:task.end_time}}",
+                    id: "{{ task.id }}",
+                    color: "#3aaf6f"
+                  },
+                  {% elif task.cancelled %}
+                  {
+                    title: "{{ task.activity_task }}",
+                    start: "{{ task.date|date:'Y-m-d'|append_datetime:task.start_time}}",
+                    end: "{{ task.date|date:'Y-m-d'|append_datetime:task.end_time}}",
+                    id: "{{ task.id }}",
+                    color: "#F76C6C"
+                  },
+                  {% endif %}
+                {% endfor %}
+              ],
+              timeFormat: 'h:mma'
+              /*events: [{
+                title: 'Make Lunch',
+                start: new Date(y, m, 1)
+              }, {
+                title: 'Help move in',
+                start: new Date(y, m, d - 5),
+                end: new Date(y, m, d - 2)
+              }, {
+                title: 'Do Groceries',
+                start: new Date(y, m, d, 10, 30),
+                allDay: false
+              }, {
+                title: 'Deliver Medication',
+                start: new Date(y, m, d + 14, 12, 0),
+                end: new Date(y, m, d, 14, 0),
+                allDay: false
+              }, {
+                title: 'Drive to grandchildren',
+                start: new Date(y, m, d + 1, 8, 0),
+                end: new Date(y, m, d + 1, 10, 0),
+                allDay: false
+              }, {
+                title: 'Pick Up Dry cleaning',
+                start: new Date(y, m, d + 1, 2, 0),
+                end: new Date(y, m, d + 1, 2, 30),
+                allDay: false
+              }, {
+                title: 'Drive Home from Grandchildren',
+                start: new Date(y, m, d + 1, 19, 00),
+                end: new Date(y, m, d + 1, 21, 30),
+                allDay: false
+              },
+    			    {
+                title: 'Testing link capability',
+                start: new Date(y, m, 28),
+                end: new Date(y, m, 29),
+                url: 'http://google.com/'
+              }]*/
+            });
+          });
+        </script>
+    <!-- /FullCalendar -->
+
+{% endblock %}

@@ -54,6 +54,12 @@
                     {% if module_dict.DASHBOARD.ADMINDASHBOARD %}
                       <li><a href={% url 'dashboard' %}>Admin Dashboard</a></li>
                     {% endif %}
+                    {% if module_dict.DASHBOARD.CAREGIVER_SCHEDULE_DASHBOARD %}
+                      <li><a href={% url 'caregiver_schedule_dashboard' %}>Caregiver Schedule Dashboard</a></li>
+                    {% endif %}
+                    {% if module_dict.DASHBOARD.CLIENT_TASK_DASHBOARD %}
+                      <li><a href={% url 'client_task_dashboard' %}>Client Task Dashboard</a></li>
+                    {% endif %}
                     {% if module_dict.DASHBOARD.ACTIONLOG %}
                       <li><a href={% url 'event_log' %}>Daily Event Log</a></li>
                     {% endif %}

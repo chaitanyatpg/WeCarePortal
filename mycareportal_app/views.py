@@ -57,7 +57,12 @@ def home(request):
         free_trial_days = (current - company_created).days
         messages.info(request, "Currently on day {0} of free trial".format(free_trial_days))
     if "CAREMANAGER" in user_roles:
-        return redirect('dashboard')
+        if current_company.default_dashboard == current_company.admin_dashboard:
+            return redirect('dashboard')
+        elif current_company.default_dashboard == current_company.client_task_dashboard:
+            return redirect('client_task_dashboard')
+        elif current_company.default_dashboard == current_company.caregiver_schedule_dashboard:
+            return redirect('caregiver_schedule_dashboard')
     elif "CAREGIVER" in user_roles:
         if "tablet_id" in request.session:
             if ClientTabletRegister.objects.filter(company=request.user.company,device_id=request.session["tablet_id"]).exists():
@@ -518,7 +523,8 @@ class EditCompany(LoginRequiredMixin, View):
             'city': current_company.city,
             'state': current_company.state,
             'zip_code': current_company.zip_code,
-            'time_zone': current_company.time_zone
+            'time_zone': current_company.time_zone,
+            'default_dashboard': current_company.default_dashboard
         })
         context['company_edit_form'] = company_edit_form
         context['current_company'] = current_company
@@ -539,7 +545,7 @@ class EditCompany(LoginRequiredMixin, View):
                 current_company.state = company_edit_form.cleaned_data['state']
                 current_company.zip_code = company_edit_form.cleaned_data['zip_code']
                 current_company.time_zone = company_edit_form.cleaned_data['time_zone']
-                print(current_company.time_zone)
+                current_company.default_dashboard = company_edit_form.cleaned_data['default_dashboard']
                 current_company.save()
                 #send_mail('Test sendgrid', 'Test message', 'info@wecareportal.com', ['dhruv.ranjan@gmail.com'], fail_silently=False)
                 messages.success(request, "Company details successfully edited")
@@ -823,3 +829,21 @@ class HomeDashboard(LoginRequiredMixin, View):
             form_errors = home_mod_task_form.errors.as_data()
             error_messaging.render_error_messages(request, form_errors)
         return redirect('home_dashboard')
+
+class CaregiverScheduleDashboard(LoginRequiredMixin, View):
+
+    def get(self, request):
+        company = request.user.company
+        context = {}
+        caregiver_schedules = CaregiverSchedule.objects.filter(company=company)
+        context['caregiver_schedules'] = caregiver_schedules
+        return render(request, "production/caregiver_schedule_dashboard.html", context)
+
+class ClientTaskDashboard(LoginRequiredMixin, View):
+
+    def get(self, request):
+        company = request.user.company
+        context = {}
+        client_tasks = TaskSchedule.objects.filter(company=company)
+        context['client_tasks'] = client_tasks
+        return render(request, "production/client_task_dashboard.html", context)

@@ -176,6 +176,8 @@ urlpatterns = [
     url(r'^reporting/daily_activity_report/(?P<start_date>\d{4}-\d{2}-\d{2})/(?P<end_date>\d{4}-\d{2}-\d{2})/$', reporting_views.ViewDailyActivityReport.as_view(), name='daily_activity_report'),
     url(r'^reporting/daily_activity_report', reporting_views.ViewDailyActivityReport.as_view(), name='daily_activity_report'),
     url(r'^legal/choose_client_for_legal', client_views.ChooseClientForLegal.as_view(), name='choose_client_for_legal'),
-    url(r'^legal/legal_email', client_views.LegalEmail.as_view(), name='legal_email')
+    url(r'^legal/legal_email', client_views.LegalEmail.as_view(), name='legal_email'),
+    url(r'^caregiver_schedule_dashboard', views.CaregiverScheduleDashboard.as_view(), name='caregiver_schedule_dashboard'),
+    url(r'^client_task_dashboard', views.ClientTaskDashboard.as_view(), name='client_task_dashboard')
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

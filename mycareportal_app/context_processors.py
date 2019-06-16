@@ -33,6 +33,8 @@ def add_roles_to_context(request):
         if 'CAREMANAGER' in user_roles:
             care_manager = CareManager.objects.get(user=request.user)
             module_dict['DASHBOARD']['ADMINDASHBOARD']=True
+            module_dict['DASHBOARD']['CAREGIVER_SCHEDULE_DASHBOARD']=True
+            module_dict['DASHBOARD']['CLIENT_TASK_DASHBOARD']=True
             module_dict['DASHBOARD']['ACTIONLOG']=True
             if care_manager.can_add:
                 module_dict['DASHBOARD']['ADDCAREMANAGER']=True

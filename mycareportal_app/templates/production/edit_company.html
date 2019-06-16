@@ -233,6 +233,35 @@
                     {% endif %}
                     </div>
                   </div>
+
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Default Dashboard</label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                        {% if company_edit_form.default_dashboard.value == 'ADMIN' %}
+                          <input type="radio" name="{{company_edit_form.default_dashboard.html_name}}" value="ADMIN" checked="checked" required="required">
+                        {% else %}
+                          <input type="radio" name="{{company_edit_form.default_dashboard.html_name}}" value="ADMIN" required="required">
+                        {% endif %}
+                        &nbsp; Admin Dashboard &nbsp; </label>
+                      <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                        {% if company_edit_form.default_dashboard.value == 'CAREGIVER' %}
+                          <input type="radio" name="{{company_edit_form.default_dashboard.html_name}}" value="CAREGIVER" checked="checked" required="required">
+                        {% else %}
+                          <input type="radio" name="{{company_edit_form.default_dashboard.html_name}}" value="CAREGIVER" required="required">
+                        {% endif %}
+                        Caregiver Schedule Dashboard </label>
+                      <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                        {% if company_edit_form.default_dashboard.value == 'CLIENT' %}
+                          <input type="radio" name="{{company_edit_form.default_dashboard.html_name}}" value="CLIENT" checked="checked" required="required">
+                        {% else %}
+                          <input type="radio" name="{{company_edit_form.default_dashboard.html_name}}" value="CLIENT" required="required">
+                        {% endif %}
+                        Client Task Dashboard </label>
+                    </div>
+                  </div>
+
+
                   <div class="ln_solid"></div>
                   <div class="form-group">
                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">

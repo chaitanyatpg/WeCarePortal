@@ -65,6 +65,7 @@ class CompanyEditForm(forms.Form):
     zip_code = forms.CharField(max_length=10,required=False)
     account_number = forms.IntegerField(required=False)
     time_zone = forms.CharField(max_length=50, required=False)
+    default_dashboard = forms.CharField(max_length=100, required=False)
 
     def clean(self):
 

@@ -14,6 +14,16 @@ class ActivationCode(models.Model):
 
 class Company(models.Model):
 
+    admin_dashboard = "ADMIN"
+    client_task_dashboard = "CLIENT"
+    caregiver_schedule_dashboard = "CAREGIVER"
+
+    DASHBOARD_CHOICES = (
+    (admin_dashboard, "ADMIN"),
+    (client_task_dashboard, "CLIENT"),
+    (caregiver_schedule_dashboard, "CAREGIVER"),
+    )
+
     company_id = models.AutoField(primary_key=True)
     uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     company_name = models.CharField(max_length=100,unique=True)
@@ -29,6 +39,7 @@ class Company(models.Model):
     activation_code = models.OneToOneField(ActivationCode, null=True)
     activated = models.BooleanField(default=True)
     is_on_free_trial = models.BooleanField(default=False)
+    default_dashboard = models.CharField(DASHBOARD_CHOICES, max_length=100, default=admin_dashboard)
 
 class User(AbstractUser):
 
