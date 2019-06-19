@@ -126,6 +126,7 @@ class Caregiver(models.Model):
     referrer = models.CharField(max_length=100,blank=True)
     rating = models.IntegerField(default=0)
     profile_picture = models.ImageField(upload_to=get_caregiver_profile_picture_upload_path)
+    hourly_rate = models.IntegerField(default=0)
     created = models.DateTimeField(auto_now_add=True)
     #add location
     #add tags
@@ -361,6 +362,8 @@ class TaskSchedule(models.Model):
     description = models.CharField(max_length=1000, blank=True)
     link = models.CharField(max_length=500, blank=True)
     attachment = models.FileField(upload_to="files/tasks", blank=True)
+    completed_by = models.ForeignKey(User, null=True)
+    completed_timestamp = models.DateTimeField(null=True)
     created = models.DateTimeField(auto_now_add=True)
 
 class TaskComment(models.Model):

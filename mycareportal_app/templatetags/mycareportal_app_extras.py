@@ -50,3 +50,11 @@ def to_yes_no(x):
         return "No"
     else:
         return x
+
+@register.filter
+def round_2(x):
+    return round(x,2)
+
+@register.filter
+def to_currency(x):
+    return "${:,}".format(round(x,2))

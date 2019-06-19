@@ -136,3 +136,13 @@ class CreateHomeModTaskForm(forms.Form):
 
         cleaned_data = super(CreateHomeModTaskForm, self).clean()
         return cleaned_data
+
+class ChooseClientInvoiceForm(forms.Form):
+
+    client_email = forms.CharField(max_length=100)
+    start_date = forms.DateField()
+    end_date = forms.DateField()
+
+    def clean(self):
+        cleaned_data = super(ChooseClientInvoiceForm, self).clean()
+        return cleaned_data

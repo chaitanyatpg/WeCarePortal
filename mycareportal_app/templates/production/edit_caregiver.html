@@ -308,6 +308,16 @@
                     </div>
                   </div>-->
                   <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Hourly Rate</label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not edit_caregiver_form.hourly_rate.value is None %}
+                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name={{edit_caregiver_form.hourly_rate.html_name}} value={{edit_caregiver_form.hourly_rate.value}}>
+                      {% else %}
+                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name={{edit_caregiver_form.hourly_rate.html_name}}>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">SSN</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not edit_caregiver_form.ssn.value is None %}

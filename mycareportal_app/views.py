@@ -847,3 +847,97 @@ class ClientTaskDashboard(LoginRequiredMixin, View):
         client_tasks = TaskSchedule.objects.filter(company=company)
         context['client_tasks'] = client_tasks
         return render(request, "production/client_task_dashboard.html", context)
+
+class ChooseClientForInvoice(LoginRequiredMixin, View):
+
+    def get(self, request):
+        current_company = request.user.company
+        context = {}
+        context['client_invoice_form'] = ChooseClientInvoiceForm()
+        all_clients = Client.objects.filter(company=current_company).order_by('last_name')
+        context['all_clients'] = all_clients
+        return render(request, "production/choose_client_invoice.html", context)
+
+class Invoice(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        current_company = request.user.company
+        context = {}
+        client_invoice_form = ChooseClientInvoiceForm(request.GET)
+        if client_invoice_form.is_valid():
+            client_email = client_invoice_form.cleaned_data['client_email']
+            client = Client.objects.get(company=current_company, email_address=client_email)
+            start_date = client_invoice_form.cleaned_data['start_date']
+            end_date = client_invoice_form.cleaned_data['end_date']
+            tasks = TaskSchedule.objects.filter(company=current_company,
+                                    date__range=(start_date, end_date))
+            context['current_company'] = current_company
+            context['client'] = client
+            context['start_date'] = start_date
+            context['end_date'] = end_date
+            task_objects = self.get_line_items(tasks, current_company)
+            total_amt = self.get_total(task_objects)
+            context['task_objects'] = task_objects
+            context['total_amt'] = total_amt
+        return render(request, "production/invoice.html", context)
+
+    def get_total(self, task_objects):
+
+        total_amt = 0
+        for caregiver, tasks in task_objects.items():
+            for task in tasks.items():
+                total_amt += task[1]['total']
+        return total_amt
+
+    def get_line_items(self, tasks, current_company):
+        line_items = []
+        task_objects = {}
+        # Task Objects should be:
+        # 1. TaskSchedule Object
+        # 2. Caregiver Objects
+        # 3. Hourly rate of caregiver
+        # 4. Summed hours for task
+        # 5. hourly rate * summed hours
+        for task in tasks:
+            completed_by = task.completed_by
+            if task.start_time != "" and task.end_time != "":
+                total_time_hrs = self.getTotalHours(task.start_time, task.end_time)
+                if Caregiver.objects.filter(company=current_company, user=completed_by).exists():
+                    caregiver = Caregiver.objects.get(company=current_company, user=completed_by)
+                    if caregiver in task_objects:
+                        if task.activity_task in task_objects[caregiver]:
+                            task_object = task_objects[caregiver][task.activity_task]
+                            task_object['task_hours'] += total_time_hrs
+                            task_object['total'] = task_object['task_hours'] * caregiver.hourly_rate
+                            task_objects[caregiver][task.activity_task] = task_object
+                        else:
+                            task_object = {
+                                "task_schedule": task,
+                                "caregiver": caregiver,
+                                "hourly_rate": caregiver.hourly_rate,
+                                "task_hours": total_time_hrs,
+                                "description": task.task_header.description,
+                                "total": total_time_hrs * caregiver.hourly_rate
+                            }
+                            task_objects[caregiver][task.activity_task] = task_object
+                    else:
+                        task_object = {
+                            "task_schedule": task,
+                            "caregiver": caregiver,
+                            "hourly_rate": caregiver.hourly_rate,
+                            "task_hours": total_time_hrs,
+                            "description": task.task_header.description,
+                            "total": total_time_hrs * caregiver.hourly_rate
+                        }
+                        task_objects[caregiver] = {task.activity_task: task_object}
+        return task_objects
+
+    def getTotalHours(self, start_time, end_time):
+        start_hour = int(start_time.split(":")[0])
+        start_minute = int(start_time.split(":")[1])
+        end_hour = int(end_time.split(":")[0])
+        end_minute = int(end_time.split(":")[1])
+        start_minutes = (start_hour * 60) + start_minute
+        end_minutes = (end_hour * 60) + end_minute
+        total_time_hrs = abs(end_minutes - start_minutes) / 60
+        return total_time_hrs

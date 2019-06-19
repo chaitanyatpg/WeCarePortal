@@ -205,7 +205,8 @@ class EditCaregiver(LoginRequiredMixin, View):
                 'ssn': caregiver.ssn,
                 'referrer': caregiver.referrer,
                 'profile_picture': caregiver.profile_picture,
-                'rating': caregiver.rating
+                'rating': caregiver.rating,
+                'hourly_rate': caregiver.hourly_rate
             })
             print(caregiver.rating)
             context['edit_caregiver_form'] = edit_caregiver_form
@@ -253,7 +254,7 @@ class EditCaregiver(LoginRequiredMixin, View):
                 referrer = edit_caregiver_form.cleaned_data['referrer']
                 profile_picture = edit_caregiver_form.cleaned_data['profile_picture']
                 rating = edit_caregiver_form.cleaned_data['rating']
-                print ("RATING: " + str(rating))
+                hourly_rate = edit_caregiver_form.cleaned_data['hourly_rate']
                 #Get current caregiver
                 caregiver = Caregiver.objects.get(company=current_company,email_address=email)
                 if self.arg_diff(caregiver.first_name, first_name):
@@ -282,6 +283,8 @@ class EditCaregiver(LoginRequiredMixin, View):
                     caregiver.ssn = ssn
                 if self.arg_diff(caregiver.referrer, referrer):
                     caregiver.referrer = referrer
+                if self.arg_diff(caregiver.hourly_rate, hourly_rate):
+                    caregiver.hourly_rate = hourly_rate
                 if self.arg_diff(caregiver.profile_picture, profile_picture):
                     caregiver.profile_picture = profile_picture
                 if self.arg_diff(caregiver.email_address, email):
@@ -527,6 +530,11 @@ class CaregiverDashboard(LoginRequiredMixin, View):
                     task.complete = False
                     task.in_progress = False
                     task.cancelled = True
+                if status == "complete":
+                    task.completed_by = self.request.user
+                    task.completed_timestamp = datetime.datetime.now()
+                else:
+                    task.completed_by = None
                 task.save()
                 self.save_task_comments(request, update_task_form, task, current_company, client, comment)
                 self.save_task_attachments(request, update_task_form, task, current_company, client, request.user, attachments)

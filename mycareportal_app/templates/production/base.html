@@ -126,6 +126,9 @@
                     {% if module_dict.CLIENTPORTAL.LEGAL_EMAIL %}
                       <li><a href={% url 'choose_client_for_legal' %}>Send Legal Email</a></li>
                     {% endif %}
+                    {% if module_dict.CLIENTPORTAL.CHOOSE_CLIENT_INVOICE %}
+                      <li><a href={% url 'choose_client_for_invoice' %}>Create Invoice</a></li>
+                    {% endif %}
                   </ul>
                 </li>
                 <li><a><i class="fa fa-edit"></i>Caregiver Portal<span class="fa fa-chevron-down"></span></a>
