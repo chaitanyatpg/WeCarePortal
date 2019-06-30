@@ -66,6 +66,7 @@ class CompanyEditForm(forms.Form):
     account_number = forms.IntegerField(required=False)
     time_zone = forms.CharField(max_length=50, required=False)
     default_dashboard = forms.CharField(max_length=100, required=False)
+    tax_rate = forms.DecimalField(required=False)
 
     def clean(self):
 

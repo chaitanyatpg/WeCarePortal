@@ -40,6 +40,7 @@ class Company(models.Model):
     activated = models.BooleanField(default=True)
     is_on_free_trial = models.BooleanField(default=False)
     default_dashboard = models.CharField(DASHBOARD_CHOICES, max_length=100, default=admin_dashboard)
+    tax_rate = models.DecimalField(max_digits=5, decimal_places=2, null=True)
 
 class User(AbstractUser):
 

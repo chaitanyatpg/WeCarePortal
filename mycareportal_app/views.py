@@ -524,7 +524,8 @@ class EditCompany(LoginRequiredMixin, View):
             'state': current_company.state,
             'zip_code': current_company.zip_code,
             'time_zone': current_company.time_zone,
-            'default_dashboard': current_company.default_dashboard
+            'default_dashboard': current_company.default_dashboard,
+            'tax_rate': current_company.tax_rate
         })
         context['company_edit_form'] = company_edit_form
         context['current_company'] = current_company
@@ -546,6 +547,7 @@ class EditCompany(LoginRequiredMixin, View):
                 current_company.zip_code = company_edit_form.cleaned_data['zip_code']
                 current_company.time_zone = company_edit_form.cleaned_data['time_zone']
                 current_company.default_dashboard = company_edit_form.cleaned_data['default_dashboard']
+                current_company.tax_rate = company_edit_form.cleaned_data['tax_rate']
                 current_company.save()
                 #send_mail('Test sendgrid', 'Test message', 'info@wecareportal.com', ['dhruv.ranjan@gmail.com'], fail_silently=False)
                 messages.success(request, "Company details successfully edited")
@@ -879,6 +881,12 @@ class Invoice(LoginRequiredMixin, View):
             total_amt = self.get_total(task_objects)
             context['task_objects'] = task_objects
             context['total_amt'] = total_amt
+            if current_company.tax_rate:
+                context['tax_amt'] = (total_amt * float(current_company.tax_rate / 100))
+                context['total_amt_tax'] = total_amt + (total_amt * float(current_company.tax_rate / 100))
+            else:
+                context['tax_amt'] = 0
+                context['total_amt_tax'] = total_amt
         return render(request, "production/invoice.html", context)
 
     def get_total(self, task_objects):

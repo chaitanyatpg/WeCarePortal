@@ -125,8 +125,20 @@
                             <td>$10.34</td>
                           </tr>!-->
                           <tr>
-                            <th>Total:</th>
+                            <th>Subtotal:</th>
                             <td>{{total_amt | to_currency}}</td>
+                          </tr>
+                          <tr>
+                            <th>Tax(%):</th>
+                            <td>{{current_company.tax_rate}}</td>
+                          </tr>
+                          <tr>
+                            <th>Tax Amount:</th>
+                            <td>{{tax_amt | to_currency}}</td>
+                          </tr>
+                          <tr>
+                            <th>Total:</th>
+                            <td>{{total_amt_tax | to_currency}}</td>
                           </tr>
                         </tbody>
                       </table>
