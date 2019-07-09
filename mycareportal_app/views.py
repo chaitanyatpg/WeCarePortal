@@ -36,6 +36,7 @@ from django.dispatch import receiver
 from mycareportal_app.common import error_messaging as error_messaging
 
 from mycareportal_app.common.core.event import Event
+import uuid
 # Create your views here.
 
 #@receiver(pre_save, sender=User)
@@ -838,6 +839,8 @@ class CaregiverScheduleDashboard(LoginRequiredMixin, View):
         company = request.user.company
         context = {}
         caregiver_schedules = CaregiverSchedule.objects.filter(company=company)
+        caregivers = Caregiver.objects.filter(company=company)
+        context['caregivers'] = caregivers
         context['caregiver_schedules'] = caregiver_schedules
         return render(request, "production/caregiver_schedule_dashboard.html", context)
 
@@ -847,6 +850,8 @@ class ClientTaskDashboard(LoginRequiredMixin, View):
         company = request.user.company
         context = {}
         client_tasks = TaskSchedule.objects.filter(company=company)
+        clients = Client.objects.filter(company=company)
+        context['clients'] = clients
         context['client_tasks'] = client_tasks
         return render(request, "production/client_task_dashboard.html", context)
 
@@ -949,3 +954,67 @@ class Invoice(LoginRequiredMixin, View):
         end_minutes = (end_hour * 60) + end_minute
         total_time_hrs = abs(end_minutes - start_minutes) / 60
         return total_time_hrs
+
+@login_required
+def get_caregiver_schedules_with_uids(request):
+    if request.method == 'GET':
+        context = {}
+        company = request.user.company
+        caregiver_uids = request.GET.getlist('caregiver_uids[]')
+        current_company = request.user.company
+        caregivers = Caregiver.objects.filter(company=company, uid__in=caregiver_uids)
+        caregiver_schedules = list(CaregiverSchedule.objects.filter(company=company,
+                                caregiver__in=caregivers))
+        schedule_objects = []
+        for schedule in caregiver_schedules:
+            schedule_object = {
+                'first_name': schedule.caregiver.first_name,
+                'last_name': schedule.caregiver.last_name,
+                'date': '{0}-{1}-{2}'.format(schedule.date.year, schedule.date.month, schedule.date.day),
+                'start_time': schedule.start_time.strftime("%I:%M %p"),
+                'end_time': schedule.end_time.strftime("%I:%M %p"),
+                'id': schedule.id,
+                'uid': str(schedule.uid)
+            }
+            schedule_objects.append(schedule_object)
+        return HttpResponse(json.dumps(schedule_objects),content_type="application/json")
+
+@login_required
+def get_client_tasks_with_uids(request):
+    if request.method == 'GET':
+        context = {}
+        company = request.user.company
+        client_uids = request.GET.getlist('client_uids[]')
+        current_company = request.user.company
+        clients = Client.objects.filter(company=company, uid__in=client_uids)
+        client_tasks = list(TaskSchedule.objects.filter(company=company,
+                                client__in=clients))
+        schedule_objects = []
+        for schedule in client_tasks:
+            schedule_object = {
+                'first_name': schedule.client.first_name,
+                'last_name': schedule.client.last_name,
+                'activity_task': schedule.activity_task,
+                'date': '{0}-{1}-{2}'.format(schedule.date.year, schedule.date.month, schedule.date.day),
+                'id': schedule.id,
+                'uid': str(schedule.uid),
+                'pending': schedule.pending,
+                'complete': schedule.complete,
+                'in_progress': schedule.in_progress,
+                'cancelled': schedule.cancelled
+            }
+            if schedule.start_time != "":
+                schedule_object['start_time'] = schedule.start_time
+                schedule_object['start_stamp'] = "{0}T{1}:00Z".format(schedule_object['date'],schedule.start_time)
+                #datetime.datetime.strptime(schedule.start_time,'%H:%M').strftime('%I:%M %p')
+            else:
+                schedule_object['start_time'] = ""
+                schedule_object['start_stamp'] = schedule_object['date']
+            if schedule.end_time != "":
+                schedule_object['end_time'] = schedule.end_time
+                schedule_object['end_stamp'] = "{0}T{1}:00Z".format(schedule_object['date'],schedule.end_time)
+            else:
+                schedule_object['end_time'] = ""
+                schedule_object['end_stamp'] = schedule_object['date']
+            schedule_objects.append(schedule_object)
+        return HttpResponse(json.dumps(schedule_objects),content_type="application/json")

@@ -178,7 +178,9 @@ urlpatterns = [
     url(r'^legal/choose_client_for_legal', client_views.ChooseClientForLegal.as_view(), name='choose_client_for_legal'),
     url(r'^legal/legal_email', client_views.LegalEmail.as_view(), name='legal_email'),
     url(r'^caregiver_schedule_dashboard', views.CaregiverScheduleDashboard.as_view(), name='caregiver_schedule_dashboard'),
+    url(r'^get_caregiver_schedules_with_uids', views.get_caregiver_schedules_with_uids, name='get_caregiver_schedules_with_uids'),
     url(r'^client_task_dashboard', views.ClientTaskDashboard.as_view(), name='client_task_dashboard'),
+    url(r'^get_client_tasks_with_uids', views.get_client_tasks_with_uids, name='get_client_tasks_with_uids'),
     url(r'^billing/invoice', views.Invoice.as_view(), name='invoice'),
     url(r'^billing/choose_client_for_invoice', views.ChooseClientForInvoice.as_view(), name='choose_client_for_invoice')
 

@@ -34,10 +34,41 @@
             </div>
             <div class="clearfix"></div>
             {{block.super}}
+
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
+                    <h2>Filters<small></small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <div id="select_client_id">
+                      <div class="row">
+                        <label class="col-md-3 col-sm-3 col-xs-12">Client<span class="required"></span> </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <select id="client_dropdown" class="select2_single" style="width: 100%" tabindex="-1" name="client_dropdown" multiple="multiple">
+                            {% for client in clients %}
+                            <option value="{{client.uid}}">{{client.first_name}} {{client.last_name}}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Calendar<small></small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
                     </ul>
@@ -49,6 +80,9 @@
                 </div>
               </div>
             </div>
+
+
+
           </div>
         </div>
         <!-- /page content -->
@@ -261,6 +295,8 @@
     <!-- FullCalendar -->
     <script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
     <script src="{% static 'vendors/fullcalendar/dist/fullcalendar.min.js' %}"></script>
+    <!-- Select2 -->
+    <script src="{% static 'vendors/select2/dist/js/select2.full.min.js' %}"></script>
 
 {% endblock %}
 {% block scripts %}
@@ -419,42 +455,7 @@
                 calendar.fullCalendar('unselect');
               },*/
               editable: true,
-              events : [
-                {% for task in client_tasks %}
-                  {% if task.pending %}
-                  {
-                    title: "{{ task.activity_task }}",
-                    start: "{{ task.date|date:'Y-m-d'|append_datetime:task.start_time}}",
-                    end: "{{ task.date|date:'Y-m-d'|append_datetime:task.end_time}}",
-                    id: "{{ task.id }}"
-                  },
-                  {% elif task.in_progress %}
-                  {
-                    title: "{{ task.activity_task }}",
-                    start: "{{ task.date|date:'Y-m-d'|append_datetime:task.start_time}}",
-                    end: "{{ task.date|date:'Y-m-d'|append_datetime:task.end_time}}",
-                    id: "{{ task.id }}",
-                    color: "#FF7F50"
-                  },
-                  {% elif task.complete %}
-                  {
-                    title: "{{ task.activity_task }}",
-                    start: "{{ task.date|date:'Y-m-d'|append_datetime:task.start_time}}",
-                    end: "{{ task.date|date:'Y-m-d'|append_datetime:task.end_time}}",
-                    id: "{{ task.id }}",
-                    color: "#3aaf6f"
-                  },
-                  {% elif task.cancelled %}
-                  {
-                    title: "{{ task.activity_task }}",
-                    start: "{{ task.date|date:'Y-m-d'|append_datetime:task.start_time}}",
-                    end: "{{ task.date|date:'Y-m-d'|append_datetime:task.end_time}}",
-                    id: "{{ task.id }}",
-                    color: "#F76C6C"
-                  },
-                  {% endif %}
-                {% endfor %}
-              ],
+              events : [],
               timeFormat: 'h:mma'
               /*events: [{
                 title: 'Make Lunch',
@@ -498,5 +499,60 @@
           });
         </script>
     <!-- /FullCalendar -->
+
+    <!-- Select2 -->
+    <script>
+      $(document).ready(function() {
+        $("#client_dropdown").select2({
+          placeholder: "",
+          allowClear: true
+        });
+      });
+    </script>
+
+    <script>
+    $(document).ready(function(){
+      $('#client_dropdown').change(function(){
+        var client_uids = $(this).val();
+        $.ajax({
+          type: "GET",
+          url: '{% url "get_client_tasks_with_uids" %}',
+          data: {client_uids: client_uids},
+          dataType: "json",
+          contentType: "application/json",
+          success: function(client_tasks){
+            var calendar = $("#calendar");
+            schedules = []
+            for(i = 0;i < client_tasks.length;i++){
+              schedule = client_tasks[i]
+              schedule_data =
+                {
+                  title: schedule.first_name + " " + schedule.last_name + "-" + schedule.activity_task,
+                  start: new Date(schedule.date + " " + schedule.start_time),
+                  end: new Date(schedule.date + " " + schedule.end_time),
+                  id: schedule.id
+                }
+              if(schedule.in_progress){
+                schedule_data.color = "#FF7F50"
+              }
+              if(schedule.complete){
+                schedule_data.color = "#3aaf6f"
+              }
+              if(schedule.cancelled){
+                schedule_data.color = "#F76C6C"
+              }
+                schedules.push(schedule_data)
+            }
+
+            calendar.fullCalendar('removeEvents')
+            calendar.fullCalendar('addEventSource', schedules)
+          },
+          failure: function(client_tasks){
+            alert('error fetching schedule data');
+          }
+        });
+      });
+    });
+    </script>
 
 {% endblock %}

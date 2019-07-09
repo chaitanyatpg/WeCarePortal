@@ -34,6 +34,35 @@
             </div>
             <div class="clearfix"></div>
             {{block.super}}
+
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Filters<small></small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <div id="select_client_id">
+                      <div class="row">
+                        <label class="col-md-3 col-sm-3 col-xs-12">Caregiver<span class="required"></span> </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <select id="caregiver_dropdown" class="select2_single" style="width: 100%" tabindex="-1" name="caregiver_dropdown" multiple="multiple">
+                            {% for caregiver in caregivers %}
+                            <option value="{{caregiver.uid}}">{{caregiver.first_name}} {{caregiver.last_name}}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
@@ -261,7 +290,8 @@
     <!-- FullCalendar -->
     <script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
     <script src="{% static 'vendors/fullcalendar/dist/fullcalendar.min.js' %}"></script>
-
+    <!-- Select2 -->
+    <script src="{% static 'vendors/select2/dist/js/select2.full.min.js' %}"></script>
 {% endblock %}
 {% block scripts %}
 
@@ -283,192 +313,57 @@
               },
               selectable: true,
               selectHelper: true,
-              /*select: function(start, end, allDay) {
-                $('#fc_create').click();
-
-                started = start;
-                ended = end;
-
-                $(".antosubmit").on("click", function() {
-                  var title = $("#title").val();
-                  if (end) {
-                    ended = end;
-                  }
-
-                  categoryClass = $("#event_type").val();
-
-                  if (title) {
-                    calendar.fullCalendar('renderEvent', {
-                        title: title,
-                        start: started,
-                        end: end,
-                        allDay: allDay
-                      },
-                      true // make the event "stick"
-                    );
-                  }
-
-                  $('#title').val('');
-
-                  calendar.fullCalendar('unselect');
-
-                  $('.antoclose').click();
-
-                  return false;
-                });
-              },*/
-              /*eventClick: function(calEvent, jsEvent, view) {
-                $('#fc_edit').click();
-                //$('#task_name').val(calEvent.title);
-                var task_id = calEvent.id;
-                $.ajax({
-                  type: "GET",
-                  url: '{% url "get_task_with_id" %}',
-                  data: { task_id: task_id },
-                  dataType: "json",
-                  contentType: "application/json",
-                  success: function(task_data){
-                    $('#recurring_task_header_details').html("");
-                    if(task_data.hasOwnProperty('task_type'))
-                    {
-                      var task_header_details = 'Occurs ' + task_data.task_type + ' from ' + task_data.start_date + ' to ' + task_data.end_date
-                      $('#recurring_task_header_details').html(task_header_details);
-                    }
-                    $('#task_id_delete').val(task_data.task_id);
-                    $('#recurring_task_id_delete').val(task_data.task_id);
-                    $('#task_id_edit').val(task_data.task_id);
-                    $('#task_name').val(task_data.task_name);
-                    //$('#task_start_time').val(task_data.start_time);
-                    //$('#task_end_time').val(task_data.end_time);
-                    $('#task_start_hour').val(task_data.start_hour);
-                    $('#task_start_minute').val(task_data.start_minute);
-                    $('#task_end_hour').val(task_data.end_hour);
-                    $('#task_end_minute').val(task_data.end_minute);
-                    $('#task_description').val(task_data.description);
-                    //$('#task_comment').val(task_data.comment);
-                    $('#task_link').html(task_data.link);
-                    $('#task_link').attr("href", task_data.link);
-                    $('#task_attachment').html(task_data.attachment);
-                    $('#task_attachment').attr("href", task_data.attachment);
-                    var status = task_data.status;
-                    $('#task_status').val(task_data.status);
-                    task_comments = task_data.comments;
-                    task_attachments = task_data.attachments;
-                    task_links = task_data.links;
-                    $(".task_comments").empty();
-                    for(var i=0;i<task_comments.length;i++){
-                      var comment_str = $('<div class="form-group task_comments_div">\
-                      <label class="col-sm-3 control-label">' + task_comments[i][1] + ' : ' + task_comments[i][2] + '</label>\
-                      <div class="col-sm-9">\
-                      <textarea class="form-control" style="height:55px;" name="task_comment" disabled="true">' + task_comments[i][0] + '</textarea></div></div>');
-                      $('#task_comments').append(comment_str);
-                    }
-                    $(".task_attachments").empty();
-                    for(var i=0;i<task_attachments.length;i++){
-                      var attachment_str = $('<div class="form-group task_attachments_div">\
-                      <label class="col-sm-3 control-label">' + task_attachments[i][1] + ' : ' + task_attachments[i][2] + '</label>\
-                      <div class="col-sm-9">\
-                      <a href=' + task_attachments[i][0] + '><i class="fa fa-paperclip"></i>' + task_attachments[i][0] + '</a>');
-                      $('#task_attachments').append(attachment_str);
-                    }
-                    $(".task_links").empty();
-                    for(var i=0;i<task_links.length;i++){
-                      var link_str = $('<div class="form-group task_links_div">\
-                      <label class="col-sm-3 control-label">' + task_links[i][1] + ' : ' + task_links[i][2] + '</label>\
-                      <div class="col-sm-9">\
-                      <a href=' + '"' + task_links[i][0] + '"' + '>' + task_links[i][0] + '</a>');
-                      $('#task_links').append(link_str);
-                    }
-                  },
-                  failure: function(client_data){
-                    alert('error fetching client data');
-                  }
-                });
-
-                if(calEvent.allDay === false)
-                {
-                  var event_start_time = moment.utc(calEvent.start).format("h:mma");
-                  if(calEvent.end != null)
-                  {
-                    var event_end_time = moment.utc(calEvent.end).format("h:mma");
-                  }
-                  else
-                  {
-                    var event_end_time = null;
-                  }
-                  $('#task_start_time').val(event_start_time)
-                  $('#task_end_time').val(event_end_time)
-                }
-                else
-                {
-                  var event_start_time = null;
-                  var event_end_time = null;
-                  $('#task_start_time').val(event_start_time)
-                  $('#task_end_time').val(event_end_time)
-                }
-                categoryClass = $("#event_type").val();
-
-                $(".edit_calendar_submit").on("click", function() {
-                  var event_title = $("#task_name").val()
-                  calEvent.title = $("#task_name").val();
-
-                  calendar.fullCalendar('updateEvent', calEvent);
-                  $('.antoclose2').click();
-                });
-
-                calendar.fullCalendar('unselect');
-              },*/
               editable: true,
-              events : [
-                {% for schedule in caregiver_schedules %}
-                  {title: "{{schedule.caregiver.first_name}} {{schedule.caregiver.last_name}}",
-                  start: "{{ schedule.date|date:'Y-m-d'|append_datetime:schedule.start_time}}",
-                  end: "{{ schedule.date|date:'Y-m-d'|append_datetime:schedule.end_time}}",
-                  id: "{{ schedule.id }}"},
-                {% endfor %}
-              ],
+              events : [],
               timeFormat: 'h:mma'
-              /*events: [{
-                title: 'Make Lunch',
-                start: new Date(y, m, 1)
-              }, {
-                title: 'Help move in',
-                start: new Date(y, m, d - 5),
-                end: new Date(y, m, d - 2)
-              }, {
-                title: 'Do Groceries',
-                start: new Date(y, m, d, 10, 30),
-                allDay: false
-              }, {
-                title: 'Deliver Medication',
-                start: new Date(y, m, d + 14, 12, 0),
-                end: new Date(y, m, d, 14, 0),
-                allDay: false
-              }, {
-                title: 'Drive to grandchildren',
-                start: new Date(y, m, d + 1, 8, 0),
-                end: new Date(y, m, d + 1, 10, 0),
-                allDay: false
-              }, {
-                title: 'Pick Up Dry cleaning',
-                start: new Date(y, m, d + 1, 2, 0),
-                end: new Date(y, m, d + 1, 2, 30),
-                allDay: false
-              }, {
-                title: 'Drive Home from Grandchildren',
-                start: new Date(y, m, d + 1, 19, 00),
-                end: new Date(y, m, d + 1, 21, 30),
-                allDay: false
-              },
-    			    {
-                title: 'Testing link capability',
-                start: new Date(y, m, 28),
-                end: new Date(y, m, 29),
-                url: 'http://google.com/'
-              }]*/
+
             });
           });
         </script>
     <!-- /FullCalendar -->
 
+    <script>
+    $(document).ready(function(){
+      $('#caregiver_dropdown').change(function(){
+        var caregiver_uids = $(this).val();
+        $.ajax({
+          type: "GET",
+          url: '{% url "get_caregiver_schedules_with_uids" %}',
+          data: {caregiver_uids: caregiver_uids},
+          dataType: "json",
+          contentType: "application/json",
+          success: function(caregiver_schedules){
+            schedules = []
+            for(i = 0;i < caregiver_schedules.length;i++){
+              schedule = caregiver_schedules[i]
+              schedule_data =
+                {
+                  title: schedule.first_name + " " + schedule.last_name,
+                  start: Date.parse(schedule.date + " " + schedule.start_time),
+                  end: Date.parse(schedule.date + " " + schedule.end_time),
+                  id: schedule.id
+                }
+                schedules.push(schedule_data)
+            }
+            var calendar = $("#calendar");
+            calendar.fullCalendar('removeEvents')
+            calendar.fullCalendar('addEventSource', schedules)
+          },
+          failure: function(caregiver_schedules){
+            alert('error fetching schedule data');
+          }
+        });
+      });
+    });
+    </script>
+
+    <!-- Select2 -->
+    <script>
+      $(document).ready(function() {
+        $("#caregiver_dropdown").select2({
+          placeholder: "",
+          allowClear: true
+        });
+      });
+    </script>
 {% endblock %}
