@@ -182,6 +182,8 @@ urlpatterns = [
     url(r'^client_task_dashboard', views.ClientTaskDashboard.as_view(), name='client_task_dashboard'),
     url(r'^get_client_tasks_with_uids', views.get_client_tasks_with_uids, name='get_client_tasks_with_uids'),
     url(r'^billing/invoice', views.Invoice.as_view(), name='invoice'),
-    url(r'^billing/choose_client_for_invoice', views.ChooseClientForInvoice.as_view(), name='choose_client_for_invoice')
+    url(r'^billing/choose_client_for_invoice', views.ChooseClientForInvoice.as_view(), name='choose_client_for_invoice'),
+    url(r'^manager_choose_client', views.ManagerChooseClient.as_view(), name='manager_choose_client'),
+    url(r'^manager_client_dashboard', views.ManagerClientDashboard.as_view(), name='manager_client_dashboard')
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -123,6 +123,9 @@
                     {% if module_dict.CLIENTPORTAL.ASSIGN_TASKS %}
                       <li><a href={% url 'assign_choose_client' %}>Assign Tasks</a></li>
                     {% endif %}
+                    {% if module_dict.CLIENTPORTAL.MANAGER_CLIENT_DASHBOARD %}
+                      <li><a href={% url 'manager_choose_client' %}>Manager Client Dashboard</a></li>
+                    {% endif %}
                     {% if module_dict.CLIENTPORTAL.LEGAL_EMAIL %}
                       <li><a href={% url 'choose_client_for_legal' %}>Send Legal Email</a></li>
                     {% endif %}

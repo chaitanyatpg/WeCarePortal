@@ -37,6 +37,10 @@ from mycareportal_app.common import error_messaging as error_messaging
 
 from mycareportal_app.common.core.event import Event
 import uuid
+from mycareportal_app.client_forms import *
+from mycareportal_app.family_forms import *
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 # Create your views here.
 
 #@receiver(pre_save, sender=User)
@@ -954,6 +958,125 @@ class Invoice(LoginRequiredMixin, View):
         end_minutes = (end_hour * 60) + end_minute
         total_time_hrs = abs(end_minutes - start_minutes) / 60
         return total_time_hrs
+
+class ManagerChooseClient(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {}
+        current_company = request.user.company
+        #context['add_client_form'] = ClientRegistrationForm()
+        all_clients = Client.objects.filter(company=current_company).order_by('last_name')
+        context['all_clients'] = all_clients
+        context['find_client_form'] = FindClientForm()
+        return render(request, 'production/choose_client_manager.html', context)
+
+class ManagerClientDashboard(LoginRequiredMixin, View):
+
+    def get(self, request):
+
+        context = {}
+        current_company = request.user.company
+        find_client_form = FindClientForm(request.GET)
+        context['all_timezones'] = pytz.all_timezones
+        if find_client_form.is_valid():
+            client_email = find_client_form.cleaned_data['client_email']
+            client = Client.objects.get(company=current_company, email_address=client_email)
+            related_clients = []
+            related_clients.append(client)
+            related_caregivers = []
+            for client in related_clients:
+                client_caregivers = client.caregiver.all()
+                related_caregivers += client_caregivers
+            active_caregivers = self.get_active_caregivers(current_company, related_clients, related_caregivers)
+            #active_caregivers = CaregiverTimeSheet.objects.filter(company=current_company, client__in=related_clients, caregiver__in=related_caregivers)
+            context['active_caregivers'] = active_caregivers
+            context['related_caregivers'] = related_caregivers
+            #Get displayable family contact data
+
+            #Get Tasks for related clients for the current day
+            client_tasks = {}
+            current_date = datetime.date.today()
+            for client_data in related_clients:
+                current_client_tasks = self.get_client_tasks(client_data, current_company)
+                #client_name = '{0} {1}'.format(client_data.first_name, client_data.last_name)
+                client_tasks[client_data] = list(current_client_tasks)
+            context["client_tasks"] = client_tasks
+            #Get Update Form
+            context["update_task_form"] = UpdateTaskForm()
+            return render(request, 'production/manager_client_dashboard.html', context)
+
+    def post(self, request):
+        context = {}
+        update_task_form = UpdateTaskForm(request.POST, request.FILES)
+        if update_task_form.is_valid():
+            current_company = request.user.company
+            comment = update_task_form.cleaned_data["comment"]
+            task_id = update_task_form.cleaned_data["task_id"]
+            client_id = update_task_form.cleaned_data["client_id"]
+            client = Client.objects.get(company=current_company,id=client_id)
+            task = TaskSchedule.objects.get(company=current_company,client=client,id=task_id)
+            self.save_task_comments(request, update_task_form, task, current_company, client, comment)
+            messages.success(request, "Edited Task: {0}".format(task.activity_task))
+        return HttpResponseRedirect(reverse('manager_client_dashboard') + "?client_email=" + client.email_address)
+
+    def get_active_caregivers(self, current_company, related_clients, related_caregivers):
+        client_timezone = pytz.timezone(related_clients[0].time_zone)
+        current_date_time = timezone.now().astimezone(client_timezone)
+        active_caregivers = CaregiverTimeSheet.objects.filter(company=current_company,
+                    client__in=related_clients,
+                    caregiver__in=related_caregivers,
+                    clock_in_timestamp__year=current_date_time.year,
+                    clock_in_timestamp__month=current_date_time.month,
+                    clock_in_timestamp__day=current_date_time.day)
+        return active_caregivers
+
+
+    def get_client_tasks(self, client_data, current_company):
+        client_timezone = pytz.timezone(client_data.time_zone)
+        #current_date = datetime.date.today()
+        current_date = (timezone.now().astimezone(client_timezone)).date()
+        timezone.activate(client_timezone)
+        client_tasks = TaskSchedule.objects.filter(company=current_company,client=client_data,date=current_date).order_by('cancelled','pending','in_progress','complete')
+        client_tasks = list(map(lambda x: (x,
+        TaskComment.objects.filter(company=current_company,client=client_data,task_schedule=x).order_by('created'),
+        TaskAttachment.objects.filter(company=current_company,client=client_data,task_schedule=x).order_by('created'),
+        TaskLink.objects.filter(company=current_company,client=client_data,task_schedule=x).order_by('created')),client_tasks))
+        return client_tasks
+
+    def save_task_comments(self, request, update_task_form, task, current_company, client, comment):
+
+        #caregiver = Caregiver.objects.get(company=current_company,user=request.user)
+        task_comment = TaskComment(company=current_company,
+                                    client=client,
+                                    user=request.user,
+                                    task_schedule=task,
+                                    comment=comment)
+        if comment != "":
+            task_comment.save()
+
+@login_required
+def get_client_with_email(request):
+    if request.method == 'GET':
+        context = {}
+        email = request.GET.get('email_data')
+        current_company = request.user.company
+        client = Client.objects.get(company=current_company,email_address = email)
+        name = '{0} {1}'.format(client.first_name, client.last_name)
+        address = '{0}, {1} {2} {3}'.format(client.address, client.city, client.state, client.zip_code)
+        phone_number = client.phone_number
+        raw_dob = client.date_of_birth
+        date_of_birth = '{0}/{1}/{2}'.format(raw_dob.month,raw_dob.day,raw_dob.year)
+        gender = client.gender
+        client_data = {'name': name,
+                        'address': address,
+                        'phone_number': phone_number,
+                        'date_of_birth': date_of_birth,
+                        'gender': gender,
+                        'email_address': email}
+        if client.profile_picture:
+            client_data['profile_picture'] = client.profile_picture.url
+        context["client_data"] = client_data
+        return HttpResponse(json.dumps(client_data), content_type="application/json")
 
 @login_required
 def get_caregiver_schedules_with_uids(request):
