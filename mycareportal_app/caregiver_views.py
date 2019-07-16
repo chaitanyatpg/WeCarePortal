@@ -612,7 +612,9 @@ class CaregiverDashboard(LoginRequiredMixin, View):
                 TaskComment.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created'),
                 TaskAttachment.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created'),
                 TaskLink.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created'),
-                TaskTemplateInstance.objects.filter(company=request.user.company,task_schedule=x).order_by('created')),client_tasks))
+                map(lambda y: (y,
+                    TaskTemplateEntryInstance.objects.filter(company=request.user.company,task_template_instance=y).order_by('created')),
+                    TaskTemplateInstance.objects.filter(company=request.user.company,task_schedule=x).order_by('created'))),client_tasks))
                 return client_tasks
             else:
                 return None

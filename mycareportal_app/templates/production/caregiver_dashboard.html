@@ -58,175 +58,179 @@
 
                             <!-- start recent activity -->
                             <ul class="messages">
-                              {% for client, tasks in client_tasks.items %}
-                              <center>
-                                <h3> {{client.first_name|addstr_space:client.last_name}} </h3>
-                                {% if client.profile_picture %}
-                                  <img src="{{client.profile_picture.url}}" style="width:230px;height:200px;">
-                                {% endif %}
+                              {% if client_tasks %}
+                                {% for client, tasks in client_tasks.items %}
+                                <center>
+                                  <h3> {{client.first_name|addstr_space:client.last_name}} </h3>
+                                  {% if client.profile_picture %}
+                                    <img src="{{client.profile_picture.url}}" style="width:230px;height:200px;">
+                                  {% endif %}
+                                  </br>
+                                    <i class="fa fa-map-marker user-profile-icon"></i> {{client.address}}
+
+                                    <i class="fa fa-mobile-phone user-profile-icon"></i> {{client.phone_number}}
+
+                                    <!--<i class="fa fa-calendar user-profile-icon"></i>-->
+
+                                    <i class="fa fa-male user-profile-icon"></i><i class="fa fa-female user-profile-icon"></i> {{client.gender}}
+                                </center>
                                 </br>
-                                  <i class="fa fa-map-marker user-profile-icon"></i> {{client.address}}
-
-                                  <i class="fa fa-mobile-phone user-profile-icon"></i> {{client.phone_number}}
-
-                                  <!--<i class="fa fa-calendar user-profile-icon"></i>-->
-
-                                  <i class="fa fa-male user-profile-icon"></i><i class="fa fa-female user-profile-icon"></i> {{client.gender}}
-                              </center>
-                              </br>
-                              <hr>
-                                {% for task, task_comments, task_attachments, task_links, task_templates in tasks %}
-                                <li>
+                                <hr>
+                                  {% if tasks|length > 0 %}
+                                    {% for task, task_comments, task_attachments, task_links, task_templates in tasks %}
+                                    <li>
 
 
-                                  <div class="message_date">
-                                    <h5 class="date text-info">
-                                      <span>{{task.start_time|convert_time_24_to_12|addstr_space:'-'}}</span>
-                                      <span>{{task.end_time|convert_time_24_to_12}}</span>
-                                    </h5>
-                                  </div>
-                                  <div class="message_wrapper">
-                                    <h4 class="heading">{{task.activity_task}}</h4>
-                                    <blockquote class="message">{{task.description}}</blockquote>
-                                    <br />
-                                    <ul>
-                                    {% for attachment in task_attachments %}
-                                        <li>
-                                          <a href="{{attachment.attachment.url}}"><i class="fa fa-paperclip"></i>{{attachment.attachment|trunc_path}}</a>
-                                          <span>Uploaded on {{attachment.created}}</span>
-                                          <span>by {{attachment.user.first_name|addstr_space:attachment.user.last_name}}</span>
-                                        </li>
-                                    {% endfor %}
-                                    </ul>
-                                    {% for link in task_links %}
-                                        <p class="url">
-                                          <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
-                                          <a href="{{link.task_url}}"><i class="fa fa-external-link"></i>{{link.task_url}}</a>
-                                          <span>Link added on {{link.created}}</span>
-                                          <span>by {{link.user.first_name|addstr_space:link.user.last_name}}</span>
-                                        </p>
-                                    {% endfor %}
-                                    <ul class="list-unstyled msg_list">
-                                    {% for comment in task_comments %}
-                                      <li>
-                                        <a>
-                                          <!--<span class="image">
-                                            {% if comment.user.profile_picture %}
-                                              <img src="{{comment.user.profile_picture.url}}" />
-                                            {% endif %}
-                                          </span>-->
-                                          <span>
-                                            <span>{{comment.user.first_name|addstr_space:comment.user.last_name}}</span>
-                                            <span>{{comment.created}}</span>
-                                          </span>
-                                          <span class="message">
-                                            {{comment.comment}}
-                                          </span>
-                                        </a>
-                                      </li>
+                                      <div class="message_date">
+                                        <h5 class="date text-info">
+                                          <span>{{task.start_time|convert_time_24_to_12|addstr_space:'-'}}</span>
+                                          <span>{{task.end_time|convert_time_24_to_12}}</span>
+                                        </h5>
+                                      </div>
+                                      <div class="message_wrapper">
+                                        <h4 class="heading">{{task.activity_task}}</h4>
+                                        <blockquote class="message">{{task.description}}</blockquote>
+                                        <br />
+                                        <ul>
+                                        {% for attachment in task_attachments %}
+                                            <li>
+                                              <a href="{{attachment.attachment.url}}"><i class="fa fa-paperclip"></i>{{attachment.attachment|trunc_path}}</a>
+                                              <span>Uploaded on {{attachment.created}}</span>
+                                              <span>by {{attachment.user.first_name|addstr_space:attachment.user.last_name}}</span>
+                                            </li>
+                                        {% endfor %}
+                                        </ul>
+                                        {% for link in task_links %}
+                                            <p class="url">
+                                              <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
+                                              <a href="{{link.task_url}}"><i class="fa fa-external-link"></i>{{link.task_url}}</a>
+                                              <span>Link added on {{link.created}}</span>
+                                              <span>by {{link.user.first_name|addstr_space:link.user.last_name}}</span>
+                                            </p>
+                                        {% endfor %}
+                                        <ul class="list-unstyled msg_list">
+                                        {% for comment in task_comments %}
+                                          <li>
+                                            <a>
+                                              <!--<span class="image">
+                                                {% if comment.user.profile_picture %}
+                                                  <img src="{{comment.user.profile_picture.url}}" />
+                                                {% endif %}
+                                              </span>-->
+                                              <span>
+                                                <span>{{comment.user.first_name|addstr_space:comment.user.last_name}}</span>
+                                                <span>{{comment.created}}</span>
+                                              </span>
+                                              <span class="message">
+                                                {{comment.comment}}
+                                              </span>
+                                            </a>
+                                          </li>
 
-                                    {% endfor %}
-                                    </ul>
-                                    <form enctype="multipart/form-data" method="post" role="form" action="{% url 'caregiver_dashboard' %}">
-                                      {% csrf_token %}
-                                      {% for template, entries in task_templates %}
-                                        <h3>{{template.task_template.name}}<span><small> - {{template.task_template.description}}</small></span></h3>
-                                        <div class="container">
-                                        {% for entry in entries %}
-                                          <div class="row">
-                                            <div class="form-group">
-                                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{entry.task_template_entry.name}}</label>
-                                              <div class="col-md-6 col-sm-6 col-xs-12">
-                                                  {% if entry.entry_value %}
-                                                    <input type="text" class="form-control col-md-7 col-xs-12" name="{{update_task_form.template_entries.html_name}}" value="{{entry.entry_value}}">
-                                                  {% else %}
-                                                    <input type="text" class="form-control col-md-7 col-xs-12" name="{{update_task_form.template_entries.html_name}}">
-                                                  {% endif %}
+                                        {% endfor %}
+                                        </ul>
+                                        <form enctype="multipart/form-data" method="post" role="form" action="{% url 'caregiver_dashboard' %}">
+                                          {% csrf_token %}
+                                          {% for template, entries in task_templates %}
+                                            <h3>{{template.task_template.name}}<span><small> - {{template.task_template.description}}</small></span></h3>
+                                            <div class="container">
+                                            {% for entry in entries %}
+                                              <div class="row">
+                                                <div class="form-group">
+                                                  <label class="control-label col-md-3 col-sm-3 col-xs-12">{{entry.task_template_entry.name}}</label>
+                                                  <div class="col-md-6 col-sm-6 col-xs-12">
+                                                      {% if entry.entry_value %}
+                                                        <input type="text" class="form-control col-md-7 col-xs-12" name="{{update_task_form.template_entries.html_name}}" value="{{entry.entry_value}}">
+                                                      {% else %}
+                                                        <input type="text" class="form-control col-md-7 col-xs-12" name="{{update_task_form.template_entries.html_name}}">
+                                                      {% endif %}
+                                                  </div>
+                                                </div>
                                               </div>
+                                              <br />
+                                            {% endfor %}
+                                            </div>
+                                          {% endfor %}
+                                          <p>
+                                            <label>New Attachments</label>
+                                                {{update_task_form.attachment.label_tag}}{{update_task_form.attachment}}
+                                          </p>
+                                          <p>
+                                            <label>New Comment</label>
+                                            <textarea class="form-control" style="height:55px;" id="task_comment" name="{{update_task_form.comment.html_name}}"></textarea>
+                                          </p>
+                                          <p>
+                                            <label>Report Incident</label>
+                                              <select name={{update_task_form.incident_id.html_name}}>
+                                                <option value="" disabled selected>Select Incident</option>
+                                                <option value=""></option>
+                                                {% for incident in default_incidents %}
+                                                  <option value="{{incident.id}}">{{incident.incident}}</option>
+                                                {% endfor %}
+                                              </select>
+                                              <select name={{update_task_form.location_id.html_name}}>
+                                                <option value="" disabled selected>Select Location</option>
+                                                <option value=""></option>
+                                                {% for location in incident_locations %}
+                                                  <option value="{{location.id}}">{{location.location}}</option>
+                                                {% endfor %}
+                                              </select>
+                                          </p>
+                                          <div class="row">
+                                            <div class="col-md-3">
+                                              <label>
+                                                {% if task.pending %}
+                                                  <input type="radio" checked="checked" value="pending" name="{{update_task_form.status.html_name}}"> Pending
+                                                  <span class="fa fa-spinner fa-pulse fa-1x fa-fw" style="color:#808080"></span>
+                                                {% else %}
+                                                  <input type="radio" value="pending" name="{{update_task_form.status.html_name}}"> Pending
+                                                {% endif %}
+                                              </label>
+                                            </div>
+                                            <div class="col-md-3">
+                                              <label>
+                                                {% if task.complete %}
+                                                  <input type="radio" checked="checked" value="complete" name="{{update_task_form.status.html_name}}"> Complete
+                                                  <span class="fa fa-check" style="color:#3CB371"></span>
+                                                {% else %}
+                                                  <input type="radio" value="complete" name="{{update_task_form.status.html_name}}"> Complete
+                                                {% endif %}
+                                              </label>
+                                            </div>
+                                            <div class="col-md-3">
+                                              <label>
+                                                {% if task.in_progress %}
+                                                  <input type="radio" checked="checked" value="in_progress" name="{{update_task_form.status.html_name}}"> In Progress
+                                                  <span class="fa fa-spinner fa-pulse fa-1x fa-fw" style="color:#baf2f5"></span>
+                                                {% else %}
+                                                  <input type="radio" value="in_progress" name="{{update_task_form.status.html_name}}"> In Progress
+                                                {% endif %}
+                                              </label>
+                                            </div>
+                                            <div class="col-md-3">
+                                              <label>
+                                                {% if task.cancelled %}
+                                                  <input type="radio" checked="checked" value="cancelled" name="{{update_task_form.status.html_name}}"> Cancelled
+                                                  <span class="fa fa-close" style="color:#ff0000"></span>
+                                                {% else %}
+                                                  <input type="radio" value="cancelled" name="{{update_task_form.status.html_name}}"> Cancelled
+                                                {% endif %}
+                                              </label>
                                             </div>
                                           </div>
-                                          <br />
-                                        {% endfor %}
-                                        </div>
-                                      {% endfor %}
-                                      <p>
-                                        <label>New Attachments</label>
-                                            {{update_task_form.attachment.label_tag}}{{update_task_form.attachment}}
-                                      </p>
-                                      <p>
-                                        <label>New Comment</label>
-                                        <textarea class="form-control" style="height:55px;" id="task_comment" name="{{update_task_form.comment.html_name}}"></textarea>
-                                      </p>
-                                      <p>
-                                        <label>Report Incident</label>
-                                          <select name={{update_task_form.incident_id.html_name}}>
-                                            <option value="" disabled selected>Select Incident</option>
-                                            <option value=""></option>
-                                            {% for incident in default_incidents %}
-                                              <option value="{{incident.id}}">{{incident.incident}}</option>
-                                            {% endfor %}
-                                          </select>
-                                          <select name={{update_task_form.location_id.html_name}}>
-                                            <option value="" disabled selected>Select Location</option>
-                                            <option value=""></option>
-                                            {% for location in incident_locations %}
-                                              <option value="{{location.id}}">{{location.location}}</option>
-                                            {% endfor %}
-                                          </select>
-                                      </p>
-                                      <div class="row">
-                                        <div class="col-md-3">
-                                          <label>
-                                            {% if task.pending %}
-                                              <input type="radio" checked="checked" value="pending" name="{{update_task_form.status.html_name}}"> Pending
-                                              <span class="fa fa-spinner fa-pulse fa-1x fa-fw" style="color:#808080"></span>
-                                            {% else %}
-                                              <input type="radio" value="pending" name="{{update_task_form.status.html_name}}"> Pending
-                                            {% endif %}
-                                          </label>
-                                        </div>
-                                        <div class="col-md-3">
-                                          <label>
-                                            {% if task.complete %}
-                                              <input type="radio" checked="checked" value="complete" name="{{update_task_form.status.html_name}}"> Complete
-                                              <span class="fa fa-check" style="color:#3CB371"></span>
-                                            {% else %}
-                                              <input type="radio" value="complete" name="{{update_task_form.status.html_name}}"> Complete
-                                            {% endif %}
-                                          </label>
-                                        </div>
-                                        <div class="col-md-3">
-                                          <label>
-                                            {% if task.in_progress %}
-                                              <input type="radio" checked="checked" value="in_progress" name="{{update_task_form.status.html_name}}"> In Progress
-                                              <span class="fa fa-spinner fa-pulse fa-1x fa-fw" style="color:#baf2f5"></span>
-                                            {% else %}
-                                              <input type="radio" value="in_progress" name="{{update_task_form.status.html_name}}"> In Progress
-                                            {% endif %}
-                                          </label>
-                                        </div>
-                                        <div class="col-md-3">
-                                          <label>
-                                            {% if task.cancelled %}
-                                              <input type="radio" checked="checked" value="cancelled" name="{{update_task_form.status.html_name}}"> Cancelled
-                                              <span class="fa fa-close" style="color:#ff0000"></span>
-                                            {% else %}
-                                              <input type="radio" value="cancelled" name="{{update_task_form.status.html_name}}"> Cancelled
-                                            {% endif %}
-                                          </label>
-                                        </div>
-                                      </div>
-                                      <div>
-                                        <div class="col-md-6 col-sm-6 col-xs-12">
-                                          <input type="hidden" value={{task.id}} name={{update_task_form.task_id.html_name}}>
-                                          <input type="hidden" value={{client.id}} name={{update_task_form.client_id.html_name}}>
-                                          <button type="submit" class="btn btn-success">Update Task</button>
-                                        </div>
-                                      </div>
-                                    </form>
-                                </li>
+                                          <div>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                              <input type="hidden" value={{task.id}} name={{update_task_form.task_id.html_name}}>
+                                              <input type="hidden" value={{client.id}} name={{update_task_form.client_id.html_name}}>
+                                              <button type="submit" class="btn btn-success">Update Task</button>
+                                            </div>
+                                          </div>
+                                        </form>
+                                    </li>
+                                    {% endfor %}
+                                  {% endif %}
                                 {% endfor %}
-                              {% endfor %}
+                              {% endif %}
                             </ul>
                             <!-- end recent activity -->
 
