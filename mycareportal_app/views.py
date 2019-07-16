@@ -62,6 +62,13 @@ def home(request):
         free_trial_days = (current - company_created).days
         messages.info(request, "Currently on day {0} of free trial".format(free_trial_days))
     if "CAREMANAGER" in user_roles:
+        if "CAREGIVER" in user_roles and "tablet_id" in request.session:
+            if ClientTabletRegister.objects.filter(company=request.user.company,device_id=request.session["tablet_id"]).exists():
+                #if "current_time_sheet" not in request.session:
+                set_caregiver_time_sheet_session(request)
+            else:
+                messages.error(request, "Tablet is not registered. Please register the tablet to a client.")
+
         if current_company.default_dashboard == current_company.admin_dashboard:
             return redirect('dashboard')
         elif current_company.default_dashboard == current_company.client_task_dashboard:
@@ -844,9 +851,49 @@ class CaregiverScheduleDashboard(LoginRequiredMixin, View):
         context = {}
         caregiver_schedules = CaregiverSchedule.objects.filter(company=company)
         caregivers = Caregiver.objects.filter(company=company)
+        (late_caregivers, not_clocked_out_caregivers) = self.get_caregiver_details(request)
         context['caregivers'] = caregivers
         context['caregiver_schedules'] = caregiver_schedules
         return render(request, "production/caregiver_schedule_dashboard.html", context)
+
+    def get_caregiver_details(self, request):
+        company = request.user.company
+        company_timezone = pytz.timezone(company.time_zone)
+        current_timestamp = (timezone.now().astimezone(company_timezone))
+        current_date = current_timestamp.date()
+        caregivers = Caregiver.objects.filter(company=company)
+        active_caregivers = list(map(lambda x: x.caregiver, CaregiverTimeSheet.objects.filter(company=company,is_active=True)))
+        caregiver_schedule = CaregiverSchedule.objects.filter(company=company,date=current_date)
+        (late_caregivers, not_clocked_out_caregivers) = self.get_late_caregivers(company, caregiver_schedule, active_caregivers, caregivers)
+        #not_clocked_out_caregivers = self.get_not_clocked_out(company, caregiver_schedule, active_caregivers, caregivers)
+        return (late_caregivers, not_clocked_out_caregivers)
+
+    def get_late_caregivers(self, company, caregiver_schedule, active_caregivers, caregivers):
+
+        late_caregivers = []
+        not_clocked_out_caregivers = []
+
+        for schedule in caregiver_schedule:
+            client = schedule.client
+
+            client_timezone = pytz.timezone(client.time_zone)
+            #current_date = datetime.date.today()
+            current_timestamp = (timezone.now().astimezone(client_timezone))
+            current_date = current_timestamp.date()
+            current_time = current_timestamp.time()
+
+            clock_in_date = schedule.date
+            clock_in_time = schedule.start_time
+            clock_out_time = schedule.end_time
+            if schedule.caregiver in active_caregivers:
+                late_time = clock_out_time.replace(minute=clock_out_time.minute+15)
+                if clock_in_date == current_date and current_time > late_time:
+                    not_clocked_out_caregivers.append(schedule.caregiver)
+            else:
+                late_time = clock_in_time.replace(minute=clock_in_time.minute+15)
+                if clock_in_date == current_date and current_time > late_time:
+                    late_caregivers.append(schedule.caregiver)
+        return (late_caregivers, not_clocked_out_caregivers)
 
 class ClientTaskDashboard(LoginRequiredMixin, View):
 
@@ -1085,20 +1132,41 @@ def get_caregiver_schedules_with_uids(request):
         company = request.user.company
         caregiver_uids = request.GET.getlist('caregiver_uids[]')
         current_company = request.user.company
+        company_timezone = pytz.timezone(current_company.time_zone)
+        current_timestamp = (timezone.now().astimezone(company_timezone))
+        current_date = current_timestamp.date()
         caregivers = Caregiver.objects.filter(company=company, uid__in=caregiver_uids)
         caregiver_schedules = list(CaregiverSchedule.objects.filter(company=company,
                                 caregiver__in=caregivers))
         schedule_objects = []
+        (late_caregivers, not_clocked_out_caregivers, active_caregivers) = get_caregiver_details(request)
         for schedule in caregiver_schedules:
+            schedule_start_datetime = datetime.datetime.combine(schedule.date, schedule.start_time)
+            schedule_end_datetime = datetime.datetime.combine(schedule.date, schedule.end_time)
+            schedule_start_datetime = schedule_start_datetime.astimezone(company_timezone)
+            schedule_end_datetime =  schedule_end_datetime.astimezone(company_timezone)
             schedule_object = {
                 'first_name': schedule.caregiver.first_name,
                 'last_name': schedule.caregiver.last_name,
-                'date': '{0}-{1}-{2}'.format(schedule.date.year, schedule.date.month, schedule.date.day),
-                'start_time': schedule.start_time.strftime("%I:%M %p"),
-                'end_time': schedule.end_time.strftime("%I:%M %p"),
+                'date': '{0}-{1}-{2}'.format(schedule_start_datetime.date().year,
+                    schedule_start_datetime.date().month,
+                    schedule_start_datetime.date().day),
+                'start_time': schedule_start_datetime.time().strftime("%I:%M %p"),
+                'end_time': schedule_end_datetime.time().strftime("%I:%M %p"),
                 'id': schedule.id,
                 'uid': str(schedule.uid)
             }
+            if schedule.date == current_date:
+                if schedule.caregiver in active_caregivers:
+                    schedule_object['status'] = 'active'
+                elif schedule.caregiver in late_caregivers:
+                    schedule_object['status'] = 'late'
+                elif schedule.caregiver in not_clocked_out_caregivers:
+                    schedule_object['status'] = 'not_clocked_out'
+                else:
+                    schedule_object['status'] = 'normal'
+            else:
+                schedule_object['status'] = 'normal'
             schedule_objects.append(schedule_object)
         return HttpResponse(json.dumps(schedule_objects),content_type="application/json")
 
@@ -1141,3 +1209,42 @@ def get_client_tasks_with_uids(request):
                 schedule_object['end_stamp'] = schedule_object['date']
             schedule_objects.append(schedule_object)
         return HttpResponse(json.dumps(schedule_objects),content_type="application/json")
+
+def get_caregiver_details(request):
+    company = request.user.company
+    company_timezone = pytz.timezone(company.time_zone)
+    current_timestamp = (timezone.now().astimezone(company_timezone))
+    current_date = current_timestamp.date()
+    caregivers = Caregiver.objects.filter(company=company)
+    active_caregivers = list(map(lambda x: x.caregiver, CaregiverTimeSheet.objects.filter(company=company,is_active=True)))
+    caregiver_schedule = CaregiverSchedule.objects.filter(company=company,date=current_date)
+    (late_caregivers, not_clocked_out_caregivers) = get_late_caregivers(company, caregiver_schedule, active_caregivers, caregivers)
+    #not_clocked_out_caregivers = self.get_not_clocked_out(company, caregiver_schedule, active_caregivers, caregivers)
+    return (late_caregivers, not_clocked_out_caregivers, active_caregivers)
+
+def get_late_caregivers(company, caregiver_schedule, active_caregivers, caregivers):
+
+    late_caregivers = []
+    not_clocked_out_caregivers = []
+
+    for schedule in caregiver_schedule:
+        client = schedule.client
+
+        client_timezone = pytz.timezone(client.time_zone)
+        #current_date = datetime.date.today()
+        current_timestamp = (timezone.now().astimezone(client_timezone))
+        current_date = current_timestamp.date()
+        current_time = current_timestamp.time()
+
+        clock_in_date = schedule.date
+        clock_in_time = schedule.start_time
+        clock_out_time = schedule.end_time
+        if schedule.caregiver in active_caregivers:
+            late_time = clock_out_time.replace(minute=clock_out_time.minute+15)
+            if clock_in_date == current_date and current_time > late_time:
+                not_clocked_out_caregivers.append(schedule.caregiver)
+        else:
+            late_time = clock_in_time.replace(minute=clock_in_time.minute+15)
+            if clock_in_date == current_date and current_time > late_time:
+                late_caregivers.append(schedule.caregiver)
+    return (late_caregivers, not_clocked_out_caregivers)

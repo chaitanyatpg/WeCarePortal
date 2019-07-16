@@ -97,8 +97,7 @@ urlpatterns = [
     url(r'^export_all_caregiver_timesheets/csv/$', caregiver_views.export_all_caregiver_timesheets, name='export_all_caregiver_timesheets'),
     url(r'^get_caregiver_with_email', caregiver_views.get_caregiver_with_email,name='get_caregiver_with_email'),
     url(r'^edit_caregiver', caregiver_views.EditCaregiver.as_view(),name='edit_caregiver'),
-    url(r'^caregiver_dashboard',caregiver_views.CaregiverDashboard.as_view(),name=
-    'caregiver_dashboard'),
+    url(r'^caregiver_dashboard',caregiver_views.CaregiverDashboard.as_view(),name='caregiver_dashboard'),
     url(r'^view_calendar',caregiver_views.ViewCalendar.as_view(),name='view_calendar'),
     url(r'^view_shifts',caregiver_views.ViewShifts.as_view(),name='view_shifts'),
     url(r'^calendar',caregiver_views.calendar,name='calendar'),

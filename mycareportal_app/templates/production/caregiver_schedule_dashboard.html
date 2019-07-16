@@ -343,7 +343,16 @@
                   end: Date.parse(schedule.date + " " + schedule.end_time),
                   id: schedule.id
                 }
-                schedules.push(schedule_data)
+              if(schedule.status === 'late'){
+                schedule_data.color = "#F76C6C";
+              }
+              else if(schedule.status === 'not_clocked_out'){
+                schedule_data.color = "#FF7F50";
+              }
+              else if(schedule.status === 'active'){
+                schedule_data.color = "#3aaf6f";
+              }
+              schedules.push(schedule_data)
             }
             var calendar = $("#calendar");
             calendar.fullCalendar('removeEvents')
