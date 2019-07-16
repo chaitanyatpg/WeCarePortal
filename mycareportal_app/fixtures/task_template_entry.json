@@ -75,5 +75,16 @@
 			"task_template_entry_code": "VIT001A1C",
 			"entry_type": "TEXT"
 		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 8,
+		"fields": {
+			"name": "Weight",
+			"description": "",
+			"task_template_code": "VIT001",
+			"task_template_entry_code": "VIT001W",
+			"entry_type": "TEXT"
+		}
 	}
 ]
