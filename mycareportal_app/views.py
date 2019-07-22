@@ -354,6 +354,12 @@ def pwd_activate_2(request, uidb64, token):
 def dashboard(request):
     context = {}
     current_company = request.user.company
+
+    if current_company.default_dashboard == current_company.client_task_dashboard:
+        return redirect('client_task_dashboard')
+    elif current_company.default_dashboard == current_company.caregiver_schedule_dashboard:
+        return redirect('caregiver_schedule_dashboard')
+
     company_timezone = pytz.timezone(current_company.time_zone)
     current_date = (timezone.now().astimezone(company_timezone)).date()
     total_clients = Client.objects.filter(company=current_company).count()
