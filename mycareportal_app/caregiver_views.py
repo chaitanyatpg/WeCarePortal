@@ -495,7 +495,8 @@ class CaregiverDashboard(LoginRequiredMixin, View):
                 location_id = update_task_form.cleaned_data["location_id"]
                 #template_entries = update_task_form.cleaned_data["template_entries"]
                 template_entries = request.POST.getlist('template_entries')
-                print(template_entries)
+                #print(request.POST)
+                #print(template_entries)
 
 
                 #attachments = request.FILES.getlist('attachment')
@@ -612,9 +613,7 @@ class CaregiverDashboard(LoginRequiredMixin, View):
                 TaskComment.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created'),
                 TaskAttachment.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created'),
                 TaskLink.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created'),
-                map(lambda y: (y,
-                    TaskTemplateEntryInstance.objects.filter(company=request.user.company,task_template_instance=y).order_by('created')),
-                    TaskTemplateInstance.objects.filter(company=request.user.company,task_schedule=x).order_by('created'))),client_tasks))
+                self.get_task_template_objects(x, request.user.company)),client_tasks))
                 return client_tasks
             else:
                 return None
@@ -624,10 +623,21 @@ class CaregiverDashboard(LoginRequiredMixin, View):
             TaskComment.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created'),
             TaskAttachment.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created'),
             TaskLink.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created'),
-            map(lambda y: (y,
-                TaskTemplateEntryInstance.objects.filter(company=request.user.company,task_template_instance=y).order_by('created')),
-                TaskTemplateInstance.objects.filter(company=request.user.company,task_schedule=x).order_by('created'))),client_tasks))
+            self.get_task_template_objects(x, request.user.company)),client_tasks))
             return client_tasks
+
+    def get_task_template_objects(self, client_task, company):
+        template_objects = {}
+        template_instances = TaskTemplateInstance.objects.filter(company=company,task_schedule=client_task).order_by('created')
+        for template_instance in template_instances:
+            if template_instance not in template_objects:
+                template_objects[template_instance] = {}
+            subcategory_instances = TaskTemplateSubcategoryInstance.objects.filter(company=company, task_template_instance=template_instance)
+            for subcategory in subcategory_instances:
+                entry_instances = list(TaskTemplateEntryInstance.objects.filter(company=company, task_template_subcategory_instance=subcategory))
+                template_objects[template_instance][subcategory] = entry_instances
+        #print(template_objects)
+        return template_objects
 
     def check_task_complete_status(self, current_client_tasks):
         for task in current_client_tasks:
@@ -912,3 +922,18 @@ def export_all_caregiver_timesheets(request):
                 parsed_timesheet.append(str(timesheet.reason))
         writer.writerow(parsed_timesheet)
     return response
+
+@login_required
+def post_template_radio(request):
+
+    if request.method == "POST":
+        company = request.user.company;
+        entry_uid = request.POST['entry_uid']
+        value = request.POST['value']
+
+        entry_instance = TaskTemplateEntryInstance.objects.get(company=company,
+                                                                uid=entry_uid)
+        entry_instance.entry_value = value
+        entry_instance.save()
+
+    return HttpResponse("Changed Value")

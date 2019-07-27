@@ -708,7 +708,7 @@ class AssignTasks(LoginRequiredMixin, View):
     def populate_task_templates(self, new_task_header, template):
         task_schedules = TaskSchedule.objects.filter(company=new_task_header.company,
                                                     task_header=new_task_header)
-        task_template_entries = TaskTemplateEntry.objects.filter(task_template_code=template.template_code)
+        task_template_subcategories = TaskTemplateSubcategory.objects.filter(template_code=template.template_code)
         for schedule in task_schedules:
             template_instance = TaskTemplateInstance(
                 company=new_task_header.company,
@@ -716,13 +716,23 @@ class AssignTasks(LoginRequiredMixin, View):
                 task_schedule = schedule
             )
             template_instance.save()
-            for template_entry in task_template_entries:
-                template_entry_instance = TaskTemplateEntryInstance(
+            for subcategory in task_template_subcategories:
+                template_subcategory_instance = TaskTemplateSubcategoryInstance(
                     company=new_task_header.company,
-                    task_template_entry=template_entry,
+                    task_template_subcategory=subcategory,
                     task_template_instance=template_instance
                 )
-                template_entry_instance.save()
+                template_subcategory_instance.save()
+                task_template_entries = TaskTemplateEntry.objects.filter(task_template_code=template.template_code,
+                                                                        task_template_subcategory_code=subcategory.template_subcategory_code)
+                for template_entry in task_template_entries:
+                    template_entry_instance = TaskTemplateEntryInstance(
+                        company=new_task_header.company,
+                        task_template_entry=template_entry,
+                        task_template_instance=template_instance,
+                        task_template_subcategory_instance=template_subcategory_instance
+                    )
+                    template_entry_instance.save()
 
     def validate_attachments(self, request, attachments):
         for attachment in attachments:

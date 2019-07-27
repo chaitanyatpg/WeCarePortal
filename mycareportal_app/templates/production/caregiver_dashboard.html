@@ -131,25 +131,71 @@
                                         </ul>
                                         <form enctype="multipart/form-data" method="post" role="form" action="{% url 'caregiver_dashboard' %}">
                                           {% csrf_token %}
-                                          {% for template, entries in task_templates %}
+                                          {% for template, subcategories in task_templates.items %}
                                             <h3>{{template.task_template.name}}<span><small> - {{template.task_template.description}}</small></span></h3>
                                             <div class="container">
-                                            {% for entry in entries %}
-                                              <div class="row">
-                                                <div class="form-group">
-                                                  <label class="control-label col-md-3 col-sm-3 col-xs-12">{{entry.task_template_entry.name}}</label>
-                                                  <div class="col-md-6 col-sm-6 col-xs-12">
-                                                      {% if entry.entry_value %}
-                                                        <input type="text" class="form-control col-md-7 col-xs-12" name="{{update_task_form.template_entries.html_name}}" value="{{entry.entry_value}}">
-                                                      {% else %}
-                                                        <input type="text" class="form-control col-md-7 col-xs-12" name="{{update_task_form.template_entries.html_name}}">
-                                                      {% endif %}
+
+                                              {% for subcategory, entries in subcategories.items %}
+                                                <div class="x_panel" style="height: auto;">
+                                                  <div class="x_title">
+                                                    <h2>{{subcategory.task_template_subcategory.name}}<span><small> - {{subcategory.task_template_subcategory.description}}</small></span></h2>
+                                                    <ul class="nav navbar-right panel_toolbox">
+                                                      <li><a class="collapse-link"><i class="fa fa-chevron-down"></i></a>
+                                                      </li>
+                                                    </ul>
+                                                    <div class="clearfix"></div>
+                                                  </div>
+                                                  <div class="x_content" style="display: none;">
+                                                    {% for entry in entries %}
+                                                      <div class="row">
+                                                        <div class="form-group">
+                                                          <label class="control-label col-md-3 col-sm-3 col-xs-12">{{entry.task_template_entry.name}}</label>
+                                                          <div class="col-md-6 col-sm-6 col-xs-12">
+                                                              {% if entry.task_template_entry.entry_type == 'TEXT' %}
+                                                                {% if entry.entry_value %}
+                                                                  <input type="text" class="form-control col-md-7 col-xs-12" name="{{update_task_form.template_entries.html_name}}" value="{{entry.entry_value}}">
+                                                                {% else %}
+                                                                  <input type="text" class="form-control col-md-7 col-xs-12" name="{{update_task_form.template_entries.html_name}}">
+                                                                {% endif %}
+                                                              {% endif %}
+                                                              {% if entry.task_template_entry.entry_type == 'RADIO' %}
+                                                                <div class="radio-inline">
+                                                                  <label>
+                                                                    {% if entry.entry_value == 'Y' %}
+                                                                      <input class="template-radio" type="radio" name="{{entry.uid}}" checked="checked" value='Y'>Y
+                                                                    {% else %}
+                                                                      <input class="template-radio" type="radio" name="{{entry.uid}}" value='Y'>Y
+                                                                    {% endif %}
+                                                                  </label>
+                                                                </div>
+                                                                <div class="radio-inline">
+                                                                  <label>
+                                                                    {% if entry.entry_value == 'N' %}
+                                                                      <input class="template-radio" type="radio" name="{{entry.uid}}" checked="checked" value='N'>N
+                                                                    {% else %}
+                                                                      <input class="template-radio" type="radio" name="{{entry.uid}}" value='N'>N
+                                                                    {% endif %}
+                                                                  </label>
+                                                                </div>
+                                                                <div class="radio-inline">
+                                                                  <label>
+                                                                    {% if entry.entry_value == 'NA' %}
+                                                                      <input class="template-radio" type="radio" name="{{entry.uid}}" checked="checked" value='NA'>N/A
+                                                                    {% else %}
+                                                                      <input class="template-radio" type="radio" name="{{entry.uid}}" value='NA'>N/A
+                                                                    {% endif %}
+                                                                  </label>
+                                                                </div>
+                                                              {% endif %}
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                      <br />
+                                                    {% endfor %}
                                                   </div>
                                                 </div>
-                                              </div>
-                                              <br />
-                                            {% endfor %}
-                                            </div>
+                                              {% endfor %}
+
                                           {% endfor %}
                                           <p>
                                             <label>New Attachments</label>
@@ -360,6 +406,44 @@
       };
     </script>
     <!-- end logout modal -->
+
+    <!--get cookie -->
+      <script>
+      function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+      }
+    </script>
+    <!-- end -->
+
+    <!-- Post template radio -->
+      <script type="text/javascript">
+          var csrftoken = getCookie('csrftoken');
+          $('.template-radio').change(function(){
+            console.log('ent temp rad');
+            $.ajax({
+              url: 'post_template_radio',
+              beforeSend: function(jqXHR, settings){
+                jqXHR.setRequestHeader("x-csrftoken",csrftoken);
+              },
+              type: 'POST',
+              data: {entry_uid: this.name, value: this.value}
+            })
+            console.log('entered');
+          });
+      </script>
+    <!-- end -->
 
     <script>
       $(function() {

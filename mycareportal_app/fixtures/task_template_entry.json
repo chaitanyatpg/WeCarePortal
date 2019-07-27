@@ -6,6 +6,7 @@
 			"name": "Blood Pressure",
 			"description": "",
 			"task_template_code": "VIT001",
+			"task_template_subcategory_code": "VIT001",
 			"task_template_entry_code": "VIT001BP",
 			"entry_type": "TEXT"
 		}
@@ -17,6 +18,7 @@
 			"name": "Heart Rate",
 			"description": "",
 			"task_template_code": "VIT001",
+			"task_template_subcategory_code": "VIT001",
 			"task_template_entry_code": "VIT001HR",
 			"entry_type": "TEXT"
 		}
@@ -28,6 +30,7 @@
 			"name": "Pulse",
 			"description": "",
 			"task_template_code": "VIT001",
+			"task_template_subcategory_code": "VIT001",
 			"task_template_entry_code": "VIT001P",
 			"entry_type": "TEXT"
 		}
@@ -39,6 +42,7 @@
 			"name": "Body Temperature",
 			"description": "",
 			"task_template_code": "VIT001",
+			"task_template_subcategory_code": "VIT001",
 			"task_template_entry_code": "VIT001BT",
 			"entry_type": "TEXT"
 		}
@@ -50,6 +54,7 @@
 			"name": "Blood Sugar Fasting",
 			"description": "",
 			"task_template_code": "VIT001",
+			"task_template_subcategory_code": "VIT001",
 			"task_template_entry_code": "VIT001BSF",
 			"entry_type": "TEXT"
 		}
@@ -61,6 +66,7 @@
 			"name": "Blood Sugar Non-Fasting",
 			"description": "",
 			"task_template_code": "VIT001",
+			"task_template_subcategory_code": "VIT001",
 			"task_template_entry_code": "VIT001BSNF",
 			"entry_type": "TEXT"
 		}
@@ -72,6 +78,7 @@
 			"name": "A1C",
 			"description": "",
 			"task_template_code": "VIT001",
+			"task_template_subcategory_code": "VIT001",
 			"task_template_entry_code": "VIT001A1C",
 			"entry_type": "TEXT"
 		}
@@ -83,8 +90,1185 @@
 			"name": "Weight",
 			"description": "",
 			"task_template_code": "VIT001",
+			"task_template_subcategory_code": "VIT001",
 			"task_template_entry_code": "VIT001W",
 			"entry_type": "TEXT"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 9,
+		"fields": {
+			"name": "Is there a slanted/uneven/unstable surface or gap?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLOTH001",
+			"task_template_entry_code": "FALLOTHE01",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 10,
+		"fields": {
+			"name": "Stairs – Is there a handrail or any support?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLOTH001",
+			"task_template_entry_code": "FALLOTHE02",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 11,
+		"fields": {
+			"name": "Stairs – Are they consecutive steps or there is a break?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLOTH001",
+			"task_template_entry_code": "FALLOTHE03",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 12,
+		"fields": {
+			"name": "Is the area well lit?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLOTH001",
+			"task_template_entry_code": "FALLOTHE04",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 13,
+		"fields": {
+			"name": "Are there wet surfaces?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLOTH001",
+			"task_template_entry_code": "FALLOTHE05",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 14,
+		"fields": {
+			"name": "Is there wheelchair access or a ramp?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLOTH001",
+			"task_template_entry_code": "FALLOTHE06",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 15,
+		"fields": {
+			"name": "Is it easy to park, is the surface slanted?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLDPL001",
+			"task_template_entry_code": "FALLDPLE01",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 16,
+		"fields": {
+			"name": "Is it easy for the patient to get out of the car without assistance?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLDPL001",
+			"task_template_entry_code": "FALLDPLE02",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 17,
+		"fields": {
+			"name": "Is the surface paved or unpaved? (check for potholes, rocks)",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLDPL001",
+			"task_template_entry_code": "FALLDPLE03",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 18,
+		"fields": {
+			"name": "Is there any clutter? (toys, bikes, plants)",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLDPL001",
+			"task_template_entry_code": "FALLDPLE04",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 19,
+		"fields": {
+			"name": "Does the door open fully?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLE001",
+			"task_template_entry_code": "FALLEE01",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 20,
+		"fields": {
+			"name": "Is the area well lit?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLE001",
+			"task_template_entry_code": "FALLEE02",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 21,
+		"fields": {
+			"name": "Is the light switch easily accessible?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLE001",
+			"task_template_entry_code": "FALLEE03",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 22,
+		"fields": {
+			"name": "Are there any tables/stands that may be an obstruction?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLE001",
+			"task_template_entry_code": "FALLEE04",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 23,
+		"fields": {
+			"name": "Is there a shoe stand and coat rack?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLE001",
+			"task_template_entry_code": "FALLEE05",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 24,
+		"fields": {
+			"name": "Is there a chair to sit on to put on/take off shoes?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLE001",
+			"task_template_entry_code": "FALLEE06",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 25,
+		"fields": {
+			"name": "Does the indoor pair of slippers/shoes have good grip?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLE001",
+			"task_template_entry_code": "FALLEE07",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 26,
+		"fields": {
+			"name": "Once the door is open, is there enough space inside for a safe passage?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLB001",
+			"task_template_entry_code": "FALLBE01",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 27,
+		"fields": {
+			"name": "Is there space inside for a second person or walker, if required?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLB001",
+			"task_template_entry_code": "FALLBE02",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 28,
+		"fields": {
+			"name": "Are there any rugs, mats, scales, trash cans, magazines, cluttering the bathroom?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLB001",
+			"task_template_entry_code": "FALLBE03",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 29,
+		"fields": {
+			"name": "Is the space well illuminated and ventilated?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLB001",
+			"task_template_entry_code": "FALLBE04",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 30,
+		"fields": {
+			"name": "Is there something sturdy to grab near the toilet and tub/shower?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLB001",
+			"task_template_entry_code": "FALLBE05",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 31,
+		"fields": {
+			"name": "Is there space for an elevated toilet seat/commode, to be placed over the toilet?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLB001",
+			"task_template_entry_code": "FALLBE06",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 32,
+		"fields": {
+			"name": "Can the toilet paper, cleansing wipes, sink, sanitizer, be accessed easily (without standing)?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLB001",
+			"task_template_entry_code": "FALLBE07",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 33,
+		"fields": {
+			"name": "Is the bathtub/shower easy to enter/step over?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLB001",
+			"task_template_entry_code": "FALLBE08",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 34,
+		"fields": {
+			"name": "Is there a shower curtain?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLB001",
+			"task_template_entry_code": "FALLBE09",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 35,
+		"fields": {
+			"name": "Is there any obstruction or lip that may present a tripping hazard?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLB001",
+			"task_template_entry_code": "FALLBE10",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 36,
+		"fields": {
+			"name": "Is there a non-slip mat in the bathtub/shower?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLB001",
+			"task_template_entry_code": "FALLBE11",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 37,
+		"fields": {
+			"name": "Does the walker fit inside?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLB001",
+			"task_template_entry_code": "FALLBE12",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 38,
+		"fields": {
+			"name": "Are the knobs in-reach and easy to use?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLB001",
+			"task_template_entry_code": "FALLBE13",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 39,
+		"fields": {
+			"name": "Is there a need for a shower seat/tub transfer bench?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLB001",
+			"task_template_entry_code": "FALLBE14",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 40,
+		"fields": {
+			"name": "Is there a first-aid kit close by?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLB001",
+			"task_template_entry_code": "FALLBE15",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 41,
+		"fields": {
+			"name": "Are there any steps or slanted surfaces?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLLR001",
+			"task_template_entry_code": "FALLLRE01",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 42,
+		"fields": {
+			"name": "Is there a sturdy railing/grab handle?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLLR001",
+			"task_template_entry_code": "FALLLRE02",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 43,
+		"fields": {
+			"name": "Is the space wheelchair/walker friendly?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLLR001",
+			"task_template_entry_code": "FALLLRE03",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 44,
+		"fields": {
+			"name": "Are there any mats, rugs, clutter, breakables, obstacles in the room?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLLR001",
+			"task_template_entry_code": "FALLLRE04",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 45,
+		"fields": {
+			"name": "Is there comfortable/apt seating for the patient? (favorite chair/spot)",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLLR001",
+			"task_template_entry_code": "FALLLRE05",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 46,
+		"fields": {
+			"name": "Does the furniture need to be rearranged?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLLR001",
+			"task_template_entry_code": "FALLLRE06",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 47,
+		"fields": {
+			"name": "Are there any steps or slanted surfaces?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLK001",
+			"task_template_entry_code": "FALLKE01",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 48,
+		"fields": {
+			"name": "Is there a sturdy railing/grab handle?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLK001",
+			"task_template_entry_code": "FALLKE02",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 49,
+		"fields": {
+			"name": "Is it wheelchair/walker friendly?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLK001",
+			"task_template_entry_code": "FALLKE03",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 50,
+		"fields": {
+			"name": "Does the wheelchair/walker have a tray to carry items on?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLK001",
+			"task_template_entry_code": "FALLKE04",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 51,
+		"fields": {
+			"name": "Is there a chair for when the patient feels fatigued?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLK001",
+			"task_template_entry_code": "FALLKE05",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 52,
+		"fields": {
+			"name": "Are there any loose tiles, mats, rugs, clutter, breakables, obstacles in the room?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLK001",
+			"task_template_entry_code": "FALLKE06",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 53,
+		"fields": {
+			"name": "Can the refrigerator/freezer, microwave, oven, dishwasher’s, doors be opened fully and easily?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLK001",
+			"task_template_entry_code": "FALLKE07",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 54,
+		"fields": {
+			"name": "Are dishes, silverware, pots & pans, ingredients readily available?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLK001",
+			"task_template_entry_code": "FALLKE08",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 55,
+		"fields": {
+			"name": "Is the sink, washing items, trash can easily accessible?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLK001",
+			"task_template_entry_code": "FALLKE09",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 56,
+		"fields": {
+			"name": "Is there a fire extinguisher, exhaust fan, smoke alarm, first-aid kit in the kitchen?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLK001",
+			"task_template_entry_code": "FALLKE10",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 57,
+		"fields": {
+			"name": "Is there a sturdy stool/step ladder, grabber available?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLK001",
+			"task_template_entry_code": "FALLKE11",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 58,
+		"fields": {
+			"name": "Are towels, paper napkins, long-handled dust pans easily accessible?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLK001",
+			"task_template_entry_code": "FALLKE12",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 59,
+		"fields": {
+			"name": "Is the doorway wide enough for a wheelchair/walker?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLB001",
+			"task_template_entry_code": "FALLBE01",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 60,
+		"fields": {
+			"name": "Are there any steps or slanted surfaces?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLB001",
+			"task_template_entry_code": "FALLBE02",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 61,
+		"fields": {
+			"name": "Is there a sturdy railing/grab handle, furniture to hold?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLB001",
+			"task_template_entry_code": "FALLBE03",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 62,
+		"fields": {
+			"name": "Are there any mats, rugs, clutter, breakables, obstacles in the room?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLB001",
+			"task_template_entry_code": "FALLBE04",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 63,
+		"fields": {
+			"name": "Is the preferred side of the bed easily accessible?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLB001",
+			"task_template_entry_code": "FALLBE05",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 64,
+		"fields": {
+			"name": "Is the bed at the right height?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLB001",
+			"task_template_entry_code": "FALLBE06",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 65,
+		"fields": {
+			"name": "Is there need for a stepping stool, grab handle?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLB001",
+			"task_template_entry_code": "FALLBE07",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 66,
+		"fields": {
+			"name": "Is there a bedrail?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLB001",
+			"task_template_entry_code": "FALLBE08",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 67,
+		"fields": {
+			"name": "Are light switches, telephone/mobile, temperature controls at hands reach?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLB001",
+			"task_template_entry_code": "FALLBE09",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 68,
+		"fields": {
+			"name": "Is there a need for multiple pillows, night light, motion sensor, emergency call button?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLB001",
+			"task_template_entry_code": "FALLBE10",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 69,
+		"fields": {
+			"name": "Are clothes/robe easily accessible?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLB001",
+			"task_template_entry_code": "FALLBE11",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 70,
+		"fields": {
+			"name": "Is there a need for a grabber?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLB001",
+			"task_template_entry_code": "FALLBE12",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 71,
+		"fields": {
+			"name": "Can the sturdy bedside table hold: Water, glasses, phone, medication?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLB001",
+			"task_template_entry_code": "FALLBE13",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 72,
+		"fields": {
+			"name": "Is there a clear, illuminated, (wheelchair/walker) accessible path to the bathroom?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLB001",
+			"task_template_entry_code": "FALLBE14",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 73,
+		"fields": {
+			"name": "Is there a sturdy railing/grab handle?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLBA001",
+			"task_template_entry_code": "FALLBAE01",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 74,
+		"fields": {
+			"name": "Is it wheelchair/walker friendly? (stair lift, wheelchair lift)",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLBA001",
+			"task_template_entry_code": "FALLBAE02",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 75,
+		"fields": {
+			"name": "Are there any mats, rugs, clutter, breakables, obstacles in the room?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLBA001",
+			"task_template_entry_code": "FALLBAE03",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 76,
+		"fields": {
+			"name": "Is there enough head height clearance?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLBA001",
+			"task_template_entry_code": "FALLBAE04",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 77,
+		"fields": {
+			"name": "Any hazards on the steps?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLBA001",
+			"task_template_entry_code": "FALLBAE05",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 78,
+		"fields": {
+			"name": "Is there ample lighting?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLBA001",
+			"task_template_entry_code": "FALLBAE06",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 79,
+		"fields": {
+			"name": "Are the switches easy to access?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLBA001",
+			"task_template_entry_code": "FALLBAE07",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 80,
+		"fields": {
+			"name": "Is there any water on the floor?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLBA001",
+			"task_template_entry_code": "FALLBAE08",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 81,
+		"fields": {
+			"name": "Is the area humid?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLBA001",
+			"task_template_entry_code": "FALLBAE09",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 82,
+		"fields": {
+			"name": "Is there a clear path to the laundry facilities?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLBA001",
+			"task_template_entry_code": "FALLBAE10",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 83,
+		"fields": {
+			"name": "Is there a way for the patient to carry laundry, basket, things up/down?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLBA001",
+			"task_template_entry_code": "FALLBAE11",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 84,
+		"fields": {
+			"name": "Do the stairs have any slanted/uneven/slippery surfaces, (torn/worn-out) carpets?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLSE001",
+			"task_template_entry_code": "FALLSEE01",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 85,
+		"fields": {
+			"name": "Any clutter, obstacles, breakables around the area.",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLSE001",
+			"task_template_entry_code": "FALLSEE02",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 86,
+		"fields": {
+			"name": "Is it free of rugs/mats?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLSE001",
+			"task_template_entry_code": "FALLSEE03",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 87,
+		"fields": {
+			"name": "Are the areas well lit?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLSE001",
+			"task_template_entry_code": "FALLSEE04",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 88,
+		"fields": {
+			"name": "Are the light switches easily accessible?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLSE001",
+			"task_template_entry_code": "FALLSEE05",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 89,
+		"fields": {
+			"name": "Are there sturdy handles/bars to hold?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLSE001",
+			"task_template_entry_code": "FALLSEE06",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 90,
+		"fields": {
+			"name": "Does the patient need to carry up/down items?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLSE001",
+			"task_template_entry_code": "FALLSEE07",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 91,
+		"fields": {
+			"name": "Can the patient carry a small bag?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLSE001",
+			"task_template_entry_code": "FALLSEE08",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 92,
+		"fields": {
+			"name": "Can a stairlift, wheelchair lift be installed?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLSE001",
+			"task_template_entry_code": "FALLSEE09",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 93,
+		"fields": {
+			"name": "Is there a second walker/wheelchair upstairs/downstairs?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLSE001",
+			"task_template_entry_code": "FALLSEE10",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 94,
+		"fields": {
+			"name": "If there is an elevator, is it and the approach easily accessible?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLSE001",
+			"task_template_entry_code": "FALLSEE11",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 95,
+		"fields": {
+			"name": "Is there a waiting seat inside and outside (different floors) of the elevator?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLSE001",
+			"task_template_entry_code": "FALLSEE12",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 96,
+		"fields": {
+			"name": "Is the elevator wheelchair/walker friendly?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLSE001",
+			"task_template_entry_code": "FALLSEE13",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 97,
+		"fields": {
+			"name": "Are pets a tripping hazard? (their food, water, waste, toys, beds)",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLPS001",
+			"task_template_entry_code": "FALLPSE01",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 98,
+		"fields": {
+			"name": "Is their food, water, cleaning, walking, waste items, litter box easily accessible?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLPS001",
+			"task_template_entry_code": "FALLPSE02",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 99,
+		"fields": {
+			"name": "Is the food bag, food/water dish, too large and heavy to dispense from/to?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLPS001",
+			"task_template_entry_code": "FALLPSE03",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 100,
+		"fields": {
+			"name": "Are food/water dishes on the floor?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLPS001",
+			"task_template_entry_code": "FALLPSE04",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 101,
+		"fields": {
+			"name": "Is walking the dog necessary?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLPS001",
+			"task_template_entry_code": "FALLPSE05",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 102,
+		"fields": {
+			"name": "Will picking up after the dog be possible?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLPS001",
+			"task_template_entry_code": "FALLPSE06",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 103,
+		"fields": {
+			"name": "Is there a fence around the yard?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLPS001",
+			"task_template_entry_code": "FALLPSE07",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 104,
+		"fields": {
+			"name": "Will the pet cause a fall while pulling/pushing?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLPS001",
+			"task_template_entry_code": "FALLPSE08",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 105,
+		"fields": {
+			"name": "Is bathing the pet an issue?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLPS001",
+			"task_template_entry_code": "FALLPSE09",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 106,
+		"fields": {
+			"name": "Is there a special area for bathing the pet?",
+			"description": "",
+			"task_template_code": "FALL001",
+			"task_template_subcategory_code": "FALLPS001",
+			"task_template_entry_code": "FALLPSE10",
+			"entry_type": "RADIO"
 		}
 	}
 ]

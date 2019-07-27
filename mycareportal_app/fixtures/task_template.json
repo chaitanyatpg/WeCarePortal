@@ -7,5 +7,14 @@
 			"description": "Used to report various essential vitals",
 			"template_code": "VIT001"
 		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplate",
+		"pk": 2,
+		"fields": {
+			"name": "Fall Prevention Checklist",
+			"description": "Used to report factors that could result in a fall  ",
+			"template_code": "FALL001"
+		}
 	}
 ]

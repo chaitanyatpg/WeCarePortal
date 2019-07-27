@@ -413,6 +413,16 @@ class TaskTemplate(models.Model):
     name = models.CharField(max_length=500)
     description = models.CharField(max_length=500)
 
+class TaskTemplateSubcategory(models.Model):
+
+    company = models.ForeignKey(Company, null=True)
+    global_template = models.BooleanField(default=True)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    template_code = models.CharField(max_length=100)
+    template_subcategory_code = models.CharField(max_length=100, blank=True, null=True)
+    name = models.CharField(max_length=500)
+    description = models.CharField(max_length=500)
+
 class TaskTemplateEntry(models.Model):
 
     ENTRY_TYPE_CHOICES = (
@@ -425,6 +435,7 @@ class TaskTemplateEntry(models.Model):
     company = models.ForeignKey(Company, null=True)
     uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     task_template_code = models.CharField(max_length=100)
+    task_template_subcategory_code = models.CharField(max_length=100, null=True)
     task_template_entry_code = models.CharField(max_length=100)
     entry_type = models.CharField(ENTRY_TYPE_CHOICES, max_length=100)
     name = models.CharField(max_length=100)
@@ -438,12 +449,21 @@ class TaskTemplateInstance(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     task_schedule = models.ForeignKey(TaskSchedule)
 
+class TaskTemplateSubcategoryInstance(models.Model):
+
+    company = models.ForeignKey(Company, null=True)
+    task_template_subcategory = models.ForeignKey(TaskTemplateSubcategory)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    created = models.DateTimeField(auto_now_add=True)
+    task_template_instance = models.ForeignKey(TaskTemplateInstance)
+
 class TaskTemplateEntryInstance(models.Model):
 
     company = models.ForeignKey(Company)
     uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     created = models.DateTimeField(auto_now_add=True)
     task_template_entry = models.ForeignKey(TaskTemplateEntry)
+    task_template_subcategory_instance = models.ForeignKey(TaskTemplateSubcategoryInstance, null=True)
     task_template_instance = models.ForeignKey(TaskTemplateInstance)
     entry_value = models.CharField(max_length=500, blank=True)
 

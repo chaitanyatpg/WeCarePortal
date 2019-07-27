@@ -1,0 +1,112 @@
+[
+	{
+		"model": "mycareportal_app.tasktemplatesubcategory",
+		"pk": 1,
+		"fields": {
+			"name": "Vitals",
+			"description": "Used to report various essential vitals",
+			"template_code": "VIT001",
+			"template_subcategory_code": "VIT001"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplatesubcategory",
+		"pk": 2,
+		"fields": {
+			"name": "Outside the Home",
+			"description": "Fall hazards outside of the home",
+			"template_code": "FALL001",
+			"template_subcategory_code": "FALLOTH001"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplatesubcategory",
+		"pk": 3,
+		"fields": {
+			"name": "Driveway/Parking Lot",
+			"description": "Fall hazards on the driveway or parking lot",
+			"template_code": "FALL001",
+			"template_subcategory_code": "FALLDPL001"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplatesubcategory",
+		"pk": 4,
+		"fields": {
+			"name": "Entrance",
+			"description": "Fall hazards in entrances",
+			"template_code": "FALL001",
+			"template_subcategory_code": "FALLE001"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplatesubcategory",
+		"pk": 5,
+		"fields": {
+			"name": "Bathroom",
+			"description": "Fall hazards in bathrooms",
+			"template_code": "FALL001",
+			"template_subcategory_code": "FALLB001"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplatesubcategory",
+		"pk": 6,
+		"fields": {
+			"name": "Living Room",
+			"description": "Fall hazards in the living room",
+			"template_code": "FALL001",
+			"template_subcategory_code": "FALLLR001"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplatesubcategory",
+		"pk": 7,
+		"fields": {
+			"name": "Kitchen",
+			"description": "Fall hazards in the kitchen",
+			"template_code": "FALL001",
+			"template_subcategory_code": "FALLK001"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplatesubcategory",
+		"pk": 8,
+		"fields": {
+			"name": "Bedroom",
+			"description": "Fall hazards in the bedroom",
+			"template_code": "FALL001",
+			"template_subcategory_code": "FALLB001"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplatesubcategory",
+		"pk": 9,
+		"fields": {
+			"name": "Basement",
+			"description": "Fall hazards in the basement",
+			"template_code": "FALL001",
+			"template_subcategory_code": "FALLBA001"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplatesubcategory",
+		"pk": 10,
+		"fields": {
+			"name": "Stairs and Elevator",
+			"description": "Fall hazards in the stairs or elevator",
+			"template_code": "FALL001",
+			"template_subcategory_code": "FALLSE001"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplatesubcategory",
+		"pk": 11,
+		"fields": {
+			"name": "Pet Safety",
+			"description": "Fall hazards related to pets",
+			"template_code": "FALL001",
+			"template_subcategory_code": "FALLPS001"
+		}
+	}
+]
