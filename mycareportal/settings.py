@@ -44,7 +44,7 @@ AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 
 
 #SSL - comment out when running locally
-#SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = True
 
 #Email Settings (Sendgrid)
 #EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
