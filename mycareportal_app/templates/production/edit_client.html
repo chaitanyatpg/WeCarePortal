@@ -162,6 +162,7 @@
                       {% if not edit_client_form.state.value is None %}
                       <select required class="select2_single form-control" tabindex="-1" name={{edit_client_form.state.html_name}} value={{edit_client_form.state.value}}>
                             <option selected=selected>{{edit_client_form.state.value}}</option>
+                            <option value="Other">Other</option>
                             <option value="AL">Alabama</option>
                           	<option value="AK">Alaska</option>
                           	<option value="AZ">Arizona</option>
@@ -217,6 +218,7 @@
                       {% else %}
                       <select required class="select2_single form-control" tabindex="-1" name={{edit_client_form.state.html_name}}>
                             <option></option>
+                            <option value="Other">Other</option>
                             <option value="AL">Alabama</option>
                           	<option value="AK">Alaska</option>
                           	<option value="AZ">Arizona</option>
@@ -681,6 +683,7 @@
                       {% if not family_details_form.state.value is None %}
                       <select required class="select2_single form-control" id="family_state" tabindex="-1" name={{family_details_form.state.html_name}} value={{family_details_form.state.value}}>
                             <option selected=selected>{{family_details_form.state.value}}</option>
+                            <option value="Other">Other</option>
                             <option value="AL">Alabama</option>
                           	<option value="AK">Alaska</option>
                           	<option value="AZ">Arizona</option>
@@ -736,6 +739,7 @@
                       {% else %}
                       <select required class="select2_single form-control" id="family_state" tabindex="-1" name={{family_details_form.state.html_name}}>
                             <option></option>
+                            <option value="Other">Other</option>
                             <option value="AL">Alabama</option>
                           	<option value="AK">Alaska</option>
                           	<option value="AZ">Arizona</option>
@@ -1003,6 +1007,7 @@
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                     <select class="select2_single form-control" id = "pharmacy_state" tabindex="-1" name = "{{pharmacy_details_form.state.html_name}}">
                           <option value="" disabled selected>Select State</option>
+                          <option value="Other">Other</option>
                           <option value="AL">Alabama</option>
                           <option value="AK">Alaska</option>
                           <option value="AZ">Arizona</option>
@@ -1140,6 +1145,7 @@
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                     <select class="select2_single form-control" id = "payer_state" tabindex="-1" name = "{{payer_details_form.state.html_name}}">
                           <option value="" disabled selected>Select State</option>
+                          <option value="Other">Other</option>
                           <option value="AL">Alabama</option>
                           <option value="AK">Alaska</option>
                           <option value="AZ">Arizona</option>

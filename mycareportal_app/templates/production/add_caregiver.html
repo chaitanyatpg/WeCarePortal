@@ -110,6 +110,7 @@
                       {% if not add_caregiver_form.state_value is None %}
                       <select required class="select2_single form-control" tabindex="-1" name={{add_caregiver_form.state.html_name}} value={{add_caregiver_form.state.value}}>
                             <option value="" disabled selected>Select State</option>
+                            <option value="Other">Other</option>
                             <option value="AL">Alabama</option>
                           	<option value="AK">Alaska</option>
                           	<option value="AZ">Arizona</option>
@@ -165,6 +166,7 @@
                       {% else %}
                       <select required class="select2_single form-control" tabindex="-1" name={{add_caregiver_form.state.html_name}}>
                             <option value="" disabled selected>Select State</option>
+                            <option value="Other">Other</option>
                             <option value="AL">Alabama</option>
                           	<option value="AK">Alaska</option>
                           	<option value="AZ">Arizona</option>

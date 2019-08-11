@@ -93,6 +93,7 @@
                       {% if not company_edit_form.state.value is None %}
                       <select required class="select2_single form-control" tabindex="-1" name = "{{company_edit_form.state.html_name}}" value = "{{company_edit_form.state.value}}">
                             <option selected=selected>{{company_edit_form.state.value}}</option>
+                            <option value="Other">Other</option>
                             <option value="AL">Alabama</option>
                             <option value="AK">Alaska</option>
                             <option value="AZ">Arizona</option>
@@ -148,6 +149,7 @@
                       {% else %}
                       <select required class="select2_single form-control" tabindex="-1" name = "{{company_edit_form.state.html_name}}" value = "{{company_edit_form.state.value}}">
                             <option value="" disabled selected>Select State</option>
+                            <option value="Other">Other</option>
                             <option value="AL">Alabama</option>
                             <option value="AK">Alaska</option>
                             <option value="AZ">Arizona</option>
