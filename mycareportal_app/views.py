@@ -543,7 +543,8 @@ class EditCompany(LoginRequiredMixin, View):
             'zip_code': current_company.zip_code,
             'time_zone': current_company.time_zone,
             'default_dashboard': current_company.default_dashboard,
-            'tax_rate': current_company.tax_rate
+            'tax_rate': current_company.tax_rate,
+            'logo': current_company.logo
         })
         context['company_edit_form'] = company_edit_form
         context['current_company'] = current_company
@@ -553,7 +554,7 @@ class EditCompany(LoginRequiredMixin, View):
     def post(self, request):
         context = {}
         current_company = request.user.company
-        company_edit_form = CompanyEditForm(request.POST)
+        company_edit_form = CompanyEditForm(request.POST, request.FILES)
         if company_edit_form.is_valid():
             try:
                 current_company.company_name = company_edit_form.cleaned_data['company_name']
@@ -566,6 +567,7 @@ class EditCompany(LoginRequiredMixin, View):
                 current_company.time_zone = company_edit_form.cleaned_data['time_zone']
                 current_company.default_dashboard = company_edit_form.cleaned_data['default_dashboard']
                 current_company.tax_rate = company_edit_form.cleaned_data['tax_rate']
+                current_company.logo = company_edit_form.cleaned_data['logo']
                 current_company.save()
                 #send_mail('Test sendgrid', 'Test message', 'info@wecareportal.com', ['dhruv.ranjan@gmail.com'], fail_silently=False)
                 messages.success(request, "Company details successfully edited")

@@ -35,7 +35,7 @@
               {{block.super}}
               <div class="x_content"> <br />
 
-                <form method='post' action="{% url 'edit_company' %}" class="form-horizontal form-label-left">
+                <form enctype="multipart/form-data" method='post' action="{% url 'edit_company' %}" class="form-horizontal form-label-left">
                   {% csrf_token %}
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Company Name <span class="required">*</span> </label>
@@ -273,6 +273,12 @@
                     </div>
                   </div>
 
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Company Logo</label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{company_edit_form.logo.label_tag}}{{company_edit_form.logo}}
+                      </div>
+                  </div>
 
                   <div class="ln_solid"></div>
                   <div class="form-group">

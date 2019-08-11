@@ -12,6 +12,9 @@ class ActivationCode(models.Model):
     activation_code = models.CharField(unique=True, max_length = 22, default=shortuuid.uuid, editable=False)
     activated = models.BooleanField(default=False)
 
+def get_company_logo_upload_path(instance, filename):
+    return "company_{0}/logo/{1}".format(instance.company_id, filename)
+
 class Company(models.Model):
 
     admin_dashboard = "ADMIN"
@@ -41,6 +44,7 @@ class Company(models.Model):
     is_on_free_trial = models.BooleanField(default=False)
     default_dashboard = models.CharField(DASHBOARD_CHOICES, max_length=100, default=admin_dashboard)
     tax_rate = models.DecimalField(max_digits=5, decimal_places=2, null=True)
+    logo = models.ImageField(upload_to=get_company_logo_upload_path, null=True)
 
 class User(AbstractUser):
 

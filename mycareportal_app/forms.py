@@ -57,6 +57,8 @@ class CareManagerRegistrationForm(forms.Form):
 
 class CompanyEditForm(forms.Form):
 
+    MAX_UPLOAD_SIZE = 5242880
+
     company_name = forms.CharField(max_length=200)
     contact_number = forms.CharField(max_length=20)
     address = forms.CharField(max_length=400,required=False)
@@ -67,10 +69,17 @@ class CompanyEditForm(forms.Form):
     time_zone = forms.CharField(max_length=50, required=False)
     default_dashboard = forms.CharField(max_length=100, required=False)
     tax_rate = forms.DecimalField(required=False)
+    logo = forms.ImageField(label='Select file', required=False)
+
+    def clean_picture(self):
+        picture = self.cleaned_data['logo']
+        if picture:
+            if picture._size > self.MAX_UPLOAD_SIZE:
+                raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
 
     def clean(self):
-
         cleaned_data = super(CompanyEditForm, self).clean()
+        self.clean_picture()
         return cleaned_data
 
 class CloseCaregiverSessionForm(forms.Form):
