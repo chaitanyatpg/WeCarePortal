@@ -626,6 +626,7 @@ class AssignTasks(LoginRequiredMixin, View):
                 saturday = assign_task_form.cleaned_data["saturday"]
                 sunday = assign_task_form.cleaned_data["sunday"]
                 template_uid = assign_task_form.cleaned_data["template"]
+                alert_active = assign_task_form.cleaned_data["alert_active"]
                 if template_uid:
                     template = TaskTemplate.objects.get(uid=template_uid)
                 else:
@@ -660,7 +661,8 @@ class AssignTasks(LoginRequiredMixin, View):
                                                 start_time = start_time,
                                                 end_time = end_time,
                                                 description = description,
-                                                link = link)
+                                                link = link,
+                                                alert_active = alert_active)
                 new_task_header.save()
                 #populate task schedule
                 current_user = request.user
@@ -795,6 +797,7 @@ class AssignTasks(LoginRequiredMixin, View):
                                             end_time=new_task_header.end_time,
                                             description = new_task_header.description,
                                             link = new_task_header.link,
+                                            alert_active = new_task_header.alert_active,
                                             task_header = new_task_header)
             schedule_entry.save()
             self.save_task_attachments(new_task_header, attachments, current_user, schedule_entry)
@@ -822,6 +825,7 @@ class AssignTasks(LoginRequiredMixin, View):
                                                 end_time=new_task_header.end_time,
                                                 description = new_task_header.description,
                                                 link = new_task_header.link,
+                                                alert_active = new_task_header.alert_active,
                                                 task_header = new_task_header)
                 schedule_entry.save()
                 if len(uploaded_task_attachments)==0:
@@ -853,6 +857,7 @@ class AssignTasks(LoginRequiredMixin, View):
                                                 end_time=new_task_header.end_time,
                                                 description = new_task_header.description,
                                                 link = new_task_header.link,
+                                                alert_active = new_task_header.alert_active,
                                                 task_header = new_task_header)
                 schedule_entry.save()
                 if len(uploaded_task_attachments)==0:
@@ -885,6 +890,7 @@ class AssignTasks(LoginRequiredMixin, View):
                                                 end_time=new_task_header.end_time,
                                                 description = new_task_header.description,
                                                 link = new_task_header.link,
+                                                alert_active = new_task_header.alert_active,
                                                 task_header = new_task_header)
                 schedule_entry.save()
                 if len(uploaded_task_attachments)==0:
@@ -917,6 +923,7 @@ class AssignTasks(LoginRequiredMixin, View):
                                                 end_time=new_task_header.end_time,
                                                 description = new_task_header.description,
                                                 link = new_task_header.link,
+                                                alert_active = new_task_header.alert_active,
                                                 task_header = new_task_header)
                 schedule_entry.save()
                 if len(uploaded_task_attachments)==0:
@@ -949,6 +956,7 @@ class AssignTasks(LoginRequiredMixin, View):
                                                 end_time=new_task_header.end_time,
                                                 description = new_task_header.description,
                                                 link = new_task_header.link,
+                                                alert_active = new_task_header.alert_active,
                                                 task_header = new_task_header)
                 schedule_entry.save()
                 if len(uploaded_task_attachments)==0:
@@ -1128,7 +1136,8 @@ def get_task_with_id(request):
                     'comments': comments,
                     'attachments': attachments,
                     'links': links,
-                    'status': status
+                    'status': status,
+                    'alert_active': current_task.alert_active
                     }
         if attachment != "":
             task_data['attachment'] = attachment.url

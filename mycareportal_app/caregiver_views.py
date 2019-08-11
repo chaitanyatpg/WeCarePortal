@@ -541,8 +541,48 @@ class CaregiverDashboard(LoginRequiredMixin, View):
                 self.save_task_attachments(request, update_task_form, task, current_company, client, request.user, attachments)
                 if(incident_id and location_id):
                     self.report_incident(request, update_task_form, incident_id, location_id, client, request.user, task)
+                if(status == "cancelled" and task.alert_active):
+                    self.send_task_cancelled_email(request, task, current_company, client, request.user)
+                if(status == "complete" and task.alert_active):
+                    self.send_task_completed_email(request, task, current_company, client, request.user)
                 messages.success(request, "Edited Task: {0}".format(task.activity_task))
         return redirect('caregiver_dashboard')
+
+    def send_task_cancelled_email(self, request, task, current_company, client, user):
+        # family, care manager, provider, should receive email
+        #1. get related family members
+        family_details = client.family_contacts.filter(is_active=True)
+        #2. get related providers
+        provider_details = client.provider.filter(is_active=True)
+        #3. get related care move_manager_dashboard
+        care_managers = CareManager.objects.filter(company = request.user.company)
+        #4. send email to family, provider, user who reported
+        email_manager = ClientEmailProcessor()
+        # Get time at client timezone
+        client_timezone = pytz.timezone(client.time_zone)
+        utc_time = pytz.utc.localize(datetime.datetime.utcnow())
+        client_timezone_time = utc_time.astimezone(client_timezone)
+        email_manager.send_task_cancelled_email(
+        client, user, care_managers, family_details, provider_details, task, client_timezone_time
+        )
+
+    def send_task_completed_email(self, request, task, current_company, client, user):
+        # family, care manager, provider, should receive email
+        #1. get related family members
+        family_details = client.family_contacts.filter(is_active=True)
+        #2. get related providers
+        provider_details = client.provider.filter(is_active=True)
+        #3. get related care move_manager_dashboard
+        care_managers = CareManager.objects.filter(company = request.user.company)
+        #4. send email to family, provider, user who reported
+        email_manager = ClientEmailProcessor()
+        # Get time at client timezone
+        client_timezone = pytz.timezone(client.time_zone)
+        utc_time = pytz.utc.localize(datetime.datetime.utcnow())
+        client_timezone_time = utc_time.astimezone(client_timezone)
+        email_manager.send_task_completed_email(
+        client, user, care_managers, family_details, provider_details, task, client_timezone_time
+        )
 
     def validate_attachments(self, request, attachments):
         for attachment in attachments:

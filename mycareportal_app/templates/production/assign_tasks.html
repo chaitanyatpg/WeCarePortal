@@ -298,6 +298,26 @@
                           {{assign_task_form.attachment.label_tag}}{{assign_task_form.attachment}}
                         </div>
                     </div>
+
+                    <div class="form-group">
+                      <div class="row">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Task Alerts<span class="required">*</span>
+                        </label>
+                        <div class="col-md-3 col-sm-3 col-xs-12">
+                          <div class="radio">
+                            <label>
+                              <input type="radio" value="N" name="{{assign_task_form.alert_active.html_name}}">No</input>
+                            </label>
+                          </div>
+                          <div class="radio">
+                            <label>
+                              <input type="radio" value="Y" name="{{assign_task_form.alert_active.html_name}}">Yes</input>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                         <!--<form method="GET" action=-->
                     <div class="ln_solid"></div>
     	              <div class="form-group">
@@ -488,6 +508,12 @@
                       <label class="col-sm-3 control-label">Status</label>
                       <div class="col-sm-9">
                         <input type="text" class="form-control" id="task_status" name="task_status" disabled="true">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">Task Alerts</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" id="task_alerts" name="task_alerts" disabled="true">
                       </div>
                     </div>
                 </div>
@@ -853,6 +879,7 @@
                     $('#task_attachment').attr("href", task_data.attachment);
                     var status = task_data.status;
                     $('#task_status').val(task_data.status);
+                    $('#task_alerts').val(task_data.alert_active);
                     task_comments = task_data.comments;
                     task_attachments = task_data.attachments;
                     task_links = task_data.links;

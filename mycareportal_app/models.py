@@ -57,6 +57,7 @@ class User(AbstractUser):
     incident_emails = models.BooleanField(default=True)
     clock_in_emails = models.BooleanField(default=True)
     clock_out_emails = models.BooleanField(default=True)
+    task_alert_emails = models.BooleanField(default=True)
 
 class UserRoles(models.Model):
 
@@ -349,6 +350,7 @@ class TaskHeader(models.Model):
     link = models.CharField(max_length=500, blank=True)
     attachment = models.FileField(upload_to="files/tasks", blank=True)
     created = models.DateTimeField(auto_now_add=True)
+    alert_active = models.BooleanField(default=False)
 
 class TaskSchedule(models.Model):
 
@@ -370,6 +372,7 @@ class TaskSchedule(models.Model):
     completed_by = models.ForeignKey(User, null=True)
     completed_timestamp = models.DateTimeField(null=True)
     created = models.DateTimeField(auto_now_add=True)
+    alert_active = models.BooleanField(default=False)
 
 class TaskComment(models.Model):
 

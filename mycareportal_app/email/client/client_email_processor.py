@@ -29,3 +29,39 @@ class ClientEmailProcessor(EmailProcessor):
         )
         email.attach_alternative(message, "text/html")
         email.send()
+
+    def send_task_cancelled_email(self, client, user, care_managers, family_details, provider_details, task, client_timezone_time):
+        mail_subject = "Task '{0}' Cancelled for {1} {2}".format(task.activity_task, client.first_name, client.last_name)
+        message = render_to_string('task_cancelled_report.html', {
+            'client': client,
+            'user': user,
+            'task': task,
+            'time': client_timezone_time
+        })
+        care_managers = list(filter(lambda x: x.user.task_alert_emails,care_managers))
+        family_details = list(filter(lambda x: x.user.task_alert_emails,family_details))
+        provider_details = list(filter(lambda x: x.user.task_alert_emails,provider_details))
+        to_list = list(map(lambda x: x.email_address, (list(care_managers) + list(family_details) + list(provider_details))))
+        email = EmailMultiAlternatives(
+                    mail_subject, message, self.sender_email, to=to_list
+        )
+        email.attach_alternative(message, "text/html")
+        email.send()
+
+    def send_task_completed_email(self, client, user, care_managers, family_details, provider_details, task, client_timezone_time):
+        mail_subject = "Task '{0}' Completed for {1} {2}".format(task.activity_task, client.first_name, client.last_name)
+        message = render_to_string('task_completed_report.html', {
+            'client': client,
+            'user': user,
+            'task': task,
+            'time': client_timezone_time
+        })
+        care_managers = list(filter(lambda x: x.user.task_alert_emails,care_managers))
+        family_details = list(filter(lambda x: x.user.task_alert_emails,family_details))
+        provider_details = list(filter(lambda x: x.user.task_alert_emails,provider_details))
+        to_list = list(map(lambda x: x.email_address, (list(care_managers) + list(family_details) + list(provider_details))))
+        email = EmailMultiAlternatives(
+                    mail_subject, message, self.sender_email, to=to_list
+        )
+        email.attach_alternative(message, "text/html")
+        email.send()
