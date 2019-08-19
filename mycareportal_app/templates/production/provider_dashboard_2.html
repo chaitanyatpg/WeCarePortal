@@ -78,7 +78,7 @@
 
                                     <i class="fa fa-male user-profile-icon"></i><i class="fa fa-female user-profile-icon"></i> {{client.gender}}
                                 </center>
-                                {% for task, task_comments, task_attachments, task_links in tasks %}
+                                {% for task, task_comments, task_attachments, task_links, task_templates in tasks %}
                                 <li>
                                   <div class="message_date">
                                     <h5 class="date text-info">
@@ -126,9 +126,76 @@
                                       </li>
                                     {% endfor %}
                                     </ul>
+                                    <form enctype="multipart/form-data" method="post" role="form" action="{% url 'provider_dashboard' %}">
+                                      {% csrf_token %}
+                                      {% for template, subcategories in task_templates.items %}
+                                        <h3>{{template.task_template.name}}<span><small> - {{template.task_template.description}}</small></span></h3>
+                                        <div class="container">
+
+                                          {% for subcategory, entries in subcategories.items %}
+                                            <div class="x_panel" style="height: auto;">
+                                              <div class="x_title">
+                                                <h2>{{subcategory.task_template_subcategory.name}}<span><small> - {{subcategory.task_template_subcategory.description}}</small></span></h2>
+                                                <ul class="nav navbar-right panel_toolbox">
+                                                  <li><a class="collapse-link"><i class="fa fa-chevron-down"></i></a>
+                                                  </li>
+                                                </ul>
+                                                <div class="clearfix"></div>
+                                              </div>
+                                              <div class="x_content" style="display: none;">
+                                                {% for entry in entries %}
+                                                  <div class="row">
+                                                    <div class="form-group">
+                                                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{entry.task_template_entry.name}}</label>
+                                                      <div class="col-md-6 col-sm-6 col-xs-12">
+                                                          {% if entry.task_template_entry.entry_type == 'TEXT' %}
+                                                            {% if entry.entry_value %}
+                                                              <input type="text" class="form-control col-md-7 col-xs-12" name="{{update_task_form.template_entries.html_name}}" value="{{entry.entry_value}}">
+                                                            {% else %}
+                                                              <input type="text" class="form-control col-md-7 col-xs-12" name="{{update_task_form.template_entries.html_name}}">
+                                                            {% endif %}
+                                                          {% endif %}
+                                                          {% if entry.task_template_entry.entry_type == 'RADIO' %}
+                                                            <div class="radio-inline">
+                                                              <label>
+                                                                {% if entry.entry_value == 'Y' %}
+                                                                  <input disabled class="template-radio" type="radio" name="{{entry.uid}}" checked="checked" value='Y'>Y
+                                                                {% else %}
+                                                                  <input disabled class="template-radio" type="radio" name="{{entry.uid}}" value='Y'>Y
+                                                                {% endif %}
+                                                              </label>
+                                                            </div>
+                                                            <div class="radio-inline">
+                                                              <label>
+                                                                {% if entry.entry_value == 'N' %}
+                                                                  <input disabled class="template-radio" type="radio" name="{{entry.uid}}" checked="checked" value='N'>N
+                                                                {% else %}
+                                                                  <input disabled class="template-radio" type="radio" name="{{entry.uid}}" value='N'>N
+                                                                {% endif %}
+                                                              </label>
+                                                            </div>
+                                                            <div class="radio-inline">
+                                                              <label>
+                                                                {% if entry.entry_value == 'NA' %}
+                                                                  <input disabled class="template-radio" type="radio" name="{{entry.uid}}" checked="checked" value='NA'>N/A
+                                                                {% else %}
+                                                                  <input disabled class="template-radio" type="radio" name="{{entry.uid}}" value='NA'>N/A
+                                                                {% endif %}
+                                                              </label>
+                                                            </div>
+                                                          {% endif %}
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                  <br />
+                                                {% endfor %}
+                                              </div>
+                                            </div>
+                                          {% endfor %}
+                                      {% endfor %}
                                       <p>
                                         <label>Comment</label>
-                                        <textarea readonly class="form-control" style="height:55px;" id="task_comment" name="{{update_task_form.comment.html_name}}">{{task.comment}}</textarea>
+                                        <textarea class="form-control" style="height:55px;" id="task_comment" name="{{update_task_form.comment.html_name}}">{{task.comment}}</textarea>
                                       </p>
                                       <div class="row">
                                         <div class="col-md-3">
@@ -172,6 +239,14 @@
                                           </label>
                                         </div>
                                       </div>
+                                      <div>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                          <input type="hidden" value={{task.id}} name={{update_task_form.task_id.html_name}}>
+                                          <input type="hidden" value={{client.id}} name={{update_task_form.client_id.html_name}}>
+                                          <button type="submit" class="btn btn-success">Update Task</button>
+                                        </div>
+                                      </div>
+                                    </form>
 
                                 </li>
                                 {% endfor %}

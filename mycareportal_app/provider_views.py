@@ -18,6 +18,7 @@ import django.utils.timezone as timezone
 from django.contrib import messages
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
+from mycareportal_app.provider_forms import *
 
 def provider_dashboard(request):
     return render(request, 'production/provider_portal.html')
@@ -41,22 +42,74 @@ class ProviderDashboard(LoginRequiredMixin, View):
         client_tasks = {}
         current_date = datetime.date.today()
         for client_data in related_clients:
-            current_client_tasks = self.get_client_tasks(client_data)
+            current_client_tasks = self.get_client_tasks(client_data, request)
             #client_name = '{0} {1}'.format(client_data.first_name, client_data.last_name)
             client_tasks[client_data] = list(current_client_tasks)
         context["client_tasks"] = client_tasks
+        context["update_task_form"] = UpdateTaskForm()
         #Get Update Form
         #context["update_task_form"] = UpdateTaskForm()
         return render(request, 'production/provider_dashboard_2.html', context)
 
-    def get_client_tasks(self, client_data):
+    @transaction.atomic
+    def post(self, request):
+        context = {}
+        update_task_form = UpdateTaskForm(request.POST, request.FILES)
+        #attachments = request.FILES.getlist('attachment')
+        are_attachments_valid = True #self.validate_attachments(request, attachments)
+        if are_attachments_valid:
+            if update_task_form.is_valid():
+                current_company = request.user.company
+                comment = update_task_form.cleaned_data["comment"]
+                task_id = update_task_form.cleaned_data["task_id"]
+                client_id = update_task_form.cleaned_data["client_id"]
+                client = Client.objects.get(company=current_company,id=client_id)
+                #status = update_task_form.cleaned_data["status"]
+                #incident_id = update_task_form.cleaned_data["incident_id"]
+                #location_id = update_task_form.cleaned_data["location_id"]
+                #template_entries = update_task_form.cleaned_data["template_entries"]
+                #template_entries = request.POST.getlist('template_entries')
+                #print(request.POST)
+                #print(template_entries)
+                #attachments = request.FILES.getlist('attachment')
+                task = TaskSchedule.objects.get(company=current_company,client=client,id=task_id)
+                self.save_task_comments(request, update_task_form, task, current_company, client, comment)
+                messages.success(request, "Edited Task: {0}".format(task.activity_task))
+        return redirect('provider_dashboard')
+
+    def get_client_tasks(self, client_data, request):
         client_timezone = pytz.timezone(client_data.time_zone)
         #current_date = datetime.date.today()
         current_date = (timezone.now().astimezone(client_timezone)).date()
         timezone.activate(client_timezone)
         client_tasks = TaskSchedule.objects.filter(client=client_data,date=current_date).order_by('cancelled','pending','in_progress','complete')
         client_tasks = list(map(lambda x: (x,
-        TaskComment.objects.filter(client=client_data,task_schedule=x).order_by('created'),
-        TaskAttachment.objects.filter(client=client_data,task_schedule=x).order_by('created'),
-        TaskLink.objects.filter(client=client_data,task_schedule=x).order_by('created')),client_tasks))
+        TaskComment.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created'),
+        TaskAttachment.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created'),
+        TaskLink.objects.filter(company=request.user.company,client=client_data,task_schedule=x).order_by('created'),
+        self.get_task_template_objects(x, request.user.company)),client_tasks))
         return client_tasks
+
+    def get_task_template_objects(self, client_task, company):
+        template_objects = {}
+        template_instances = TaskTemplateInstance.objects.filter(company=company,task_schedule=client_task).order_by('created')
+        for template_instance in template_instances:
+            if template_instance not in template_objects:
+                template_objects[template_instance] = {}
+            subcategory_instances = TaskTemplateSubcategoryInstance.objects.filter(company=company, task_template_instance=template_instance)
+            for subcategory in subcategory_instances:
+                entry_instances = list(TaskTemplateEntryInstance.objects.filter(company=company, task_template_subcategory_instance=subcategory))
+                template_objects[template_instance][subcategory] = entry_instances
+        #print(template_objects)
+        return template_objects
+
+    def save_task_comments(self, request, update_task_form, task, current_company, client, comment):
+
+        #caregiver = Caregiver.objects.get(company=current_company,user=request.user)
+        task_comment = TaskComment(company=current_company,
+                                    client=client,
+                                    user=request.user,
+                                    task_schedule=task,
+                                    comment=comment)
+        if comment != "":
+            task_comment.save()
