@@ -184,6 +184,8 @@ urlpatterns = [
     url(r'^billing/choose_client_for_invoice', views.ChooseClientForInvoice.as_view(), name='choose_client_for_invoice'),
     url(r'^manager_choose_client', views.ManagerChooseClient.as_view(), name='manager_choose_client'),
     url(r'^manager_client_dashboard', views.ManagerClientDashboard.as_view(), name='manager_client_dashboard'),
-    url(r'^post_template_radio', caregiver_views.post_template_radio, name='post_template_radio')
+    url(r'^post_template_radio', caregiver_views.post_template_radio, name='post_template_radio'),
+    url(r'^vitals_choose_client', provider_views.ChooseClientVitals.as_view(), name='vitals_choose_client'),
+    url(r'^reporting/vitals_report', provider_views.VitalsReport.as_view(), name='vitals_report')
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

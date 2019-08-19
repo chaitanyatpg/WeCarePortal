@@ -19,6 +19,9 @@ from django.contrib import messages
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from mycareportal_app.provider_forms import *
+from django.db.models import Max
+from django.db.models import Min
+from django.db.models import Q
 
 def provider_dashboard(request):
     return render(request, 'production/provider_portal.html')
@@ -113,3 +116,61 @@ class ProviderDashboard(LoginRequiredMixin, View):
                                     comment=comment)
         if comment != "":
             task_comment.save()
+
+class ChooseClientVitals(LoginRequiredMixin, View):
+
+    def get(self, request):
+        current_company = request.user.company
+        context = {}
+        context['client_invoice_form'] = ChooseClientVitalsForm()
+        all_clients = Client.objects.filter(company=current_company).order_by('last_name')
+        context['all_clients'] = all_clients
+        return render(request, 'production/choose_client_vitals_report.html', context)
+
+class VitalsReport(LoginRequiredMixin, View):
+
+    def get(self, request):
+        current_company = request.user.company
+        context = {}
+        choose_client_vitals_form = ChooseClientVitalsForm(request.GET)
+        if choose_client_vitals_form.is_valid():
+            client_email = choose_client_vitals_form.cleaned_data['client_email']
+            client = Client.objects.get(company=current_company, email_address=client_email)
+            start_date = choose_client_vitals_form.cleaned_data['start_date']
+            end_date = choose_client_vitals_form.cleaned_data['end_date']
+
+            tasks = TaskSchedule.objects.filter(company=current_company, client=client,
+                                    date__range=(start_date, end_date))
+            tasks = tasks.order_by('date')
+            vitals_templates = []
+            vitals_task_templates = []
+            for task in tasks:
+                vitals_template = self.get_task_template_objects(task, current_company)
+                if len(vitals_template)>0:
+                    vitals_task_templates.append((task, vitals_template))
+                    vitals_templates.append(vitals_template)
+            sample_template = TaskTemplateEntry.objects.filter(task_template_code='VIT001').order_by('name')
+            context['sample_template'] = sample_template
+            context['vitals_task_templates'] = vitals_task_templates
+            context['client'] = client
+            context['start_date'] = start_date
+            context['end_date'] = end_date
+        return render(request, 'production/vitals_report.html', context)
+
+    def get_task_template_objects(self, client_task, company):
+        template_objects = {}
+        template_entry_instances = []
+        template_instances = TaskTemplateInstance.objects.filter(company=company,task_schedule=client_task,task_template__template_code='VIT001')
+        for template_instance in template_instances:
+            if template_instance not in template_objects:
+                template_objects[template_instance] = {}
+            subcategory_instances = TaskTemplateSubcategoryInstance.objects.filter(company=company, task_template_instance=template_instance)
+            for subcategory in subcategory_instances:
+                entry_instances = TaskTemplateEntryInstance.objects.filter(company=company,
+                    task_template_subcategory_instance=subcategory)
+                entry_instances = list(entry_instances.filter(~Q(entry_value='')))
+                entry_instances = sorted(entry_instances, key=lambda x: x.task_template_entry.name)
+                template_objects[template_instance][subcategory] = entry_instances
+                template_entry_instances.extend(entry_instances)
+        #print(template_objects)
+        return template_entry_instances

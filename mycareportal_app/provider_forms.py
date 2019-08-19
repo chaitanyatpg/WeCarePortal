@@ -14,3 +14,13 @@ class UpdateTaskForm(forms.Form):
     def clean(self):
         cleaned_data = super(UpdateTaskForm, self).clean()
         return cleaned_data
+
+class ChooseClientVitalsForm(forms.Form):
+
+    client_email = forms.CharField(max_length=100)
+    start_date = forms.DateField()
+    end_date = forms.DateField()
+
+    def clean(self):
+        cleaned_data = super(ChooseClientVitalsForm, self).clean()
+        return cleaned_data

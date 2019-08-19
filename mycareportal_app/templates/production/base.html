@@ -168,8 +168,11 @@
                 </li>
                 <li><a><i class="fa fa-table"></i>Provider Portal<span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu">
-                    {% if module_dict.PROVIDERPORTAL.PROVIDERDASHBOARD %}
+                    {% if module_dict.PROVIDERPORTAL.DASHBOARD %}
                       <li><a href={% url 'provider_dashboard' %}>Provider Dashboard</a></li>
+                    {% endif %}
+                    {% if module_dict.PROVIDERPORTAL.VITALSREPORT %}
+                      <li><a href={% url 'vitals_choose_client' %}>Vitals Report</a></li>
                     {% endif %}
                   </ul>
                 </li>
