@@ -149,12 +149,30 @@ class VitalsReport(LoginRequiredMixin, View):
                 if len(vitals_template)>0:
                     vitals_task_templates.append((task, vitals_template))
                     vitals_templates.append(vitals_template)
+            vitals_task_templates.sort(key=lambda x: x[0].date)
+
             sample_template = TaskTemplateEntry.objects.filter(task_template_code='VIT001').order_by('name')
+
+            x_axis_series = [x[0].date.strftime("%Y-%m-%d %H:%M:%S") for x in vitals_task_templates]
+            y_axis_series = [x[1][0].entry_value for x in vitals_task_templates]
+            all_y_series = []
+            for i, entry in enumerate(sample_template):
+                all_y_series.append([])
+            for task in vitals_task_templates:
+                templates = task[1]
+                for i, entry in enumerate(templates):
+                    all_y_series[i].append(entry.entry_value)
+
+            #all_y_series = [json.dumps(x) for x in all_y_series]
+
             context['sample_template'] = sample_template
+            context['y_series_names'] = [x.name for x in sample_template]
             context['vitals_task_templates'] = vitals_task_templates
             context['client'] = client
             context['start_date'] = start_date
             context['end_date'] = end_date
+            context['x_axis_series'] = x_axis_series
+            context['y_axis_series'] = all_y_series
         return render(request, 'production/vitals_report.html', context)
 
     def get_task_template_objects(self, client_task, company):
@@ -168,9 +186,15 @@ class VitalsReport(LoginRequiredMixin, View):
             for subcategory in subcategory_instances:
                 entry_instances = TaskTemplateEntryInstance.objects.filter(company=company,
                     task_template_subcategory_instance=subcategory)
-                entry_instances = list(entry_instances.filter(~Q(entry_value='')))
-                entry_instances = sorted(entry_instances, key=lambda x: x.task_template_entry.name)
-                template_objects[template_instance][subcategory] = entry_instances
-                template_entry_instances.extend(entry_instances)
+                # entry_instances = list(entry_instances.filter(~Q(entry_value='')))
+                empty_instances = True
+                for instance in entry_instances:
+                    if instance.entry_value != '':
+                        empty_instances = False
+                        break
+                if not empty_instances:
+                    entry_instances = sorted(entry_instances, key=lambda x: x.task_template_entry.name)
+                    template_objects[template_instance][subcategory] = entry_instances
+                    template_entry_instances.extend(entry_instances)
         #print(template_objects)
         return template_entry_instances
