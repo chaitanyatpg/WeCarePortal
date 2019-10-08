@@ -361,3 +361,11 @@ class LegalEmailForm(forms.Form):
     def clean(self):
         cleaned_data = super(LegalEmailForm, self).clean()
         return cleaned_data
+
+class DeactivateClientForm(forms.Form):
+
+    client_uid = forms.UUIDField()
+
+    def clean(self):
+        cleaned_data = super(DeactivateClientForm, self).clean()
+        return cleaned_data

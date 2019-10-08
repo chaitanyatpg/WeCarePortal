@@ -1041,6 +1041,75 @@ class LegalEmail(LoginRequiredMixin, View):
             messages.error(request, "Error sending email: Please contact customer support")
         return HttpResponseRedirect(reverse('legal_email') + "?client_email=" + client.email_address)
 
+class ChooseClientForDeactivate(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {}
+        current_company = request.user.company
+        #context['add_client_form'] = ClientRegistrationForm()
+        all_clients = Client.all_objects.filter(company=current_company).order_by('last_name')
+        context['all_clients'] = all_clients
+        context['find_client_form'] = FindClientForm()
+        return render(request, 'production/choose_client_deactivate.html', context)
+
+class DeactivateClient(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {}
+        current_company = request.user.company
+        find_client_form = FindClientForm(request.GET)
+        if find_client_form.is_valid():
+            client_email = find_client_form.cleaned_data['client_email']
+            client = Client.all_objects.get(company=current_company, email_address=client_email)
+            context['deactivate_client_form'] = DeactivateClientForm()
+            context['client'] = client
+            return render(request, 'production/deactivate_client.html', context)
+        else:
+            return redirect('deactivate_choose_client')
+
+    def post(self, request):
+        context = {}
+        current_company = request.user.company
+        deactivate_client_form = DeactivateClientForm(request.POST)
+        if deactivate_client_form.is_valid():
+            client_uid = deactivate_client_form.cleaned_data['client_uid']
+            client = Client.all_objects.get(company=current_company,uid=client_uid)
+            if client.deleted_at != None:
+                client.deleted_at = None
+                messages.success(request, "Client Activated")
+            else:
+                client.delete()
+                messages.success(request, "Client Deactivated")
+            client.save()
+            return HttpResponseRedirect(reverse('deactivate_client') + "?client_email=" + client.email_address)
+        else:
+            return redirect('deactivate_choose_client')
+
+
+@login_required
+def get_all_client_with_email(request):
+    if request.method == 'GET':
+        context = {}
+        email = request.GET.get('email_data')
+        current_company = request.user.company
+        client = Client.all_objects.get(company=current_company,email_address = email)
+        name = '{0} {1}'.format(client.first_name, client.last_name)
+        address = '{0}, {1} {2} {3}'.format(client.address, client.city, client.state, client.zip_code)
+        phone_number = client.phone_number
+        raw_dob = client.date_of_birth
+        date_of_birth = '{0}/{1}/{2}'.format(raw_dob.month,raw_dob.day,raw_dob.year)
+        gender = client.gender
+        client_data = {'name': name,
+                        'address': address,
+                        'phone_number': phone_number,
+                        'date_of_birth': date_of_birth,
+                        'gender': gender,
+                        'email_address': email}
+        if client.profile_picture:
+            client_data['profile_picture'] = client.profile_picture.url
+        context["client_data"] = client_data
+        return HttpResponse(json.dumps(client_data), content_type="application/json")
+
 @login_required
 def get_client_with_email(request):
     if request.method == 'GET':

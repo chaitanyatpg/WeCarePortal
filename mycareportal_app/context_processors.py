@@ -53,6 +53,7 @@ def add_roles_to_context(request):
             module_dict['CLIENTPORTAL']['LEGAL_EMAIL']=True
             module_dict['CLIENTPORTAL']['MANAGER_CLIENT_DASHBOARD']=True
             module_dict['CLIENTPORTAL']['CHOOSE_CLIENT_INVOICE']=True
+            module_dict['CLIENTPORTAL']['DEACTIVATE_CLIENT']=True
             module_dict['CAREGIVERPORTAL']['CAREGIVERONBOARDING']=True
             module_dict['CAREGIVERPORTAL']['CAREGIVEREDIT']=True
             module_dict['CAREGIVERPORTAL']['SCHEDULESHIFTS']=True

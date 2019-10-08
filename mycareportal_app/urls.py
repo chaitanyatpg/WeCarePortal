@@ -81,6 +81,7 @@ urlpatterns = [
     url(r'^delete_recurring_schedule_with_id', caregiver_views.delete_recurring_schedule_with_id,name='delete_recurring_schedule_with_id'),
     url(r'^get_assigned_clients_with_caregiver_with_id', caregiver_views.get_assigned_clients_with_caregiver_with_id,name='get_assigned_clients_with_caregiver_with_id'),
     url(r'^get_client_with_email', client_views.get_client_with_email,name='get_client_with_email'),
+    url(r'^get_all_client_with_email', client_views.get_all_client_with_email,name='get_all_client_with_email'),
     url(r'^get_sub_categories', client_views.get_sub_categories,name='get_sub_categories'),
     url(r'^get_tasks_from_master', client_views.get_tasks_from_master,name='get_tasks_from_master'),
     url(r'^assign_choose_client', client_views.AssignTasksChooseClient.as_view(),name='assign_choose_client'),
@@ -186,6 +187,8 @@ urlpatterns = [
     url(r'^manager_client_dashboard', views.ManagerClientDashboard.as_view(), name='manager_client_dashboard'),
     url(r'^post_template_radio', caregiver_views.post_template_radio, name='post_template_radio'),
     url(r'^vitals_choose_client', provider_views.ChooseClientVitals.as_view(), name='vitals_choose_client'),
-    url(r'^reporting/vitals_report', provider_views.VitalsReport.as_view(), name='vitals_report')
+    url(r'^reporting/vitals_report', provider_views.VitalsReport.as_view(), name='vitals_report'),
+    url(r'^deactivate_choose_client', client_views.ChooseClientForDeactivate.as_view(), name='deactivate_choose_client'),
+    url(r'^deactivate_client', client_views.DeactivateClient.as_view(), name='deactivate_client')
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
