@@ -376,5 +376,59 @@
 			"activity_category_code": "DEM001CAM",
       "activity_category": "Calendar Management"
 		}
+	},
+	{
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 43,
+		"fields": {
+			"activity_code": "CCT001",
+			"activity_category_code": "CCT001AG",
+			"activity_category": "Anticipatory Grieving"
+		}
+	},
+	{
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 44,
+		"fields": {
+			"activity_code": "CCT001",
+			"activity_category_code": "CCT001PM",
+			"activity_category": "Pain Management"
+		}
+	},
+	{
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 45,
+		"fields": {
+			"activity_code": "CCT001",
+			"activity_category_code": "CCT001NM",
+			"activity_category": "Nutrition Management"
+		}
+	},
+	{
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 46,
+		"fields": {
+			"activity_code": "CCT001",
+			"activity_category_code": "CCT001FM",
+			"activity_category": "Fluid Management"
+		}
+	},
+	{
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 47,
+		"fields": {
+			"activity_code": "CCT001",
+			"activity_category_code": "CCT001FAM",
+			"activity_category": "Fatigue Management"
+		}
+	},
+	{
+		"model": "mycareportal_app.activitysubcategory",
+		"pk": 48,
+		"fields": {
+			"activity_code": "CCT001",
+			"activity_category_code": "CCT001HM",
+			"activity_category": "Hygiene Management"
+		}
 	}
 ]

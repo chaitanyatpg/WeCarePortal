@@ -682,5 +682,176 @@
 			"activity_task": "Review Daily Calendar Update",
 			"task_code": "DEM001CAMRDCU"
 		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 77,
+		"fields": {
+			"activity_category_code": "CCT001AG",
+			"activity_task": "Therapeutic Communication",
+			"task_code": "CCT001AGTC"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 78,
+		"fields": {
+			"activity_category_code": "CCT001AG",
+			"activity_task": "General Counseling",
+			"task_code": "CCT001AGGC"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 79,
+		"fields": {
+			"activity_category_code": "CCT001AG",
+			"activity_task": "Emotional Therapy",
+			"task_code": "CCT001AGET"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 80,
+		"fields": {
+			"activity_category_code": "CCT001PM",
+			"activity_task": "Pain Data Collection",
+			"task_code": "CCT001PMPDC"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 81,
+		"fields": {
+			"activity_category_code": "CCT001PM",
+			"activity_task": "Pain Relief and Control Check",
+			"task_code": "CCT001PMPPRCC"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 82,
+		"fields": {
+			"activity_category_code": "CCT001PM",
+			"activity_task": "Non-pharmacological Comfort Measures",
+			"task_code": "CCT001PMNPCM"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 83,
+		"fields": {
+			"activity_category_code": "CCT001PM",
+			"activity_task": "Medication Management",
+			"task_code": "CCT001PMMM"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 84,
+		"fields": {
+			"activity_category_code": "CCT001NM",
+			"activity_task": "Monitor Daily Food Intake",
+			"task_code": "CCT001NMMDFI"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 85,
+		"fields": {
+			"activity_category_code": "CCT001NM",
+			"activity_task": "Antiemetic Administration",
+			"task_code": "CCT001NMAA"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 86,
+		"fields": {
+			"activity_category_code": "CCT001NM",
+			"activity_task": "Daily Vital Gathering",
+			"task_code": "CCT001NMDVG"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 87,
+		"fields": {
+			"activity_category_code": "CCT001FM",
+			"activity_task": "Check skin turgor and moisture of mucous membranes",
+			"task_code": "CCT001FMCST"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 88,
+		"fields": {
+			"activity_category_code": "CCT001FM",
+			"activity_task": "Check bleeding tendencies and presenc of ecchymosis or petechiae",
+			"task_code": "CCT001FMCBT"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 89,
+		"fields": {
+			"activity_category_code": "CCT001FAM",
+			"activity_task": "Schedule Rest Period",
+			"task_code": "CCT001FAMSRP"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 90,
+		"fields": {
+			"activity_category_code": "CCT001FAM",
+			"activity_task": "Schedule Physical Therapy",
+			"task_code": "CCT001FAMSPT"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 91,
+		"fields": {
+			"activity_category_code": "CCT001FAM",
+			"activity_task": "Schedule Occupational Therapy",
+			"task_code": "CCT001FAMSOT"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 92,
+		"fields": {
+			"activity_category_code": "CCT001HM",
+			"activity_task": "Oral Care",
+			"task_code": "CCT001HMOC"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 93,
+		"fields": {
+			"activity_category_code": "CCT001HM",
+			"activity_task": "Linens Management",
+			"task_code": "CCT001HMLM"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 94,
+		"fields": {
+			"activity_category_code": "CCT001HM",
+			"activity_task": "Clothing Decisions",
+			"task_code": "CCT001HMCD"
+		}
+	},
+	{
+		"model": "mycareportal_app.defaulttasks",
+		"pk": 95,
+		"fields": {
+			"activity_category_code": "CCT001HM",
+			"activity_task": "Bowel Management",
+			"task_code": "CCT001HMBM"
+		}
 	}
 ]

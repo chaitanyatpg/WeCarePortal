@@ -46,5 +46,13 @@
 			"activity_code": "DEM001",
 			"activity_description": "Dementia Template"
 		}
+	},
+	{
+		"model": "mycareportal_app.activitymaster",
+		"pk": 7,
+		"fields": {
+			"activity_code": "CCT001",
+			"activity_description": "Cancer Care Template"
+		}
 	}
 ]
