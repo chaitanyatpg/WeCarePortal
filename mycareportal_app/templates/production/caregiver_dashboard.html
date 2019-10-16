@@ -94,7 +94,7 @@
                                         <ul>
                                         {% for attachment in task_attachments %}
                                             <li>
-                                              <a href="{{attachment.attachment.url}}"><i class="fa fa-paperclip"></i>{{attachment.attachment|trunc_path}}</a>
+                                              <a href="{{attachment.attachment.url}}" target="_blank"><i class="fa fa-paperclip"></i>{{attachment.attachment|trunc_path}}</a>
                                               <span>Uploaded on {{attachment.created}}</span>
                                               <span>by {{attachment.user.first_name|addstr_space:attachment.user.last_name}}</span>
                                             </li>
@@ -103,7 +103,7 @@
                                         {% for link in task_links %}
                                             <p class="url">
                                               <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
-                                              <a href="{{link.task_url}}"><i class="fa fa-external-link"></i>{{link.task_url}}</a>
+                                              <a href="{{link.task_url}}" target="_blank"><i class="fa fa-external-link"></i>{{link.task_url}}</a>
                                               <span>Link added on {{link.created}}</span>
                                               <span>by {{link.user.first_name|addstr_space:link.user.last_name}}</span>
                                             </p>
