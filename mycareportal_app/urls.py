@@ -189,6 +189,8 @@ urlpatterns = [
     url(r'^vitals_choose_client', provider_views.ChooseClientVitals.as_view(), name='vitals_choose_client'),
     url(r'^reporting/vitals_report', provider_views.VitalsReport.as_view(), name='vitals_report'),
     url(r'^deactivate_choose_client', client_views.ChooseClientForDeactivate.as_view(), name='deactivate_choose_client'),
-    url(r'^deactivate_client', client_views.DeactivateClient.as_view(), name='deactivate_client')
+    url(r'^deactivate_client', client_views.DeactivateClient.as_view(), name='deactivate_client'),
+    url(r'^client/end_of_life_choose_client', client_views.ChooseClientEndOfLife.as_view(), name='end_of_life_choose_client'),
+    url(r'^client/end_of_life', client_views.ClientEndOfLifeView.as_view(), name='client_end_of_life')
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

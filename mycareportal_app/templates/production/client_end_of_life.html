@@ -1,0 +1,299 @@
+{% extends "production/base.html" %}
+{% block title %} Client End of Life {% endblock %}
+{% load mycareportal_app_extras%}
+{% block headlibs %}
+{% load static %}
+    <!-- bootstrap-wysiwyg -->
+    <link href="{% static 'vendors/google-code-prettify/bin/prettify.min.css' %}" rel="stylesheet">
+    <!-- Select2 -->
+    <link href="{% static 'vendors/select2/dist/css/select2.min.css' %}" rel="stylesheet">
+    <!-- Switchery -->
+    <link href="{% static 'vendors/switchery/dist/switchery.min.css' %}" rel="stylesheet">
+    <!-- starrr -->
+    <link href="{% static 'vendors/starrr/dist/starrr.css' %}" rel="stylesheet">
+    <!-- bootstrap-daterangepicker -->
+    <link href="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+{% endblock %}
+{% block logout %}
+  {% if tasks_not_complete %}
+    <li><a onclick="logout_modal_show();"><i class="fa fa-sign-out pull-right"></i>Logout</a></li>
+  {% else %}
+    {{block.super}}
+  {% endif %}
+{% endblock %}
+{% block pagecontent %}
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3></h3>
+              </div>
+            </div>
+
+            <div class="clearfix"></div>
+            {{block.super}}
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>End of Life - {{client.first_name}} {{client.last_name}}</h2>
+                    <!--<ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                    </ul>-->
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                      {% if request.session.current_time_sheet %}
+                        <h4>Clocked in for: {{clocked_in_time}}</h4>
+                      {% endif %}
+
+                      <center>
+                        <h3> {{client.first_name|addstr_space:client.last_name}} </h3>
+                        {% if client.profile_picture %}
+                          <img src="{{client.profile_picture.url}}" style="width:230px;height:200px;">
+                        {% endif %}
+                        </br>
+                          <i class="fa fa-map-marker user-profile-icon"></i> {{client.address}}
+
+                          <i class="fa fa-mobile-phone user-profile-icon"></i> {{client.phone_number}}
+
+                          <!--<i class="fa fa-calendar user-profile-icon"></i>-->
+
+                          <i class="fa fa-male user-profile-icon"></i><i class="fa fa-female user-profile-icon"></i> {{client.gender}}
+                      </center>
+
+                      <label>Start Date: </label>{{eol.start_date}}
+                      </br>
+                      <label>End Date: </label>
+                      {% if eol.end_date %}{{eol.end_date}}{% endif %}
+
+                      {% if comments %}
+                      <ul class="list-unstyled msg_list">
+                        {% for comment in comments %}
+                          <li>
+                            <a>
+                              <!--<span class="image">
+                                {% if comment.user.profile_picture %}
+                                  <img src="{{comment.user.profile_picture.url}}" />
+                                {% endif %}
+                              </span>-->
+                              <span>
+                                <span>{{comment.user.first_name|addstr_space:comment.user.last_name}}</span>
+                                <span>{{comment.created}}</span>
+                              </span>
+                              <span class="message">
+                                {{comment.comment}}
+                              </span>
+                            </a>
+                          </li>
+
+                        {% endfor %}
+                      </ul>
+                      {% endif %}
+
+                      <form enctype="multipart/form-data" method="post" role="form" action="{% url 'client_end_of_life' %}">
+                        {% csrf_token %}
+
+                        <p>
+                          <label>New Comment</label>
+                          <textarea class="form-control" style="height:55px;" id="task_comment" name="{{eol_form.comment.html_name}}"></textarea>
+                        </p>
+                        <p>
+                          <label>Attachments</label>
+                              {{eol_form.attachment.label_tag}}{{eol_form.attachment}}
+                              <ul>
+                              {% for attachment in attachments %}
+                                  <li>
+                                    <a href="{{attachment.attachment.url}}"><i class="fa fa-paperclip"></i>{{attachment.attachment|trunc_path}}</a>
+                                    <span>Uploaded on {{attachment.created}}</span>
+                                    <span>by {{attachment.user.first_name|addstr_space:attachment.user.last_name}}</span>
+                                  </li>
+                              {% endfor %}
+                              </ul>
+                        </p>
+                        <div>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="hidden" value={{eol.id}} name={{eol_form.end_of_life_id.html_name}}>
+                            <input type="hidden" value={{client.id}} name={{eol_form.client_id.html_name}}>
+                            <button type="submit" class="btn btn-success">Update End of Life</button>
+                            <button type="submit" class="btn btn-warning">Close End of Life</button>
+                          </div>
+                        </div>
+                      </form>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+{% endblock %}
+{% block footlibs %}
+
+    <!-- morris.js -->
+    <script src="{% static 'vendors/raphael/raphael.min.js' %}"></script>
+    <script src="{% static 'vendors/morris.js/morris.min.js' %}"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="{% static 'vendors/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+    <!-- Select2 -->
+    <script src="{% static 'vendors/select2/dist/js/select2.full.min.js' %}"></script>
+
+{% endblock %}
+{% block scripts %}
+
+    <!-- Logout Modal -->
+    <script type="text/javascript">
+      function logout_modal_show(){
+        $('#LogoutModal').modal()
+      };
+    </script>
+    <!-- end logout modal -->
+
+    <!--get cookie -->
+      <script>
+      function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+      }
+    </script>
+    <!-- end -->
+
+    <!-- Post template radio -->
+      <script type="text/javascript">
+          var csrftoken = getCookie('csrftoken');
+          $('.template-radio').change(function(){
+            console.log('ent temp rad');
+            $.ajax({
+              url: 'post_template_radio',
+              beforeSend: function(jqXHR, settings){
+                jqXHR.setRequestHeader("x-csrftoken",csrftoken);
+              },
+              type: 'POST',
+              data: {entry_uid: this.name, value: this.value}
+            })
+            console.log('entered');
+          });
+      </script>
+    <!-- end -->
+
+    <script>
+      $(function() {
+        Morris.Bar({
+          element: 'graph_bar',
+          data: [
+            { "period": "Monday", "Hours worked": 6 },
+            { "period": "Tuesday", "Hours worked": 7 },
+            { "period": "Wednesday", "Hours worked": 5 },
+            { "period": "Thursday", "Hours worked": 8 },
+            { "period": "Friday", "Hours worked": 8 },
+            { "period": "Saturday", "Hours worked": 5 },
+            { "period": "Sunday", "Hours worked": 5 }
+          ],
+          xkey: 'period',
+          hideHover: 'auto',
+          barColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
+          ykeys: ['Hours worked', 'sorned'],
+          labels: ['Hours worked', 'SORN'],
+          xLabelAngle: 60,
+          resize: true
+        });
+
+        $MENU_TOGGLE.on('click', function() {
+          $(window).resize();
+        });
+      });
+    </script>
+
+    <!-- datepicker -->
+    <script type="text/javascript">
+      $(document).ready(function() {
+
+        var cb = function(start, end, label) {
+          console.log(start.toISOString(), end.toISOString(), label);
+          $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+          //alert("Callback has fired: [" + start.format('MMMM D, YYYY') + " to " + end.format('MMMM D, YYYY') + ", label = " + label + "]");
+        }
+
+        var optionSet1 = {
+          startDate: moment().subtract(29, 'days'),
+          endDate: moment(),
+          minDate: '01/01/2012',
+          maxDate: '12/31/2015',
+          dateLimit: {
+            days: 60
+          },
+          showDropdowns: true,
+          showWeekNumbers: true,
+          timePicker: false,
+          timePickerIncrement: 1,
+          timePicker12Hour: true,
+          ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+          },
+          opens: 'left',
+          buttonClasses: ['btn btn-default'],
+          applyClass: 'btn-small btn-primary',
+          cancelClass: 'btn-small',
+          format: 'MM/DD/YYYY',
+          separator: ' to ',
+          locale: {
+            applyLabel: 'Submit',
+            cancelLabel: 'Clear',
+            fromLabel: 'From',
+            toLabel: 'To',
+            customRangeLabel: 'Custom',
+            daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+            monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            firstDay: 1
+          }
+        };
+        $('#reportrange span').html(moment().subtract(29, 'days').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+        $('#reportrange').daterangepicker(optionSet1, cb);
+        $('#reportrange').on('show.daterangepicker', function() {
+          console.log("show event fired");
+        });
+        $('#reportrange').on('hide.daterangepicker', function() {
+          console.log("hide event fired");
+        });
+        $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
+          console.log("apply event fired, start/end dates are " + picker.startDate.format('MMMM D, YYYY') + " to " + picker.endDate.format('MMMM D, YYYY'));
+        });
+        $('#reportrange').on('cancel.daterangepicker', function(ev, picker) {
+          console.log("cancel event fired");
+        });
+        $('#options1').click(function() {
+          $('#reportrange').data('daterangepicker').setOptions(optionSet1, cb);
+        });
+        $('#options2').click(function() {
+          $('#reportrange').data('daterangepicker').setOptions(optionSet2, cb);
+        });
+        $('#destroy').click(function() {
+          $('#reportrange').data('daterangepicker').remove();
+        });
+      });
+    </script>
+    <!-- /datepicker -->
+{% endblock %}

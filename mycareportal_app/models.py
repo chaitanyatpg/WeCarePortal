@@ -987,3 +987,66 @@ class MoveProjectStatusLog(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     move_management_project = models.ForeignKey(MoveManagementProject)
     status = models.CharField(STATUS_CHOICES, max_length = 10)
+
+class ClientEndOfLife(models.Model):
+
+    company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    client = models.OneToOneField(Client)
+    start_date = models.DateTimeField(auto_now_add=True)
+    end_date = models.DateTimeField(null=True)
+    open = models.BooleanField(default=True)
+
+    @staticmethod
+    def get_or_create_eol(company, client):
+        if ClientEndOfLife.objects.filter(client=client).exists():
+            return ClientEndOfLife.objects.get(company=company, client=client)
+        else:
+            eol = ClientEndOfLife(company=company, client=client)
+            eol.start_date = datetime.datetime.now()
+            eol.save()
+            return eol
+
+    def get_comments(self):
+        comments = EndOfLifeComment.objects.filter(end_of_life=self)
+        return comments
+
+    def make_comment(self, comment, company, client, user):
+        if comment:
+            new_comment = EndOfLifeComment(company=company,
+                                            client=client,
+                                            user=user,
+                                            comment=comment,
+                                            end_of_life=self)
+            new_comment.save()
+
+    def get_attachments(self):
+        attachments = EndOfLifeAttachment.objects.filter(end_of_life=self)
+        return attachments
+
+class EndOfLifeComment(models.Model):
+
+    company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    client = models.ForeignKey(Client)
+    #caregiver = models.ForeignKey(Caregiver)
+    user = models.ForeignKey(User,null=True) #change before final deployment
+    end_of_life = models.ForeignKey(ClientEndOfLife)
+    created = models.DateTimeField(auto_now_add=True)
+    comment = models.CharField(max_length=500)
+
+def get_end_of_life_attachment_upload_path(instance, filename):
+    return "company_{0}/client/client_{1}/end_of_life/end_of_life_{2}/{3}".format(instance.company.company_id,
+                                                        instance.client.id,
+                                                        instance.end_of_life.id,
+                                                        filename)
+
+class EndOfLifeAttachment(models.Model):
+
+    company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    client = models.ForeignKey(Client)
+    user = models.ForeignKey(User)
+    end_of_life = models.ForeignKey(ClientEndOfLife)
+    attachment = models.FileField(upload_to=get_end_of_life_attachment_upload_path)
+    created = models.DateTimeField(auto_now_add=True)

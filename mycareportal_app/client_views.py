@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from django.core import serializers
 from django.shortcuts import redirect
 from mycareportal_app.models import *
+from mycareportal_app.models import ClientEndOfLife
 from mycareportal_app.client_forms import *
 from django.views.generic import View
 from django.http import JsonResponse
@@ -1085,6 +1086,80 @@ class DeactivateClient(LoginRequiredMixin, View):
         else:
             return redirect('deactivate_choose_client')
 
+class ChooseClientEndOfLife(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {}
+        current_company = request.user.company
+        #context['add_client_form'] = ClientRegistrationForm()
+        all_clients = Client.all_objects.filter(company=current_company).order_by('last_name')
+        context['all_clients'] = all_clients
+        context['find_client_form'] = FindClientForm()
+        return render(request, 'production/choose_client_end_of_life.html', context)
+
+class ClientEndOfLifeView(LoginRequiredMixin, View):
+
+    MAX_FILE_SIZE = 104857600 #100mb in bytes
+
+    def get(self, request):
+        context = {}
+        current_company = request.user.company
+        find_client_form = FindClientForm(request.GET)
+        if find_client_form.is_valid():
+            client_email = find_client_form.cleaned_data['client_email']
+            client = Client.all_objects.get(company=current_company,
+                                            email_address=client_email)
+            end_of_life = ClientEndOfLife.get_or_create_eol(company=current_company,
+                                                            client=client)
+            comments = end_of_life.get_comments()
+            attachments = end_of_life.get_attachments()
+            context['client'] = client
+            context['eol'] = end_of_life
+            context['comments'] = comments
+            context['attachments'] = attachments
+            context['eol_form'] = EndOfLifeForm()
+            return render(request, 'production/client_end_of_life.html', context)
+
+    def post(self, request):
+        context = {}
+        company = request.user.company
+        eol_form = EndOfLifeForm(request.POST, request.FILES)
+        attachments = request.FILES.getlist('attachment')
+        are_attachments_valid = self.validate_attachments(request, attachments)
+        if eol_form.is_valid() and are_attachments_valid:
+            comment = eol_form.cleaned_data['comment']
+            client_id = eol_form.cleaned_data['client_id']
+            client = Client.objects.get(id=client_id)
+            end_of_life_id = eol_form.cleaned_data['end_of_life_id']
+            eol = ClientEndOfLife.objects.get(id=end_of_life_id)
+            if comment:
+                eol.make_comment(comment, company, client, request.user)
+            eol.save()
+            self.save_client_attachments(company, client,
+                                        attachments, request.user, eol)
+            return HttpResponseRedirect(reverse('client_end_of_life')
+                    + "?client_email=" + client.email_address)
+        else:
+            messages.error(request, "Invalid EOL Form")
+            return HttpResponseRedirect(reverse('client_end_of_life')
+                    + "?client_email=" + client.email_address)
+
+    def validate_attachments(self, request, attachments):
+        for attachment in attachments:
+            if attachment._size > self.MAX_FILE_SIZE:
+                messages.error(request,
+                "Attachment {0} is too large. All attachments must be under 100mb.".format(attachment))
+                return False
+        return True
+
+    def save_client_attachments(self, company, client, attachments, current_user, eol):
+        for uploaded_file in attachments:
+            client_attachment = EndOfLifeAttachment(company=company,
+                                            client=client,
+                                            user=current_user,
+                                            attachment=uploaded_file,
+                                            end_of_life=eol)
+            client_attachment.save()
 
 @login_required
 def get_all_client_with_email(request):

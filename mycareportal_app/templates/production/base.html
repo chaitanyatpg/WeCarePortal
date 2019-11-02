@@ -135,6 +135,9 @@
                     {% if module_dict.CLIENTPORTAL.DEACTIVATE_CLIENT %}
                       <li><a href={% url 'deactivate_choose_client' %}>Deactivate Client</a></li>
                     {% endif %}
+                    {% if module_dict.CLIENTPORTAL.CLIENT_END_OF_LIFE %}
+                      <li><a href={% url 'end_of_life_choose_client' %}>Client End of Life</a></li>
+                    {% endif %}
                   </ul>
                 </li>
                 <li><a><i class="fa fa-edit"></i>Caregiver Portal<span class="fa fa-chevron-down"></span></a>

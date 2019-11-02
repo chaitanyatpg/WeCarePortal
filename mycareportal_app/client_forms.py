@@ -369,3 +369,14 @@ class DeactivateClientForm(forms.Form):
     def clean(self):
         cleaned_data = super(DeactivateClientForm, self).clean()
         return cleaned_data
+
+class EndOfLifeForm(forms.Form):
+
+    comment = forms.CharField(max_length=500, required=False)
+    end_of_life_id = forms.IntegerField()
+    client_id = forms.IntegerField()
+    attachment = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), label='', required=False)
+
+    def clean(self):
+        cleaned_data = super(EndOfLifeForm, self).clean()
+        return cleaned_data
