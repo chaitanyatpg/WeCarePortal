@@ -5,6 +5,7 @@ from PIL import Image
 import uuid
 import shortuuid
 import django.utils.timezone as timezone
+import datetime
 # Create your models here.
 
 class SoftDeletionQuerySet(models.QuerySet):
