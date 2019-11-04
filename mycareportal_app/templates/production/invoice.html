@@ -36,7 +36,9 @@
                           Invoice
                         <small class="pull-right">{{start_date}} - {{end_date}}</small>
                     </h1>
-                    <img src="{{current_company.logo.url}}", style="width: 230px; height:200px"/>
+                    {% if current_company.logo %}
+                      <img src="{{current_company.logo.url}}", style="width: 230px; height:200px"/>
+                    {% endif %}
                   </div>
                   <!-- /.col -->
                 </div>
