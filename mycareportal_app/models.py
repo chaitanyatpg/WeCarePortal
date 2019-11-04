@@ -1025,6 +1025,22 @@ class ClientEndOfLife(models.Model):
         attachments = EndOfLifeAttachment.objects.filter(end_of_life=self)
         return attachments
 
+    def close_end_of_life(self):
+        self.end_date = datetime.datetime.now()
+        self.open = False
+        client = self.client
+        client_tasks = TaskSchedule.objects.filter(company=client.company,
+                                                   client=client)
+        for task in client_tasks:
+            task.delete()
+        client_task_headers = TaskHeader.objects.filter(company=client.company,
+                                                        client=client)
+        for task_header in client_task_headers:
+            task_header.delete()
+        self.save()
+        self.client.delete()
+        self.client.save()
+
 class EndOfLifeComment(models.Model):
 
     company = models.ForeignKey(Company)

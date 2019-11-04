@@ -113,16 +113,22 @@
                               {% endfor %}
                               </ul>
                         </p>
-                        <div>
-                          <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="hidden" value={{eol.id}} name={{eol_form.end_of_life_id.html_name}}>
-                            <input type="hidden" value={{client.id}} name={{eol_form.client_id.html_name}}>
-                            <button type="submit" class="btn btn-success">Update End of Life</button>
-                            <button type="submit" class="btn btn-warning">Close End of Life</button>
+                        {% if eol.open %}
+                          <div>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="hidden" value={{eol.id}} name={{eol_form.end_of_life_id.html_name}}>
+                              <input type="hidden" value={{client.id}} name={{eol_form.client_id.html_name}}>
+                              <button type="submit" class="btn btn-success">Update End of Life</button>
+                            </div>
                           </div>
-                        </div>
+                        {% endif %}
                       </form>
-
+                      {% if eol.open %}
+                        <form class='form-inline' enctype="multipart/form-data" method="post" role="form" action="{% url 'close_end_of_life' eol.uid %}">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-warning">Close End of Life</button>
+                        </form>
+                      {% endif %}
                     </div>
                   </div>
                 </div>

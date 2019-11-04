@@ -1161,6 +1161,16 @@ class ClientEndOfLifeView(LoginRequiredMixin, View):
                                             end_of_life=eol)
             client_attachment.save()
 
+
+@login_required
+def close_end_of_life(request, eol_id):
+    eol = ClientEndOfLife.objects.get(company=request.user.company,
+                                        uid=eol_id)
+    eol.close_end_of_life()
+    messages.success(request,
+        "Successfully closed end of life event")
+    return redirect('end_of_life_choose_client')
+
 @login_required
 def get_all_client_with_email(request):
     if request.method == 'GET':
