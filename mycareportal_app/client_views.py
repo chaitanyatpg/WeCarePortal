@@ -2089,7 +2089,7 @@ def send_legal_email_incident(request):
         current_site = get_current_site(request)
         email_manager = LegalEmailProcessor()
         email_manager.send_incident_email(
-        report, care_managers
+        report, care_managers, company
         )
         messages.success(request, "Successfully sent email to legal team. You will be contacted shortly with further details.")
     else:

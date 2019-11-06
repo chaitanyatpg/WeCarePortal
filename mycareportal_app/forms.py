@@ -70,6 +70,7 @@ class CompanyEditForm(forms.Form):
     default_dashboard = forms.CharField(max_length=100, required=False)
     tax_rate = forms.DecimalField(required=False)
     logo = forms.ImageField(label='Select file', required=False)
+    attorney_email = forms.EmailField(required=False)
 
     def clean_picture(self):
         picture = self.cleaned_data['logo']

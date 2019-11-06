@@ -88,6 +88,7 @@ class Company(models.Model):
     default_dashboard = models.CharField(DASHBOARD_CHOICES, max_length=100, default=admin_dashboard)
     tax_rate = models.DecimalField(max_digits=5, decimal_places=2, null=True)
     logo = models.ImageField(upload_to=get_company_logo_upload_path, null=True)
+    attorney_email = models.EmailField(null=True, blank=True)
 
 class User(AbstractUser):
 

@@ -286,6 +286,17 @@
                   </div>
 
                   <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Attorney Email</label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not company_edit_form.attorney_email.value is None %}
+                        <input type="text" class="form-control" name = "{{company_edit_form.attorney_email.html_name}}" value="{{company_edit_form.attorney_email.value}}" required="" />
+                      {% else %}
+                        <input type="text" class="form-control" name = "{{company_edit_form.attorney_email.html_name}}" required="" />
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Time Zone<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not company_edit_form.time_zone.value is None %}
