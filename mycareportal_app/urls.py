@@ -192,6 +192,7 @@ urlpatterns = [
     url(r'^deactivate_client', client_views.DeactivateClient.as_view(), name='deactivate_client'),
     url(r'^client/end_of_life_choose_client', client_views.ChooseClientEndOfLife.as_view(), name='end_of_life_choose_client'),
     url(r'^client/end_of_life', client_views.ClientEndOfLifeView.as_view(), name='client_end_of_life'),
-    url(r'^client/close_end_of_life/(?P<eol_id>[0-9a-f-]+)/$', client_views.close_end_of_life, name='close_end_of_life')
+    url(r'^client/close_end_of_life/(?P<eol_id>[0-9a-f-]+)/$', client_views.close_end_of_life, name='close_end_of_life'),
+    url(r'^family/dashboard_client_signoff_all/(?P<client_uid>[0-9a-f-]+)/$', family_views.client_signoff_all, name='client_signoff_all')
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -6,6 +6,7 @@ import uuid
 import shortuuid
 import django.utils.timezone as timezone
 import datetime
+import pytz
 # Create your models here.
 
 class SoftDeletionQuerySet(models.QuerySet):
@@ -417,6 +418,27 @@ class TaskSchedule(models.Model):
     completed_timestamp = models.DateTimeField(null=True)
     created = models.DateTimeField(auto_now_add=True)
     alert_active = models.BooleanField(default=False)
+    marked_off = models.BooleanField(default=False)
+    marked_off_timestamp = models.DateTimeField(null=True)
+    marked_off_user = models.ForeignKey(User, related_name="marked_off_user", null=True)
+
+    @staticmethod
+    def get_todays_tasks(company, client):
+        client_timezone = pytz.timezone(client.time_zone)
+        #current_date = datetime.date.today()
+        current_date = (timezone.now().astimezone(client_timezone)).date()
+        #timezone.activate(client_timezone)
+        client_tasks = TaskSchedule.objects.filter(
+                                company=company,
+                                client=client,
+                                date=current_date)
+        return client_tasks
+
+    def mark_off(self, user):
+        self.marked_off = True
+        self.marked_off_user = user
+        self.marked_off_timestamp = datetime.datetime.now()
+        self.save()
 
 class TaskComment(models.Model):
 

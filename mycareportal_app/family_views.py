@@ -72,9 +72,12 @@ class FamilyDashboard(LoginRequiredMixin, View):
             comment = update_task_form.cleaned_data["comment"]
             task_id = update_task_form.cleaned_data["task_id"]
             client_id = update_task_form.cleaned_data["client_id"]
+            sign_off = update_task_form.cleaned_data["sign_off"]
             client = Client.objects.get(company=current_company,id=client_id)
             task = TaskSchedule.objects.get(company=current_company,client=client,id=task_id)
             self.save_task_comments(request, update_task_form, task, current_company, client, comment)
+            if sign_off != task.marked_off:
+                task.mark_off(request.user)
             messages.success(request, "Edited Task: {0}".format(task.activity_task))
         return redirect('family_dashboard')
 
@@ -112,3 +115,12 @@ class FamilyDashboard(LoginRequiredMixin, View):
                                     comment=comment)
         if comment != "":
             task_comment.save()
+
+def client_signoff_all(request, client_uid):
+    company = request.user.company
+    client = Client.objects.get(company=company, uid=client_uid)
+    tasks = TaskSchedule.get_todays_tasks(company, client)
+    for task in tasks:
+        task.mark_off(request.user)
+    messages.success(request, "Signed off all tasks")
+    return redirect('family_dashboard')

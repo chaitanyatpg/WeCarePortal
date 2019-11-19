@@ -188,45 +188,70 @@
                                       </p>
 
                                       <div class="row">
-                                        <div class="col-md-3">
-                                          <label>
-                                            {% if task.pending %}
-                                              <input type="radio" checked="checked" value="pending" name="{{update_task_form.status.html_name}}" disabled> Pending
-                                              <span class="fa fa-spinner fa-pulse fa-1x fa-fw" style="color:#808080"></span>
-                                            {% else %}
-                                              <input type="radio" value="pending" name="{{update_task_form.status.html_name}}" disabled> Pending
-                                            {% endif %}
-                                          </label>
+                                          <div class="col-md-3">
+                                            <label>
+                                              {% if task.pending %}
+                                                <input type="radio" checked="checked" value="pending" name="{{update_task_form.status.html_name}}" disabled> Pending
+                                                <span class="fa fa-spinner fa-pulse fa-1x fa-fw" style="color:#808080"></span>
+                                              {% else %}
+                                                <input type="radio" value="pending" name="{{update_task_form.status.html_name}}" disabled> Pending
+                                              {% endif %}
+                                            </label>
+                                          </div>
+                                          <div class="col-md-3">
+                                            <label>
+                                              {% if task.complete %}
+                                                <input type="radio" checked="checked" value="complete" name="{{update_task_form.status.html_name}}" disabled> Complete
+                                                <span class="fa fa-check" style="color:#3CB371"></span>
+                                              {% else %}
+                                                <input type="radio" value="complete" name="{{update_task_form.status.html_name}}" disabled> Complete
+                                              {% endif %}
+                                            </label>
+                                          </div>
+                                          <div class="col-md-3">
+                                            <label>
+                                              {% if task.in_progress %}
+                                                <input type="radio" checked="checked" value="in_progress" name="{{update_task_form.status.html_name}}" disabled> In Progress
+                                                <span class="fa fa-spinner fa-pulse fa-1x fa-fw" style="color:#baf2f5"></span>
+                                              {% else %}
+                                                <input type="radio" value="in_progress" name="{{update_task_form.status.html_name}}" disabled> In Progress
+                                              {% endif %}
+                                            </label>
+                                          </div>
+                                          <div class="col-md-3">
+                                            <label>
+                                              {% if task.cancelled %}
+                                                <input type="radio" checked="checked" value="cancelled" name="{{update_task_form.status.html_name}}" disabled> Cancelled
+                                                <span class="fa fa-close" style="color:#ff0000"></span>
+                                              {% else %}
+                                                <input type="radio" value="cancelled" name="{{update_task_form.status.html_name}}" disabled> Cancelled
+                                              {% endif %}
+                                            </label>
+                                          </div>
                                         </div>
-                                        <div class="col-md-3">
-                                          <label>
-                                            {% if task.complete %}
-                                              <input type="radio" checked="checked" value="complete" name="{{update_task_form.status.html_name}}" disabled> Complete
-                                              <span class="fa fa-check" style="color:#3CB371"></span>
-                                            {% else %}
-                                              <input type="radio" value="complete" name="{{update_task_form.status.html_name}}" disabled> Complete
-                                            {% endif %}
-                                          </label>
-                                        </div>
-                                        <div class="col-md-3">
-                                          <label>
-                                            {% if task.in_progress %}
-                                              <input type="radio" checked="checked" value="in_progress" name="{{update_task_form.status.html_name}}" disabled> In Progress
-                                              <span class="fa fa-spinner fa-pulse fa-1x fa-fw" style="color:#baf2f5"></span>
-                                            {% else %}
-                                              <input type="radio" value="in_progress" name="{{update_task_form.status.html_name}}" disabled> In Progress
-                                            {% endif %}
-                                          </label>
-                                        </div>
-                                        <div class="col-md-3">
-                                          <label>
-                                            {% if task.cancelled %}
-                                              <input type="radio" checked="checked" value="cancelled" name="{{update_task_form.status.html_name}}" disabled> Cancelled
-                                              <span class="fa fa-close" style="color:#ff0000"></span>
-                                            {% else %}
-                                              <input type="radio" value="cancelled" name="{{update_task_form.status.html_name}}" disabled> Cancelled
-                                            {% endif %}
-                                          </label>
+                                        <div class="row">
+                                          <div class="col-md-3">
+                                            <label> Sign Off </label>
+                                          </div>
+                                          <div class="col-md-3">
+                                            <label>
+                                              {% if task.marked_off %}
+                                                <input type="radio" checked="checked" name="{{update_task_form.sign_off.html_name}}" disabled> Yes
+                                                <p>Signed off by {{task.marked_off_user}} at {{task.marked_off_timestamp}}</p>
+                                              {% else %}
+                                                <input type="radio" name="{{update_task_form.sign_off.html_name}}"> Yes
+                                              {% endif %}
+                                            </label>
+                                          </div>
+                                          <div class="col-md-3">
+                                            <label>
+                                              {% if task.marked_off %}
+                                                <input type="radio" name="{{update_task_form.sign_off.html_name}}" disabled> No
+                                              {% else %}
+                                                <input type="radio" checked="checked" name="{{update_task_form.sign_off.html_name}}"> No
+                                              {% endif %}
+                                            </label>
+                                          </div>
                                         </div>
                                         <div>
                                           <div class="col-md-6 col-sm-6 col-xs-12">
@@ -235,11 +260,17 @@
                                             <button type="submit" class="btn btn-success">Update Task</button>
                                           </div>
                                         </div>
-                                      </div>
                                     </form>
 
                                 </li>
                                 {% endfor %}
+                                <form method="post" role="form" action="{% url 'client_signoff_all' client_uid=client.uid %}">
+                                  {% csrf_token %}
+                                  <div class="row">
+                                    <button type="submit" class="btn btn-success">Sign off all tasks
+                                    </button>
+                                  </div>
+                                </form>
                               {% endfor %}
 
                               <!--

@@ -5,6 +5,7 @@ from django.utils.translation import ugettext as _
 class UpdateTaskForm(forms.Form):
 
     comment = forms.CharField(max_length=500, required=False)
+    sign_off = forms.BooleanField(required=False)
     #status = forms.CharField(max_length=50)
     task_id = forms.IntegerField()
     client_id = forms.IntegerField()
