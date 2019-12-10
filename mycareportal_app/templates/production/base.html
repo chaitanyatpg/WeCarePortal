@@ -18,6 +18,7 @@
 <link href="{% static 'build/css/custom.min.css' %}" rel="stylesheet">
 <!-- favicon -->
 <link rel="shortcut icon" href="{% static 'pictures/logo_32_32.png' %}" />
+{% load mycareportal_app_extras%}
 {% block headlibs %}{% endblock %}
 </head>
 
@@ -353,6 +354,49 @@
   }
 </script>
 <!-- end -->
+
+<script type="text/javascript">
+  function isIOSDevice(){
+    os = null;
+    if(window.navigator != undefined) {
+      var platform = window.navigator.platform;
+      iosPlatforms = ['iPhone', 'iPad', 'iPod'];
+      if(iosPlatforms.indexOf(platform) !== -1) {
+        return true;
+      }
+    }
+    return false;
+  }
+</script>
+
+<script type="text/javascript">
+  if(isIOSDevice()){
+    window.webkit.messageHandlers.iosDeviceIdMessageHandler.postMessage();
+  }
+</script>
+
+<script type="text/javascript">
+  function iosDeviceIdSuccess(tablet_id) {
+    console.log(tablet_id);
+    $.ajax({
+      type: "GET",
+      url: '{% url "set_tablet_id_session" %}',
+      data: { tablet_id: tablet_id },
+      contentType: "application/json",
+      success: function(out_msg){
+      },
+      failure: function(out_msg){
+      }
+    });
+  }
+</script>
+
+<script type="text/javascript">
+  function iosDeviceIdFailure() {
+    console.log("Could not fetch device ID");
+  }
+</script>
+
 <!-- Only show li for register tablet if Android interface exists -->
 <script type="text/javascript">
 $(document).ready(function(){
