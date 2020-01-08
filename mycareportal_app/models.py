@@ -649,6 +649,69 @@ class CaregiverSchedule(models.Model):
     end_time = models.TimeField()
     created = models.DateTimeField(auto_now_add=True)
 
+    def is_active(self):
+        active_timesheet_exists = CaregiverTimeSheet.objects.exists(company=self.company,
+                                                caregiver=self.caregiver,
+                                                is_active=true)
+        return active_timesheet_exists
+
+    def is_late(self):
+        client = self.client
+        client_timezone = pytz.timezone(client.time_zone)
+        #current_date = datetime.date.today()
+        current_timestamp = (timezone.now().astimezone(client_timezone))
+        current_date = current_timestamp.date()
+        current_time = current_timestamp.time()
+        clock_in_date = schedule.date
+        clock_in_time = schedule.start_time
+        clock_out_time = schedule.end_time
+        if not self.is_active():
+            late_time = clock_in_time.replace(minute=clock_in_time.minute+15)
+            if clock_in_date == current_date and current_time > late_time:
+                return true
+        return False
+
+    def is_complete(self):
+        daily_tasks = TaskSchedule.get_todays_tasks(
+                                self.company, self.client)
+        for task in daily_tasks:
+            if not task.complete:
+                return False
+        return True
+
+    def is_missed(self):
+        # check if date in caregiver schedule is matched by a clock in dates
+        # in the caregiver timesheet (the clock_in_timestamp)
+        matched_timesheets = CaregiverTimesheet.objects.exists(clock_in_timestamp__date=self.date)
+        return matched_timesheets
+
+    def get_late_caregivers(company, caregiver_schedule, active_caregivers, caregivers):
+
+        late_caregivers = []
+        not_clocked_out_caregivers = []
+
+        for schedule in caregiver_schedule:
+            client = schedule.client
+
+            client_timezone = pytz.timezone(client.time_zone)
+            #current_date = datetime.date.today()
+            current_timestamp = (timezone.now().astimezone(client_timezone))
+            current_date = current_timestamp.date()
+            current_time = current_timestamp.time()
+
+            clock_in_date = schedule.date
+            clock_in_time = schedule.start_time
+            clock_out_time = schedule.end_time
+            if schedule.caregiver in active_caregivers:
+                late_time = clock_out_time.replace(minute=clock_out_time.minute+15)
+                if clock_in_date == current_date and current_time > late_time:
+                    not_clocked_out_caregivers.append(schedule.caregiver)
+            else:
+                late_time = clock_in_time.replace(minute=clock_in_time.minute+15)
+                if clock_in_date == current_date and current_time > late_time:
+                    late_caregivers.append(schedule.caregiver)
+        return (late_caregivers, not_clocked_out_caregivers)
+
 class ClientMatchCategory(models.Model):
     category = models.CharField(max_length=500)
     uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
@@ -1090,3 +1153,17 @@ class EndOfLifeAttachment(models.Model):
     end_of_life = models.ForeignKey(ClientEndOfLife)
     attachment = models.FileField(upload_to=get_end_of_life_attachment_upload_path)
     created = models.DateTimeField(auto_now_add=True)
+
+class CaregiverScheduleDashboardSettings(models.Model):
+
+    company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    created = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User)
+    open_filter = models.BooleanField(default=False)
+    scheduled_filter = models.BooleanField(default=True)
+    in_progress_filter = models.BooleanField(default=False)
+    completed_filter = models.BooleanField(default=False)
+    late_filter = models.BooleanField(default=False)
+    missed_filter = models.BooleanField(default=False)
+    caregiver_filter = models.ManyToManyField(Caregiver, null=True)

@@ -27,7 +27,7 @@ SECRET_KEY = 'ylwi3hn#79&v2(%#k&por1szkfssgih4nn)13t4q9v0sz47*eg'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.2.21','mycareportal.herokuapp.com','localhost','www.wecareportal.com','www.wecarehealthportal.com','127.0.0.1']
+ALLOWED_HOSTS = ['192.168.1.64','mycareportal.herokuapp.com','localhost','www.wecareportal.com','www.wecarehealthportal.com','127.0.0.1']
 #'192.168.2.77'
 
 #AWS SETTINGS
@@ -44,7 +44,7 @@ AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 
 
 #SSL - comment out when running locally
-SECURE_SSL_REDIRECT = True
+#SECURE_SSL_REDIRECT = True
 
 #Email Settings (Sendgrid)
 #EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
