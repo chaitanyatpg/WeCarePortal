@@ -46,31 +46,64 @@
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
-                    <div class="container">
-                      <div class="row">
-                        <button class="btn btn-dark">Open</button>
-                        <button class="btn btn-primary">Scheduled</button>
-                        <button class="btn btn-info">In Progress</button>
-                        <button class="btn btn-success">Completed</button>
-                        <button class="btn btn-warning">Late</button>
-                        <button class="btn btn-danger">Missed</button>
-                      </div>
-                    </div>
-                    <div id="select_client_id">
-                      <div class="row">
-                        <label class="col-md-3 col-sm-3 col-xs-12">Caregiver<span class="required"></span> </label>
-                        <div class="col-md-9 col-sm-9 col-xs-12">
-                          <select id="caregiver_dropdown" class="select2_single" style="width: 100%" tabindex="-1" name="caregiver_dropdown" multiple="multiple">
-                            {% for caregiver in caregivers %}
-                            <option value="{{caregiver.uid}}">{{caregiver.first_name}} {{caregiver.last_name}}</option>
-                            {% endfor %}
-                          </select>
+                    <form enctype="multipart/form-data" method="post" action="{% url 'caregiver_schedule_dashboard' %}">
+                      {% csrf_token %}
+                      <div class="container">
+                        <div class="row">
+                          <label class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default" style="background-color: #4b6071;">
+                              <input type="checkbox" name="{{dashboard_settings_form.open_filter.html_name}}" {% if dashboard_settings_form.open_filter.value %} checked {% endif %}>
+                            &nbsp; Open &nbsp;
+                          </label>
+
+                          <label class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                              <input type="checkbox" name="{{dashboard_settings_form.scheduled_filter.html_name}}" {% if dashboard_settings_form.scheduled_filter.value %} checked {% endif %}>
+                            &nbsp; Scheduled &nbsp;
+                          </label>
+
+                          <label class="btn btn-info" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                              <input type="checkbox" name="{{dashboard_settings_form.in_progress_filter.html_name}}" {% if dashboard_settings_form.in_progress_filter.value %} checked {% endif %}>
+                            &nbsp; In Progress &nbsp;
+                          </label>
+
+                          <label class="btn btn-success" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                              <input type="checkbox" name="{{dashboard_settings_form.completed_filter.html_name}}" {% if dashboard_settings_form.completed_filter.value %} checked {% endif %}>
+                            &nbsp; Completed &nbsp;
+                          </label>
+
+                          <label class="btn btn-warning" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                              <input type="checkbox" name="{{dashboard_settings_form.late_filter.html_name}}" {% if dashboard_settings_form.late_filter.value %} checked {% endif %}>
+                            &nbsp; Late &nbsp;
+                          </label>
+
+                          <label class="btn btn-danger" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                              <input type="checkbox" name="{{dashboard_settings_form.missed_filter.html_name}}" {% if dashboard_settings_form.missed_filter.value %} checked {% endif %}>
+                            &nbsp; Missed &nbsp;
+                          </label>
+
+                          <!--<button class="btn btn-dark">Open</button>
+                          <button class="btn btn-primary">Scheduled</button>
+                          <button class="btn btn-info">In Progress</button>
+                          <button class="btn btn-success">Completed</button>
+                          <button class="btn btn-warning">Late</button>
+                          <button class="btn btn-danger">Missed</button>-->
+                        </div>
+                        <div id="select_client_id">
+                          <div class="row">
+                            <label class="col-md-3 col-sm-3 col-xs-12">Caregiver<span class="required"></span> </label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                              <select id="caregiver_dropdown" class="select2_single" style="width: 100%" tabindex="-1" name="caregiver_dropdown" multiple="multiple">
+                                {% for caregiver in caregivers %}
+                                <option value="{{caregiver.uid}}">{{caregiver.first_name}} {{caregiver.last_name}}</option>
+                                {% endfor %}
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <button class="btn btn-success">Save Filters</button>
                         </div>
                       </div>
-                    </div>
-                    <div class="row">
-                      <button class="btn btn-success">Save Filters</button>
-                    </div>
+                    </form>
                   </div>
                 </div>
               </div>
@@ -109,6 +142,78 @@
     <!-- FullCalendar -->
     <script>
           $(window).load(function() {
+
+            schedules = [];
+            scheduled_schedules = {{scheduled_schedules|safe}};
+            for(i=0;i < scheduled_schedules.length;i++){
+              schedule = scheduled_schedules[i];
+              schedule_data =
+                {
+                  title: schedule.caregiver_name,
+                  start: Date.parse(schedule.date + " " + schedule.start_time),
+                  end: Date.parse(schedule.date + " " + schedule.end_time),
+                  id: schedule.id
+                }
+              schedule_data.color = "#337ab7";
+              schedules.push(schedule_data);
+            }
+
+            in_progress_schedules = {{in_progress_schedules|safe}};
+            for(i=0;i < in_progress_schedules.length;i++){
+              schedule = in_progress_schedules[i];
+              schedule_data =
+                {
+                  title: schedule.caregiver_name,
+                  start: Date.parse(schedule.date + " " + schedule.start_time),
+                  end: Date.parse(schedule.date + " " + schedule.end_time),
+                  id: schedule.id
+                }
+              schedule_data.color = "#5bc1de";
+              schedules.push(schedule_data);
+            }
+
+            completed_schedules = {{completed_schedules|safe}};
+            for(i=0;i < completed_schedules.length;i++){
+              schedule = completed_schedules[i];
+              schedule_data =
+                {
+                  title: schedule.caregiver_name,
+                  start: Date.parse(schedule.date + " " + schedule.start_time),
+                  end: Date.parse(schedule.date + " " + schedule.end_time),
+                  id: schedule.id
+                }
+              schedule_data.color = "#26b99a";
+              schedules.push(schedule_data);
+            }
+
+            missed_schedules = {{missed_schedules|safe}};
+            for(i=0;i < missed_schedules.length;i++){
+              schedule = missed_schedules[i];
+              schedule_data =
+                {
+                  title: schedule.caregiver_name,
+                  start: Date.parse(schedule.date + " " + schedule.start_time),
+                  end: Date.parse(schedule.date + " " + schedule.end_time),
+                  id: schedule.id
+                }
+              schedule_data.color = "#d9534f";
+              schedules.push(schedule_data);
+            }
+
+            late_schedules = {{late_schedules|safe}};
+            for(i=0;i < late_schedules.length;i++){
+              schedule = late_schedules[i];
+              schedule_data =
+                {
+                  title: schedule.caregiver_name,
+                  start: Date.parse(schedule.date + " " + schedule.start_time),
+                  end: Date.parse(schedule.date + " " + schedule.end_time),
+                  id: schedule.id
+                }
+              schedule_data.color = "#f0ad4e";
+              schedules.push(schedule_data);
+            }
+
             var date = new Date(),
                 d = date.getDate(),
                 m = date.getMonth(),
@@ -125,7 +230,7 @@
               selectable: true,
               selectHelper: true,
               editable: true,
-              events : [],
+              events : schedules,
               timeFormat: 'h:mma'
 
             });

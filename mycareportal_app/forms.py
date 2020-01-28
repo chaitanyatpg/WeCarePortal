@@ -157,3 +157,13 @@ class ChooseClientInvoiceForm(forms.Form):
     def clean(self):
         cleaned_data = super(ChooseClientInvoiceForm, self).clean()
         return cleaned_data
+
+class CaregiverScheduleDashboardSettingsForm(forms.Form):
+
+    open_filter = forms.BooleanField(required=False)
+    scheduled_filter = forms.BooleanField(required=False)
+    in_progress_filter = forms.BooleanField(required=False)
+    completed_filter = forms.BooleanField(required=False)
+    late_filter = forms.BooleanField(required=False)
+    missed_filter = forms.BooleanField(required=False)
+    #caregiver_filter = forms.MultiValueField(Caregiver, blank=True)

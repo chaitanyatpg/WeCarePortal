@@ -649,41 +649,76 @@ class CaregiverSchedule(models.Model):
     end_time = models.TimeField()
     created = models.DateTimeField(auto_now_add=True)
 
-    def is_active(self):
-        active_timesheet_exists = CaregiverTimeSheet.objects.exists(company=self.company,
-                                                caregiver=self.caregiver,
-                                                is_active=true)
-        return active_timesheet_exists
-
-    def is_late(self):
+    def get_current_client_timestamp(self):
         client = self.client
         client_timezone = pytz.timezone(client.time_zone)
-        #current_date = datetime.date.today()
+        current_timestamp = (timezone.now().astimezone(client_timezone))
+        return current_timestamp
+
+    def is_active(self):
+        client = self.client
+        client_timezone = pytz.timezone(client.time_zone)
         current_timestamp = (timezone.now().astimezone(client_timezone))
         current_date = current_timestamp.date()
+        active_timesheets = CaregiverTimeSheet.objects.filter(company=self.company,
+                                                caregiver=self.caregiver,
+                                                is_active=True,
+                                                clock_out_timestamp=None
+                                                )
+        caregiver_is_active = False
+        for timesheet in active_timesheets:
+            if timesheet.clock_in_timestamp.date()==current_date and current_date == self.date:
+                caregiver_is_active = True
+                break
+        return caregiver_is_active
+
+    def is_late(self):
+        current_timestamp = self.get_current_client_timestamp()
+        current_date = current_timestamp.date()
+        if self.date != current_date:
+            return False
+        if CaregiverTimeSheet.objects.filter(company=self.company,
+                    caregiver=self.caregiver,
+                    clock_in_timestamp__date=self.date).exists():
+            return False
+        client = self.client
+        client_timezone = pytz.timezone(client.time_zone)
+        current_date = current_timestamp.date()
         current_time = current_timestamp.time()
-        clock_in_date = schedule.date
-        clock_in_time = schedule.start_time
-        clock_out_time = schedule.end_time
+        clock_in_date = self.date
+        clock_in_time = self.start_time
+        clock_out_time = self.end_time
         if not self.is_active():
             late_time = clock_in_time.replace(minute=clock_in_time.minute+15)
             if clock_in_date == current_date and current_time > late_time:
-                return true
+                return True
         return False
 
     def is_complete(self):
+        current_timestamp = self.get_current_client_timestamp()
+        current_date = current_timestamp.date()
+        if self.date != current_date:
+            return False
         daily_tasks = TaskSchedule.get_todays_tasks(
                                 self.company, self.client)
         for task in daily_tasks:
             if not task.complete:
+                print(task)
                 return False
         return True
 
     def is_missed(self):
-        # check if date in caregiver schedule is matched by a clock in dates
+        current_timestamp = self.get_current_client_timestamp()
+        current_date = current_timestamp.date()
+        if self.date != current_date:
+            return False
+        # check if date in caregiver schedule is matched by a clock in date
         # in the caregiver timesheet (the clock_in_timestamp)
-        matched_timesheets = CaregiverTimesheet.objects.exists(clock_in_timestamp__date=self.date)
-        return matched_timesheets
+        matching_timesheets = CaregiverTimeSheet.objects.filter(company=self.company,
+                                caregiver=self.caregiver,
+                                clock_in_timestamp__date=self.date).exists()
+        past_end_time = current_timestamp.time() > self.end_time
+        return (not matching_timesheets) and past_end_time
 
     def get_late_caregivers(company, caregiver_schedule, active_caregivers, caregivers):
 
@@ -711,6 +746,30 @@ class CaregiverSchedule(models.Model):
                 if clock_in_date == current_date and current_time > late_time:
                     late_caregivers.append(schedule.caregiver)
         return (late_caregivers, not_clocked_out_caregivers)
+
+    def to_json_schedule(self):
+        schedule_start_datetime = datetime.datetime.combine(self.date, self.start_time)
+        schedule_end_datetime = datetime.datetime.combine(self.date, self.end_time)
+        client_timezone = pytz.timezone(self.client.time_zone)
+        #current_date = datetime.date.today()
+        schedule_start_datetime = (schedule_start_datetime.astimezone(client_timezone))
+        schedule_end_datetime = (schedule_end_datetime.astimezone(client_timezone))
+        schedule_object = {
+            "id" : self.id,
+            "uid" : str(self.uid),
+            "caregiver_name" : "{0} {1}".format(self.caregiver.first_name,
+                                                self.caregiver.last_name),
+            "client_name" : "{0} {1}".format(self.client.first_name,
+                                            self.client.last_name),
+            'date': '{0}-{1}-{2}'.format(schedule_start_datetime.date().year,
+                schedule_start_datetime.date().month,
+                schedule_start_datetime.date().day),
+            'start_time': schedule_start_datetime.time().strftime("%I:%M %p"),
+            'end_time': schedule_end_datetime.time().strftime("%I:%M %p"),
+            "created" : str(self.created)
+        }
+        return schedule_object
+
 
 class ClientMatchCategory(models.Model):
     category = models.CharField(max_length=500)
@@ -1166,4 +1225,13 @@ class CaregiverScheduleDashboardSettings(models.Model):
     completed_filter = models.BooleanField(default=False)
     late_filter = models.BooleanField(default=False)
     missed_filter = models.BooleanField(default=False)
-    caregiver_filter = models.ManyToManyField(Caregiver, null=True)
+    caregiver_filter = models.ManyToManyField(Caregiver, blank=True)
+
+    def get_or_create(company, user):
+        if CaregiverScheduleDashboardSettings.objects.filter(company=company, user=user).exists():
+            return CaregiverScheduleDashboardSettings.objects.get(company=company, user=user)
+        else:
+            csds = CaregiverScheduleDashboardSettings(company=company,
+                                                      user=user)
+            csds.save()
+            return csds

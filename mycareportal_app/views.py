@@ -12,6 +12,8 @@ from django.shortcuts import redirect
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 import json
+from django.core.serializers.json import DjangoJSONEncoder
+from django.core import serializers
 from django.contrib import messages
 from django.db import IntegrityError
 
@@ -859,12 +861,99 @@ class CaregiverScheduleDashboard(LoginRequiredMixin, View):
     def get(self, request):
         company = request.user.company
         context = {}
+        # 1. Get all caregiver schedules for current company
         caregiver_schedules = CaregiverSchedule.objects.filter(company=company)
+        # 2. Get caregiver dashboard schedule object for company/user,
+        # or create one if it currently does not exist
+        schedule_dashboard_settings = CaregiverScheduleDashboardSettings.get_or_create(company, request.user)
+        # 3. Filter caregiver_schedules from 1. using active filters from settings in 2.
+        (filtered_schedules, scheduled_schedules,
+        in_progress_schedules, completed_schedules,
+        missed_schedules, late_schedules) = self.apply_settings_filters(caregiver_schedules, schedule_dashboard_settings)
         caregivers = Caregiver.objects.filter(company=company)
-        (late_caregivers, not_clocked_out_caregivers) = self.get_caregiver_details(request)
+        form = CaregiverScheduleDashboardSettingsForm(initial=
+            {
+                "open_filter": schedule_dashboard_settings.open_filter,
+                "scheduled_filter": schedule_dashboard_settings.scheduled_filter,
+                "in_progress_filter": schedule_dashboard_settings.in_progress_filter,
+                "completed_filter": schedule_dashboard_settings.completed_filter,
+                "late_filter": schedule_dashboard_settings.late_filter,
+                "missed_filter": schedule_dashboard_settings.missed_filter
+            }
+        )
+        # (late_caregivers, not_clocked_out_caregivers) = self.get_caregiver_details(request)
         context['caregivers'] = caregivers
-        context['caregiver_schedules'] = caregiver_schedules
+        context['caregiver_schedules'] = self.to_schedule_objects(filtered_schedules)
+        #json.dumps(list(filtered_schedules), cls=DjangoJSONEncoder)
+        context['scheduled_schedules'] = self.to_schedule_objects(scheduled_schedules)
+        context['in_progress_schedules'] = self.to_schedule_objects(in_progress_schedules)
+        context['completed_schedules'] = self.to_schedule_objects(completed_schedules)
+        context['missed_schedules'] = self.to_schedule_objects(missed_schedules)
+        context['late_schedules'] = self.to_schedule_objects(late_schedules)
+        context['dashboard_settings_form'] = form
         return render(request, "production/caregiver_schedule_dashboard.html", context)
+
+    def to_schedule_objects(self, filtered_schedules):
+        schedules = []
+        for schedule in filtered_schedules:
+            schedule_object = schedule.to_json_schedule()
+            schedules.append(schedule_object)
+        return schedules
+
+    def post(self, request):
+        company = request.user.company
+        context = {}
+        schedule_settings_form = CaregiverScheduleDashboardSettingsForm(request.POST)
+        if schedule_settings_form.is_valid():
+            schedule_dashboard_settings = CaregiverScheduleDashboardSettings.get_or_create(company, request.user)
+            schedule_dashboard_settings.open_filter = schedule_settings_form.cleaned_data['open_filter']
+            schedule_dashboard_settings.scheduled_filter = schedule_settings_form.cleaned_data['scheduled_filter']
+            schedule_dashboard_settings.in_progress_filter = schedule_settings_form.cleaned_data['in_progress_filter']
+            schedule_dashboard_settings.completed_filter = schedule_settings_form.cleaned_data['completed_filter']
+            schedule_dashboard_settings.late_filter = schedule_settings_form.cleaned_data['late_filter']
+            schedule_dashboard_settings.missed_filter = schedule_settings_form.cleaned_data['missed_filter']
+            schedule_dashboard_settings.save()
+            #send_mail('Test sendgrid', 'Test message', 'info@wecareportal.com', ['dhruv.ranjan@gmail.com'], fail_silently=False)
+            messages.success(request, "Dashboard settings saved")
+        else:
+            messages.error(request, "Error saving dashboard settings")
+        return redirect('caregiver_schedule_dashboard')
+
+    def apply_settings_filters(self, caregiver_schedules, settings):
+        filtered_schedules = []
+        scheduled_schedules = []
+        in_progress_schedules = []
+        completed_schedules = []
+        missed_schedules = []
+        late_schedules = []
+        for schedule in caregiver_schedules:
+            if settings.open_filter:
+                pass
+            if settings.scheduled_filter:
+                filtered_schedules.append(schedule)
+                scheduled_schedules.append(schedule)
+            if settings.in_progress_filter:
+                if schedule.is_active():
+                    filtered_schedules.append(schedule)
+                    in_progress_schedules.append(schedule)
+                    continue
+            if settings.completed_filter:
+                if schedule.is_complete():
+                    filtered_schedules.append(schedule)
+                    completed_schedules.append(schedule)
+                    continue
+            if settings.missed_filter:
+                if schedule.is_missed():
+                    filtered_schedules.append(schedule)
+                    missed_schedules.append(schedule)
+                    continue
+            if settings.late_filter:
+                if schedule.is_late():
+                    filtered_schedules.append(schedule)
+                    late_schedules.append(schedule)
+                    continue
+        return (filtered_schedules, scheduled_schedules, in_progress_schedules,
+                completed_schedules, missed_schedules, late_schedules)
 
     def get_caregiver_details(self, request):
         company = request.user.company
