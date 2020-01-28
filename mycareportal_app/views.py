@@ -890,15 +890,10 @@ class CaregiverScheduleDashboard(LoginRequiredMixin, View):
         context['completed_schedules'] = self.to_schedule_objects(completed_schedules)
         context['missed_schedules'] = self.to_schedule_objects(missed_schedules)
         context['late_schedules'] = self.to_schedule_objects(late_schedules)
+        context['caregiver_filter'] = schedule_dashboard_settings.caregiver_filter.all()
+        context['unselected_caregivers'] = list(set(caregivers)-set(schedule_dashboard_settings.caregiver_filter.all()))
         context['dashboard_settings_form'] = form
         return render(request, "production/caregiver_schedule_dashboard.html", context)
-
-    def to_schedule_objects(self, filtered_schedules):
-        schedules = []
-        for schedule in filtered_schedules:
-            schedule_object = schedule.to_json_schedule()
-            schedules.append(schedule_object)
-        return schedules
 
     def post(self, request):
         company = request.user.company
@@ -912,12 +907,25 @@ class CaregiverScheduleDashboard(LoginRequiredMixin, View):
             schedule_dashboard_settings.completed_filter = schedule_settings_form.cleaned_data['completed_filter']
             schedule_dashboard_settings.late_filter = schedule_settings_form.cleaned_data['late_filter']
             schedule_dashboard_settings.missed_filter = schedule_settings_form.cleaned_data['missed_filter']
+            caregiver_uid_filters = request.POST.getlist('caregiver_filter')
+            caregiver_filters = Caregiver.objects.filter(company=company, uid__in=caregiver_uid_filters)
+            schedule_dashboard_settings.caregiver_filter = caregiver_filters
+            #print(schedule_dashboard_settings.cleaned_data['caregiver_filter'])
+            #schedule_dashboard_settings.caregiver_filter = schedule_settings_form.cleaned_data['caregiver_filter']
             schedule_dashboard_settings.save()
             #send_mail('Test sendgrid', 'Test message', 'info@wecareportal.com', ['dhruv.ranjan@gmail.com'], fail_silently=False)
             messages.success(request, "Dashboard settings saved")
         else:
             messages.error(request, "Error saving dashboard settings")
         return redirect('caregiver_schedule_dashboard')
+
+
+    def to_schedule_objects(self, filtered_schedules):
+        schedules = []
+        for schedule in filtered_schedules:
+            schedule_object = schedule.to_json_schedule()
+            schedules.append(schedule_object)
+        return schedules
 
     def apply_settings_filters(self, caregiver_schedules, settings):
         filtered_schedules = []
@@ -926,7 +934,12 @@ class CaregiverScheduleDashboard(LoginRequiredMixin, View):
         completed_schedules = []
         missed_schedules = []
         late_schedules = []
+        caregiver_filter_active = False
+        if settings.caregiver_filter.all().count() > 0:
+            caregiver_filter_active = True
         for schedule in caregiver_schedules:
+            if caregiver_filter_active and not schedule.caregiver in settings.caregiver_filter.all():
+                continue
             if settings.open_filter:
                 pass
             if settings.scheduled_filter:
@@ -936,22 +949,18 @@ class CaregiverScheduleDashboard(LoginRequiredMixin, View):
                 if schedule.is_active():
                     filtered_schedules.append(schedule)
                     in_progress_schedules.append(schedule)
-                    continue
             if settings.completed_filter:
                 if schedule.is_complete():
                     filtered_schedules.append(schedule)
                     completed_schedules.append(schedule)
-                    continue
             if settings.missed_filter:
                 if schedule.is_missed():
                     filtered_schedules.append(schedule)
                     missed_schedules.append(schedule)
-                    continue
             if settings.late_filter:
                 if schedule.is_late():
                     filtered_schedules.append(schedule)
                     late_schedules.append(schedule)
-                    continue
         return (filtered_schedules, scheduled_schedules, in_progress_schedules,
                 completed_schedules, missed_schedules, late_schedules)
 

@@ -703,7 +703,6 @@ class CaregiverSchedule(models.Model):
                                 self.company, self.client)
         for task in daily_tasks:
             if not task.complete:
-                print(task)
                 return False
         return True
 

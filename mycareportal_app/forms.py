@@ -166,4 +166,4 @@ class CaregiverScheduleDashboardSettingsForm(forms.Form):
     completed_filter = forms.BooleanField(required=False)
     late_filter = forms.BooleanField(required=False)
     missed_filter = forms.BooleanField(required=False)
-    #caregiver_filter = forms.MultiValueField(Caregiver, blank=True)
+    #caregiver_filter = forms.MultiValueField(required=False)

@@ -91,8 +91,11 @@
                           <div class="row">
                             <label class="col-md-3 col-sm-3 col-xs-12">Caregiver<span class="required"></span> </label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              <select id="caregiver_dropdown" class="select2_single" style="width: 100%" tabindex="-1" name="caregiver_dropdown" multiple="multiple">
-                                {% for caregiver in caregivers %}
+                              <select id="caregiver_dropdown" name="caregiver_filter" class="select2_single" style="width: 100%" tabindex="-1" multiple="multiple">
+                                {% for caregiver in caregiver_filter %}
+                                <option selected value="{{caregiver.uid}}">{{caregiver.first_name}} {{caregiver.last_name}}</option>
+                                {% endfor %}
+                                {% for caregiver in unselected_caregivers %}
                                 <option value="{{caregiver.uid}}">{{caregiver.first_name}} {{caregiver.last_name}}</option>
                                 {% endfor %}
                               </select>
@@ -239,7 +242,7 @@
     <!-- /FullCalendar -->
 
     <script>
-    $(document).ready(function(){
+    /*$(document).ready(function(){
       $('#caregiver_dropdown').change(function(){
         var caregiver_uids = $(this).val();
         $.ajax({
@@ -279,7 +282,7 @@
           }
         });
       });
-    });
+    });*/
     </script>
 
     <!-- Select2 -->
