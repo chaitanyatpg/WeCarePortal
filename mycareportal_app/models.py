@@ -422,6 +422,30 @@ class TaskSchedule(models.Model):
     marked_off_timestamp = models.DateTimeField(null=True)
     marked_off_user = models.ForeignKey(User, related_name="marked_off_user", null=True)
 
+    def to_json(self):
+        json_data = {
+            'client': "{0} {1}".format(self.client.first_name, self.client.last_name),
+            'date': '{0}-{1}-{2}'.format(self.date.year, self.date.month,
+                                        self.date.day),
+            'task': self.activity_task,
+            'start_time': self.start_time,
+            'end_time': self.end_time,
+            'status': self.get_current_status()
+        }
+        return json_data
+
+    def get_current_status(self):
+        if self.pending:
+            return "PENDING"
+        if self.complete:
+            return "COMPLETE"
+        if self.cancelled:
+            return "CANCELLED"
+        if self.in_progress:
+            return "IN PROGRESS"
+        else:
+            return "PENDING"
+
     @staticmethod
     def get_todays_tasks(company, client):
         client_timezone = pytz.timezone(client.time_zone)
@@ -432,6 +456,14 @@ class TaskSchedule(models.Model):
                                 company=company,
                                 client=client,
                                 date=current_date)
+        return client_tasks
+
+    @staticmethod
+    def get_all_tasks_for_date(company, client, date):
+        client_tasks = TaskSchedule.objects.filter(
+                                company=company,
+                                client=client,
+                                date=date)
         return client_tasks
 
     def mark_off(self, user):

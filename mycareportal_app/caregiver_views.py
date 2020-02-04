@@ -977,3 +977,15 @@ def post_template_radio(request):
         entry_instance.save()
 
     return HttpResponse("Changed Value")
+
+@login_required
+def get_daily_tasks_with_schedule_id(request):
+    company = request.user.company
+    schedule_id = request.GET.get('schedule_id')
+    schedule_entry = CaregiverSchedule.objects.get(company=company,
+                                                id=schedule_id)
+    client = schedule_entry.client
+    date = schedule_entry.date
+    daily_tasks = TaskSchedule.get_all_tasks_for_date(company, client, date)
+    json_daily_tasks = [task.to_json() for task in daily_tasks]
+    return HttpResponse(json.dumps(json_daily_tasks), content_type="application/json")

@@ -100,8 +100,6 @@ class ViewDailyActivityReport(LoginRequiredMixin, View):
             start_date = self.kwargs['start_date']
         if 'end_date' in self.kwargs:
             end_date = self.kwargs['end_date']
-        print(start_date)
-        print(end_date)
         tasks = TaskSchedule.objects.filter(company=company, date__range=[start_date, end_date])
         context['tasks'] = self.create_task_objects(tasks, company)
         return render(request, "production/view_daily_tasks.html", context)
