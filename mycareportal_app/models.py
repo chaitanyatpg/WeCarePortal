@@ -6,6 +6,7 @@ import uuid
 import shortuuid
 import django.utils.timezone as timezone
 import datetime
+from datetime import timedelta
 import pytz
 # Create your models here.
 
@@ -681,6 +682,98 @@ class CaregiverSchedule(models.Model):
     end_time = models.TimeField()
     created = models.DateTimeField(auto_now_add=True)
 
+    @staticmethod
+    def create_open_schedule_json(company, caregiver, date):
+        existing_schedules_for_day = CaregiverSchedule.objects.filter(company=company,
+                                                                      caregiver=caregiver,
+                                                                      date=date).order_by('start_time')
+        day_start_time_str = '00:00:00'
+        day_start_time = datetime.datetime.strptime(day_start_time_str, '%H:%M:%S')
+
+        day_end_time_str = '23:59:59'
+        day_end_time = datetime.datetime.strptime(day_end_time_str, '%H:%M:%S')
+
+        company_timezone = pytz.timezone(company.time_zone)
+
+        open_schedule_objects = []
+
+        if not existing_schedules_for_day.exists():
+            schedule_object = {
+                "id" : "",
+                "uid" : "",
+                "caregiver_name" : "{0} {1}".format(caregiver.email_address,
+                                                    caregiver.last_name),
+                "client_name" : "",
+                'date': '{0}-{1}-{2}'.format(date.year, date.month, date.day),
+                'start_time': day_start_time.strftime("%I:%M %p"),
+                'end_time': day_end_time.strftime("%I:%M %p"),
+                "created" : ""
+            }
+            open_schedule_objects.append(schedule_object)
+            return open_schedule_objects
+
+        current_start = day_start_time.time()
+        # current_highest_time = day_end_time
+        current_end = day_end_time.time()
+
+        client_timezone = company_timezone
+        for schedule in existing_schedules_for_day:
+            client_timezone = pytz.timezone(schedule.client.time_zone)
+            current_end = datetime.datetime.combine(date, schedule.start_time).astimezone(client_timezone) - timedelta(minutes=1)
+
+            schedule_start_time = current_start.strftime("%I:%M %p")
+            schedule_end_time = current_end.strftime("%I:%M %p")
+            #schedule_start_time = current_start.time() + 1
+            #schedule_end_time = current_end.time() - 1
+            schedule_object = {
+                "id" : "",
+                "uid" : "",
+                "caregiver_name" : "{0} {1}".format(caregiver.email_address,
+                                                    caregiver.last_name),
+                "client_name" : "",
+                'date': '{0}-{1}-{2}'.format(date.year, date.month, date.day),
+                'start_time': schedule_start_time, #current_start.replace(minute=(current_start.minute+1)%60).strftime("%I:%M %p"),
+                'end_time': schedule_end_time, #current_end.replace(minute=(current_end.minute-1)%60).strftime("%I:%M %p"),
+                "created" : ""
+            }
+            open_schedule_objects.append(schedule_object)
+            current_start = (datetime.datetime.combine(date, schedule.end_time).astimezone(client_timezone) + timedelta(minutes=1))# schedule.end_time.replace(minute=(current_end.minute+1)%60)
+
+        current_end = datetime.datetime.combine(date, schedule.start_time) - timedelta(minutes=1)
+
+        schedule_start_time = current_start.strftime("%I:%M %p")
+        schedule_end_time = day_end_time.astimezone(company_timezone).strftime("%I:%M %p")
+        #schedule_start_time = current_start.time() + 1
+        #schedule_end_time = current_end.time() - 1
+        schedule_object = {
+            "id" : "",
+            "uid" : "",
+            "caregiver_name" : "{0} {1}".format(caregiver.email_address,
+                                                caregiver.last_name),
+            "client_name" : "",
+            'date': '{0}-{1}-{2}'.format(date.year, date.month, date.day),
+            'start_time': schedule_start_time, #current_start.replace(minute=(current_start.minute+1)%60).strftime("%I:%M %p"),
+            'end_time': schedule_end_time, #current_end.replace(minute=(current_end.minute-1)%60).strftime("%I:%M %p"),
+            "created" : ""
+        }
+        open_schedule_objects.append(schedule_object)
+
+        '''schedule_object = {
+            "id" : self.id,
+            "uid" : str(self.uid),
+            "caregiver_name" : "{0} {1}".format(self.caregiver.first_name,
+                                                self.caregiver.last_name),
+            "client_name" : "{0} {1}".format(self.client.first_name,
+                                            self.client.last_name),
+            'date': '{0}-{1}-{2}'.format(schedule_start_datetime.date().year,
+                schedule_start_datetime.date().month,
+                schedule_start_datetime.date().day),
+            'start_time': schedule_start_datetime.time().strftime("%I:%M %p"),
+            'end_time': schedule_end_datetime.time().strftime("%I:%M %p"),
+            "created" : str(self.created)
+        }'''
+        return open_schedule_objects
+
     def get_current_client_timestamp(self):
         client = self.client
         client_timezone = pytz.timezone(client.time_zone)
@@ -788,7 +881,7 @@ class CaregiverSchedule(models.Model):
         schedule_object = {
             "id" : self.id,
             "uid" : str(self.uid),
-            "caregiver_name" : "{0} {1}".format(self.caregiver.first_name,
+            "caregiver_name" : "{0} {1}".format(self.caregiver.email_address,
                                                 self.caregiver.last_name),
             "client_name" : "{0} {1}".format(self.client.first_name,
                                             self.client.last_name),

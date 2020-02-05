@@ -209,6 +209,7 @@
 
             schedules = [];
             scheduled_schedules = {{scheduled_schedules|safe}};
+            console.log(scheduled_schedules[scheduled_schedules.length-1])
             for(i=0;i < scheduled_schedules.length;i++){
               schedule = scheduled_schedules[i];
               schedule_data =
@@ -275,6 +276,21 @@
                   id: schedule.id
                 }
               schedule_data.color = "#f0ad4e";
+              schedules.push(schedule_data);
+            }
+
+            open_schedules = {{open_schedules|safe}};
+            console.log(open_schedules);
+            for(i=0;i < open_schedules.length;i++){
+              schedule = open_schedules[i];
+              schedule_data =
+                {
+                  title: schedule.caregiver_name,
+                  start: Date.parse(schedule.date + " " + schedule.start_time),
+                  end: Date.parse(schedule.date + " " + schedule.end_time),
+                  id: ""
+                }
+              schedule_data.color = "#4b6071";
               schedules.push(schedule_data);
             }
 

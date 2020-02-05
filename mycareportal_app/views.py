@@ -869,7 +869,9 @@ class CaregiverScheduleDashboard(LoginRequiredMixin, View):
         # 3. Filter caregiver_schedules from 1. using active filters from settings in 2.
         (filtered_schedules, scheduled_schedules,
         in_progress_schedules, completed_schedules,
-        missed_schedules, late_schedules) = self.apply_settings_filters(caregiver_schedules, schedule_dashboard_settings)
+        missed_schedules, late_schedules, open_schedules) = self.apply_settings_filters(caregiver_schedules,
+                                                                                        schedule_dashboard_settings,
+                                                                                        self.request.user.company)
         caregivers = Caregiver.objects.filter(company=company)
         form = CaregiverScheduleDashboardSettingsForm(initial=
             {
@@ -890,6 +892,8 @@ class CaregiverScheduleDashboard(LoginRequiredMixin, View):
         context['completed_schedules'] = self.to_schedule_objects(completed_schedules)
         context['missed_schedules'] = self.to_schedule_objects(missed_schedules)
         context['late_schedules'] = self.to_schedule_objects(late_schedules)
+        context['open_schedules'] = open_schedules
+        print(open_schedules)
         context['caregiver_filter'] = schedule_dashboard_settings.caregiver_filter.all()
         context['unselected_caregivers'] = list(set(caregivers)-set(schedule_dashboard_settings.caregiver_filter.all()))
         context['dashboard_settings_form'] = form
@@ -927,21 +931,20 @@ class CaregiverScheduleDashboard(LoginRequiredMixin, View):
             schedules.append(schedule_object)
         return schedules
 
-    def apply_settings_filters(self, caregiver_schedules, settings):
+    def apply_settings_filters(self, caregiver_schedules, settings, company):
         filtered_schedules = []
         scheduled_schedules = []
         in_progress_schedules = []
         completed_schedules = []
         missed_schedules = []
         late_schedules = []
+        open_schedules = []
         caregiver_filter_active = False
         if settings.caregiver_filter.all().count() > 0:
             caregiver_filter_active = True
         for schedule in caregiver_schedules:
             if caregiver_filter_active and not schedule.caregiver in settings.caregiver_filter.all():
                 continue
-            if settings.open_filter:
-                pass
             if settings.scheduled_filter:
                 filtered_schedules.append(schedule)
                 scheduled_schedules.append(schedule)
@@ -961,8 +964,21 @@ class CaregiverScheduleDashboard(LoginRequiredMixin, View):
                 if schedule.is_late():
                     filtered_schedules.append(schedule)
                     late_schedules.append(schedule)
+        if settings.open_filter:
+            company_timezone = pytz.timezone(company.time_zone)
+            current_date = (timezone.now().astimezone(company_timezone)).date()
+            if caregiver_filter_active:
+                all_caregivers = Caregiver.objects.filter(company=companyy,
+                    id__in=[x.id for x in settings.caregiver_filter.all()])
+            else:
+                all_caregivers = Caregiver.objects.filter(company=company)
+            for caregiver in all_caregivers:
+                new_open_schedules = CaregiverSchedule.create_open_schedule_json(company,
+                                        caregiver, current_date)
+                open_schedules.extend(new_open_schedules)
+                #filtered_schedules.extend(new_open_schedules)
         return (filtered_schedules, scheduled_schedules, in_progress_schedules,
-                completed_schedules, missed_schedules, late_schedules)
+                completed_schedules, missed_schedules, late_schedules, open_schedules)
 
     def get_caregiver_details(self, request):
         company = request.user.company
