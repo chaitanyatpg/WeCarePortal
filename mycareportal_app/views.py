@@ -893,7 +893,6 @@ class CaregiverScheduleDashboard(LoginRequiredMixin, View):
         context['missed_schedules'] = self.to_schedule_objects(missed_schedules)
         context['late_schedules'] = self.to_schedule_objects(late_schedules)
         context['open_schedules'] = open_schedules
-        print(open_schedules)
         context['caregiver_filter'] = schedule_dashboard_settings.caregiver_filter.all()
         context['unselected_caregivers'] = list(set(caregivers)-set(schedule_dashboard_settings.caregiver_filter.all()))
         context['dashboard_settings_form'] = form
@@ -968,7 +967,7 @@ class CaregiverScheduleDashboard(LoginRequiredMixin, View):
             company_timezone = pytz.timezone(company.time_zone)
             current_date = (timezone.now().astimezone(company_timezone)).date()
             if caregiver_filter_active:
-                all_caregivers = Caregiver.objects.filter(company=companyy,
+                all_caregivers = Caregiver.objects.filter(company=company,
                     id__in=[x.id for x in settings.caregiver_filter.all()])
             else:
                 all_caregivers = Caregiver.objects.filter(company=company)
