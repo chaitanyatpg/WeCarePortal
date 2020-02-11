@@ -861,8 +861,22 @@ class CaregiverScheduleDashboard(LoginRequiredMixin, View):
     def get(self, request):
         company = request.user.company
         context = {}
-        # 1. Get all caregiver schedules for current company
-        caregiver_schedules = CaregiverSchedule.objects.filter(company=company)
+        # 1. Get all caregiver schedules for current company for the current week
+        current_date = datetime.date.today()
+        calendar_dates = []
+
+        calendar_dates.append(current_date - datetime.timedelta(1))
+        calendar_dates.append(current_date - datetime.timedelta(2))
+        calendar_dates.append(current_date - datetime.timedelta(3))
+
+        calendar_dates.append(current_date)
+
+        calendar_dates.append(current_date + datetime.timedelta(1))
+        calendar_dates.append(current_date + datetime.timedelta(2))
+        calendar_dates.append(current_date + datetime.timedelta(3))
+
+        caregiver_schedules = CaregiverSchedule.objects.filter(company=company,
+                                                               date__in=calendar_dates)
         # 2. Get caregiver dashboard schedule object for company/user,
         # or create one if it currently does not exist
         schedule_dashboard_settings = CaregiverScheduleDashboardSettings.get_or_create(company, request.user)
