@@ -814,8 +814,8 @@ class HomeDashboard(LoginRequiredMixin, View):
         current_company = request.user.company
         all_clients = Client.objects.filter(company=current_company).order_by('last_name')
         home_mod_categories = AssessmentCategories.objects.all()
-        existing_home_mod_tasks = HomeModificationTask.objects.filter(company=current_company).order_by('-created')
-        existing_move_manage_tasks = MoveManageTask.objects.filter(company=current_company).order_by('-created')
+        existing_home_mod_tasks = HomeModificationTask.get_unarchived_tasks(current_company)
+        existing_move_manage_tasks = MoveManageTask.get_unarchived_tasks(current_company)
         tzname = current_company.time_zone
         timezone.activate(pytz.timezone(tzname))
 

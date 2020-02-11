@@ -457,7 +457,9 @@ class UpdateMoveProjects(LoginRequiredMixin, View):
         current_company = request.user.company
         move_manager = MoveManager.objects.get(company=current_company,
                                                         user=request.user)
-        projects = MoveManagementProject.objects.filter(company=current_company, move_manager=move_manager)
+        projects = MoveManagementProject.objects.filter(company=current_company,
+                                                        move_manager=move_manager,
+                                                        move_manage_task__archived=False)
         context['projects'] = projects
         return render(request, "production/update_move_projects.html", context)
 
@@ -542,6 +544,18 @@ class DeleteMoveTask(LoginRequiredMixin, View):
         task = MoveManageTask.objects.get(company=current_company, uid = task_id)
         task.delete()
         messages.success(request, "Deleted move task")
+        return redirect('home_dashboard')
+
+class ArchiveProject(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        company = request.user.company
+        task_id = self.kwargs['task_id']
+        task = MoveManageTask.objects.get(company=company, uid=task_id)
+        task.archived = True
+        task.save()
+        messages.success(request, "Closed Move Project")
         return redirect('home_dashboard')
 
 @login_required

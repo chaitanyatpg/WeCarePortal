@@ -998,6 +998,13 @@ class HomeModificationTask(models.Model):
 
     #bid = models.ForeignKey(HomeModTaskBid, null=true)
     chosen_bid = models.OneToOneField('HomeModTaskBid', null=True)
+    archived = models.BooleanField(default=False)
+
+    @staticmethod
+    def get_unarchived_tasks(company):
+        tasks = HomeModificationTask.objects.filter(company=company,
+                                                    archived=False).order_by('-created')
+        return tasks
 
 class HomeModTaskBid(models.Model):
 
@@ -1139,6 +1146,13 @@ class MoveManageTask(models.Model):
 
     #bid = models.ForeignKey(HomeModTaskBid, null=true)
     chosen_bid = models.OneToOneField('MoveManageTaskBid', null=True)
+    archived = models.BooleanField(default=False)
+
+    @staticmethod
+    def get_unarchived_tasks(company):
+        tasks = MoveManageTask.objects.filter(company=company,
+                                              archived=False).order_by('-created')
+        return tasks
 
 def get_move_inventory_upload_path(instance, filename):
     return "company_{0}/move_inventory/client_{1}/move_task_{2}/inventory/{3}".format(instance.company.company_id,instance.move_manage_task.client.id,instance.move_manage_task.id,filename)

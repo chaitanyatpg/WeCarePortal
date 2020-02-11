@@ -298,7 +298,7 @@ class UpdateProjects(LoginRequiredMixin, View):
         current_company = request.user.company
         home_mod_user = HomeModificationUser.objects.get(company=current_company,
                                                         user=request.user)
-        projects = HomeModProject.objects.filter(company=current_company, contractor=home_mod_user)
+        projects = HomeModProject.objects.filter(company=current_company, contractor=home_mod_user, home_mod_task__archived=False)
         context['projects'] = projects
         return render(request, "production/update_projects.html", context)
 
@@ -374,6 +374,29 @@ class ViewProjectDisabled(LoginRequiredMixin, View):
         status_list = HomeModProjectStatusLog.objects.filter(company=current_company, home_mod_project=home_mod_project).order_by('created')
 
         return (progress_list, budget_list, amount_spent_list, duration_list, status_list)
+
+class DeleteHomeModTask(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        current_company = request.user.company
+        task_id = self.kwargs['task_id']
+        task = HomeModificationTask.objects.get(company=current_company, uid = task_id)
+        task.delete()
+        messages.success(request, "Deleted Home Modification task")
+        return redirect('home_dashboard')
+
+class ArchiveProject(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        company = request.user.company
+        task_id = self.kwargs['task_id']
+        task = HomeModificationTask.objects.get(company=company, uid=task_id)
+        task.archived = True
+        task.save()
+        messages.success(request, "Closed Home Modification Project")
+        return redirect('home_dashboard')
 
 @login_required
 def get_home_mod_with_email(request):

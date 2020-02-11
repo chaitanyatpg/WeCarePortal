@@ -194,6 +194,9 @@ urlpatterns = [
     url(r'^client/end_of_life', client_views.ClientEndOfLifeView.as_view(), name='client_end_of_life'),
     url(r'^client/close_end_of_life/(?P<eol_id>[0-9a-f-]+)/$', client_views.close_end_of_life, name='close_end_of_life'),
     url(r'^family/dashboard_client_signoff_all/(?P<client_uid>[0-9a-f-]+)/$', family_views.client_signoff_all, name='client_signoff_all'),
-    url(r'^get_daily_tasks_with_schedule_id', caregiver_views.get_daily_tasks_with_schedule_id, name='get_daily_tasks_with_schedule_id')
+    url(r'^get_daily_tasks_with_schedule_id', caregiver_views.get_daily_tasks_with_schedule_id, name='get_daily_tasks_with_schedule_id'),
+    url(r'^move_management/archive_project/(?P<task_id>[0-9a-f-]+)/$', move_manage_views.ArchiveProject.as_view(), name='archive_move_project'),
+    url(r'^home_modification/archive_project/(?P<task_id>[0-9a-f-]+)/$', home_mod_views.ArchiveProject.as_view(), name='archive_home_mod_project'),
+    url(r'^home_modification/delete_home_mod_task/(?P<task_id>[0-9a-f-]+)/$', home_mod_views.DeleteHomeModTask.as_view(), name="delete_home_mod_task"),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

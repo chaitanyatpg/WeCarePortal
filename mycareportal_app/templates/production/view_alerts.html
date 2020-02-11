@@ -216,7 +216,10 @@
                         <form action="" style="float: left;">
                           <button type="submit" class="btn btn-warning" disabled>View Bids</button>
                         </form>
-                        <a href="{% url 'view_move_project_disabled' task_id=task.uid %}" class="btn btn-success"> View Project</a>
+                        <a href="{% url 'view_move_project_disabled' task_id=task.uid %}" class="btn btn-success" style="float: left;"> View Project</a>
+                        <form action="{% url 'archive_move_project' task_id=task.uid %}">
+                          <button type="submit" class="btn btn-danger">Close Project</button>
+                        </form>
                       </div>
                       {% endif %}
                     </div>
@@ -258,7 +261,9 @@
                           <form action="{% url 'view_bids' task_id=task.uid %}" style="float: left;">
                             <button type="submit" class="btn btn-warning">View Bids</button>
                           </form>
-                          <button type="submit" class="btn btn-danger">Delete</button>
+                          <form action="{% url 'delete_home_mod_task' task_id=task.uid %}">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                          </form>
                         </div>
                       {% else %}
                       <div class="form-group">
@@ -271,8 +276,10 @@
                         <form action="" style="float: left;">
                           <button type="submit" class="btn btn-warning" disabled>View Bids</button>
                         </form>
-                        <button type="submit" class="btn btn-danger" disabled>Delete</button>
-                        <a href="{% url 'view_project_disabled' task_id=task.uid %}" class="btn btn-success"> View Project</a>
+                        <a href="{% url 'view_project_disabled' task_id=task.uid %}" class="btn btn-success" style="float: left;"> View Project</a>
+                        <form action="{% url 'archive_home_mod_project' task_id=task.uid %}">
+                          <button type="submit" class="btn btn-danger">Close Project</button>
+                        </form>
                       </div>
                       {% endif %}
                     </div>
