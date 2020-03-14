@@ -1373,3 +1373,8 @@ class CaregiverScheduleDashboardSettings(models.Model):
                                                       user=user)
             csds.save()
             return csds
+
+
+class ClientFamilyContacts(models.Model):
+    client_id = models.ForeignKey(Client)
+    familycontact_id  = models.ForeignKey(FamilyContact)
