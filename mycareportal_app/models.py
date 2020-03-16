@@ -1375,6 +1375,3 @@ class CaregiverScheduleDashboardSettings(models.Model):
             return csds
 
 
-class ClientFamilyContacts(models.Model):
-    client_id = models.ForeignKey(Client)
-    familycontact_id  = models.ForeignKey(FamilyContact)
