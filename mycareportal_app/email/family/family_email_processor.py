@@ -24,9 +24,9 @@ class FamilyEmailProcessor(EmailProcessor):
         )
         email.send()
 
-    def send_generic_legal_email_family(self, familycontact, subject, content, user, company):
+    def send_family_email(self, family_contact, subject, content, user, company):
         message = render_to_string('send_family_email.html', {
-                'familycontact': familycontact,
+                'familycontact': family_contact,
                 'content': content,
                 'user': user,
                 'company': company
@@ -35,7 +35,8 @@ class FamilyEmailProcessor(EmailProcessor):
         #to_list.append("mkumar@wecareportal.com")
         #to_list.append("dranjan@wecareportal.com")
         #to_list.append("dhruv.ranjan@gmail.com")
-        to_list.append(company.attorney_email)
+        #to_list.append(company.attorney_email)
+        to_list.append(family_contact.email_address)
         email = EmailMultiAlternatives(
                     subject, message, self.sender_email, to=to_list
         )

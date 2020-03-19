@@ -20,7 +20,7 @@ import django.utils.timezone as timezone
 from django.contrib import messages
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
-from mycareportal_app.client_forms import * 
+from mycareportal_app.client_forms import *
 #  =======================
 from mycareportal_app.common import error_messaging as error_messaging
 from django.contrib.sites.shortcuts import get_current_site
@@ -74,7 +74,7 @@ class FamilyDashboard(LoginRequiredMixin, View):
         #Get Update Form
         context["update_task_form"] = UpdateTaskForm()
         return render(request, 'production/family_dashboard.html', context)
-    
+
     def post(self, request):
         context = {}
         update_task_form = UpdateTaskForm(request.POST, request.FILES)
@@ -96,7 +96,7 @@ class FamilyDashboard(LoginRequiredMixin, View):
                     task.mark_off(request.user)
                 messages.success(request, "Edited Task: {0}".format(task.activity_task))
         return redirect('family_dashboard')
-    
+
     def validate_attachments(self, request, attachments):
         for attachment in attachments:
             if attachment._size > self.MAX_FILE_SIZE:
@@ -180,7 +180,7 @@ def client_signoff_all(request, client_uid):
 
 # new family member ==============================
 class ChooseClientForLegalMail(LoginRequiredMixin, View):
-    
+
     def get(self, request):
         context = {}
         current_company = request.user.company
@@ -226,7 +226,7 @@ class LegalEmailFamily(LoginRequiredMixin, View):
 
             current_site = get_current_site(request)
             email_manager = FamilyEmailProcessor()
-            email_manager.send_generic_legal_email_family(
+            email_manager.send_family_email(
                 familycontact, subject, content, request.user, current_company
             )
             messages.success(request, "Successfully sent email to legal team. You will be contacted shortly with further details.")
@@ -253,8 +253,5 @@ def get_family_with_email(request):
         context["family_data"] = family_data
         return HttpResponse(json.dumps(family_data), content_type="application/json")
 
- 
+
 # new family member ==============================
-
-
-
