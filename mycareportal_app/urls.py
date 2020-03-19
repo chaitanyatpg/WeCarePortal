@@ -81,6 +81,9 @@ urlpatterns = [
     url(r'^delete_recurring_schedule_with_id', caregiver_views.delete_recurring_schedule_with_id,name='delete_recurring_schedule_with_id'),
     url(r'^get_assigned_clients_with_caregiver_with_id', caregiver_views.get_assigned_clients_with_caregiver_with_id,name='get_assigned_clients_with_caregiver_with_id'),
     url(r'^get_client_with_email', client_views.get_client_with_email,name='get_client_with_email'),
+    # new development for family
+    url(r'^get_family_with_email', family_views.get_family_with_email,name='get_family_with_email'),
+    # new development for family
     url(r'^get_all_client_with_email', client_views.get_all_client_with_email,name='get_all_client_with_email'),
     url(r'^get_sub_categories', client_views.get_sub_categories,name='get_sub_categories'),
     url(r'^get_tasks_from_master', client_views.get_tasks_from_master,name='get_tasks_from_master'),
@@ -177,6 +180,10 @@ urlpatterns = [
     url(r'^reporting/daily_activity_report', reporting_views.ViewDailyActivityReport.as_view(), name='daily_activity_report'),
     url(r'^legal/choose_client_for_legal', client_views.ChooseClientForLegal.as_view(), name='choose_client_for_legal'),
     url(r'^legal/legal_email', client_views.LegalEmail.as_view(), name='legal_email'),
+    # # new development for family
+    url(r'^family/choose_client_for_legal_mail', family_views.ChooseClientForLegalMail.as_view(), name='choose_client_for_legal_mail'), 
+    url(r'^family/legal_email_family', family_views.LegalEmailFamily.as_view(), name='legal_email_family'),
+    # # new development for family
     url(r'^caregiver_schedule_dashboard', views.CaregiverScheduleDashboard.as_view(), name='caregiver_schedule_dashboard'),
     url(r'^get_caregiver_schedules_with_uids', views.get_caregiver_schedules_with_uids, name='get_caregiver_schedules_with_uids'),
     url(r'^client_task_dashboard', views.ClientTaskDashboard.as_view(), name='client_task_dashboard'),

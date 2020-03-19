@@ -117,7 +117,7 @@
                                     <ul>
                                     {% for attachment in task_attachments %}
                                         <li>
-                                          <a href="{{attachment.attachment.url}}"><i class="fa fa-paperclip"></i>{{attachment.attachment|trunc_path}}</a>
+                                          <a href="{{attachment.attachment.url}}"  target="_blank"><i class="fa fa-paperclip"></i>{{attachment.attachment|trunc_path}}</a>
                                           <span>Uploaded on {{attachment.created}}</span>
                                           <span>by {{attachment.user.first_name|addstr_space:attachment.user.last_name}}</span>
                                         </li>

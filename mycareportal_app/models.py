@@ -1373,3 +1373,5 @@ class CaregiverScheduleDashboardSettings(models.Model):
                                                       user=user)
             csds.save()
             return csds
+
+

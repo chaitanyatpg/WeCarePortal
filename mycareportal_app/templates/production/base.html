@@ -171,6 +171,11 @@
                     {% if module_dict.FAMILYPORTAL.FAMILYDASHBOARD %}
                       <li><a href={% url 'family_dashboard' %}>Family Dashboard</a></li>
                     {% endif %}
+
+                    {% if module_dict.FAMILYPORTAL.LEGAL_EMAIL %}
+                    <li><a href={% url 'choose_client_for_legal_mail' %}>Send Email</a></li>
+                    {% endif %}
+
                   </ul>
                 </li>
                 <li><a><i class="fa fa-table"></i>Provider Portal<span class="fa fa-chevron-down"></span></a>

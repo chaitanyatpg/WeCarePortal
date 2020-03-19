@@ -89,6 +89,7 @@ def add_roles_to_context(request):
             #module_dict['CAREGIVERPORTAL']['CALENDAR']=True
         if 'FAMILYUSER' in user_roles:
             module_dict['FAMILYPORTAL']['FAMILYDASHBOARD']=True
+            module_dict['FAMILYPORTAL']['LEGAL_EMAIL']=True
         if 'HOMEMODUSER' in user_roles:
             module_dict['HOMEMODIFICATIONPORTAL']['CONTRACTORDASHBOARD']=True
             module_dict['HOMEMODIFICATIONPORTAL']['VIEWALLPROJECTS']=True
