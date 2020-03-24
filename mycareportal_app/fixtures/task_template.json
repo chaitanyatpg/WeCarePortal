@@ -16,5 +16,14 @@
 			"description": "Used to report factors that could result in a fall  ",
 			"template_code": "FALL001"
 		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplate",
+		"pk": 3,
+		"fields": {
+			"name": "Daily Wellness Checklist",
+			"description": "Used to report wellness",
+			"template_code": "DWC001"
+		}
 	}
 ]

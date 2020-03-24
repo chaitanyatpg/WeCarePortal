@@ -1270,5 +1270,41 @@
 			"task_template_entry_code": "FALLPSE10",
 			"entry_type": "RADIO"
 		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 107,
+		"fields": {
+			"name": "Body Temperature",
+			"description": "",
+			"task_template_code": "DWC001",
+			"task_template_subcategory_code": "DWCCW001",
+			"task_template_entry_code": "DWCCWE001",
+			"entry_type": "TEXT"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 108,
+		"fields": {
+			"name": "Do you have a Cold or Cough?",
+			"description": "",
+			"task_template_code": "DWC001",
+			"task_template_subcategory_code": "DWCCW001",
+			"task_template_entry_code": "DWCCWE002",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 109,
+		"fields": {
+			"name": "Do you have any breathing issues?",
+			"description": "",
+			"task_template_code": "DWC001",
+			"task_template_subcategory_code": "DWCCW001",
+			"task_template_entry_code": "DWCCWE003",
+			"entry_type": "RADIO"
+		}
 	}
 ]
