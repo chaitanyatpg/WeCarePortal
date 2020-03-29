@@ -318,12 +318,13 @@ def set_user_lat_long_session(request):
         return HttpResponse("Set Location")
 
 def save_caregiver_location(request):
-    user_location = UserLocation(company = request.user.company,
-                                 user = request.user,
-                                 user_long = request.session["user_long"],
-                                 user_lat = request.session["user_lat"],
-                                 created = datetime.datetime.now())
-    user_location.save()
+    if "user_long" in request.session and "user_lat" in request.session["user_lat"]:
+        user_location = UserLocation(company = request.user.company,
+                                     user = request.user,
+                                     user_long = request.session["user_long"],
+                                     user_lat = request.session["user_lat"],
+                                     created = datetime.datetime.now())
+        user_location.save()
 
 class ForgotPassword(View):
 
