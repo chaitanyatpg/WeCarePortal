@@ -55,6 +55,7 @@ def home(request):
     context = {}
     current_company = request.user.company
     user = request.user
+    save_caregiver_location(request)
     user_roles = UserRoles.objects.filter(company=current_company, user=user)
     user_roles = [x.role for x in user_roles]
     if current_company.is_on_free_trial:
@@ -85,6 +86,7 @@ def home(request):
             else:
                 messages.error(request, "Tablet is not registered. Please register the tablet to a client.")
                 return redirect('login')
+
         return redirect('caregiver_dashboard')
     elif "FAMILYUSER" in user_roles:
         return redirect('family_dashboard')
@@ -118,6 +120,7 @@ def caregiver_logout_view(request):
     current_company = request.user.company
     user = request.user
     return redirect('logout')
+
 
 def register(request):
     context = {}
@@ -302,6 +305,25 @@ def reset_password(request):
             error_messaging.render_error_messages(request, form_errors)
             return redirect("pwd_activate", uidb64=uidb64, token=token)
         return redirect("login")
+
+
+#Capturing user Latitude and longitude
+
+def set_user_lat_long_session(request):
+    if request.method == 'GET':
+        user_lat = request.GET.get('user_lat')
+        user_long = request.GET.get('user_long')
+        request.session["user_lat"] = user_lat
+        request.session["user_long"] = user_long
+        return HttpResponse("Set Location")
+
+def save_caregiver_location(request):
+    user_location = UserLocation(company = request.user.company,
+                                 user = request.user,
+                                 user_long = request.session["user_long"],
+                                 user_lat = request.session["user_lat"],
+                                 created = datetime.datetime.now())
+    user_location.save()
 
 class ForgotPassword(View):
 
@@ -1385,3 +1407,25 @@ def get_late_caregivers(company, caregiver_schedule, active_caregivers, caregive
             if clock_in_date == current_date and current_time > late_time:
                 late_caregivers.append(schedule.caregiver)
     return (late_caregivers, not_clocked_out_caregivers)
+
+# This class has been written for fetching the detail locaton of the care giver
+# This will be visible only to the administrator
+#
+class ViewCareGiverLocationLogs(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {}
+        loc_caregiver_map = []
+        company = request.user.company
+        locationresults = UserLocation.objects.filter(company = company)
+        if locationresults is not None:
+            for result in locationresults:
+                users = User.objects.filter(id=result.user_id)
+                loc_caregiver_map.append({
+                    'caregiver_name': users[0].first_name +' '+users[0].last_name,
+                    'caregiver_location': 'https://www.google.com/maps/?q='+result.user_lat+','+result.user_long,
+                    'date_time': result.created
+                })
+        context['loc_caregiver_map'] = loc_caregiver_map
+
+        return render(request, "production/caregiver_location_map.html", context)
