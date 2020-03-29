@@ -86,7 +86,7 @@ def home(request):
             else:
                 messages.error(request, "Tablet is not registered. Please register the tablet to a client.")
                 return redirect('login')
-                
+
         return redirect('caregiver_dashboard')
     elif "FAMILYUSER" in user_roles:
         return redirect('family_dashboard')
@@ -1410,9 +1410,9 @@ def get_late_caregivers(company, caregiver_schedule, active_caregivers, caregive
 
 # This class has been written for fetching the detail locaton of the care giver
 # This will be visible only to the administrator
-# 
+#
 class ViewCareGiverLocationLogs(LoginRequiredMixin, View):
-        
+
     def get(self, request):
         context = {}
         loc_caregiver_map = []
@@ -1427,5 +1427,5 @@ class ViewCareGiverLocationLogs(LoginRequiredMixin, View):
                     'date_time': result.created
                 })
         context['loc_caregiver_map'] = loc_caregiver_map
-        
+
         return render(request, "production/caregiver_location_map.html", context)
