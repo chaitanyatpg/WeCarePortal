@@ -318,7 +318,7 @@ def set_user_lat_long_session(request):
         return HttpResponse("Set Location")
 
 def save_caregiver_location(request):
-    if "user_long" in request.session and "user_lat" in request.session["user_lat"]:
+    if request.session.get("user_long") and request.session.get("user_lat"):
         user_location = UserLocation(company = request.user.company,
                                      user = request.user,
                                      user_long = request.session["user_long"],
