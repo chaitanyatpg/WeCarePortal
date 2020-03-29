@@ -120,6 +120,17 @@ class UserRoles(models.Model):
     role = models.CharField(max_length=50,choices=ROLE_CHOICES)
     created = models.DateTimeField(auto_now_add=True)
 
+# This model has been created to store the location i.e lat and long
+#  of the user whenever they made login.
+
+class UserLocation(models.Model):
+    company = models.ForeignKey(Company)
+    user = models.ForeignKey(User)
+    #email settings
+    user_lang = models.CharField(max_length = 200)
+    user_lat = models.CharField(max_length = 200)
+    created = models.DateTimeField(auto_now_add = True)
+    
 class CareManager(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)

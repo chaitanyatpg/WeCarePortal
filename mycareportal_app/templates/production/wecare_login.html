@@ -30,7 +30,7 @@
       <a class="hiddenanchor" id="signin"></a>
       <img src="{% static 'pictures/wecare_logo.png' %}" height="100" width="100" style="display: block; margin-left: auto; margin-right: auto;"/>
       <div class="login_wrapper">
-
+        
         <div class="login_form">
           <section class="login_content">
             <form method="post" action="{% url 'login' %}">
@@ -153,7 +153,37 @@
       }
     });
     </script>
-    <!-- end -->
+    <script type="text/javascript">
+      // function getLocationConstant()
+      // {
+      $(document).ready(function(){
+          if(navigator.geolocation)
+          {
+            navigator.geolocation.getCurrentPosition(onGeoSuccess,onGeoError);
+          } else {
+            console.log("No GPS support");
+          }
+      });
+      function onGeoSuccess(event)
+      {
+          console.log(event.coords.latitude+", "+event.coords.longitude);
+          $.ajax({
+          type: "GET",
+          url: '{% url "set_user_lat_long_session" %}',
+          data: { user_lat: event.coords.latitude, user_long: event.coords.longitude},
+          contentType: "application/json",
+          success: function(out_msg){
+          },
+          failure: function(out_msg){
+          }
+        });
+      }
+      function onGeoError(event)
+      {
+        console.log("Error code " + event.code + ". " + event.message);
+      }
+      </script>
+  <!-- end -->
 
 
   </body>
