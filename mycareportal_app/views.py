@@ -55,6 +55,7 @@ def home(request):
     context = {}
     current_company = request.user.company
     user = request.user
+    save_caregiver_location(request)
     user_roles = UserRoles.objects.filter(company=current_company, user=user)
     user_roles = [x.role for x in user_roles]
     if current_company.is_on_free_trial:
@@ -85,7 +86,7 @@ def home(request):
             else:
                 messages.error(request, "Tablet is not registered. Please register the tablet to a client.")
                 return redirect('login')
-        save_caregiver_location(request)        
+                
         return redirect('caregiver_dashboard')
     elif "FAMILYUSER" in user_roles:
         return redirect('family_dashboard')
@@ -1417,13 +1418,14 @@ class ViewCareGiverLocationLogs(LoginRequiredMixin, View):
         loc_caregiver_map = []
         company = request.user.company
         locationresults = UserLocation.objects.filter(company = company)
-        for result in locationresults:
-            caregivers = Caregiver.objects.filter(user=result.user_id)
-            loc_caregiver_map.append({
-                'caregiver_name': caregivers[0].first_name +' '+caregivers[0].last_name,
-                'caregiver_location': 'https://www.google.com/maps/?q='+result.user_lat+','+result.user_long,
-                'date_time': result.created
-            })
+        if locationresults is not None:
+            for result in locationresults:
+                users = User.objects.filter(id=result.user_id)
+                loc_caregiver_map.append({
+                    'caregiver_name': users[0].first_name +' '+users[0].last_name,
+                    'caregiver_location': 'https://www.google.com/maps/?q='+result.user_lat+','+result.user_long,
+                    'date_time': result.created
+                })
         context['loc_caregiver_map'] = loc_caregiver_map
         
         return render(request, "production/caregiver_location_map.html", context)
