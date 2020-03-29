@@ -126,8 +126,7 @@ class UserRoles(models.Model):
 class UserLocation(models.Model):
     company = models.ForeignKey(Company)
     user = models.ForeignKey(User)
-    #email settings
-    user_lang = models.CharField(max_length = 200)
+    user_long = models.CharField(max_length = 200)
     user_lat = models.CharField(max_length = 200)
     created = models.DateTimeField(auto_now_add = True)
     

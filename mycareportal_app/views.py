@@ -319,7 +319,7 @@ def set_user_lat_long_session(request):
 def save_caregiver_location(request):
     user_location = UserLocation(company = request.user.company,
                                  user = request.user,
-                                 user_lang = request.session["user_long"],
+                                 user_long = request.session["user_long"],
                                  user_lat = request.session["user_lat"],
                                  created = datetime.datetime.now())
     user_location.save()
@@ -1421,7 +1421,7 @@ class ViewCareGiverLocationLogs(LoginRequiredMixin, View):
             caregivers = Caregiver.objects.filter(user=result.user_id)
             loc_caregiver_map.append({
                 'caregiver_name': caregivers[0].first_name +' '+caregivers[0].last_name,
-                'caregiver_location': 'https://www.google.com/maps/?q='+result.user_lat+','+result.user_lang,
+                'caregiver_location': 'https://www.google.com/maps/?q='+result.user_lat+','+result.user_long,
                 'date_time': result.created
             })
         context['loc_caregiver_map'] = loc_caregiver_map
