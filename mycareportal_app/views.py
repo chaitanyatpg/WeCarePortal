@@ -1418,14 +1418,15 @@ class ViewCareGiverLocationLogs(LoginRequiredMixin, View):
         context = {}
         loc_caregiver_map = []
         company = request.user.company
-        locationresults = UserLocation.objects.filter(company = company)
+        locationresults = UserLocation.objects.filter(company=company)
+        company_timezone = pytz.timezone(company.time_zone)
         if locationresults is not None:
             for result in locationresults:
                 users = User.objects.filter(id=result.user_id)
                 loc_caregiver_map.append({
                     'caregiver_name': users[0].first_name +' '+users[0].last_name,
                     'caregiver_location': 'https://www.google.com/maps/?q='+result.user_lat+','+result.user_long,
-                    'date_time': result.created
+                    'date_time': result.created.astimezone(company_timezone).replace(tzinfo=None)
                 })
         context['loc_caregiver_map'] = loc_caregiver_map
 
