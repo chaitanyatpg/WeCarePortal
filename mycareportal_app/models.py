@@ -129,7 +129,7 @@ class UserLocation(models.Model):
     user_long = models.CharField(max_length = 200)
     user_lat = models.CharField(max_length = 200)
     created = models.DateTimeField(auto_now_add = True)
-    
+
 class CareManager(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -697,11 +697,14 @@ class CaregiverSchedule(models.Model):
         existing_schedules_for_day = CaregiverSchedule.objects.filter(company=company,
                                                                       caregiver=caregiver,
                                                                       date=date).order_by('start_time')
-        day_start_time_str = '00:00:00'
-        day_start_time = datetime.datetime.strptime(day_start_time_str, '%H:%M:%S')
+        #day_start_time_str = '00:00:00'
+        #day_start_time = datetime.datetime.strptime(day_start_time_str, '%H:%M:%S')
 
-        day_end_time_str = '23:59:59'
-        day_end_time = datetime.datetime.strptime(day_end_time_str, '%H:%M:%S')
+        #day_end_time_str = '23:59:59'
+        #day_end_time = datetime.datetime.strptime(day_end_time_str, '%H:%M:%S')
+
+        day_start_time = datetime.datetime.now().replace(hour=0, minute=0, second=0)
+        day_end_time = datetime.datetime.now().replace(hour=23, minute=59, second=59)
 
         company_timezone = pytz.timezone(company.time_zone)
 
@@ -725,7 +728,7 @@ class CaregiverSchedule(models.Model):
         current_start = day_start_time.time()
         # current_highest_time = day_end_time
         current_end = day_end_time.time()
-
+        initial_start = day_start_time
         client_timezone = company_timezone
         for schedule in existing_schedules_for_day:
             client_timezone = pytz.timezone(schedule.client.time_zone)
@@ -746,6 +749,13 @@ class CaregiverSchedule(models.Model):
                 'end_time': schedule_end_time, #current_end.replace(minute=(current_end.minute-1)%60).strftime("%I:%M %p"),
                 "created" : ""
             }
+            '''if initial_start is not None:
+                temp_datetime = initial_start.astimezone(client_timezone)
+                temp_endtime = current_end.astimezone(client_timezone)
+                schedule_object['start_time'] = temp_datetime.strftime("%I:%M %p")
+                temp_date = temp_datetime - timedelta(days=1)
+                schedule_object['date'] = "{0}-{1}-{2}".format(temp_date.year, temp_date.month, temp_date.day)
+                initial_start = None'''
             open_schedule_objects.append(schedule_object)
             current_start = (datetime.datetime.combine(date, schedule.end_time).astimezone(client_timezone) + timedelta(minutes=1))# schedule.end_time.replace(minute=(current_end.minute+1)%60)
 
@@ -903,6 +913,9 @@ class CaregiverSchedule(models.Model):
             "created" : str(self.created)
         }
         return schedule_object
+
+    def __str__(self):
+        return str(self.to_json_schedule())
 
 
 class ClientMatchCategory(models.Model):
@@ -1383,5 +1396,3 @@ class CaregiverScheduleDashboardSettings(models.Model):
                                                       user=user)
             csds.save()
             return csds
-
-
