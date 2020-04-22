@@ -164,6 +164,9 @@
                     {% if module_dict.CAREGIVERPORTAL.VIEWSHIFTS %}
                       <li><a href={% url 'view_shifts' %}>View Shifts</a></li>
                     {% endif %}
+                    {% if module_dict.CAREGIVERPORTAL.SCHEDULEFREECAREGIVER %}
+                      <li><a href={% url 'schedule_free_caregiver' %}>Schedule Free Caregiver</a></li>
+                    {% endif %}
                   </ul>
                 </li>
                 <li><a><i class="fa fa-desktop"></i>Family Portal<span class="fa fa-chevron-down"></span></a>
