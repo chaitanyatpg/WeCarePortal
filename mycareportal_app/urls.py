@@ -206,4 +206,6 @@ urlpatterns = [
     url(r'^home_modification/archive_project/(?P<task_id>[0-9a-f-]+)/$', home_mod_views.ArchiveProject.as_view(), name='archive_home_mod_project'),
     url(r'^home_modification/delete_home_mod_task/(?P<task_id>[0-9a-f-]+)/$', home_mod_views.DeleteHomeModTask.as_view(), name="delete_home_mod_task"),
 
+    url(r'^schedule_free_caregiver',caregiver_views.ScheduleFreeCaregiver.as_view(),name='schedule_free_caregiver'),
+
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
