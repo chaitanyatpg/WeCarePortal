@@ -117,11 +117,44 @@ class ScheduleShiftForm(forms.Form):
     start_minute = forms.CharField(max_length=10)
     end_hour = forms.CharField(max_length=10)
     end_minute = forms.CharField(max_length=10)
+    
 
     def clean(self):
         cleaned_data = super(ScheduleShiftForm, self).clean()
         return cleaned_data
 
+class ScheduleShiftFreeCaregiverForm(forms.Form):
+    
+    start_date = forms.DateField()
+    end_date = forms.DateField()
+    start_hour = forms.CharField(max_length=10)
+    start_minute = forms.CharField(max_length=10)
+    end_hour = forms.CharField(max_length=10)
+    end_minute = forms.CharField(max_length=10)
+    # caregiver_id = forms.IntegerField()
+    subject = forms.CharField(max_length=100)
+    content = forms.CharField(max_length=1000)
+
+
+    def clean(self):
+        cleaned_data = super(ScheduleShiftFreeCaregiverForm, self).clean()
+        return cleaned_data
+
+    def __len__(self):
+        return len(self.ScheduleShiftFreeCaregiverForm)
+
+
+
+
+
+    
+
+
+
+
+
+
+    
 class EditScheduleForm(forms.Form):
 
     schedule_id = forms.IntegerField()
