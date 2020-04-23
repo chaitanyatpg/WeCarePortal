@@ -40,27 +40,19 @@ class CareManagerEmailProcessor(EmailProcessor):
         email.send()
     
 
-    def schedule_free_caregiver_email(self,  caregiver_email_address,subject, content, user, company):
-        #  emailadd ==== to send the email
+    def schedule_free_caregiver_email(self,  caregiver_email_address,subject, caremanager_email,content, user, company):
         connection = mail.get_connection() 
-        
         message = render_to_string('schedule_free_caregiver_email.html', {
-                
                 'caregiver_email_address':caregiver_email_address,
                 'user': user,
                 'content': content,
-                # 'caregiver':caregiver, 
-                # 'caregiver.last_name': caregiver.last_name,
-                'company': company
+                'company': company,
+                'caremanager_email' : caremanager_email,
                 })
-        to_list = []
-        to_list_manager = []
-
-        to_list_manager.append(user.username)
+        
+        print ('caremanager_email :', caremanager_email)
         email = EmailMultiAlternatives(
-                    subject, message, self.sender_email,  to=to_list_manager, bcc = caregiver_email_address, connection=connection
-
-        )
+                    subject, message, self.sender_email,  to=caremanager_email, bcc = caregiver_email_address)
         email.attach_alternative(message, "text/html")
         email.send()
 

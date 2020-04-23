@@ -803,32 +803,27 @@ class ScheduleFreeCaregiver(LoginRequiredMixin, View):
             subject = shedule_shift_free_caregiver_form.cleaned_data['subject']
             content = shedule_shift_free_caregiver_form.cleaned_data['content']
             date_range_num = end_date - start_date
+            caremanager_email = []
+            caremanager = CareManager.objects.filter(company=current_company)
+            for i in caremanager:
+                caremanager_email.append(i.email_address)
             for i in range(date_range_num.days + 1):
                 new_date = (start_date + datetime.timedelta(days=i))
-                print("new_date",new_date)
                 cargiver_without_task = CaregiverSchedule.objects.filter(company=current_company).exclude(date = new_date,start_time = "{0}:{1}".format(str(start_hour),str(start_minute)),end_time = "{0}:{1}".format(str(end_hour),str(end_minute)))
-                print("cargiver_without_task ",cargiver_without_task)
             caregiverwithtask = CaregiverSchedule.objects.filter(company=current_company).exclude(id__in = cargiver_without_task )
-            print("caregiverwithtask ",caregiverwithtask)
             caregiver_to_exclude = [o.caregiver_id for o in caregiverwithtask] 
-            print("caregiver_to_exclude",caregiver_to_exclude)
             caregiver = list(Caregiver.objects.exclude(id__in =caregiver_to_exclude))
-            print("caregiverhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",caregiver)
             caregiver_email_address = []
             for caregiver in caregiver:
                 caregiver.id
                 caregiver.first_name
                 caregiver_email_address.append(caregiver.email_address)
-                print("s", caregiver.email_address)
-                print("id", caregiver.id)
-                print("caregiver.first_name",caregiver.first_name)
-            print("caregiver_email_address",caregiver_email_address)
             if shedule_shift_free_caregiver_form.is_valid():
                 subject = shedule_shift_free_caregiver_form.cleaned_data['subject']
                 content = shedule_shift_free_caregiver_form.cleaned_data['content']
                 current_site = get_current_site(request)
                 email_manager = CareManagerEmailProcessor()
-                email_manager.schedule_free_caregiver_email(caregiver_email_address,subject, content, user, current_company)
+                email_manager.schedule_free_caregiver_email(caregiver_email_address,subject,caremanager_email, content, user, current_company)
                 messages.success(request, "Successfully sent email to free caregiver. You will be contacted shortly with further details.")
             else:
                 messages.error(request, "Error sending email: There is no caregiver")
