@@ -56,6 +56,7 @@ def home(request):
     current_company = request.user.company
     user = request.user
     save_caregiver_location(request)
+    save_fcm_token(request)
     user_roles = UserRoles.objects.filter(company=current_company, user=user)
     user_roles = [x.role for x in user_roles]
     if current_company.is_on_free_trial:
@@ -325,6 +326,20 @@ def save_caregiver_location(request):
                                      user_lat = request.session["user_lat"],
                                      created = datetime.datetime.now())
         user_location.save()
+
+def save_fcm_token(request):
+    if request.session.get("fcm_token"):
+        token = UserFcmTokenMap.get_or_create(request.user, request.session.get('fcm_token'))
+        if token is not None:
+            token.fcm_token =  request.session.get('fcm_token')
+            token.save()
+               
+#For Setting FCM token in session
+def set_user_fcm_token(request):
+    if request.method == 'GET':
+        fcm_token = request.GET.get('fcm_token')
+        request.session["fcm_token"] = fcm_token
+        return HttpResponse("Set FCM Token")
 
 class ForgotPassword(View):
 
