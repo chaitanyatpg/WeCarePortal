@@ -108,5 +108,15 @@
 			"template_code": "FALL001",
 			"template_subcategory_code": "FALLPS001"
 		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplatesubcategory",
+		"pk": 12,
+		"fields": {
+			"name": "Caregiver Wellness",
+			"description": "General wellness reporting for caregivers",
+			"template_code": "DWC001",
+			"template_subcategory_code": "DWCCW001"
+		}
 	}
 ]

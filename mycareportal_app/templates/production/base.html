@@ -82,6 +82,9 @@
                     {% if module_dict.CLIENTPORTAL.VIEWINCIDENTSBYCLIENT %}
                       <li><a href={% url 'choose_view_client_incidents' %}>View Incidents by Client</a></li>
                     {% endif %}
+                    {% if module_dict.DASHBOARD.VIEWLOCATIONLOGS %}
+                      <li><a href={% url 'caregiver_location_map' %}>View Location Logs</a></li>
+                    {% endif %}
                   </ul>
                 </li>
                 <li><a><i class="fa fa-home"></i>Reporting Portal<span class="fa fa-chevron-down"></span></a>
