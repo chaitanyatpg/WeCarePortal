@@ -52,6 +52,21 @@ class ProviderDashboard(LoginRequiredMixin, View):
         context["update_task_form"] = UpdateTaskForm()
         #Get Update Form
         #context["update_task_form"] = UpdateTaskForm()
+
+        #For Video Conference Mapping
+        family_member = []
+        provider = []
+        all_care_giver = []
+        for client in related_clients:
+            client_family_contacts = client.family_contacts.all()
+            family_member =client_family_contacts
+            provider = client.provider.all()
+            caregiver = client.caregiver.all()
+        context["family_member"] = family_member
+        context["provider"] = provider
+        context["caregiver"] = caregiver
+
+
         return render(request, 'production/provider_dashboard_2.html', context)
 
     @transaction.atomic

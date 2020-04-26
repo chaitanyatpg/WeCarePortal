@@ -209,6 +209,15 @@ urlpatterns = [
     #Location Capturing process
     url(r'^set_user_lat_long_session',views.set_user_lat_long_session,name='set_user_lat_long_session'),
     url(r'^caregiver_location_map',views.ViewCareGiverLocationLogs.as_view(),name='caregiver_location_map'),
+
+    #setting fcm token for FCM
+    url(r'^set_user_fcm_token',views.set_user_fcm_token,name='set_user_fcm_token'),
+    url(r'^firebase-messaging-sw.js', views.ServiceWorkerView.as_view(), name='service_worker'),
+    
+
+    url(r'^send_call_notification', views.send_call_notification, name='send_call_notification'),
+    
+    
     
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

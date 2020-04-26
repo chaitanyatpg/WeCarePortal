@@ -1396,3 +1396,16 @@ class CaregiverScheduleDashboardSettings(models.Model):
                                                       user=user)
             csds.save()
             return csds
+
+class UserFcmTokenMap(models.Model):
+    user = models.ForeignKey(User)
+    fcm_token = models.CharField(max_length=500)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    def get_or_create(user, fcm_token):
+        if UserFcmTokenMap.objects.filter(user=user).exists():
+            return UserFcmTokenMap.objects.get(user=user)
+        else:
+            new_token = UserFcmTokenMap(user=user, fcm_token=fcm_token)
+            new_token.save()
+            
