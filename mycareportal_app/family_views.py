@@ -73,6 +73,21 @@ class FamilyDashboard(LoginRequiredMixin, View):
         context["client_tasks"] = client_tasks
         #Get Update Form
         context["update_task_form"] = UpdateTaskForm()
+
+        #For Map of provider and caregiver
+        family_member = []
+        provider = []
+        all_care_giver = []
+        for client in related_clients:
+            client_family_contacts = client.family_contacts.all()
+            family_member =client_family_contacts
+            provider = client.provider.all()
+            caregiver = client.caregiver.all()
+        context["family_member"] = family_member
+        context["provider"] = provider
+        context["caregiver"] = caregiver
+            
+
         return render(request, 'production/family_dashboard.html', context)
 
     def post(self, request):
@@ -255,3 +270,7 @@ def get_family_with_email(request):
 
 
 # new family member ==============================
+
+
+    
+     

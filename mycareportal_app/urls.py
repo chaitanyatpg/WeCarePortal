@@ -212,7 +212,12 @@ urlpatterns = [
 
     #setting fcm token for FCM
     url(r'^set_user_fcm_token',views.set_user_fcm_token,name='set_user_fcm_token'),
+    url(r'^firebase-messaging-sw.js', views.ServiceWorkerView.as_view(), name='service_worker'),
+    
 
+    url(r'^send_call_notification', views.send_call_notification, name='send_call_notification'),
+    
+    
     
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -23,10 +23,5 @@ class Migration(migrations.Migration):
                 ('updated', models.DateTimeField(auto_now_add=True)),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
-        ),
-        migrations.AlterField(
-            model_name='activationcode',
-            name='activation_code',
-            field=models.CharField(default=shortuuid.main.ShortUUID.uuid, editable=False, max_length=22, unique=True),
-        ),
+        )
     ]

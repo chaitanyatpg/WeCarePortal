@@ -18,6 +18,8 @@
 <link href="{% static 'build/css/custom.min.css' %}" rel="stylesheet">
 <!-- favicon -->
 <link rel="shortcut icon" href="{% static 'pictures/logo_32_32.png' %}" />
+<!--Manifest json for firebase notification-->
+<link rel="manifest" href="{% static 'build/js/manifest.json' %}" />
 {% load mycareportal_app_extras%}
 {% block headlibs %}{% endblock %}
 </head>
@@ -292,7 +294,9 @@
                   </li>
                 </ul>
               </li>-->
-             <li><a href="javascript:open_browser()"><i class="fa fa-video-camera"></i></a></li>   
+              {% if module_dict.FAMILYPORTAL.FAMILYDASHBOARD or module_dict.PROVIDERPORTAL.DASHBOARD %}
+                <li><a href="javascript:openList()"><i class="fa fa-video-camera"></i></a></li>
+              {% endif %}   
 
             </ul>
           </nav>
@@ -339,6 +343,85 @@
     <!-- /footer content -->
   </div>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+  <input type="hidden" id="videoLink" value="" />
+  <div class="modal-dialog">
+  
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Modal Header</h4>
+      </div>
+      <div class="modal-body">
+        <p>You have received a video call request. Please Accept Or Decline</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" onclick="openVideoLink()" data-dismiss="modal" class="btn btn-primary" >Accept</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Decline</button>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<div class="modal fade" id="conferenceModal" role="dialog">
+  <input type="hidden" id="videoLink" value="" />
+  <div class="modal-dialog">
+  
+    <!-- Modal content-->
+    <form name="user_form" role="form" id="user_form">
+    <!-- <form method="post" role="form" action="{% url 'send_call_notification' %}"> -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Available Users For Call</h4>
+      </div>
+      <div class="modal-body">
+        
+        <div class="row">
+          <h5>Caregivers</h5>
+          <hr>
+          {% for caregiver in caregiver %}
+          <div>
+            <input type="radio" id="radio1" name="radio1" value="{{caregiver.user}}">
+            <label class="custom-control-label" for="radio1">{{caregiver.first_name}}&nbsp;{{caregiver.last_name}}</label>
+          </div>
+         {% endfor %}
+        </div>
+        <hr>
+        <div class="row">
+          <h5>Family Members</h5>
+          <hr>
+          {% for member in family_member %}
+          <div class="col-sm-5">
+            <input type="radio" id="radio1" name="radio1" value="{{member.user}}">
+            <label class="custom-control-label" for="radio1">{{member.first_name}}&nbsp;{{member.last_name}} </label>
+          </div>
+         {% endfor %}
+        </div>
+        <hr>  
+        <div class="row">
+          <h5>Providers</h5>
+          <hr>
+          {% for provider in provider %}
+          <div class="col-sm-5">
+            <input type="radio" id="radio1" name="radio1" value={{provider.user}}>
+            <label class="custom-control-label" for="radio1">{{provider.first_name}}&nbsp;{{provider.last_name}}</label>
+          </div>
+         {% endfor %}
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" onclick="submit_notification_form()"  class="btn btn-primary" >Accept</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Decline</button>
+      </div>
+    </div>
+  </form>
+  </div>
+</div>
 
 <!-- jQuery -->
 <script src="{% static 'vendors/jquery/dist/jquery.min.js' %}"></script>
@@ -354,6 +437,7 @@
 <script src="{% static 'build/js/custom.min.js' %}"></script>
 <!-- Get Android Tablet ID if Android interface exists -->
 <script type="text/javascript">
+
   function get_android_tablet_id(){
     if(window.Android){
       return Android.returnID();
@@ -362,24 +446,41 @@
       return -1;
     }
   }
-
-  function get_fcm_token(){
+  function open_browser(out_msg){
     if(window.Android){
-      return Android.returnFCMtoken();
-    }
-    else{
-      return -1;
-    }
-
-  }
-  function open_browser(){
-    if(window.Android){
-      return Android.openBrowser();
+      return Android.openBrowser(out_msg);
     }
     else{
       return -1;
     }
   }
+
+  function openVideoLink() {
+    var url= document.getElementById("videoLink").value
+    window.open(url);
+  }
+
+  function submit_notification_form() {
+      $.ajax({
+      type: "GET",
+      url: '{% url "send_call_notification" %}',
+      data: { email: document.forms.user_form.radio1.value },
+      contentType: "application/json",
+      success: function(out_msg){
+        if(out_msg !== 'false') {
+          if(window.Android){
+                window.open_browser(out_msg)
+          }else{
+                window.open(out_msg)
+          }
+        }
+      },
+      failure: function(out_msg){
+        console.log("Failure Message :", out_msg);
+      }
+    });
+  }
+
 </script>
 <!-- end -->
 
@@ -456,6 +557,8 @@ $(document).ready(function(){
     return cookieValue;
   }
 </script>
+
+
 <!-- end -->
 <!-- set tablet id in session -->
 <!--<script type="text/javascript">
@@ -475,8 +578,236 @@ $(document).ready(function(){
   }
 });
 </script>-->
+<script>
+  function openList() {
+    $("#conferenceModal").modal();
+  }
+</script>
+
+<script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-messaging.js"></script>
+
+
+
+<script>
+
+var firebaseConfig = {
+apiKey: "AIzaSyBoHn7o797Puv80voB4uwPC1GztrspUJHg",
+authDomain: "we-care-29905.firebaseapp.com",
+databaseURL: "https://we-care-29905.firebaseio.com",
+projectId: "we-care-29905",
+storageBucket: "we-care-29905.appspot.com",
+messagingSenderId: "356911246271",
+appId: "1:356911246271:web:c1f3af11e123337c674f0a",
+measurementId: "G-GPNQPQXS5L"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+
+const messaging = firebase.messaging();
+
+const tokenDivId = 'token_div';
+const permissionDivId = 'permission_div';
+
+messaging.usePublicVapidKey("BLqX-1Rb6U5RDfXHlpVFW8THXFkmgfH0e152EZezLuuIZgvV3asbNZZ3cm46zIez_sPB_f5i4iu0TRqbqa-PEDE");
+
+//[Start Referesh Token]
+messaging.onTokenRefresh(function() {
+    messaging.getToken()
+      .then(function(refreshedToken) {
+      console.log('Token refreshed.');
+      setTokenSentToServer(false);
+      sendTokenToServer(refreshedToken);
+      resetUI();
+})
+.catch(function(err) {
+    console.log('Unable to retrieve refreshed token ', err);
+
+});
+});
+// [END refresh_token]
+
+// [START receive_message]
+messaging.onMessage(function(payload) {
+      
+  console.log("Message received. ", payload); 
+  document.getElementById("videoLink").value = payload.notification.body;
+     // appendMessage(payload);
+      $("#myModal").modal();
+
+});
+
+
+function resetUI() {
+//clearMessages();
+// showToken('loading...');
+console.log("getting token")
+  messaging.getToken().then((resp) => {
+      console.log(resp)
+  })
+
+   messaging.getToken().then(function(currentToken) {
+      console.log("Got current token")
+      if (currentToken) {
+          sendTokenToServer(currentToken);
+          updateUIForPushEnabled(currentToken);
+      } else {
+              // Show permission request.
+              console.log('No Instance ID token available. Request permission to generate one.');
+              // Show permission UI.
+              updateUIForPushPermissionRequired();
+              setTokenSentToServer(false);
+      }
+  })
+  .catch(function(err) {
+  console.log('An error occurred while retrieving token. ', err);
+  //showToken('Error retrieving Instance ID token. ', err);
+  setTokenSentToServer(false);
+  });
+  console.log("End get token")
+
+}
+// [END get_token]
+
+function showToken(currentToken) {
+// Show token in console and UI.
+var tokenElement = document.querySelector('#token');
+console.log(tokenElement)
+console.log(currentToken)
+tokenElement.textContent = currentToken;
+}
+
+// Send the Instance ID token your application server, so that it can:
+// - send messages back to this app
+// - subscribe/unsubscribe the token from topics
+function sendTokenToServer(currentToken) {
+//if (!isTokenSentToServer()) {
+console.log('Sending token to server...');
+$.ajax({
+  url: '{% url "set_user_fcm_token" %}',
+  type: "GET",
+  data: {fcm_token: currentToken},
+  contentType: 'application/json',
+  success: function(out_msg){
+    setTokenSentToServer(true);
+    },
+   failure:   function(out_msg){
+    }
+});
+//}
+}
+
+function isTokenSentToServer() {
+if (window.localStorage.getItem('sentToServer') == 1) {
+    return true;
+}
+return false;
+}
+
+function setTokenSentToServer(sent) {
+if (sent) {
+window.localStorage.setItem('sentToServer', 1);
+} else {
+window.localStorage.setItem('sentToServer', 0);
+}
+}
+
+function showHideDiv(divId, show) {
+// const div = document.querySelector('#' + divId);
+// if (show) {
+//   div.style = "display: visible";
+// } else {
+//   div.style = "display: none";
+// }
+}
+
+function requestPermission() {
+console.log('Requesting permission...');
+// [START request_permission]
+messaging.requestPermission()
+.then(function() {
+console.log('Notification permission granted.');
+// TODO(developer): Retrieve an Instance ID token for use with FCM.
+// [START_EXCLUDE]
+// In many cases once an app has been granted notification permission, it
+// should update its UI reflecting this.
+resetUI();
+// [END_EXCLUDE]
+})
+.catch(function(err) {
+console.log('Unable to get permission to notify.', err);
+});
+// [END request_permission]
+}
+
+function deleteToken() {
+// Delete Instance ID token.
+// [START delete_token]
+messaging.getToken()
+.then(function(currentToken) {
+messaging.deleteToken(currentToken)
+.then(function() {
+  console.log('Token deleted.');
+  setTokenSentToServer(false);
+  // [START_EXCLUDE]
+  // Once token is deleted update UI.
+  resetUI();
+  // [END_EXCLUDE]
+})
+.catch(function(err) {
+  console.log('Unable to delete token. ', err);
+});
+// [END delete_token]
+})
+.catch(function(err) {
+console.log('Error retrieving Instance ID token. ', err);
+//showToken('Error retrieving Instance ID token. ', err);
+});
+
+}
+
+// Add a message to the messages element.
+function appendMessage(payload) {
+const messagesElement = document.querySelector('#messages');
+const dataHeaderELement = document.createElement('h5');
+const dataElement = document.createElement('pre');
+dataElement.style = 'overflow-x:hidden;'
+dataHeaderELement.textContent = 'Received message:';
+dataElement.textContent = JSON.stringify(payload, null, 2);
+
+}
+
+// Clear the messages element of all children.
+function clearMessages() {
+const messagesElement = document.querySelector('#messages');
+while (messagesElement.hasChildNodes()) {
+console.log("Has children")
+messagesElement.removeChild(messagesElement.lastChild);
+}
+}
+
+function updateUIForPushEnabled(currentToken) {
+//showHideDiv(tokenDivId, true);
+//showHideDiv(permissionDivId, false);
+// showToken(currentToken);
+}
+
+function updateUIForPushPermissionRequired() {
+//showHideDiv(tokenDivId, false);
+//showHideDiv(permissionDivId, true);
+}
+
+resetUI();
+
+
+</script>
+
+
 <!-- end -->
 {% block scripts %}{% endblock %}
+
+
 
 </body>
 </html>

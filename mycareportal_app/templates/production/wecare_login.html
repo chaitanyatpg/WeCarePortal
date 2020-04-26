@@ -113,6 +113,17 @@
           return -1;
         }
       }
+
+  function get_fcm_token(){
+    if(window.Android){
+      return Android.returnFCMtoken();
+    }
+    else{
+      return -1;
+    }
+
+  }
+
     </script>
     <!-- end -->
 
@@ -151,6 +162,21 @@
           }
         });
       }
+
+      if(window.Android){
+        var fcm_token = get_fcm_token();
+        $.ajax({
+          type: "GET",
+          url: '{% url "set_user_fcm_token" %}',
+          data: { fcm_token: fcm_token },
+          contentType: "application/json",
+          success: function(out_msg){
+          },
+          failure: function(out_msg){
+          }
+        });
+      }
+
     });
     </script>
     <script type="text/javascript">
@@ -183,6 +209,7 @@
         console.log("Error code " + event.code + ". " + event.message);
       }
       </script>
+
   <!-- end -->
 
 

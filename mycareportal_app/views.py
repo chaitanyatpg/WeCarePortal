@@ -43,6 +43,10 @@ from mycareportal_app.client_forms import *
 from mycareportal_app.family_forms import *
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+
+from random import randint
+import requests
+
 # Create your views here.
 
 #@receiver(pre_save, sender=User)
@@ -327,19 +331,33 @@ def save_caregiver_location(request):
                                      created = datetime.datetime.now())
         user_location.save()
 
+#This method will work perfectly while working with android.
 def save_fcm_token(request):
+    print("******************* :", request.session.get("fcm_token"))
     if request.session.get("fcm_token"):
         token = UserFcmTokenMap.get_or_create(request.user, request.session.get('fcm_token'))
         if token is not None:
             token.fcm_token =  request.session.get('fcm_token')
             token.save()
                
-#For Setting FCM token in session
+#For Setting FCM token in session 
+#While updating token from website
+#it is happening after getting logged in becasue of that
+#save_fcm_token method called before set_user_fcm_token and due to
+#which it get blank token.
+#In this method, I have checked the user in request and added the token.
 def set_user_fcm_token(request):
     if request.method == 'GET':
+        if request.user is not None:
+            token = UserFcmTokenMap.get_or_create(request.user, request.GET.get('fcm_token'))
+            if token is not None:
+                token.fcm_token =  request.GET.get('fcm_token')
+                token.save()
+
         fcm_token = request.GET.get('fcm_token')
         request.session["fcm_token"] = fcm_token
         return HttpResponse("Set FCM Token")
+
 
 class ForgotPassword(View):
 
@@ -1446,3 +1464,56 @@ class ViewCareGiverLocationLogs(LoginRequiredMixin, View):
         context['loc_caregiver_map'] = loc_caregiver_map
 
         return render(request, "production/caregiver_location_map.html", context)
+
+class ServiceWorkerView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'build/js/firebase-messaging-sw.js', content_type="application/x-javascript")
+
+
+#Fetch all records related to client like family, provider. 
+
+def send_call_notification(request):
+    status = False
+    url=""
+    if request.method == 'GET':
+        user_email = request.GET.get('email')
+        care_giver_user = Caregiver.objects.filter(email_address = user_email)
+        provider_user = Provider.objects.filter(email_address = user_email)
+        family_user = FamilyContact.objects.filter(email_address = user_email)
+        
+        if care_giver_user.count() > 0:
+            user_token_map = UserFcmTokenMap.objects.filter(user=care_giver_user[0].user)
+        elif provider_user.count() > 0:
+            user_token_map = UserFcmTokenMap.objects.filter(user=provider_user[0].user)
+        elif family_user.count() > 0:   
+            user_token_map = UserFcmTokenMap.objects.filter(user=family_user[0].user)
+
+        if user_token_map.count() > 0:
+           if user_token_map[0].fcm_token is not None:
+               url = "https://appr.tc/r/"+str(randint(100000, 999999))
+               data = {
+                    "to": user_token_map[0].fcm_token,
+                    "notification": {
+                                        "body": url,
+                                        "OrganizationId": "2",
+                                        "priority": "high",
+                                        "subtitle": "Elementary School",
+                                        "Title": "hello"
+                                    }
+                        }
+               payload= json.dumps(data)
+                
+               headers = { 'content-type': 'application/json',
+                            'Authorization': 'key=AAAAUxmRa78:APA91bEvq6FZ1tJnm8FeoAxigyJ7cgoK1L4gLcAquhsZ55KQpzz1eKPx7t7bdwok4LXOtqb2OeQTWgZIpHlmbTgn7V3gs-7xwdc9Sq0828saDSJpR6k_gW1DxYMiBmbEnfoabnIfdgMc'}
+               response = requests.post("https://fcm.googleapis.com/fcm/send", data=payload, headers=headers)
+               if response.status_code == 200:
+                    status = True
+        else:
+            messages.error(request, "Remote user never logged in")
+    if status == True:
+        return HttpResponse(url)
+    elif status == False:
+        return redirect('family_dashboard')
+
+    
+
