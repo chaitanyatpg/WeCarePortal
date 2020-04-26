@@ -339,8 +339,8 @@ def save_fcm_token(request):
         if token is not None:
             token.fcm_token =  request.session.get('fcm_token')
             token.save()
-               
-#For Setting FCM token in session 
+
+#For Setting FCM token in session
 #While updating token from website
 #it is happening after getting logged in becasue of that
 #save_fcm_token method called before set_user_fcm_token and due to
@@ -1470,22 +1470,26 @@ class ServiceWorkerView(View):
         return render(request, 'build/js/firebase-messaging-sw.js', content_type="application/x-javascript")
 
 
-#Fetch all records related to client like family, provider. 
+#Fetch all records related to client like family, provider.
 
 def send_call_notification(request):
     status = False
     url=""
+    company = request.user.company
     if request.method == 'GET':
         user_email = request.GET.get('email')
-        care_giver_user = Caregiver.objects.filter(email_address = user_email)
-        provider_user = Provider.objects.filter(email_address = user_email)
-        family_user = FamilyContact.objects.filter(email_address = user_email)
-        
+        care_giver_user = Caregiver.objects.filter(company=company,
+                                                   email_address = user_email)
+        provider_user = Provider.objects.filter(company=company,
+                                                email_address = user_email)
+        family_user = FamilyContact.objects.filter(company=company,
+                                                    email_address = user_email)
+
         if care_giver_user.count() > 0:
             user_token_map = UserFcmTokenMap.objects.filter(user=care_giver_user[0].user)
         elif provider_user.count() > 0:
             user_token_map = UserFcmTokenMap.objects.filter(user=provider_user[0].user)
-        elif family_user.count() > 0:   
+        elif family_user.count() > 0:
             user_token_map = UserFcmTokenMap.objects.filter(user=family_user[0].user)
 
         if user_token_map.count() > 0:
@@ -1502,7 +1506,7 @@ def send_call_notification(request):
                                     }
                         }
                payload= json.dumps(data)
-                
+
                headers = { 'content-type': 'application/json',
                             'Authorization': 'key=AAAAUxmRa78:APA91bEvq6FZ1tJnm8FeoAxigyJ7cgoK1L4gLcAquhsZ55KQpzz1eKPx7t7bdwok4LXOtqb2OeQTWgZIpHlmbTgn7V3gs-7xwdc9Sq0828saDSJpR6k_gW1DxYMiBmbEnfoabnIfdgMc'}
                response = requests.post("https://fcm.googleapis.com/fcm/send", data=payload, headers=headers)
@@ -1514,6 +1518,3 @@ def send_call_notification(request):
         return HttpResponse(url)
     elif status == False:
         return redirect('family_dashboard')
-
-    
-
