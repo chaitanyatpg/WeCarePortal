@@ -791,7 +791,6 @@ class ScheduleFreeCaregiver(LoginRequiredMixin, View):
         context = {}
         current_company = request.user.company
         user = request.user
-        print("user",user.username)
         shedule_shift_free_caregiver_form = ScheduleShiftFreeCaregiverForm(request.POST)
         if shedule_shift_free_caregiver_form.is_valid():
             start_date = shedule_shift_free_caregiver_form.cleaned_data['start_date']
@@ -823,7 +822,8 @@ class ScheduleFreeCaregiver(LoginRequiredMixin, View):
                 content = shedule_shift_free_caregiver_form.cleaned_data['content']
                 current_site = get_current_site(request)
                 email_manager = CareManagerEmailProcessor()
-                email_manager.schedule_free_caregiver_email(caregiver_email_address,subject,caremanager_email, content, user, current_company)
+                email_manager.schedule_free_caregiver_email(caregiver_email_address,start_date,end_date,start_hour,start_minute,end_hour,end_minute,subject,caremanager_email, content, user, current_company)
+                
                 messages.success(request, "Successfully sent email to free caregiver. You will be contacted shortly with further details.")
             else:
                 messages.error(request, "Error sending email: There is no caregiver")
