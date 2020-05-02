@@ -216,6 +216,10 @@ urlpatterns = [
     
 
     url(r'^send_call_notification', views.send_call_notification, name='send_call_notification'),
+    url(r'^get_clients_details', views.get_clients_details, name='get_clients_details'),
+    
+    
+    
     
     
     

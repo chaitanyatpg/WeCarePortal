@@ -475,6 +475,10 @@ class CaregiverDashboard(LoginRequiredMixin, View):
         #Get incident locations
         incident_locations = IncidentLocations.objects.all().order_by('location')
         context['incident_locations'] = incident_locations
+
+        
+
+
         return render(request, 'production/caregiver_dashboard.html', context)
 
     @transaction.atomic

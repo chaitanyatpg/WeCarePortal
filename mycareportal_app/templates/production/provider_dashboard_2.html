@@ -77,6 +77,7 @@
                                     <!--<i class="fa fa-calendar user-profile-icon"></i>-->
 
                                     <i class="fa fa-male user-profile-icon"></i><i class="fa fa-female user-profile-icon"></i> {{client.gender}}
+                                    <li><a href="javascript:openList('{{client.email_address}}')"><i class="fa fa-video-camera"></i></a></li>
                                 </center>
                                 {% for task, task_comments, task_attachments, task_links, task_templates in tasks %}
                                 <li>

@@ -50,22 +50,13 @@ class ProviderDashboard(LoginRequiredMixin, View):
             client_tasks[client_data] = list(current_client_tasks)
         context["client_tasks"] = client_tasks
         context["update_task_form"] = UpdateTaskForm()
+        
         #Get Update Form
         #context["update_task_form"] = UpdateTaskForm()
 
-        #For Video Conference Mapping
-        family_member = []
-        provider = []
-        all_care_giver = []
-        for client in related_clients:
-            client_family_contacts = client.family_contacts.all()
-            family_member =client_family_contacts
-            provider = client.provider.all()
-            caregiver = client.caregiver.all()
-        context["family_member"] = family_member
-        context["provider"] = provider
-        context["caregiver"] = caregiver
-
+        #Get Related client on the modal where user can select desired client
+        # for making video calls
+        context["related_clients"] = related_clients
 
         return render(request, 'production/provider_dashboard_2.html', context)
 

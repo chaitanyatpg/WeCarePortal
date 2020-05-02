@@ -294,10 +294,6 @@
                   </li>
                 </ul>
               </li>-->
-              {% if module_dict.FAMILYPORTAL.FAMILYDASHBOARD or module_dict.PROVIDERPORTAL.DASHBOARD %}
-                <li><a href="javascript:openList()"><i class="fa fa-video-camera"></i></a></li>
-              {% endif %}   
-
             </ul>
           </nav>
         </div>
@@ -344,6 +340,7 @@
   </div>
 </div>
 <!-- Modal -->
+
 <div class="modal fade" id="myModal" role="dialog">
   <input type="hidden" id="videoLink" value="" />
   <div class="modal-dialog">
@@ -366,62 +363,7 @@
   </div>
 </div>
 
-<div class="modal fade" id="conferenceModal" role="dialog">
-  <input type="hidden" id="videoLink" value="" />
-  <div class="modal-dialog">
-  
-    <!-- Modal content-->
-    <form name="user_form" role="form" id="user_form">
-    <!-- <form method="post" role="form" action="{% url 'send_call_notification' %}"> -->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Available Users For Call</h4>
-      </div>
-      <div class="modal-body">
-        
-        <div class="row">
-          <h5>Caregivers</h5>
-          <hr>
-          {% for caregiver in caregiver %}
-          <div>
-            <input type="radio" id="radio1" name="radio1" value="{{caregiver.user}}">
-            <label class="custom-control-label" for="radio1">{{caregiver.first_name}}&nbsp;{{caregiver.last_name}}</label>
-          </div>
-         {% endfor %}
-        </div>
-        <hr>
-        <div class="row">
-          <h5>Family Members</h5>
-          <hr>
-          {% for member in family_member %}
-          <div class="col-sm-5">
-            <input type="radio" id="radio1" name="radio1" value="{{member.user}}">
-            <label class="custom-control-label" for="radio1">{{member.first_name}}&nbsp;{{member.last_name}} </label>
-          </div>
-         {% endfor %}
-        </div>
-        <hr>  
-        <div class="row">
-          <h5>Providers</h5>
-          <hr>
-          {% for provider in provider %}
-          <div class="col-sm-5">
-            <input type="radio" id="radio1" name="radio1" value={{provider.user}}>
-            <label class="custom-control-label" for="radio1">{{provider.first_name}}&nbsp;{{provider.last_name}}</label>
-          </div>
-         {% endfor %}
-        </div>
-      </div>
-      
-      <div class="modal-footer">
-        <button type="button" onclick="submit_notification_form()"  class="btn btn-primary" >Accept</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Decline</button>
-      </div>
-    </div>
-  </form>
-  </div>
-</div>
+<div id="modal-div"></div>
 
 <!-- jQuery -->
 <script src="{% static 'vendors/jquery/dist/jquery.min.js' %}"></script>
@@ -579,9 +521,24 @@ $(document).ready(function(){
 });
 </script>-->
 <script>
-  function openList() {
-    $("#conferenceModal").modal();
+  function openList(client_email_address) {
+    var modalDiv = $("#modal-div");
+  $.ajax({
+      type: "GET",
+      url: '{% url "get_clients_details" %}',
+      data: { client_email_address: client_email_address },
+      contentType: "application/json",
+      success: function(out_msg){ 
+        modalDiv.html(out_msg);
+       $("#conferenceModal").modal();
+
+      },
+      failure: function(out_msg){
+      }
+    });
+    
   }
+
 </script>
 
 <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-app.js"></script>
