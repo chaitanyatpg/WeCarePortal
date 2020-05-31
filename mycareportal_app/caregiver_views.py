@@ -117,7 +117,7 @@ class AddCaregiver(LoginRequiredMixin, View):
                         messages.success(request, "Caregiver {0} {1} successfully added!".format(first_name, last_name))
                     else:
                         messages.success(request, "Caregiver role added to user {0} {1}".format(first_name, last_name))
-                    return redirect('add_caregiver')
+                    return HttpResponseRedirect(reverse('edit_caregiver') + "?caregiver_email=" + email)
             except IntegrityError as e:
                 messages.error(request, "Caregiver has already been registered. Please enter a new email address.")
         else:
@@ -786,7 +786,7 @@ class ScheduleFreeCaregiver(LoginRequiredMixin, View):
         current_company = request.user.company
         context['shedule_shifts_free_caregiver_form'] = ScheduleShiftFreeCaregiverForm()
         return render(request, 'production/schedule_free_caregiver.html', context)
-    
+
     def post(self, request, *args, **kwargs):
         context = {}
         current_company = request.user.company
@@ -810,7 +810,7 @@ class ScheduleFreeCaregiver(LoginRequiredMixin, View):
                 new_date = (start_date + datetime.timedelta(days=i))
                 cargiver_without_task = CaregiverSchedule.objects.filter(company=current_company).exclude(date = new_date,start_time = "{0}:{1}".format(str(start_hour),str(start_minute)),end_time = "{0}:{1}".format(str(end_hour),str(end_minute)))
             caregiverwithtask = CaregiverSchedule.objects.filter(company=current_company).exclude(id__in = cargiver_without_task )
-            caregiver_to_exclude = [o.caregiver_id for o in caregiverwithtask] 
+            caregiver_to_exclude = [o.caregiver_id for o in caregiverwithtask]
             caregiver = list(Caregiver.objects.exclude(id__in =caregiver_to_exclude))
             caregiver_email_address = []
             for caregiver in caregiver:
@@ -823,15 +823,15 @@ class ScheduleFreeCaregiver(LoginRequiredMixin, View):
                 current_site = get_current_site(request)
                 email_manager = CareManagerEmailProcessor()
                 email_manager.schedule_free_caregiver_email(caregiver_email_address,start_date,end_date,start_hour,start_minute,end_hour,end_minute,subject,caremanager_email, content, user, current_company)
-                
+
                 messages.success(request, "Successfully sent email to free caregiver. You will be contacted shortly with further details.")
             else:
                 messages.error(request, "Error sending email: There is no caregiver")
         return render(request, 'production/schedule_free_caregiver.html', context)
-            
 
 
-        
+
+
 
 class ViewCalendar(LoginRequiredMixin, View):
     def get(self, request):
