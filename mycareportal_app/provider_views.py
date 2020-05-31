@@ -62,9 +62,9 @@ class ProviderDashboard(LoginRequiredMixin, View):
             family_member =client_family_contacts
             provider = client.provider.all()
             caregiver = client.caregiver.all()
-        context["family_member"] = family_member
-        context["provider"] = provider
-        context["caregiver"] = caregiver
+        context["family_member_call"] = family_member
+        context["provider_call"] = provider
+        context["caregiver_call"] = caregiver
 
 
         return render(request, 'production/provider_dashboard_2.html', context)
