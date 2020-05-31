@@ -20,3 +20,5 @@ urlpatterns = [
     url(r'^', include('mycareportal_app.urls')),
     url(r'^admin/', admin.site.urls),
 ]
+
+handler500 = 'mycareportal_app.views.handler500'
