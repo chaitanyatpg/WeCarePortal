@@ -87,7 +87,7 @@
                     {% if module_dict.DASHBOARD.VIEWLOCATIONLOGS %}
                       <li><a href={% url 'caregiver_location_map' %}>View Location Logs</a></li>
                     {% endif %}
-                  </ul>
+					        </ul>
                 </li>
                 <li><a><i class="fa fa-home"></i>Reporting Portal<span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu">
@@ -386,7 +386,7 @@
         <div class="row">
           <h5>Caregivers</h5>
           <hr>
-          {% for caregiver in caregiver %}
+          {% for caregiver in caregiver_call %}
           <div>
             <input type="radio" id="radio1" name="radio1" value="{{caregiver.user}}">
             <label class="custom-control-label" for="radio1">{{caregiver.first_name}}&nbsp;{{caregiver.last_name}}</label>
@@ -397,7 +397,7 @@
         <div class="row">
           <h5>Family Members</h5>
           <hr>
-          {% for member in family_member %}
+          {% for member in family_member_call %}
           <div class="col-sm-5">
             <input type="radio" id="radio1" name="radio1" value="{{member.user}}">
             <label class="custom-control-label" for="radio1">{{member.first_name}}&nbsp;{{member.last_name}} </label>
@@ -408,7 +408,7 @@
         <div class="row">
           <h5>Providers</h5>
           <hr>
-          {% for provider in provider %}
+          {% for provider in provider_call %}
           <div class="col-sm-5">
             <input type="radio" id="radio1" name="radio1" value={{provider.user}}>
             <label class="custom-control-label" for="radio1">{{provider.first_name}}&nbsp;{{provider.last_name}}</label>
