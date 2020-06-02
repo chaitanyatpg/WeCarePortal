@@ -110,6 +110,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'mycareportal_app.context_processors.add_roles_to_context',
                 'mycareportal_app.context_processors.add_current_user_context',
+                'mycareportal_app.context_processors.add_tablet_id_context',
             ],
         },
     },
