@@ -380,3 +380,12 @@ class EndOfLifeForm(forms.Form):
     def clean(self):
         cleaned_data = super(EndOfLifeForm, self).clean()
         return cleaned_data
+
+
+
+class CopyAssignTaskForm(forms.Form):
+    clientwithtask = forms.CharField(max_length=500)
+    clientwithouttask = forms.CharField(max_length=500)
+    def clean(self):
+        cleaned_data = super(CopyAssignTaskForm, self).clean()
+        return cleaned_data

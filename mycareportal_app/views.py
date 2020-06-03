@@ -45,7 +45,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
 from random import randint
-import requests
+#import requests
 
 # Create your views here.
 
@@ -462,6 +462,8 @@ def dashboard(request):
     context['days_since_company_created'] = days_since_company_created
     context['current_date'] = '{0}-{1}-{2}'.format(current_date.year,current_date.strftime('%m'),current_date.strftime('%d'))
     print(context['current_date'])
+    client_notify = NotifyClientVitalTask.objects.filter(company = current_company,is_active = True)
+    context['client_notify'] = client_notify
     return render(request, 'production/admin_dashboard.html', context)
 
 class AddCareManager(LoginRequiredMixin, View):
@@ -1518,3 +1520,25 @@ def send_call_notification(request):
         return HttpResponse(url)
     elif status == False:
         return redirect('family_dashboard')
+
+class ClientHighRisk(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        context = {}
+        current_company = request.user.company
+        notify_client_vital_task = NotifyClientVitalTask.objects.filter(company=current_company)
+        print("notify_client_vital_task",notify_client_vital_task)
+        context['notify_client_vital_task'] =notify_client_vital_task
+    
+        
+        return render(request, "production/view_client_high_risk.html", context)
+        
+
+def viewclienthigh( request, *args, **kwargs):
+    context = {}
+    id = kwargs['id']
+    notify_client_vital_task = NotifyClientVitalTask.objects.get(pk= id)
+    notify_client_vital_task.is_active = False
+    notify_client_vital_task.save()
+    
+    return redirect("dashboard")
+

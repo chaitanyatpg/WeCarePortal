@@ -28,6 +28,7 @@ from mycareportal_app.common import error_messaging as error_messaging
 from django.contrib.sites.shortcuts import get_current_site
 from mycareportal_app.email.caregiver.caregiver_email_processor import CaregiverEmailProcessor
 from mycareportal_app.email.client.client_email_processor import ClientEmailProcessor
+#import requests
 
 
 
@@ -512,6 +513,132 @@ class CaregiverDashboard(LoginRequiredMixin, View):
                     for i in range(len(template_entries)):
                         entry_instances[i].entry_value = template_entries[i]
                         entry_instances[i].save()
+				    
+                    try:
+                        task_template= TaskTemplate.objects.get(pk =1)
+                   
+                        
+                        new_entry_instance = TaskTemplateEntryInstance.objects.filter(company=current_company,                    
+                                                                task_template_instance=task_template_instance)
+                        
+                        heart_rate_max_value = 100
+                        heart_rate_min_value =60
+                        setvalue_blood_oxygen_level_value = 95
+                        body_temperature_value_max = 98 
+                        task_list_key =[]
+
+                        heart_rate = None
+                        heart_rate_bpm_over_100_bpm_under_60_bpm = None
+                        body_temperature_38_higher = None
+                        blood_oxygen_level_SpO2_95_below = None
+                        breathing_issues = None
+                        cold_cough = None
+                        bad_throat = None 
+                        lack_of_test_smell = None
+                        chest_pain = None
+                        headache = None
+                        weakness = None
+                        fever = None
+                        blood_pressure=None
+                        blood_sugar_fasting=None
+                        blood_sugar_non_fasting=None
+                        weight=None
+
+
+
+                        # tasksentryvalue = []                                                           
+                        for i in new_entry_instance:
+                            task_template_entry = TaskTemplateEntry.objects.filter(id=i.task_template_entry_id)
+                            if task_template_entry[0].task_template_entry_code == 'VIT001HR':
+                                if i.entry_value != "" and i.entry_value != "Y" and i.entry_value != "N" and i.entry_value != "NA":
+                                    heart_rate= int(i.entry_value)
+                                    if heart_rate > 100 or heart_rate < 60:
+                                        heart_rate_bpm_over_100_bpm_under_60_bpm = heart_rate    
+                                else:
+                                    heart_rate = None
+                            if task_template_entry[0].task_template_entry_code == 'VIT001BT':
+                                if i.entry_value != "" and i.entry_value != "Y" and i.entry_value != "N" and i.entry_value != "NA":
+                                    body_temperature = int(i.entry_value)
+                                    if body_temperature > body_temperature_value_max:
+                                        body_temperature_38_higher = body_temperature    
+                                else:
+                                    body_temperature_38_higher = None
+                            
+                            if task_template_entry[0].task_template_entry_code == 'VIT001BOL':
+                                if i.entry_value != "" and i.entry_value != "Y" and i.entry_value != "N" and i.entry_value != "NA":
+                                    blood_oxygen_level_value = int(i.entry_value)
+                                    if blood_oxygen_level_value < setvalue_blood_oxygen_level_value:
+                                        blood_oxygen_level_SpO2_95_below = blood_oxygen_level_value    
+                                else:
+                                    blood_oxygen_level_SpO2_95_below = None
+                            
+                            if task_template_entry[0].task_template_entry_code == 'VIT001BP':
+                                if i.entry_value != "" and i.entry_value != "Y" and i.entry_value != "N" and i.entry_value != "NA":
+                                    blood_pressure = i.entry_value
+                                else:
+                                    blood_pressure = None
+
+                            if task_template_entry[0].task_template_entry_code == 'VIT001BSF':
+                                if i.entry_value != "" and i.entry_value != "Y" and i.entry_value != "N" and i.entry_value != "NA":
+                                    blood_sugar_fasting = i.entry_value
+                                else:
+                                    blood_sugar_fasting = None
+
+                            if task_template_entry[0].task_template_entry_code == 'VIT001BSNF':
+                                if i.entry_value != "" and i.entry_value != "Y" and i.entry_value != "N" and i.entry_value != "NA":
+                                    blood_sugar_non_fasting = i.entry_value
+                                else:
+                                    blood_oxygen_level_SpO2_95_below = None
+                                    
+                            if task_template_entry[0].task_template_entry_code == 'VIT001W':
+                                if i.entry_value != "" and i.entry_value != "Y" and i.entry_value != "N" and i.entry_value != "NA":
+                                    weight = i.entry_value
+                                else:
+                                    weight = None
+                            
+                            if task_template_entry[0].task_template_entry_code == 'VIT001BI':
+                                if i.entry_value != ""  and  i.entry_value == "Y":
+                                    breathing_issues = i.entry_value    
+                                
+                            if task_template_entry[0].task_template_entry_code == 'VIT001CD':
+                                if i.entry_value != ""  and  i.entry_value == "Y":
+                                    cold_cough = i.entry_value
+
+                            if task_template_entry[0].task_template_entry_code == 'VIT001BTH':
+                                if i.entry_value != ""  and  i.entry_value == "Y":
+                                    bad_throat = i.entry_value
+
+                            if task_template_entry[0].task_template_entry_code == 'VIT001TS':
+                                if i.entry_value != ""  and  i.entry_value == "Y":
+                                    VIT001TS = i.entry_value
+                            
+                            if task_template_entry[0].task_template_entry_code == 'VIT001H':
+                                if i.entry_value != ""  and  i.entry_value == "Y":
+                                    headache = i.entry_value
+                            
+                            if task_template_entry[0].task_template_entry_code == 'VIT001CP':
+                                if i.entry_value != ""  and  i.entry_value == "Y":
+                                    chest_pain = i.entry_value
+
+                            if task_template_entry[0].task_template_entry_code == 'VIT001WD':
+                                if i.entry_value != ""  and  i.entry_value == "Y":
+                                    weakness = i.entry_value
+
+                            if task_template_entry[0].task_template_entry_code == 'VIT001FC':
+                                if i.entry_value != ""  and  i.entry_value == "Y":
+                                    fever = i.entry_value
+
+                        if body_temperature_38_higher  or heart_rate_bpm_over_100_bpm_under_60_bpm or blood_oxygen_level_SpO2_95_below or blood_oxygen_level_SpO2_95_below or breathing_issues  or cold_cough or lack_of_test_smell or headache or  chest_pain or weakness or fever:
+                            notify_task = NotifyClientVitalTask(company =current_company ,user =request.user,client =client,breathing_issues =breathing_issues,
+                                                                Cold_or_Cough =cold_cough,bad_throat =bad_throat,lack_taste_and_smell=lack_of_test_smell,
+                                                                headache=headache,chest_pain=chest_pain,weakness =weakness,fever = fever,
+                                                                body_temperature_38_higher = body_temperature_38_higher,blood_oxygen_level_SpO2_95_below=blood_oxygen_level_SpO2_95_below,
+                                                                heart_rate_bpm_over_100_bpm_under_60_bpm =heart_rate_bpm_over_100_bpm_under_60_bpm,
+                                                                weight=weight,blood_sugar_fasting=blood_sugar_fasting,blood_sugar_non_fasting=blood_sugar_non_fasting, blood_pressure=blood_pressure )
+                            notify_task.save()           
+                    except Exception as e:
+                        print("exception", e)
+
                 #task.comment = comment
                 if status == "pending":
                     task.pending = True
@@ -671,6 +798,7 @@ class CaregiverDashboard(LoginRequiredMixin, View):
     def get_task_template_objects(self, client_task, company):
         template_objects = {}
         template_instances = TaskTemplateInstance.objects.filter(company=company,task_schedule=client_task).order_by('created')
+        
         for template_instance in template_instances:
             if template_instance not in template_objects:
                 template_objects[template_instance] = {}
@@ -678,7 +806,7 @@ class CaregiverDashboard(LoginRequiredMixin, View):
             for subcategory in subcategory_instances:
                 entry_instances = list(TaskTemplateEntryInstance.objects.filter(company=company, task_template_subcategory_instance=subcategory))
                 template_objects[template_instance][subcategory] = entry_instances
-        #print(template_objects)
+        
         return template_objects
 
     def check_task_complete_status(self, current_client_tasks):
@@ -711,6 +839,7 @@ class ScheduleShifts(LoginRequiredMixin, View):
                 if caregiver in client.caregiver.all():
                     assigned_clients.append(client)
             context['caregiver'] = caregiver
+
             context['assigned_clients'] = assigned_clients
             context['schedule_shift_form'] = ScheduleShiftForm()
             context['delete_schedule_form'] = DeleteScheduleForm()
@@ -1044,3 +1173,38 @@ def get_daily_tasks_with_schedule_id(request):
     daily_tasks = TaskSchedule.get_all_tasks_for_date(company, client, date)
     json_daily_tasks = [task.to_json() for task in daily_tasks]
     return HttpResponse(json.dumps(json_daily_tasks), content_type="application/json")
+
+@login_required
+def send_notification_to_admin(request):
+    user_token = []
+    status = False
+    company = request.user.company
+    care_managers = CareManager.objects.filter(company = request.user.company)
+    for manager in care_managers:
+        try:
+            token = UserFcmTokenMap.objects.get(user=manager.user).fcm_token
+            user_token.append(token)
+        except UserFcmTokenMap.DoesNotExist:
+            print("token not Exisits")
+        
+
+    data = {
+                    "registration_ids ": user_token,
+                    "notification": {
+                                        "body": "High Risk Client",
+                                        "OrganizationId": "2",
+                                        "priority": "high",
+                                        "subtitle": "High Risk Client",
+                                        "Title": "High Risk Client"
+                                    }
+                        }
+    payload= json.dumps(data)
+
+    headers = { 'content-type': 'application/json',
+                'Authorization': 'key=AAAAUxmRa78:APA91bEvq6FZ1tJnm8FeoAxigyJ7cgoK1L4gLcAquhsZ55KQpzz1eKPx7t7bdwok4LXOtqb2OeQTWgZIpHlmbTgn7V3gs-7xwdc9Sq0828saDSJpR6k_gW1DxYMiBmbEnfoabnIfdgMc'}
+    response = requests.post("https://fcm.googleapis.com/fcm/send", data=payload, headers=headers)
+    if response.status_code == 200:
+        status = True
+    return redirect('caregiver_dashboard')
+
+

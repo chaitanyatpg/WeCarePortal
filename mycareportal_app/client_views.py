@@ -18,6 +18,7 @@ import pytz
 import django.utils.timezone as timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+import uuid
 
 from django.contrib import messages
 
@@ -362,15 +363,192 @@ class EditClient(LoginRequiredMixin, View):
             client_attachment.save()
 
 class AssignTasksChooseClient(LoginRequiredMixin, View):
-
     def get(self, request):
         context = {}
         current_company = request.user.company
-        #context['add_client_form'] = ClientRegistrationForm()
         all_clients = Client.objects.filter(company=current_company).order_by('last_name')
         context['all_clients'] = all_clients
         context['find_client_form'] = FindClientForm()
+        context['copy_assign_task_form'] = CopyAssignTaskForm()
+        client = Client.objects.all()
+        context['client'] = client
+        taskheader = TaskHeader.objects.all()
+        context['taskheader'] = taskheader 
+        client_id = TaskSchedule.objects.filter(company=current_company).values('client_id')
+        client_without_task = Client.objects.filter(company=current_company).exclude(id__in = client_id)
+        context['client_without_task'] = client_without_task
+        
+        client_with_task = Client.objects.filter(company=current_company).exclude(id__in = client_without_task)
+        context['client_with_task'] = client_with_task
+        print("client_with_task***********************", client_with_task)
+        client_with_task = Client.objects.filter(company=current_company).exclude(id__in = client_without_task)
+  
         return render(request,'production/assign_tasks_choose_client.html', context)
+    
+    def post(self, request):
+        context = {}
+        copy_assign_task_form = CopyAssignTaskForm(request.POST)
+        if copy_assign_task_form.is_valid():
+            
+            current_company = request.user.company
+            taskattachment = TaskAttachment.objects.all()
+            tasklink = TaskLink.objects.all()
+            # taskschedule = TaskSchedule.objects.all()
+            taskheader = TaskHeader.objects.all()
+            clientwithtask = copy_assign_task_form.cleaned_data["clientwithtask"]
+            clientwithouttask   = copy_assign_task_form.cleaned_data["clientwithouttask"]
+            
+                       
+            clientwt = Client.objects.filter( email_address = clientwithtask )
+            clientwot = Client.objects.get( email_address =clientwithouttask)
+            #  client without task client_id
+            clientwotclientid = clientwot.id
+            
+            #  client without task client_id
+
+            task_header_client = list(TaskHeader.objects.filter(company=current_company,client = clientwt).order_by('client_id'))
+            
+            task_schedule_client = list(TaskSchedule.objects.filter(company=current_company,client = clientwt).order_by('client_id'))
+            
+            
+            task_link_client = list(TaskLink.objects.filter(company=current_company,client = clientwt).order_by('client_id'))
+            
+            task_attachment_client = list(TaskAttachment.objects.filter(company=current_company,client = clientwt).order_by('client_id'))
+            
+            
+            for taskheader in task_header_client:
+                print("Client ID ************* :",clientwotclientid)
+                taskheader.pk = None
+                taskheader.client_id = clientwotclientid
+                taskheader.uid = str(uuid.uuid4())
+                taskheader.save()
+
+            
+            taskHeader_updated = list(TaskHeader.objects.filter(company=current_company,client = clientwotclientid).order_by('client_id'))
+            for header in taskHeader_updated:
+                for taskschedule in task_schedule_client:
+                    task_template_instance = TaskTemplateInstance.objects.get(company=current_company, task_schedule=taskschedule)
+                    taskschedule.pk = None
+                    client_vital = taskschedule.client_id = clientwotclientid
+                    taskschedule.task_header = header
+                    taskschedule.uid = str(uuid.uuid4())
+                    taskschedule.pending = True
+
+                    taskschedule.save()
+                    
+                    task_template_subcategory_instance = TaskTemplateSubcategoryInstance.objects.get(company=current_company, task_template_instance=task_template_instance)
+                    task_template_entry_instance = TaskTemplateEntryInstance.objects.filter(company=current_company, task_template_instance= task_template_instance, task_template_subcategory_instance=task_template_subcategory_instance ).order_by("task_template_entry_id")
+                    
+                    task_template_instance.pk = None
+                    task_template_instance.company = current_company
+                    task_template_instance.uid = str(uuid.uuid4())
+                    task_template_instance.task_schedule = taskschedule
+                    task_template_instance.save()
+
+                    task_template_subcategory_instance.pk = None
+                    task_template_subcategory_instance.company = current_company
+                    task_template_subcategory_instance.uid = str(uuid.uuid4())
+                    task_template_subcategory_instance.task_template_instance = task_template_instance
+                    task_template_subcategory_instance.save()
+
+                    
+
+                    for entry_instance in task_template_entry_instance:
+                        entry_instance.pk = None
+                        entry_instance.uid = str(uuid.uuid4())
+                        entry_instance.company = current_company
+                        entry_instance.task_template_instance = task_template_instance
+                        entry_instance.task_template_subcategory_instance = task_template_subcategory_instance
+                        
+                        entry_instance.save()
+
+
+            
+
+            for tasklink in task_link_client:
+                tasklink.pk = None
+                tasklink.client_id = clientwotclientid
+                tasklink.uid = str(uuid.uuid4())
+                tasklink.save()
+                
+            
+            for taskattachment in task_attachment_client:
+                taskattachment.pk = None
+                taskattachment.client_id = clientwotclientid
+                taskattachment.uid = str(uuid.uuid4())
+                taskattachment.save()
+                
+            existing_tasks = Tasks.objects.filter(company=current_company).order_by('activity_task')
+            default_tasks = DefaultTasks.objects.all().order_by('activity_task')
+            activity_masters = ActivityMaster.objects.all().order_by('activity_description')
+            all_tasks = []
+            for i in existing_tasks:
+                all_tasks.append(i)
+            for i in default_tasks:
+                all_tasks.append(i)
+            for task in all_tasks:
+                sub_category_name = ActivitySubCategory.objects.filter(activity_category_code=task.activity_category_code)
+                if sub_category_name:
+                    task.activity_category_name = sub_category_name[0].activity_category
+                else:
+                    task.activity_category_name = task.activity_category_code
+            all_tasks.sort(key=lambda x: x.activity_category_name)
+            context["all_tasks"] = all_tasks
+            context["activity_masters"] = activity_masters
+            # Get template client_match_categories
+            task_templates = TaskTemplate.objects.filter(
+                Q(global_template=True) |
+                Q(company=current_company)
+            )
+            context["task_templates"] = task_templates
+            #Populate client email
+            # clientwithouttask = copy_assign_task_form.cleaned_data['clientwithouttask']
+            # context["client_email"] = clientwithouttask
+            #Get Form
+            context["assign_task_form"] = AssignTaskForm()            
+            #Get Delete Task Form
+            context["delete_task_form"] = DeleteTaskForm()
+            #Get Edit Task Form
+            context["edit_task_form"] = EditTaskForm()
+            current_client = Client.objects.get(company=current_company,email_address=clientwithouttask)
+            client_id = current_client.id
+            context["client_id"] = client_id
+            client_schedule = TaskSchedule.objects.filter(company=current_company,client=current_client)
+            context["client_schedule"] = client_schedule
+            return render(request,'production/assign_tasks.html',context)
+            
+        else:
+            context["status_message"] = "Error Adding Task"
+            messages.error(request, "Error addingllllllllllllll task")
+            return redirect("assign_choose_client")
+            
+
+
+@login_required
+def get_client_with_email_to_copy(request):
+    if request.method == 'GET':
+        context = {}
+        email = request.GET.get('email_data')
+        current_company = request.user.company
+        taskheader = TaskHeader.objects.filter(company=current_company)
+        client = Client.objects.get(company=current_company,email_address = email)
+        name = '{0} {1}'.format(client.first_name, client.last_name)
+        address = '{0}, {1} {2} {3}'.format(client.address, client.city, client.state, client.zip_code)
+        phone_number = client.phone_number
+        raw_dob = client.date_of_birth
+        date_of_birth = '{0}/{1}/{2}'.format(raw_dob.month,raw_dob.day,raw_dob.year)
+        gender = client.gender
+        client_data = {'name': name,
+                        'address': address,
+                        'phone_number': phone_number,
+                        'date_of_birth': date_of_birth,
+                        'gender': gender,
+                        'email_address': email
+                        }
+        if client.profile_picture:
+            client_data['profile_picture'] = client.profile_picture.url
+        context["client_data"] = client_data
+        return HttpResponse(json.dumps(client_data), content_type="application/json")
 
 class CreateTasks(LoginRequiredMixin, View):
 
@@ -1202,6 +1380,7 @@ def get_client_with_email(request):
         email = request.GET.get('email_data')
         current_company = request.user.company
         client = Client.objects.get(company=current_company,email_address = email)
+        taskheader = TaskHeader.objects.filter(company=current_company)
         name = '{0} {1}'.format(client.first_name, client.last_name)
         address = '{0}, {1} {2} {3}'.format(client.address, client.city, client.state, client.zip_code)
         phone_number = client.phone_number
