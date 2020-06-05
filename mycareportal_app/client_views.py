@@ -477,7 +477,7 @@ class AssignTasksChooseClient(LoginRequiredMixin, View):
                 taskheader.save()
 
             
-            taskHeader_updated = list(TaskHeader.objects.filter(company=current_company,client = clientwotclientid).order_by('client_id'))
+            taskHeader_updated = list(TaskHeader.objects.filter(company=current_company,client = clientwot).order_by('client_id'))
             for header in taskHeader_updated:
                 for taskschedule in task_schedule_client:
                     task_template_instance = TaskTemplateInstance.objects.get(company=current_company, task_schedule=taskschedule)
