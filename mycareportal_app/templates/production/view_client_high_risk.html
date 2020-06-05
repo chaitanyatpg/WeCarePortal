@@ -62,6 +62,7 @@
                                 <th>Blood Glucose Level Fasting (mg/dl)</th>
                                 <th>Blood Glucose Level Non-Fasting (mg/dl)</th>
                                 <th>Blood Pressure (systolic/diastolic)</th>
+                                <th>action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -77,6 +78,7 @@
                                 <td>{{  data.blood_sugar_fasting }}</td>
                                 <td>{{  data.blood_sugar_non_fasting }}</td>
                                 <td>{{  data.blood_pressure }}</td>
+                                <td><a href="{% url 'admin_send_call_request_to_caregiver' email=data.user.email %}" ><i class="fa fa-video-camera"></i></a></td>
                                 
                             </tr>
                             {% endfor %}

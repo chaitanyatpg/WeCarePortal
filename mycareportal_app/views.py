@@ -45,7 +45,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
 from random import randint
-#import requests
+import requests
 
 # Create your views here.
 
@@ -1542,3 +1542,53 @@ def viewclienthigh( request, *args, **kwargs):
     
     return redirect("dashboard")
 
+def admin_send_call_request_to_caregiver(request, email):
+    status = False
+    url=""
+    caregiver_email_id = email
+    company = request.user.company
+    try:
+        if request.method == 'GET':
+            user_email = request.GET.get('email')
+            care_giver_user = Caregiver.objects.get(company=company,
+                                                    email_address = caregiver_email_id)
+            
+            
+            if care_giver_user is not None:
+                user_token_map = UserFcmTokenMap.objects.get(user=care_giver_user.user)
+
+            
+                
+            
+                if user_token_map is not None:
+                    
+                    url = "https://appr.tc/r/"+str(randint(100000, 999999))
+                    
+                    data = {
+                            "to": user_token_map.fcm_token,
+                            "notification": {
+                                                "body": url,
+                                                "OrganizationId": "2",
+                                                "priority": "high",
+                                                "subtitle": "Elementary School",
+                                                "Title": "hello"
+                                            }
+                            }
+                    payload= json.dumps(data)
+
+                    headers = { 'content-type': 'application/json',
+                            'Authorization': 'key=AAAAUxmRa78:APA91bEvq6FZ1tJnm8FeoAxigyJ7cgoK1L4gLcAquhsZ55KQpzz1eKPx7t7bdwok4LXOtqb2OeQTWgZIpHlmbTgn7V3gs-7xwdc9Sq0828saDSJpR6k_gW1DxYMiBmbEnfoabnIfdgMc'}
+                    response = requests.post("https://fcm.googleapis.com/fcm/send", data=payload, headers=headers)
+                    print("USer Map :",user_token_map.fcm_token)
+                    if response.status_code == 200:
+                            status = True
+                else:
+                    messages.error(request, "Remote user never logged in")
+    except Exception as ex:
+        print("Exception :", ex)
+        
+    if status == True:
+        return redirect(url)
+    elif status == False:
+        return redirect('view_client_high_risk')
+    

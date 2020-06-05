@@ -30,6 +30,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from mycareportal_app.email.family.family_email_processor import FamilyEmailProcessor
 from mycareportal_app.email.provider.provider_email_processor import ProviderEmailProcessor
 from mycareportal_app.email.legal.legal_email_processor import LegalEmailProcessor
+from mycareportal_app.email.caregiver.caregiver_email_processor import CaregiverEmailProcessor
 
 from django.db.models import Q
 
@@ -123,6 +124,7 @@ class AddClient(LoginRequiredMixin, View):
             notes = add_client_form.cleaned_data['notes']
             company = request.user.company
             #Create Client object and save
+            is_caregiver = add_client_form.cleaned_data['is_caregiver']
             try:
                 new_client = Client(company = company,
                                     email_address = email,
@@ -139,8 +141,60 @@ class AddClient(LoginRequiredMixin, View):
                                     zip_code = zip_code,
                                     time_zone = time_zone,
                                     referrer = referrer,
-                                    notes = notes
+                                    notes = notes,
+									is_caregiver =is_caregiver
                                     )
+                if is_caregiver:
+                    existing_user_flag = False
+                    if User.objects.filter(username=email, email=email).exists():
+                        new_user = User.objects.get(username=email)
+                        existing_user_flag = True
+                    else:
+                        new_user = User.objects.create_user(username=email,
+                                                        email=email,
+                                                        first_name=first_name,
+                                                        last_name=last_name,
+                                                        company=company)
+                        new_user.is_active = False
+                        new_user.set_unusable_password()
+                        new_user.save()
+                
+                    new_caregiver = Caregiver(user = new_user,
+                                            first_name = first_name,
+                                            last_name = last_name,
+                                            middle_name = middle_name,
+                                            gender = gender,
+                                            address = address,
+                                            city = city,
+                                            state = state,
+                                            zip_code = zip_code,
+                                            date_of_birth = date_of_birth,
+                                            phone_number = phone_number,
+                                            secondary_phone_number = secondary_phone_number,
+                                            email_address = email,
+                                            
+                                            referrer = referrer,
+                                            company=company)
+                    new_caregiver.save()
+                    new_caregiver.profile_picture = profile_picture
+                    new_caregiver.save()
+                    new_role = UserRoles(company=company,
+                                        user=new_user,
+                                        role='CAREGIVER')
+                    new_role.save()
+                    #Send verification email
+                    if not existing_user_flag:
+                        current_site = get_current_site(request)
+                        email_manager = CaregiverEmailProcessor()
+                        email_manager.send_verification_email(
+                        new_user, current_site.domain
+                        )
+                    if not existing_user_flag:
+                        new_client.save()
+                        messages.success(request, "Caregiver {0} {1} successfully added!".format(first_name, last_name))
+                    else:
+                        messages.success(request, "Caregiver role added to user {0} {1}".format(first_name, last_name))
+                        return redirect('add_client')
                 new_client.save()
                 new_client.profile_picture = profile_picture
                 new_client.save()
@@ -417,7 +471,6 @@ class AssignTasksChooseClient(LoginRequiredMixin, View):
             
             
             for taskheader in task_header_client:
-                print("Client ID ************* :",clientwotclientid)
                 taskheader.pk = None
                 taskheader.client_id = clientwotclientid
                 taskheader.uid = str(uuid.uuid4())

@@ -350,6 +350,7 @@ class Client(SoftDeletionModel):
     referrer = models.CharField(max_length=100, blank=True)
 
     notes = models.CharField(max_length=1000, blank=True)
+    is_caregiver = models.BooleanField(default=False)
 
 def get_client_attachment_upload_path(instance, filename):
     return "company_{0}/client/client_{1}/attachments/{2}".format(instance.company.company_id,instance.client.id,filename)

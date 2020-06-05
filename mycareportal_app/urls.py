@@ -227,6 +227,8 @@ urlpatterns = [
     url(r'^get_client_with_email_to_copy', client_views.get_client_with_email_to_copy,name='get_client_with_email_to_copy'),
     url(r'^get_client_with_email', client_views.get_client_with_email,name='get_client_with_email'),
 
+    url(r'^admin_send_call_request_to_caregiver/(?P<email>[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/$', views.admin_send_call_request_to_caregiver, name='admin_send_call_request_to_caregiver'),
+
     
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
