@@ -87,7 +87,7 @@
                     {% if module_dict.DASHBOARD.VIEWLOCATIONLOGS %}
                       <li><a href={% url 'caregiver_location_map' %}>View Location Logs</a></li>
                     {% endif %}
-                  </ul>
+					        </ul>
                 </li>
                 <li><a><i class="fa fa-home"></i>Reporting Portal<span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu">
@@ -168,6 +168,9 @@
                     {% endif %}
                     {% if module_dict.CAREGIVERPORTAL.VIEWSHIFTS %}
                       <li><a href={% url 'view_shifts' %}>View Shifts</a></li>
+                    {% endif %}
+                    {% if module_dict.CAREGIVERPORTAL.SCHEDULEFREECAREGIVER %}
+                      <li><a href={% url 'schedule_free_caregiver' %}>Schedule Free Caregiver</a></li>
                     {% endif %}
                   </ul>
                 </li>
@@ -294,6 +297,9 @@
                   </li>
                 </ul>
               </li>-->
+              {% if module_dict.FAMILYPORTAL.FAMILYDASHBOARD or module_dict.PROVIDERPORTAL.DASHBOARD %}
+                <li><a href="javascript:openList()"><i class="fa fa-video-camera"></i></a></li>
+              {% endif %}
             </ul>
           </nav>
         </div>
@@ -344,7 +350,7 @@
 <div class="modal fade" id="myModal" role="dialog">
   <input type="hidden" id="videoLink" value="" />
   <div class="modal-dialog">
-  
+
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
@@ -359,11 +365,68 @@
         <button type="button" class="btn btn-default" data-dismiss="modal">Decline</button>
       </div>
     </div>
-    
+
   </div>
 </div>
 
 <div id="modal-div"></div>
+<div class="modal fade" id="conferenceModal" role="dialog">
+  <input type="hidden" id="videoLink" value="" />
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <form name="user_form" role="form" id="user_form">
+    <!-- <form method="post" role="form" action="{% url 'send_call_notification' %}"> -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Available Users For Call</h4>
+      </div>
+      <div class="modal-body">
+
+        <div class="row">
+          <h5>Caregivers</h5>
+          <hr>
+          {% for caregiver in caregiver_call %}
+          <div>
+            <input type="radio" id="radio1" name="radio1" value="{{caregiver.user}}">
+            <label class="custom-control-label" for="radio1">{{caregiver.first_name}}&nbsp;{{caregiver.last_name}}</label>
+          </div>
+         {% endfor %}
+        </div>
+        <hr>
+        <div class="row">
+          <h5>Family Members</h5>
+          <hr>
+          {% for member in family_member_call %}
+          <div class="col-sm-5">
+            <input type="radio" id="radio1" name="radio1" value="{{member.user}}">
+            <label class="custom-control-label" for="radio1">{{member.first_name}}&nbsp;{{member.last_name}} </label>
+          </div>
+         {% endfor %}
+        </div>
+        <hr>
+        <div class="row">
+          <h5>Providers</h5>
+          <hr>
+          {% for provider in provider_call %}
+          <div class="col-sm-5">
+            <input type="radio" id="radio1" name="radio1" value={{provider.user}}>
+            <label class="custom-control-label" for="radio1">{{provider.first_name}}&nbsp;{{provider.last_name}}</label>
+          </div>
+         {% endfor %}
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" onclick="submit_notification_form()"  class="btn btn-primary" >Accept</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Decline</button>
+      </div>
+    </div>
+  </form>
+  </div>
+</div>
+
 
 <!-- jQuery -->
 <script src="{% static 'vendors/jquery/dist/jquery.min.js' %}"></script>
@@ -471,7 +534,7 @@
 <!-- Only show li for register tablet if Android interface exists -->
 <script type="text/javascript">
 $(document).ready(function(){
-    if(window.Android){
+    if(window.Android || isIOSDevice()){
       $('#register_tablet_li_id').show();
     }
     else{
@@ -587,8 +650,8 @@ messaging.onTokenRefresh(function() {
 
 // [START receive_message]
 messaging.onMessage(function(payload) {
-      
-  console.log("Message received. ", payload); 
+
+  console.log("Message received. ", payload);
   document.getElementById("videoLink").value = payload.notification.body;
      // appendMessage(payload);
       $("#myModal").modal();

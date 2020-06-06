@@ -50,10 +50,6 @@ class ProviderDashboard(LoginRequiredMixin, View):
             client_tasks[client_data] = list(current_client_tasks)
         context["client_tasks"] = client_tasks
         context["update_task_form"] = UpdateTaskForm()
-        
-        #Get Update Form
-        #context["update_task_form"] = UpdateTaskForm()
-
         #Get Related client on the modal where user can select desired client
         # for making video calls
         context["related_clients"] = related_clients

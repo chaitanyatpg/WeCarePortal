@@ -1,0 +1,14 @@
+{% autoescape off %}
+
+  Start &nbsp; Date: &nbsp; {{start_date}}  &nbsp; End &nbsp; Date: &nbsp; {{end_date}}  <br> 
+  Start &nbsp; Hour: &nbsp; {{start_hour}}:{{start_minute}} &nbsp; End &nbsp; Hour: &nbsp; {{end_hour}}: {{end_minute}}
+
+
+<p> {{content}} </p>
+
+
+
+From Care Manager  <br>
+{{ user.first_name }} {{ user.last_name}}. <br>
+Thank you
+{% endautoescape %}

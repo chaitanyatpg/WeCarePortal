@@ -81,7 +81,7 @@ class Company(models.Model):
     state = models.CharField(max_length=100)
     zip_code = models.CharField(max_length=10)
     time_zone = models.CharField(max_length=50)
-    account_number = models.IntegerField(unique=True, null=True)
+    account_number = models.CharField(max_length=250, blank=True, null=True)
     parent_account = models.ForeignKey('self', null=True)
     created = models.DateTimeField(auto_now_add=True)
     activation_code = models.OneToOneField(ActivationCode, null=True)
@@ -1408,4 +1408,3 @@ class UserFcmTokenMap(models.Model):
         else:
             new_token = UserFcmTokenMap(user=user, fcm_token=fcm_token)
             new_token.save()
-            
