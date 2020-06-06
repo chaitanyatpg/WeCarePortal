@@ -302,12 +302,10 @@
               </li>-->
               {% if module_dict.FAMILYPORTAL.FAMILYDASHBOARD or module_dict.PROVIDERPORTAL.DASHBOARD %}
                 <li><a href="javascript:openList()"><i class="fa fa-video-camera"></i></a></li>
-              {% endif %}  
-              
+              {% endif %}
               {% if module_dict.CAREGIVERPORTAL.CAREGIVERDASHBOARD %}
                 <li><a href="{% url 'send_notification_to_admin' %}">Notify Admin</a></li>
               {% endif %}  
-
             </ul>
           </nav>
         </div>
@@ -357,7 +355,7 @@
 <div class="modal fade" id="myModal" role="dialog">
   <input type="hidden" id="videoLink" value="" />
   <div class="modal-dialog">
-  
+
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
@@ -372,14 +370,14 @@
         <button type="button" class="btn btn-default" data-dismiss="modal">Decline</button>
       </div>
     </div>
-    
+
   </div>
 </div>
 
 <div class="modal fade" id="conferenceModal" role="dialog">
   <input type="hidden" id="videoLink" value="" />
   <div class="modal-dialog">
-  
+
     <!-- Modal content-->
     <form name="user_form" role="form" id="user_form">
     <!-- <form method="post" role="form" action="{% url 'send_call_notification' %}"> -->
@@ -389,7 +387,7 @@
         <h4 class="modal-title">Available Users For Call</h4>
       </div>
       <div class="modal-body">
-        
+
         <div class="row">
           <h5>Caregivers</h5>
           <hr>
@@ -411,7 +409,7 @@
           </div>
          {% endfor %}
         </div>
-        <hr>  
+        <hr>
         <div class="row">
           <h5>Providers</h5>
           <hr>
@@ -423,7 +421,7 @@
          {% endfor %}
         </div>
       </div>
-      
+
       <div class="modal-footer">
         <button type="button" onclick="submit_notification_form()"  class="btn btn-primary" >Accept</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Decline</button>
@@ -539,7 +537,7 @@
 <!-- Only show li for register tablet if Android interface exists -->
 <script type="text/javascript">
 $(document).ready(function(){
-    if(window.Android){
+    if(window.Android || isIOSDevice()){
       $('#register_tablet_li_id').show();
     }
     else{
@@ -640,8 +638,8 @@ messaging.onTokenRefresh(function() {
 
 // [START receive_message]
 messaging.onMessage(function(payload) {
-      
-  console.log("Message received. ", payload); 
+
+  console.log("Message received. ", payload);
   document.getElementById("videoLink").value = payload.notification.body;
      // appendMessage(payload);
       $("#myModal").modal();

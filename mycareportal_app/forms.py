@@ -65,7 +65,7 @@ class CompanyEditForm(forms.Form):
     city = forms.CharField(max_length=100,required=False)
     state = forms.CharField(max_length=100,required=False)
     zip_code = forms.CharField(max_length=10,required=False)
-    account_number = forms.IntegerField(required=False)
+    account_number = forms.CharField(required=False)
     time_zone = forms.CharField(max_length=50, required=False)
     default_dashboard = forms.CharField(max_length=100, required=False)
     tax_rate = forms.DecimalField(required=False)

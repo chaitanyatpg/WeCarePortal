@@ -85,7 +85,7 @@ def add_roles_to_context(request):
             module_dict['REPORTING']['VIEWALLCLIENTSWITHOUTCAREGIVERS']=True
             module_dict['REPORTING']['VIEWDAILYACTIVITYREPORT']=True
             module_dict['PROVIDERPORTAL']['VITALSREPORT']=True
-            
+
         #CAREGIVER PERMISSIONS
         if 'CAREGIVER' in user_roles:
             module_dict['CAREGIVERPORTAL']['CAREGIVERDASHBOARD']=True
@@ -124,4 +124,10 @@ def add_current_user_context(request):
         if 'CAREMANAGER' in user_roles:
             auth_info = CareManager.objects.get(user=request.user)
             context['current_user_info'] = auth_info
+    return context
+
+def add_tablet_id_context(request):
+    context = {}
+    if "tablet_id" in request.session:
+        context["global_tablet_id"] = request.session["tablet_id"]
     return context
