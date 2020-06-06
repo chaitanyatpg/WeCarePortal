@@ -107,6 +107,9 @@ def home(request):
 def login(request):
     return render(request, 'production/wecare_login.html')
 
+def handler500(request):
+    return render(request, 'production/500.html', status=500)
+
 @login_required
 def logout_view(request):
     current_company = request.user.company
