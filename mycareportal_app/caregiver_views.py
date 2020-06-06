@@ -28,7 +28,7 @@ from mycareportal_app.common import error_messaging as error_messaging
 from django.contrib.sites.shortcuts import get_current_site
 from mycareportal_app.email.caregiver.caregiver_email_processor import CaregiverEmailProcessor
 from mycareportal_app.email.client.client_email_processor import ClientEmailProcessor
-#import requests
+import requests
 
 
 
