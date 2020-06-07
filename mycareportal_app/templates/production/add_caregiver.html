@@ -356,6 +356,22 @@
                         {{add_caregiver_form.profile_picture.label_tag}}{{add_caregiver_form.profile_picture}}
                       </div>
                   </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Additional Attachments</label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{add_caregiver_form.attachment.label_tag}}{{add_caregiver_form.attachment}}
+                      </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Additional Notes</label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not add_caregiver_form.notes.value is None %}
+                        <textarea type="text" class="form-control col-md-7 col-xs-12" name={{add_caregiver_form.notes.html_name}} value={{add_caregiver_form.notes.value}}>{{add_caregiver_form.notes.value}}</textarea>
+                      {% else %}
+                        <textarea type="text" class="form-control col-md-7 col-xs-12" name={{add_caregiver_form.notes.html_name}}></textarea>
+                      {% endif %}
+                    </div>
+                  </div>
                   <!--<div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Location</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">

@@ -37,6 +37,8 @@ def add_caregiver(request):
 
 class AddCaregiver(LoginRequiredMixin, View):
 
+    MAX_FILE_SIZE = 104857600 #100mb in bytes
+
     def get(self, request):
         context = {}
         context['add_caregiver_form'] = CaregiverRegistrationForm()
@@ -47,7 +49,9 @@ class AddCaregiver(LoginRequiredMixin, View):
         context = {}
         add_caregiver_form = CaregiverRegistrationForm(request.POST,request.FILES)
         context['add_caregiver_form'] = add_caregiver_form
-        if add_caregiver_form.is_valid():
+        attachments = request.FILES.getlist('attachment')
+        are_attachments_valid = self.validate_attachments(request, attachments)
+        if are_attachments_valid and add_caregiver_form.is_valid():
             first_name = add_caregiver_form.cleaned_data['first_name']
             last_name = add_caregiver_form.cleaned_data['last_name']
             middle_name = add_caregiver_form.cleaned_data['middle_name']
@@ -63,6 +67,7 @@ class AddCaregiver(LoginRequiredMixin, View):
             ssn = add_caregiver_form.cleaned_data['ssn']
             referrer = add_caregiver_form.cleaned_data['referrer']
             profile_picture = add_caregiver_form.cleaned_data['profile_picture']
+            notes = add_caregiver_form.cleaned_data['notes']
             company = request.user.company
             #Create caregiver user auth model and save
             try:
@@ -96,11 +101,14 @@ class AddCaregiver(LoginRequiredMixin, View):
                                               email_address = email,
                                               ssn = ssn,
                                               referrer = referrer,
-                                              company=company)
+                                              company=company,
+                                              notes=notes)
                     new_caregiver.save()
                     #Save Image
                     new_caregiver.profile_picture = profile_picture
                     new_caregiver.save()
+                    # save attachments
+                    self.save_caregiver_attachments(company, new_caregiver, attachments, request.user)
                     #Add new user to UserRoles with CAREGIVER Role
                     new_role = UserRoles(company=company,
                                             user=new_user,
@@ -125,6 +133,21 @@ class AddCaregiver(LoginRequiredMixin, View):
             form_errors = add_caregiver_form.errors.as_data()
             error_messaging.render_error_messages(request, form_errors)
         return render(request, 'production/add_caregiver.html', context)
+
+    def validate_attachments(self, request, attachments):
+        for attachment in attachments:
+            if attachment._size > self.MAX_FILE_SIZE:
+                messages.error(request, "Attachment {0} is too large. All attachments must be under 100mb.".format(attachment))
+                return False
+        return True
+
+    def save_caregiver_attachments(self, company, caregiver, attachments, current_user):
+        for uploaded_file in attachments:
+            caregiver_attachment = CaregiverAttachment(company=company,
+                                            caregiver=caregiver,
+                                            user=current_user,
+                                            attachment=uploaded_file)
+            caregiver_attachment.save()
 
 class EditChooseCaregiver(LoginRequiredMixin, View):
 
@@ -183,6 +206,8 @@ class ViewCaregiverTimesheet(LoginRequiredMixin, View):
 
 class EditCaregiver(LoginRequiredMixin, View):
 
+    MAX_FILE_SIZE = 104857600 #100mb in bytes
+
     def get(self, request):
         context = {}
         find_caregiver_form = FindCaregiverForm(request.GET)
@@ -209,10 +234,12 @@ class EditCaregiver(LoginRequiredMixin, View):
                 'referrer': caregiver.referrer,
                 'profile_picture': caregiver.profile_picture,
                 'rating': caregiver.rating,
-                'hourly_rate': caregiver.hourly_rate
+                'hourly_rate': caregiver.hourly_rate,
+                'notes': caregiver.notes
             })
-            print(caregiver.rating)
             context['edit_caregiver_form'] = edit_caregiver_form
+            caregiver_attachments = self.get_caregiver_attachments(current_company, caregiver)
+            context['caregiver_attachments'] = caregiver_attachments
             #Client Criteria map
             client_match_categories = ClientMatchCategory.objects.all()
             client_match_criteria = ClientMatchCriteria.objects.filter(is_default=True) | ClientMatchCriteria.objects.filter(company=current_company)
@@ -239,7 +266,9 @@ class EditCaregiver(LoginRequiredMixin, View):
         edit_caregiver_form = CaregiverEditForm(request.POST,request.FILES)
         email = request.POST.get('email')
         context['edit_caregiver_form'] = edit_caregiver_form
-        if edit_caregiver_form.is_valid():
+        attachments = request.FILES.getlist('attachment')
+        are_attachments_valid = self.validate_attachments(request, attachments)
+        if are_attachments_valid and edit_caregiver_form.is_valid():
             try:
                 first_name = edit_caregiver_form.cleaned_data['first_name']
                 last_name = edit_caregiver_form.cleaned_data['last_name']
@@ -258,6 +287,7 @@ class EditCaregiver(LoginRequiredMixin, View):
                 profile_picture = edit_caregiver_form.cleaned_data['profile_picture']
                 rating = edit_caregiver_form.cleaned_data['rating']
                 hourly_rate = edit_caregiver_form.cleaned_data['hourly_rate']
+                notes = edit_caregiver_form.cleaned_data['notes']
                 #Get current caregiver
                 caregiver = Caregiver.objects.get(company=current_company,email_address=email)
                 if self.arg_diff(caregiver.first_name, first_name):
@@ -290,6 +320,8 @@ class EditCaregiver(LoginRequiredMixin, View):
                     caregiver.hourly_rate = hourly_rate
                 if self.arg_diff(caregiver.profile_picture, profile_picture):
                     caregiver.profile_picture = profile_picture
+                if self.arg_diff(caregiver.notes, notes):
+                    caregiver.notes = notes
                 if self.arg_diff(caregiver.email_address, email):
                     caregiver.email_address = email
                     caregiver_auth = User.objects.get(company=current_company,email=email)
@@ -297,6 +329,7 @@ class EditCaregiver(LoginRequiredMixin, View):
                     caregiver_auth.save()
                 caregiver.rating = rating
                 caregiver.save()
+                self.save_caregiver_attachments(current_company, caregiver, attachments, request.user)
                 messages.success(request, "Caregiver {0} {1} successfully edited!".format(first_name,last_name))
             except IntegrityError as e:
                 messages.error(request, "Caregiver already exists. Please add a new Caregiver")
@@ -351,6 +384,25 @@ class EditCaregiver(LoginRequiredMixin, View):
                         criteria_map[category][criteria] = criteria_status
                         criteria_status.save()
         return criteria_map
+
+    def get_caregiver_attachments(self, company, caregiver):
+        caregiver_attachments = CaregiverAttachment.objects.filter(company=company,caregiver=caregiver)
+        return caregiver_attachments
+
+    def validate_attachments(self, request, attachments):
+        for attachment in attachments:
+            if attachment._size > self.MAX_FILE_SIZE:
+                messages.error(request, "Attachment {0} is too large. All attachments must be under 100mb.".format(attachment))
+                return False
+        return True
+
+    def save_caregiver_attachments(self, company, caregiver, attachments, current_user):
+        for uploaded_file in attachments:
+            caregiver_attachment = CaregiverAttachment(company=company,
+                                            caregiver=caregiver,
+                                            user=current_user,
+                                            attachment=uploaded_file)
+            caregiver_attachment.save()
 
 @login_required
 def get_caregiver_with_email(request):
@@ -479,7 +531,7 @@ class CaregiverDashboard(LoginRequiredMixin, View):
         incident_locations = IncidentLocations.objects.all().order_by('location')
         context['incident_locations'] = incident_locations
 
-        
+
 
 
         return render(request, 'production/caregiver_dashboard.html', context)
@@ -517,18 +569,18 @@ class CaregiverDashboard(LoginRequiredMixin, View):
                     for i in range(len(template_entries)):
                         entry_instances[i].entry_value = template_entries[i]
                         entry_instances[i].save()
-				    
+
                     try:
                         task_template= TaskTemplate.objects.get(pk =1)
-                   
-                        
-                        new_entry_instance = TaskTemplateEntryInstance.objects.filter(company=current_company,                    
+
+
+                        new_entry_instance = TaskTemplateEntryInstance.objects.filter(company=current_company,
                                                                 task_template_instance=task_template_instance)
-                        
+
                         heart_rate_max_value = 100
                         heart_rate_min_value =60
                         setvalue_blood_oxygen_level_value = 95
-                        body_temperature_value_max = 98 
+                        body_temperature_value_max = 98
                         task_list_key =[]
 
                         heart_rate = None
@@ -537,7 +589,7 @@ class CaregiverDashboard(LoginRequiredMixin, View):
                         blood_oxygen_level_SpO2_95_below = None
                         breathing_issues = None
                         cold_cough = None
-                        bad_throat = None 
+                        bad_throat = None
                         lack_of_test_smell = None
                         chest_pain = None
                         headache = None
@@ -550,32 +602,32 @@ class CaregiverDashboard(LoginRequiredMixin, View):
 
 
 
-                        # tasksentryvalue = []                                                           
+                        # tasksentryvalue = []
                         for i in new_entry_instance:
                             task_template_entry = TaskTemplateEntry.objects.filter(id=i.task_template_entry_id)
                             if task_template_entry[0].task_template_entry_code == 'VIT001HR':
                                 if i.entry_value != "" and i.entry_value != "Y" and i.entry_value != "N" and i.entry_value != "NA":
                                     heart_rate= int(i.entry_value)
                                     if heart_rate > 100 or heart_rate < 60:
-                                        heart_rate_bpm_over_100_bpm_under_60_bpm = heart_rate    
+                                        heart_rate_bpm_over_100_bpm_under_60_bpm = heart_rate
                                 else:
                                     heart_rate = None
                             if task_template_entry[0].task_template_entry_code == 'VIT001BT':
                                 if i.entry_value != "" and i.entry_value != "Y" and i.entry_value != "N" and i.entry_value != "NA":
                                     body_temperature = int(i.entry_value)
                                     if body_temperature > body_temperature_value_max:
-                                        body_temperature_38_higher = body_temperature    
+                                        body_temperature_38_higher = body_temperature
                                 else:
                                     body_temperature_38_higher = None
-                            
+
                             if task_template_entry[0].task_template_entry_code == 'VIT001BOL':
                                 if i.entry_value != "" and i.entry_value != "Y" and i.entry_value != "N" and i.entry_value != "NA":
                                     blood_oxygen_level_value = int(i.entry_value)
                                     if blood_oxygen_level_value < setvalue_blood_oxygen_level_value:
-                                        blood_oxygen_level_SpO2_95_below = blood_oxygen_level_value    
+                                        blood_oxygen_level_SpO2_95_below = blood_oxygen_level_value
                                 else:
                                     blood_oxygen_level_SpO2_95_below = None
-                            
+
                             if task_template_entry[0].task_template_entry_code == 'VIT001BP':
                                 if i.entry_value != "" and i.entry_value != "Y" and i.entry_value != "N" and i.entry_value != "NA":
                                     blood_pressure = i.entry_value
@@ -593,17 +645,17 @@ class CaregiverDashboard(LoginRequiredMixin, View):
                                     blood_sugar_non_fasting = i.entry_value
                                 else:
                                     blood_oxygen_level_SpO2_95_below = None
-                                    
+
                             if task_template_entry[0].task_template_entry_code == 'VIT001W':
                                 if i.entry_value != "" and i.entry_value != "Y" and i.entry_value != "N" and i.entry_value != "NA":
                                     weight = i.entry_value
                                 else:
                                     weight = None
-                            
+
                             if task_template_entry[0].task_template_entry_code == 'VIT001BI':
                                 if i.entry_value != ""  and  i.entry_value == "Y":
-                                    breathing_issues = i.entry_value    
-                                
+                                    breathing_issues = i.entry_value
+
                             if task_template_entry[0].task_template_entry_code == 'VIT001CD':
                                 if i.entry_value != ""  and  i.entry_value == "Y":
                                     cold_cough = i.entry_value
@@ -615,11 +667,11 @@ class CaregiverDashboard(LoginRequiredMixin, View):
                             if task_template_entry[0].task_template_entry_code == 'VIT001TS':
                                 if i.entry_value != ""  and  i.entry_value == "Y":
                                     VIT001TS = i.entry_value
-                            
+
                             if task_template_entry[0].task_template_entry_code == 'VIT001H':
                                 if i.entry_value != ""  and  i.entry_value == "Y":
                                     headache = i.entry_value
-                            
+
                             if task_template_entry[0].task_template_entry_code == 'VIT001CP':
                                 if i.entry_value != ""  and  i.entry_value == "Y":
                                     chest_pain = i.entry_value
@@ -639,7 +691,7 @@ class CaregiverDashboard(LoginRequiredMixin, View):
                                                                 body_temperature_38_higher = body_temperature_38_higher,blood_oxygen_level_SpO2_95_below=blood_oxygen_level_SpO2_95_below,
                                                                 heart_rate_bpm_over_100_bpm_under_60_bpm =heart_rate_bpm_over_100_bpm_under_60_bpm,
                                                                 weight=weight,blood_sugar_fasting=blood_sugar_fasting,blood_sugar_non_fasting=blood_sugar_non_fasting, blood_pressure=blood_pressure )
-                            notify_task.save()           
+                            notify_task.save()
                     except Exception as e:
                         print("exception", e)
 
@@ -802,7 +854,7 @@ class CaregiverDashboard(LoginRequiredMixin, View):
     def get_task_template_objects(self, client_task, company):
         template_objects = {}
         template_instances = TaskTemplateInstance.objects.filter(company=company,task_schedule=client_task).order_by('created')
-        
+
         for template_instance in template_instances:
             if template_instance not in template_objects:
                 template_objects[template_instance] = {}
@@ -810,7 +862,7 @@ class CaregiverDashboard(LoginRequiredMixin, View):
             for subcategory in subcategory_instances:
                 entry_instances = list(TaskTemplateEntryInstance.objects.filter(company=company, task_template_subcategory_instance=subcategory))
                 template_objects[template_instance][subcategory] = entry_instances
-        
+
         return template_objects
 
     def check_task_complete_status(self, current_client_tasks):
@@ -1190,7 +1242,7 @@ def send_notification_to_admin(request):
             user_token.append(token)
         except UserFcmTokenMap.DoesNotExist:
             print("token not Exisits")
-        
+
 
     data = {
                     "registration_ids ": user_token,
@@ -1210,5 +1262,3 @@ def send_notification_to_admin(request):
     if response.status_code == 200:
         status = True
     return redirect('caregiver_dashboard')
-
-

@@ -24,6 +24,8 @@ class CaregiverRegistrationForm(forms.Form):
     ssn = forms.CharField(max_length=20, required=False)
     referrer = forms.CharField(max_length=100, required=False)
     profile_picture = forms.ImageField(label='Select file', required=False)
+    attachment = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), label='Select files', required=False)
+    notes = forms.CharField(max_length=1000, required=False)
 
     def clean_picture(self):
         picture = self.cleaned_data['profile_picture']
@@ -64,6 +66,8 @@ class CaregiverEditForm(forms.Form):
     profile_picture = forms.ImageField(label='Select file', required=False)
     rating = forms.IntegerField(required=False)
     hourly_rate = forms.IntegerField(required=False)
+    attachment = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), label='Select files', required=False)
+    notes = forms.CharField(max_length=1000, required=False)
 
     def clean_picture(self):
         picture = self.cleaned_data['profile_picture']
@@ -117,14 +121,13 @@ class ScheduleShiftForm(forms.Form):
     start_minute = forms.CharField(max_length=10)
     end_hour = forms.CharField(max_length=10)
     end_minute = forms.CharField(max_length=10)
-    
 
     def clean(self):
         cleaned_data = super(ScheduleShiftForm, self).clean()
         return cleaned_data
 
 class ScheduleShiftFreeCaregiverForm(forms.Form):
-    
+
     start_date = forms.DateField()
     end_date = forms.DateField()
     start_hour = forms.CharField(max_length=10)
@@ -143,18 +146,6 @@ class ScheduleShiftFreeCaregiverForm(forms.Form):
     def __len__(self):
         return len(self.ScheduleShiftFreeCaregiverForm)
 
-
-
-
-
-    
-
-
-
-
-
-
-    
 class EditScheduleForm(forms.Form):
 
     schedule_id = forms.IntegerField()

@@ -404,6 +404,31 @@
                       </div>
                   </div>
                   <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Attachments</label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{edit_caregiver_form.attachment.label_tag}}{{edit_caregiver_form.attachment}}
+                      <ul>
+                      {% for attachment in caregiver_attachments %}
+                          <li>
+                            <a href="{{attachment.attachment.url}}"  target="_blank"><i class="fa fa-paperclip"></i>{{attachment.attachment|trunc_path}}</a>
+                            <span>Uploaded on {{attachment.created}}</span>
+                            <span>by {{attachment.user.first_name|addstr_space:attachment.user.last_name}}</span>
+                          </li>
+                      {% endfor %}
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Additional Notes</label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not edit_caregiver_form.notes.value is None %}
+                        <textarea type="text" class="form-control col-md-7 col-xs-12" name={{edit_caregiver_form.notes.html_name}} value={{edit_caregiver_form.notes.value}}>{{edit_caregiver_form.notes.value}}</textarea>
+                      {% else %}
+                        <textarea type="text" class="form-control col-md-7 col-xs-12" name={{edit_caregiver_form.notes.html_name}}></textarea>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Rating<span class="required">*</span> </label>
                     <div class="starrr stars"></div>
                     <span class="stars-count">{{edit_caregiver_form.rating.value}}</span> star(s)

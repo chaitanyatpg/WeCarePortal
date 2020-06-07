@@ -190,11 +190,24 @@ class Caregiver(models.Model):
     profile_picture = models.ImageField(upload_to=get_caregiver_profile_picture_upload_path)
     hourly_rate = models.IntegerField(default=0)
     created = models.DateTimeField(auto_now_add=True)
+    notes = models.CharField(max_length=1000, blank=True)
     #add location
     #add tags
 
     def __unicode__(self):
         return self.user.username
+
+def get_caregiver_attachment_upload_path(instance, filename):
+    return "company_{0}/caregiver/caregiver_{1}/attachments/{2}".format(instance.company.company_id,instance.caregiver.id,filename)
+
+class CaregiverAttachment(models.Model):
+
+    company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    caregiver = models.ForeignKey(Caregiver)
+    user = models.ForeignKey(User)
+    attachment = models.FileField(upload_to=get_caregiver_attachment_upload_path)
+    created = models.DateTimeField(auto_now_add=True)
 
 def get_home_mod_user_profile_picture_upload_path(instance, filename):
     return "company_{0}/home_mod/home_mod_{1}/profile_pictures/{2}".format(instance.company.company_id,instance.id,filename)
