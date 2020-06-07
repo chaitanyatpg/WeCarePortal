@@ -192,6 +192,10 @@ class AddClient(LoginRequiredMixin, View):
                     if not existing_user_flag:
                         new_client.save()
                         messages.success(request, "Caregiver {0} {1} successfully added!".format(first_name, last_name))
+                        assigned_caregiver = Caregiver.objects.get(company=current_company, email_address=email)
+                        assigned_client = Client.objects.get(company=current_company, email_address=email)
+                        assigned_client.caregiver.add(assigned_caregiver)
+                        assigned_client.save()
                     else:
                         messages.success(request, "Caregiver role added to user {0} {1}".format(first_name, last_name))
                         return redirect('add_client')
