@@ -218,6 +218,10 @@ urlpatterns = [
     
 
     url(r'^send_call_notification', views.send_call_notification, name='send_call_notification'),
+    url(r'^get_clients_details', views.get_clients_details, name='get_clients_details'),
+    
+    
+    
     
     url(r'^schedule_free_caregiver',caregiver_views.ScheduleFreeCaregiver.as_view(),name='schedule_free_caregiver'),
     

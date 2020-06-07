@@ -300,7 +300,6 @@
               {% if module_dict.FAMILYPORTAL.FAMILYDASHBOARD or module_dict.PROVIDERPORTAL.DASHBOARD %}
                 <li><a href="javascript:openList()"><i class="fa fa-video-camera"></i></a></li>
               {% endif %}
-
             </ul>
           </nav>
         </div>
@@ -347,6 +346,7 @@
   </div>
 </div>
 <!-- Modal -->
+
 <div class="modal fade" id="myModal" role="dialog">
   <input type="hidden" id="videoLink" value="" />
   <div class="modal-dialog">
@@ -369,6 +369,7 @@
   </div>
 </div>
 
+<div id="modal-div"></div>
 <div class="modal fade" id="conferenceModal" role="dialog">
   <input type="hidden" id="videoLink" value="" />
   <div class="modal-dialog">
@@ -425,6 +426,7 @@
   </form>
   </div>
 </div>
+
 
 <!-- jQuery -->
 <script src="{% static 'vendors/jquery/dist/jquery.min.js' %}"></script>
@@ -582,9 +584,24 @@ $(document).ready(function(){
 });
 </script>-->
 <script>
-  function openList() {
-    $("#conferenceModal").modal();
+  function openList(client_email_address) {
+    var modalDiv = $("#modal-div");
+  $.ajax({
+      type: "GET",
+      url: '{% url "get_clients_details" %}',
+      data: { client_email_address: client_email_address },
+      contentType: "application/json",
+      success: function(out_msg){ 
+        modalDiv.html(out_msg);
+       $("#conferenceModal").modal();
+
+      },
+      failure: function(out_msg){
+      }
+    });
+    
   }
+
 </script>
 
 <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-app.js"></script>
