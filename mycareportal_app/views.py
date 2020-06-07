@@ -1524,6 +1524,7 @@ def send_call_notification(request):
     elif status == False:
         return redirect('family_dashboard')
 
+
 class ClientHighRisk(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         context = {}
@@ -1595,3 +1596,19 @@ def admin_send_call_request_to_caregiver(request, email):
     elif status == False:
         return redirect('view_client_high_risk')
     
+
+def get_clients_details(request):
+    if request.method == "GET":
+        user_email = request.GET.get('client_email_address')
+        clients = Client.objects.filter(company=request.user.company, email_address = user_email)
+        family_member =clients[0].family_contacts.all().exclude(user= request.user)
+        provider = clients[0].provider.all().exclude(user= request.user)
+        caregiver = clients[0].caregiver.all().exclude(user= request.user)
+        context = {
+              'provider' :   provider,
+              'caregiver':   caregiver,
+              'family_member' : family_member
+       }
+    
+    return render(request, 'production/available_users_modal.html', context)
+
