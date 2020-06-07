@@ -1307,4 +1307,129 @@
 			"entry_type": "RADIO"
 		}
 	}
+,
+{
+	"model": "mycareportal_app.tasktemplateentry",
+	"pk": 110,
+	"fields": {
+		"name": "Blood Oxygen Level (SpO2 %) ",
+		"description": "",
+		"task_template_code": "VIT001",
+		"task_template_subcategory_code": "VIT001",
+		"task_template_entry_code": "VIT001BOL",
+		"entry_type": "TEXT"
+	}
+},
+
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 111,
+		"fields": {
+			"name": "Do you have any breathing issues?",
+			"description": "",
+			"task_template_code": "VIT001",
+			"task_template_subcategory_code": "VIT001",
+			"task_template_entry_code": "VIT001BI",
+			"entry_type": "RADIO"
+		}
+	},
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 112,
+		"fields": {
+			"name": "Do you have a Cold or Cough?",
+			"description": "",
+			"task_template_code": "VIT001",
+			"task_template_subcategory_code": "VIT001",
+			"task_template_entry_code": "VIT001CD",
+			"entry_type": "RADIO"
+		}
+	},
+	
+
+
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 113,
+		"fields": {
+			"name": "Do you have a bad throat?",
+			"description": "",
+			"task_template_code": "VIT001",
+			"task_template_subcategory_code": "VIT001",
+			"task_template_entry_code": "VIT001BT",
+			"entry_type": "RADIO"
+		}
+	},
+
+
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 114,
+		"fields": {
+			"name": "Do you have a lack of taste and smell? ",
+			"description": "",
+			"task_template_code": "VIT001",
+			"task_template_subcategory_code": "VIT001",
+			"task_template_entry_code": "VIT001TS",
+			"entry_type": "RADIO"
+		}
+	},
+
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 115,
+		"fields": {
+			"name": "Do you have a headache? ",
+			"description": "",
+			"task_template_code": "VIT001",
+			"task_template_subcategory_code": "VIT001",
+			"task_template_entry_code": "VIT001H",
+			"entry_type": "RADIO"
+		}
+	},
+
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 116,
+		"fields": {
+			"name": "Do you have any chest pain? ",
+			"description": "",
+			"task_template_code": "VIT001",
+			"task_template_subcategory_code": "VIT001",
+			"task_template_entry_code": "VIT001CP",
+			"entry_type": "RADIO"
+		}
+	},
+
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 117,
+		"fields": {
+			"name": "Do you have any weakness/tiredness?  ",
+			"description": "",
+			"task_template_code": "VIT001",
+			"task_template_subcategory_code": "VIT001",
+			"task_template_entry_code": "VIT001WD",
+			"entry_type": "RADIO"
+		}
+	},
+
+
+
+
+
+	{
+		"model": "mycareportal_app.tasktemplateentry",
+		"pk": 118,
+		"fields": {
+			"name": "Do you have fever or chills?  ",
+			"description": "",
+			"task_template_code": "VIT001",
+			"task_template_subcategory_code": "VIT001",
+			"task_template_entry_code": "VIT001FC",
+			"entry_type": "RADIO"
+		}	
+	}
+
+
 ]

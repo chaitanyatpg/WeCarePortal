@@ -64,6 +64,13 @@
               <span id="total_cancelled_tasks_sub" class="count_bottom">{{total_cancelled_tasks}} cancelled tasks</span>
             </div>
           </div>
+		  <div>
+			{% for i in client_notify %}
+
+            <marquee onmouseover="this.stop();" onmouseout="this.start();"> <a  href ="{% url 'view_client_high' i.id  %}"><span style="color:red"> {{i.client.first_name}} &nbsp {{i.client.last_name}}  is at high risk  &nbsp X</span></a> </marquee>
+
+            {% endfor %}
+          </div>
           <hr>
           <div class="row tile_count">
             <h2> Company details </h2>

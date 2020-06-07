@@ -66,7 +66,7 @@
                 <tbody>
                     {% for caregiver in caregivers %}
                       <tr>
-                        <td>{{caregiver.first_name}}</td>
+                        <td><a href="{% url 'edit_caregiver' %}?caregiver_email={{caregiver.email_address}}">{{caregiver.first_name}}</a></td>
                         <td>{{caregiver.last_name}}</td>
                         <td>{{caregiver.email_address}}</td>
                         <td>{{caregiver.gender}}</td>

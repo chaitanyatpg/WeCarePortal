@@ -465,6 +465,8 @@ def dashboard(request):
     context['days_since_company_created'] = days_since_company_created
     context['current_date'] = '{0}-{1}-{2}'.format(current_date.year,current_date.strftime('%m'),current_date.strftime('%d'))
     print(context['current_date'])
+    client_notify = NotifyClientVitalTask.objects.filter(company = current_company,is_active = True)
+    context['client_notify'] = client_notify
     return render(request, 'production/admin_dashboard.html', context)
 
 class AddCareManager(LoginRequiredMixin, View):
@@ -1522,6 +1524,79 @@ def send_call_notification(request):
     elif status == False:
         return redirect('family_dashboard')
 
+
+class ClientHighRisk(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        context = {}
+        current_company = request.user.company
+        notify_client_vital_task = NotifyClientVitalTask.objects.filter(company=current_company)
+        print("notify_client_vital_task",notify_client_vital_task)
+        context['notify_client_vital_task'] =notify_client_vital_task
+    
+        
+        return render(request, "production/view_client_high_risk.html", context)
+        
+
+def viewclienthigh( request, *args, **kwargs):
+    context = {}
+    id = kwargs['id']
+    notify_client_vital_task = NotifyClientVitalTask.objects.get(pk= id)
+    notify_client_vital_task.is_active = False
+    notify_client_vital_task.save()
+    
+    return redirect("dashboard")
+
+def admin_send_call_request_to_caregiver(request, email):
+    status = False
+    url=""
+    caregiver_email_id = email
+    company = request.user.company
+    try:
+        if request.method == 'GET':
+            user_email = request.GET.get('email')
+            care_giver_user = Caregiver.objects.get(company=company,
+                                                    email_address = caregiver_email_id)
+            
+            
+            if care_giver_user is not None:
+                user_token_map = UserFcmTokenMap.objects.get(user=care_giver_user.user)
+
+            
+                
+            
+                if user_token_map is not None:
+                    
+                    url = "https://appr.tc/r/"+str(randint(100000, 999999))
+                    
+                    data = {
+                            "to": user_token_map.fcm_token,
+                            "notification": {
+                                                "body": url,
+                                                "OrganizationId": "2",
+                                                "priority": "high",
+                                                "subtitle": "Elementary School",
+                                                "Title": "hello"
+                                            }
+                            }
+                    payload= json.dumps(data)
+
+                    headers = { 'content-type': 'application/json',
+                            'Authorization': 'key=AAAAUxmRa78:APA91bEvq6FZ1tJnm8FeoAxigyJ7cgoK1L4gLcAquhsZ55KQpzz1eKPx7t7bdwok4LXOtqb2OeQTWgZIpHlmbTgn7V3gs-7xwdc9Sq0828saDSJpR6k_gW1DxYMiBmbEnfoabnIfdgMc'}
+                    response = requests.post("https://fcm.googleapis.com/fcm/send", data=payload, headers=headers)
+                    print("USer Map :",user_token_map.fcm_token)
+                    if response.status_code == 200:
+                            status = True
+                else:
+                    messages.error(request, "Remote user never logged in")
+    except Exception as ex:
+        print("Exception :", ex)
+        
+    if status == True:
+        return redirect(url)
+    elif status == False:
+        return redirect('view_client_high_risk')
+    
+
 def get_clients_details(request):
     if request.method == "GET":
         user_email = request.GET.get('client_email_address')
@@ -1536,3 +1611,4 @@ def get_clients_details(request):
        }
     
     return render(request, 'production/available_users_modal.html', context)
+

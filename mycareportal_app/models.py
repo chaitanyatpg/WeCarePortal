@@ -350,6 +350,7 @@ class Client(SoftDeletionModel):
     referrer = models.CharField(max_length=100, blank=True)
 
     notes = models.CharField(max_length=1000, blank=True)
+    is_caregiver = models.BooleanField(default=False)
 
 def get_client_attachment_upload_path(instance, filename):
     return "company_{0}/client/client_{1}/attachments/{2}".format(instance.company.company_id,instance.client.id,filename)
@@ -1408,3 +1409,27 @@ class UserFcmTokenMap(models.Model):
         else:
             new_token = UserFcmTokenMap(user=user, fcm_token=fcm_token)
             new_token.save()
+
+class NotifyClientVitalTask(models.Model):
+
+    created = models.DateTimeField(auto_now_add=True)
+    company = models.ForeignKey(Company)
+    user = models.ForeignKey(User)
+    client = models.ForeignKey(Client)
+
+    is_active = models.BooleanField(default=True)
+    breathing_issues =models.CharField(max_length=1, blank=True, null=True)
+    Cold_or_Cough = models.CharField(max_length=1, blank=True, null=True)
+    bad_throat = models.CharField(max_length=1, blank=True, null=True)
+    lack_taste_and_smell =models.CharField(max_length=1, blank=True, null=True)
+    headache =models.CharField(max_length=1, blank=True, null=True)
+    chest_pain=models.CharField(max_length=1, blank=True, null=True)
+    weakness = models.CharField(max_length=1, blank=True, null=True)
+    fever = models.CharField(max_length=1, blank=True, null=True)
+    body_temperature_38_higher =models.CharField(max_length=500, blank=True, null=True)
+    blood_oxygen_level_SpO2_95_below = models.CharField(max_length=500, blank=True, null=True)
+    heart_rate_bpm_over_100_bpm_under_60_bpm =  models.CharField(max_length=500, blank=True, null=True)
+    weight =models.CharField(max_length=100, blank=True, null=True)
+    blood_sugar_fasting=models.CharField(max_length=100, blank=True, null=True)
+    blood_sugar_non_fasting=models.CharField(max_length=100, blank=True, null=True)
+    blood_pressure=models.CharField(max_length=100, blank=True, null=True)

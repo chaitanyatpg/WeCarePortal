@@ -224,7 +224,15 @@ urlpatterns = [
     
     
     url(r'^schedule_free_caregiver',caregiver_views.ScheduleFreeCaregiver.as_view(),name='schedule_free_caregiver'),
-    
+    url(r'^view_client_high_risk', views.ClientHighRisk.as_view(),name='view_client_high_risk'),
+    url(r'^view_client_high/(?P<id>[0-9a-f-]+)',views.viewclienthigh,name='view_client_high'),
+
+    url(r'^send_notification_to_admin', caregiver_views.send_notification_to_admin ,name='send_notification_to_admin'),
+    url(r'^get_client_with_email_to_copy', client_views.get_client_with_email_to_copy,name='get_client_with_email_to_copy'),
+    url(r'^get_client_with_email', client_views.get_client_with_email,name='get_client_with_email'),
+
+    url(r'^admin_send_call_request_to_caregiver/(?P<email>[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/$', views.admin_send_call_request_to_caregiver, name='admin_send_call_request_to_caregiver'),
+
     
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

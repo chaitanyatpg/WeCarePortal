@@ -28,6 +28,7 @@ class ClientRegistrationForm(forms.Form):
     referrer = forms.CharField(max_length=100, required=False)
     attachment = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), label='Select files', required=False)
     notes = forms.CharField(max_length=1000, required=False)
+    is_caregiver = forms.BooleanField(required=False)
 
 
     def clean_picture(self):
@@ -379,4 +380,13 @@ class EndOfLifeForm(forms.Form):
 
     def clean(self):
         cleaned_data = super(EndOfLifeForm, self).clean()
+        return cleaned_data
+
+
+
+class CopyAssignTaskForm(forms.Form):
+    clientwithtask = forms.CharField(max_length=500)
+    clientwithouttask = forms.CharField(max_length=500)
+    def clean(self):
+        cleaned_data = super(CopyAssignTaskForm, self).clean()
         return cleaned_data

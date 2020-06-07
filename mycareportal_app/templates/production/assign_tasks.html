@@ -107,14 +107,14 @@
                       <label class="control-label col-md-3 col-sm-3 col-xs-12">Start Date<span class="required">*</span>
                       </label>
                       <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input type="text" id="start_date" class="date-picker form-control col-md-7 col-xs-12" required="required" name="{{assign_task_form.start_date.html_name}}">
+                        <input type="text" id="start_date" readonly="true" class="date-picker form-control col-md-7 col-xs-12" required="required" name="{{assign_task_form.start_date.html_name}}">
                       </div>
                     </div>
                     <div class="form-group">
                       <label class="control-label col-md-3 col-sm-3 col-xs-12">End Date<span class="required">*</span>
                       </label>
                       <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input type="text" id="end_date" class="date-picker form-control col-md-7 col-xs-12" required="required" name="{{assign_task_form.end_date.html_name}}">
+                        <input type="text" readonly="true" id="end_date" class="date-picker form-control col-md-7 col-xs-12" required="required" name="{{assign_task_form.end_date.html_name}}">
                       </div>
                     </div>
                     <div class="form-group">
@@ -712,6 +712,7 @@
 
     <script>
     $(document).ready(function(){
+      console.log("Language *************************", window.navigator.language)
       $('#client_dropdown').change(function(){
         var email = $(this).val();
         $.ajax({
@@ -773,7 +774,7 @@
       $(document).ready(function() {
         $('#start_date').daterangepicker({
           singleDatePicker: true,
-          calender_style: "picker_2"
+          calender_style: "picker_2",
         }, function(start, end, label) {
           console.log(start.toISOString(), end.toISOString(), label);
         });
@@ -784,7 +785,8 @@
       $(document).ready(function() {
         $('#end_date').daterangepicker({
           singleDatePicker: true,
-          calender_style: "picker_2"
+          calender_style: "picker_2",
+          
         }, function(start, end, label) {
           console.log(start.toISOString(), end.toISOString(), label);
         });
