@@ -101,7 +101,7 @@
                               </div>
                           </form>
                       
-                         <button type="button" class="btn btn-success" data-toggle="modal"   data-target="#CopyTaskModal">
+                         <button type="button" class="btn btn-success" data-toggle="modal" data-backdrop="static" data-target="#CopyTaskModal">
                           Copy Tasks
                         </button>
                       </div>
@@ -154,7 +154,7 @@
                                   </div>
                                 </div>
                               </form>
-                              </div>
+                              </div> 
                               <div class="modal-footer">
 
 
@@ -162,7 +162,7 @@
                                      {{client.activity_task}}
                                   {% endfor %}
                                
-                                 <form method="POST" >
+                                 <form id="copyForm" method="POST" >
                                     {% csrf_token %}
             	                         <div class="form-group">
 
@@ -170,8 +170,9 @@
                                 <input type="hidden" id="client_email_hidden_with_out_task" name="{{copy_assign_task_form.clientwithouttask.html_name}}">
                                 
                                 
-                                <button type="submit" class="btn btn-success">Copy Tasks</button>
+                                <button onClick="this.form.submit(); this.disabled=true; this.value='Sending…'; " type="submit" class="btn btn-success">Copy Tasks</button>
                               </form>
+                              
                               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             	                   </div>
                                  
@@ -303,6 +304,7 @@
       $(document).ready(function() {
         $('#birthday').daterangepicker({
           singleDatePicker: true,
+          showDropdowns: true,
           calender_style: "picker_4"
         }, function(start, end, label) {
           console.log(start.toISOString(), end.toISOString(), label);
@@ -689,6 +691,7 @@
       });
     </script>
 
+
     <script>
       $(document).ready(function() {
         $('#reservation').daterangepicker(null, function(start, end, label) {
@@ -704,5 +707,6 @@
         });
       });
     </script>
+
     <!-- /bootstrap-daterangepicker -->
 {% endblock %}
