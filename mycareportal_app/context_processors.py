@@ -44,7 +44,7 @@ def add_roles_to_context(request):
             module_dict['DASHBOARD']['VIEWCAREGIVERTIMESHEET']=True
             module_dict['DASHBOARD']['VIEWDAILYINCIDENTS']=True
             module_dict['DASHBOARD']['VIEWLOCATIONLOGS']=True
-		    
+
             module_dict['DASHBOARD']['VIEWCLIENTHIGHRISK']=True
             module_dict['CLIENTPORTAL']['VIEWINCIDENTSBYCLIENT']=True
             module_dict['CLIENTPORTAL']['CLIENTONBOARDING']=True
@@ -91,6 +91,7 @@ def add_roles_to_context(request):
             module_dict['CAREGIVERPORTAL']['CAREGIVERDASHBOARD']=True
             module_dict['CAREGIVERPORTAL']['VIEWCALENDAR']=True
             module_dict['CAREGIVERPORTAL']['VIEWSHIFTS']=True
+            module_dict['CLIENTPORTAL']['REGISTERTABLETCLIENT']=True
             #module_dict['CAREGIVERPORTAL']['CALENDAR']=True
         if 'FAMILYUSER' in user_roles:
             module_dict['FAMILYPORTAL']['FAMILYDASHBOARD']=True

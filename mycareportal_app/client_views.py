@@ -82,7 +82,13 @@ class ActivateTabletChooseClient(LoginRequiredMixin, View):
         context = {}
         current_company = request.user.company
         #context['add_client_form'] = ClientRegistrationForm()
-        all_clients = Client.objects.filter(company=current_company).order_by('last_name')
+        user_roles = UserRoles.objects.filter(user=request.user)
+        user_roles = [x.role for x in user_roles]
+        all_clients = []
+        if 'CAREMANAGER' in user_roles:
+            all_clients = Client.objects.filter(company=current_company).order_by('last_name')
+        elif 'CAREGIVER' in user_roles: # only for the case where a Caregiver is their own Client
+            all_clients = Client.objects.filter(company=current_company, email_address=request.user.email)
         context['all_clients'] = all_clients
         context['find_client_form'] = FindClientForm()
         return render(request,'production/activate_tablet_choose_client.html', context) #placeholder
@@ -158,7 +164,7 @@ class AddClient(LoginRequiredMixin, View):
                         new_user.is_active = False
                         new_user.set_unusable_password()
                         new_user.save()
-                
+
                     new_caregiver = Caregiver(user = new_user,
                                             first_name = first_name,
                                             last_name = last_name,
@@ -172,7 +178,7 @@ class AddClient(LoginRequiredMixin, View):
                                             phone_number = phone_number,
                                             secondary_phone_number = secondary_phone_number,
                                             email_address = email,
-                                            
+
                                             referrer = referrer,
                                             company=company)
                     new_caregiver.save()
@@ -431,22 +437,22 @@ class AssignTasksChooseClient(LoginRequiredMixin, View):
         client = Client.objects.all()
         context['client'] = client
         taskheader = TaskHeader.objects.all()
-        context['taskheader'] = taskheader 
+        context['taskheader'] = taskheader
         client_id = TaskSchedule.objects.filter(company=current_company).values('client_id')
         client_without_task = Client.objects.filter(company=current_company).exclude(id__in = client_id)
         context['client_without_task'] = client_without_task
-        
+
         client_with_task = Client.objects.filter(company=current_company).exclude(id__in = client_without_task)
         context['client_with_task'] = client_with_task
         client_with_task = Client.objects.filter(company=current_company).exclude(id__in = client_without_task)
-  
+
         return render(request,'production/assign_tasks_choose_client.html', context)
-    
+
     def post(self, request):
         context = {}
         copy_assign_task_form = CopyAssignTaskForm(request.POST)
         if copy_assign_task_form.is_valid():
-            
+
             current_company = request.user.company
             taskattachment = TaskAttachment.objects.all()
             tasklink = TaskLink.objects.all()
@@ -454,32 +460,32 @@ class AssignTasksChooseClient(LoginRequiredMixin, View):
             taskheader = TaskHeader.objects.all()
             clientwithtask = copy_assign_task_form.cleaned_data["clientwithtask"]
             clientwithouttask   = copy_assign_task_form.cleaned_data["clientwithouttask"]
-            
-                       
+
+
             clientwt = Client.objects.get( email_address = clientwithtask )
             clientwot = Client.objects.get( email_address =clientwithouttask)
             #  client without task client_id
             clientwotclientid = clientwot.id
-            
+
             #  client without task client_id
 
             task_header_client = list(TaskHeader.objects.filter(company=current_company,client = clientwt).order_by('client_id'))
-            
+
             task_schedule_client = list(TaskSchedule.objects.filter(company=current_company,client = clientwt).order_by('client_id'))
-            
-            
+
+
             task_link_client = list(TaskLink.objects.filter(company=current_company,client = clientwt).order_by('client_id'))
-            
+
             task_attachment_client = list(TaskAttachment.objects.filter(company=current_company,client = clientwt).order_by('client_id'))
-            
-            
+
+
             for taskheader in task_header_client:
                 taskheader.pk = None
                 taskheader.client_id = clientwotclientid
                 taskheader.uid = str(uuid.uuid4())
                 taskheader.save()
 
-            
+
             taskHeader_updated = list(TaskHeader.objects.filter(company=current_company,client = clientwot).order_by('client_id'))
             for header in taskHeader_updated:
                 for taskschedule in task_schedule_client:
@@ -491,10 +497,10 @@ class AssignTasksChooseClient(LoginRequiredMixin, View):
                     taskschedule.pending = True
 
                     taskschedule.save()
-                    
+
                     task_template_subcategory_instance = TaskTemplateSubcategoryInstance.objects.get(company=current_company, task_template_instance=task_template_instance)
                     task_template_entry_instance = TaskTemplateEntryInstance.objects.filter(company=current_company, task_template_instance= task_template_instance, task_template_subcategory_instance=task_template_subcategory_instance ).order_by("task_template_entry_id")
-                    
+
                     task_template_instance.pk = None
                     task_template_instance.company = current_company
                     task_template_instance.uid = str(uuid.uuid4())
@@ -507,7 +513,7 @@ class AssignTasksChooseClient(LoginRequiredMixin, View):
                     task_template_subcategory_instance.task_template_instance = task_template_instance
                     task_template_subcategory_instance.save()
 
-                    
+
 
                     for entry_instance in task_template_entry_instance:
                         entry_instance.pk = None
@@ -515,25 +521,25 @@ class AssignTasksChooseClient(LoginRequiredMixin, View):
                         entry_instance.company = current_company
                         entry_instance.task_template_instance = task_template_instance
                         entry_instance.task_template_subcategory_instance = task_template_subcategory_instance
-                        
+
                         entry_instance.save()
 
 
-            
+
 
             for tasklink in task_link_client:
                 tasklink.pk = None
                 tasklink.client_id = clientwotclientid
                 tasklink.uid = str(uuid.uuid4())
                 tasklink.save()
-                
-            
+
+
             for taskattachment in task_attachment_client:
                 taskattachment.pk = None
                 taskattachment.client_id = clientwotclientid
                 taskattachment.uid = str(uuid.uuid4())
                 taskattachment.save()
-                
+
             existing_tasks = Tasks.objects.filter(company=current_company).order_by('activity_task')
             default_tasks = DefaultTasks.objects.all().order_by('activity_task')
             activity_masters = ActivityMaster.objects.all().order_by('activity_description')
@@ -561,7 +567,7 @@ class AssignTasksChooseClient(LoginRequiredMixin, View):
             # clientwithouttask = copy_assign_task_form.cleaned_data['clientwithouttask']
             # context["client_email"] = clientwithouttask
             #Get Form
-            context["assign_task_form"] = AssignTaskForm()            
+            context["assign_task_form"] = AssignTaskForm()
             #Get Delete Task Form
             context["delete_task_form"] = DeleteTaskForm()
             #Get Edit Task Form
@@ -572,12 +578,12 @@ class AssignTasksChooseClient(LoginRequiredMixin, View):
             client_schedule = TaskSchedule.objects.filter(company=current_company,client=current_client)
             context["client_schedule"] = client_schedule
             return render(request,'production/assign_tasks.html',context)
-            
+
         else:
             context["status_message"] = "Error Adding Task"
             messages.error(request, "Error adding task")
             return redirect("assign_choose_client")
-            
+
 
 
 @login_required
