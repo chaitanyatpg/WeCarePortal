@@ -3,7 +3,7 @@
 		"model": "mycareportal_app.tasktemplateentry",
 		"pk": 1,
 		"fields": {
-			"name": "Blood Pressure",
+			"name": "Blood Pressure (systolic/diastolic)",
 			"description": "",
 			"task_template_code": "VIT001",
 			"task_template_subcategory_code": "VIT001",
@@ -15,7 +15,7 @@
 		"model": "mycareportal_app.tasktemplateentry",
 		"pk": 2,
 		"fields": {
-			"name": "Heart Rate",
+			"name": "Heart Rate (bpm)",
 			"description": "",
 			"task_template_code": "VIT001",
 			"task_template_subcategory_code": "VIT001",
@@ -39,7 +39,7 @@
 		"model": "mycareportal_app.tasktemplateentry",
 		"pk": 4,
 		"fields": {
-			"name": "Body Temperature",
+			"name": "Body Temperature (℃)",
 			"description": "",
 			"task_template_code": "VIT001",
 			"task_template_subcategory_code": "VIT001",
@@ -51,7 +51,7 @@
 		"model": "mycareportal_app.tasktemplateentry",
 		"pk": 5,
 		"fields": {
-			"name": "Blood Sugar Fasting",
+			"name": "Blood Sugar Fasting (mg/dl)",
 			"description": "",
 			"task_template_code": "VIT001",
 			"task_template_subcategory_code": "VIT001",
@@ -63,7 +63,7 @@
 		"model": "mycareportal_app.tasktemplateentry",
 		"pk": 6,
 		"fields": {
-			"name": "Blood Sugar Non-Fasting",
+			"name": "Blood Sugar Non-Fasting (mg/dl)",
 			"description": "",
 			"task_template_code": "VIT001",
 			"task_template_subcategory_code": "VIT001",
@@ -87,7 +87,7 @@
 		"model": "mycareportal_app.tasktemplateentry",
 		"pk": 8,
 		"fields": {
-			"name": "Weight",
+			"name": "Weight (kgs)",
 			"description": "",
 			"task_template_code": "VIT001",
 			"task_template_subcategory_code": "VIT001",
@@ -1312,7 +1312,7 @@
 	"model": "mycareportal_app.tasktemplateentry",
 	"pk": 110,
 	"fields": {
-		"name": "Blood Oxygen Level (SpO2 %) ",
+		"name": "Blood Oxygen Level (%) ",
 		"description": "",
 		"task_template_code": "VIT001",
 		"task_template_subcategory_code": "VIT001",

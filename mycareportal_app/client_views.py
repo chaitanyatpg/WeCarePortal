@@ -438,7 +438,6 @@ class AssignTasksChooseClient(LoginRequiredMixin, View):
         
         client_with_task = Client.objects.filter(company=current_company).exclude(id__in = client_without_task)
         context['client_with_task'] = client_with_task
-        print("client_with_task***********************", client_with_task)
         client_with_task = Client.objects.filter(company=current_company).exclude(id__in = client_without_task)
   
         return render(request,'production/assign_tasks_choose_client.html', context)
@@ -457,7 +456,7 @@ class AssignTasksChooseClient(LoginRequiredMixin, View):
             clientwithouttask   = copy_assign_task_form.cleaned_data["clientwithouttask"]
             
                        
-            clientwt = Client.objects.filter( email_address = clientwithtask )
+            clientwt = Client.objects.get( email_address = clientwithtask )
             clientwot = Client.objects.get( email_address =clientwithouttask)
             #  client without task client_id
             clientwotclientid = clientwot.id
@@ -576,7 +575,7 @@ class AssignTasksChooseClient(LoginRequiredMixin, View):
             
         else:
             context["status_message"] = "Error Adding Task"
-            messages.error(request, "Error addingllllllllllllll task")
+            messages.error(request, "Error adding task")
             return redirect("assign_choose_client")
             
 

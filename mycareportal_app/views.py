@@ -436,6 +436,7 @@ def dashboard(request):
     total_in_progress_tasks = TaskSchedule.objects.filter(company=current_company,date=current_date,in_progress=True).count()
     total_completed_tasks = TaskSchedule.objects.filter(company=current_company,date=current_date,complete=True).count()
     total_cancelled_tass = TaskSchedule.objects.filter(company=current_company,date=current_date,cancelled=True).count()
+    total_client_at_high_risk = NotifyClientVitalTask.objects.filter(company=current_company).count()
     company_details = {
         'company_name' : current_company.company_name,
         'contact_number' : current_company.contact_number,
@@ -458,6 +459,7 @@ def dashboard(request):
     context['total_in_progress_tasks'] = total_in_progress_tasks
     context['total_completed_tasks'] = total_completed_tasks
     context['total_cancelled_tasks'] = total_cancelled_tass
+    context['total_client_at_high_risk'] = total_client_at_high_risk
     #Add company details to context
     context['company_details'] = company_details
     context['company_created_date'] = current_company.created
