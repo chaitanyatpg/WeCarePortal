@@ -8,6 +8,7 @@ import django.utils.timezone as timezone
 import datetime
 from datetime import timedelta
 import pytz
+import vinaigrette
 # Create your models here.
 
 class SoftDeletionQuerySet(models.QuerySet):
@@ -540,6 +541,7 @@ class TaskTemplateSubcategory(models.Model):
     name = models.CharField(max_length=500)
     description = models.CharField(max_length=500)
 
+
 class TaskTemplateEntry(models.Model):
 
     ENTRY_TYPE_CHOICES = (
@@ -557,6 +559,8 @@ class TaskTemplateEntry(models.Model):
     entry_type = models.CharField(ENTRY_TYPE_CHOICES, max_length=100)
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=500)
+
+vinaigrette.register(TaskTemplateEntry, ['name'])
 
 class TaskTemplateInstance(models.Model):
 

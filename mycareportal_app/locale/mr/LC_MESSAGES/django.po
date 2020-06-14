@@ -1,0 +1,485 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-06-11 17:37+0530\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\mycareportal_app.TaskTemplateEntry/name:1
+msgid "Blood Pressure"
+msgstr " रक्तदाब "
+
+#: .\mycareportal_app.TaskTemplateEntry/name:2
+msgid "Heart Rate"
+msgstr "हृदयाची गती"
+
+#: .\mycareportal_app.TaskTemplateEntry/name:3
+msgid "Pulse"
+msgstr "नाडी"
+
+#: .\mycareportal_app.TaskTemplateEntry/name:4
+msgid "Body Temperature"
+msgstr "शरीराचे तापमान"
+
+#: .\mycareportal_app.TaskTemplateEntry/name:5
+msgid "Blood Sugar Fasting"
+msgstr "रक्तातील साखर उपोषण"
+
+#: .\mycareportal_app.TaskTemplateEntry/name:6
+msgid "Blood Sugar Non-Fasting"
+msgstr "रक्तातील साखर न उपोषण"
+
+#: .\mycareportal_app.TaskTemplateEntry/name:7
+msgid "A1C"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:8
+msgid "Weight"
+msgstr "वजन"
+
+#: .\mycareportal_app.TaskTemplateEntry/name:9
+msgid "Is there a slanted/uneven/unstable surface or gap?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:10
+msgid "Stairs – Is there a handrail or any support?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:11
+msgid "Stairs – Are they consecutive steps or there is a break?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:12
+msgid "Is the area well lit?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:13
+msgid "Are there wet surfaces?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:14
+msgid "Is there wheelchair access or a ramp?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:15
+msgid "Is it easy to park, is the surface slanted?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:16
+msgid "Is it easy for the patient to get out of the car without assistance?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:17
+msgid "Is the surface paved or unpaved? (check for potholes, rocks)"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:18
+msgid "Is there any clutter? (toys, bikes, plants)"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:19
+msgid "Does the door open fully?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:21
+msgid "Is the light switch easily accessible?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:22
+msgid "Are there any tables/stands that may be an obstruction?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:23
+msgid "Is there a shoe stand and coat rack?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:24
+msgid "Is there a chair to sit on to put on/take off shoes?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:25
+msgid "Does the indoor pair of slippers/shoes have good grip?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:26
+msgid "Once the door is open, is there enough space inside for a safe passage?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:27
+msgid "Is there space inside for a second person or walker, if required?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:28
+msgid ""
+"Are there any rugs, mats, scales, trash cans, magazines, cluttering the "
+"bathroom?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:29
+msgid "Is the space well illuminated and ventilated?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:30
+msgid "Is there something sturdy to grab near the toilet and tub/shower?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:31
+msgid ""
+"Is there space for an elevated toilet seat/commode, to be placed over the "
+"toilet?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:32
+msgid ""
+"Can the toilet paper, cleansing wipes, sink, sanitizer, be accessed easily "
+"(without standing)?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:33
+msgid "Is the bathtub/shower easy to enter/step over?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:34
+msgid "Is there a shower curtain?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:35
+msgid "Is there any obstruction or lip that may present a tripping hazard?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:36
+msgid "Is there a non-slip mat in the bathtub/shower?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:37
+msgid "Does the walker fit inside?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:38
+msgid "Are the knobs in-reach and easy to use?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:39
+msgid "Is there a need for a shower seat/tub transfer bench?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:40
+msgid "Is there a first-aid kit close by?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:41
+msgid "Are there any steps or slanted surfaces?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:42
+msgid "Is there a sturdy railing/grab handle?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:43
+msgid "Is the space wheelchair/walker friendly?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:44
+msgid "Are there any mats, rugs, clutter, breakables, obstacles in the room?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:45
+msgid "Is there comfortable/apt seating for the patient? (favorite chair/spot)"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:46
+msgid "Does the furniture need to be rearranged?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:49
+msgid "Is it wheelchair/walker friendly?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:50
+msgid "Does the wheelchair/walker have a tray to carry items on?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:51
+msgid "Is there a chair for when the patient feels fatigued?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:52
+msgid ""
+"Are there any loose tiles, mats, rugs, clutter, breakables, obstacles in the "
+"room?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:53
+msgid ""
+"Can the refrigerator/freezer, microwave, oven, dishwasher’s, doors be opened "
+"fully and easily?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:54
+msgid "Are dishes, silverware, pots & pans, ingredients readily available?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:55
+msgid "Is the sink, washing items, trash can easily accessible?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:56
+msgid ""
+"Is there a fire extinguisher, exhaust fan, smoke alarm, first-aid kit in the "
+"kitchen?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:57
+msgid "Is there a sturdy stool/step ladder, grabber available?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:58
+msgid "Are towels, paper napkins, long-handled dust pans easily accessible?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:59
+msgid "Is the doorway wide enough for a wheelchair/walker?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:61
+msgid "Is there a sturdy railing/grab handle, furniture to hold?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:63
+msgid "Is the preferred side of the bed easily accessible?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:64
+msgid "Is the bed at the right height?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:65
+msgid "Is there need for a stepping stool, grab handle?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:66
+msgid "Is there a bedrail?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:67
+msgid ""
+"Are light switches, telephone/mobile, temperature controls at hands reach?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:68
+msgid ""
+"Is there a need for multiple pillows, night light, motion sensor, emergency "
+"call button?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:69
+msgid "Are clothes/robe easily accessible?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:70
+msgid "Is there a need for a grabber?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:71
+msgid "Can the sturdy bedside table hold: Water, glasses, phone, medication?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:72
+msgid ""
+"Is there a clear, illuminated, (wheelchair/walker) accessible path to the "
+"bathroom?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:74
+msgid "Is it wheelchair/walker friendly? (stair lift, wheelchair lift)"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:76
+msgid "Is there enough head height clearance?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:77
+msgid "Any hazards on the steps?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:78
+msgid "Is there ample lighting?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:79
+msgid "Are the switches easy to access?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:80
+msgid "Is there any water on the floor?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:81
+msgid "Is the area humid?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:82
+msgid "Is there a clear path to the laundry facilities?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:83
+msgid ""
+"Is there a way for the patient to carry laundry, basket, things up/down?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:84
+msgid ""
+"Do the stairs have any slanted/uneven/slippery surfaces, (torn/worn-out) "
+"carpets?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:85
+msgid "Any clutter, obstacles, breakables around the area."
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:86
+msgid "Is it free of rugs/mats?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:87
+msgid "Are the areas well lit?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:88
+msgid "Are the light switches easily accessible?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:89
+msgid "Are there sturdy handles/bars to hold?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:90
+msgid "Does the patient need to carry up/down items?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:91
+msgid "Can the patient carry a small bag?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:92
+msgid "Can a stairlift, wheelchair lift be installed?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:93
+msgid "Is there a second walker/wheelchair upstairs/downstairs?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:94
+msgid "If there is an elevator, is it and the approach easily accessible?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:95
+msgid ""
+"Is there a waiting seat inside and outside (different floors) of the "
+"elevator?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:96
+msgid "Is the elevator wheelchair/walker friendly?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:97
+msgid "Are pets a tripping hazard? (their food, water, waste, toys, beds)"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:98
+msgid ""
+"Is their food, water, cleaning, walking, waste items, litter box easily "
+"accessible?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:99
+msgid ""
+"Is the food bag, food/water dish, too large and heavy to dispense from/to?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:100
+msgid "Are food/water dishes on the floor?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:101
+msgid "Is walking the dog necessary?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:102
+msgid "Will picking up after the dog be possible?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:103
+msgid "Is there a fence around the yard?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:104
+msgid "Will the pet cause a fall while pulling/pushing?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:105
+msgid "Is bathing the pet an issue?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:106
+msgid "Is there a special area for bathing the pet?"
+msgstr ""
+
+#: .\mycareportal_app.TaskTemplateEntry/name:108
+msgid "Do you have a Cold or Cough?"
+msgstr "आपल्याला सर्दी आहे की खोकला?"
+
+#: .\mycareportal_app.TaskTemplateEntry/name:109
+msgid "Do you have any breathing issues?"
+msgstr "आपल्याला श्वासोच्छवासाच्या काही समस्या आहेत?"
+
+#: .\mycareportal_app.TaskTemplateEntry/name:110
+msgid "Blood Oxygen Level (SpO2 %%) "
+msgstr "रक्त ऑक्सिजन पातळी (एसपीओ 2%)"
+
+#: .\mycareportal_app.TaskTemplateEntry/name:113
+msgid "Do you have a bad throat?"
+msgstr "तुमचा घसा खराब आहे का?"
+
+#: .\mycareportal_app.TaskTemplateEntry/name:114
+msgid "Do you have a lack of taste and smell? "
+msgstr "आपल्याकडे चव आणि गंध यांचा अभाव आहे?"
+
+#: .\mycareportal_app.TaskTemplateEntry/name:115
+msgid "Do you have a headache? "
+msgstr "तुम्हाला डोकेदुखी आहे का?"
+
+#: .\mycareportal_app.TaskTemplateEntry/name:116
+msgid "Do you have any chest pain? "
+msgstr "तुम्हाला छातीत दुखत आहे का?"
+
+#: .\mycareportal_app.TaskTemplateEntry/name:117
+msgid "Do you have any weakness/tiredness?  "
+msgstr "तुम्हाला काही अशक्तपणा / कंटाळा आहे का?"
+
+#: .\mycareportal_app.TaskTemplateEntry/name:118
+msgid "Do you have fever or chills?  "
+msgstr "आपल्याला ताप किंवा सर्दी आहे का?"
+
+#: .\mycareportal_app\caregiver_views.py:486
+msgid "hello"
+msgstr "नमस्कार"
+
+#: .\mycareportal_app\client_forms.py:52 .\mycareportal_app\client_forms.py:101
+#: .\mycareportal_app\forms.py:31 .\mycareportal_app\forms.py:116
+msgid "Passwords do not match"
+msgstr ""
