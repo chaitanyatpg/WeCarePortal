@@ -30,3 +30,4 @@ sqlparse==0.3.0
 stripe==2.28.0
 urllib3==1.25.2
 whitenoise==3.3.0
+django-vinaigrette==2.0.1
