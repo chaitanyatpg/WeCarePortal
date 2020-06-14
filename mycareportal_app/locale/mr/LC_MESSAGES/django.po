@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-11 17:37+0530\n"
+"POT-Creation-Date: 2020-06-15 00:44+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,36 +19,36 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: .\mycareportal_app.TaskTemplateEntry/name:1
-msgid "Blood Pressure"
-msgstr " रक्तदाब "
+msgid "Blood Pressure (systolic/diastolic)"
+msgstr "रक्तदाब (systolic/diastolic)"
 
 #: .\mycareportal_app.TaskTemplateEntry/name:2
-msgid "Heart Rate"
-msgstr "हृदयाची गती"
+msgid "Heart Rate (bpm)"
+msgstr "हृदयाची गती (bpm)"
 
 #: .\mycareportal_app.TaskTemplateEntry/name:3
 msgid "Pulse"
-msgstr "नाडी"
+msgstr ""
 
 #: .\mycareportal_app.TaskTemplateEntry/name:4
-msgid "Body Temperature"
-msgstr "शरीराचे तापमान"
+msgid "Body Temperature (℃)"
+msgstr "शरीराचे तापमान (℃)"
 
 #: .\mycareportal_app.TaskTemplateEntry/name:5
-msgid "Blood Sugar Fasting"
-msgstr "रक्तातील साखर उपोषण"
+msgid "Blood Sugar Fasting (mg/dl)"
+msgstr "रक्तातील साखर उपोषण (mg/dl)"
 
 #: .\mycareportal_app.TaskTemplateEntry/name:6
-msgid "Blood Sugar Non-Fasting"
-msgstr "रक्तातील साखर न उपोषण"
+msgid "Blood Sugar Non-Fasting (mg/dl)"
+msgstr "रक्तातील साखर न उपोषण (mg/dl)"
 
 #: .\mycareportal_app.TaskTemplateEntry/name:7
 msgid "A1C"
 msgstr ""
 
 #: .\mycareportal_app.TaskTemplateEntry/name:8
-msgid "Weight"
-msgstr "वजन"
+msgid "Weight (kgs)"
+msgstr "वजन (kgs)"
 
 #: .\mycareportal_app.TaskTemplateEntry/name:9
 msgid "Is there a slanted/uneven/unstable surface or gap?"
@@ -439,9 +439,13 @@ msgstr ""
 msgid "Is there a special area for bathing the pet?"
 msgstr ""
 
+#: .\mycareportal_app.TaskTemplateEntry/name:107
+msgid "Body Temperature"
+msgstr ""
+
 #: .\mycareportal_app.TaskTemplateEntry/name:108
 msgid "Do you have a Cold or Cough?"
-msgstr "आपल्याला सर्दी आहे की खोकला?"
+msgstr "आपल्याला सर्दी आहे की खोकला ?"
 
 #: .\mycareportal_app.TaskTemplateEntry/name:109
 msgid "Do you have any breathing issues?"
@@ -475,11 +479,7 @@ msgstr "तुम्हाला काही अशक्तपणा / कं�
 msgid "Do you have fever or chills?  "
 msgstr "आपल्याला ताप किंवा सर्दी आहे का?"
 
-#: .\mycareportal_app\caregiver_views.py:486
-msgid "hello"
-msgstr "नमस्कार"
-
-#: .\mycareportal_app\client_forms.py:52 .\mycareportal_app\client_forms.py:101
-#: .\mycareportal_app\forms.py:31 .\mycareportal_app\forms.py:116
+#: .\mycareportal_app\client_forms.py:53 .\mycareportal_app\client_forms.py:102
+#: .\mycareportal_app\forms.py:31 .\mycareportal_app\forms.py:117
 msgid "Passwords do not match"
 msgstr ""
