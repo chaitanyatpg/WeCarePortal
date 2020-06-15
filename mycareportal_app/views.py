@@ -83,6 +83,8 @@ def home(request):
             return redirect('client_task_dashboard')
         elif current_company.default_dashboard == current_company.caregiver_schedule_dashboard:
             return redirect('caregiver_schedule_dashboard')
+        elif current_company.default_dashboard == current_company.management_dashboard:
+            return redirect('management_dashboard')
     elif "CAREGIVER" in user_roles:
         if "tablet_id" in request.session:
             if ClientTabletRegister.objects.filter(company=request.user.company,device_id=request.session["tablet_id"]).exists():
@@ -610,7 +612,8 @@ class EditCompany(LoginRequiredMixin, View):
             'default_dashboard': current_company.default_dashboard,
             'tax_rate': current_company.tax_rate,
             'logo': current_company.logo,
-            'attorney_email': current_company.attorney_email
+            'attorney_email': current_company.attorney_email,
+            'is_parent':current_company.is_parent
         })
         context['company_edit_form'] = company_edit_form
         context['current_company'] = current_company
@@ -635,6 +638,8 @@ class EditCompany(LoginRequiredMixin, View):
                 current_company.tax_rate = company_edit_form.cleaned_data['tax_rate']
                 current_company.logo = company_edit_form.cleaned_data['logo']
                 current_company.attorney_email = company_edit_form.cleaned_data['attorney_email']
+                current_company.is_parent = company_edit_form.cleaned_data['is_parent']
+                
                 current_company.save()
                 #send_mail('Test sendgrid', 'Test message', 'info@wecareportal.com', ['dhruv.ranjan@gmail.com'], fail_silently=False)
                 messages.success(request, "Company details successfully edited")
@@ -1614,3 +1619,23 @@ def get_clients_details(request):
     
     return render(request, 'production/available_users_modal.html', context)
 
+
+@login_required
+def management_dashboard(request):
+    if request.method == "GET":
+        context = {}
+        y_count_series = []
+        x_company_name_series = []
+        company_list = Company.objects.filter(account_number__startswith=request.user.company.account_number).exclude(account_number=request.user.company.account_number)
+        
+        for comp in company_list:
+            high_client = NotifyClientVitalTask.objects.filter(company=comp)
+            x_company_name_series.append(comp.company_name)
+            y_count_series.append(high_client.count())
+        
+        context['y_count_series'] = y_count_series
+        context['x_company_name_series'] = x_company_name_series
+        print('x_company_name_series :',x_company_name_series)
+
+        
+    return render(request, 'production/management_dashboard.html', context)

@@ -1,0 +1,228 @@
+{% extends "production/base.html" %}
+{% block title %} Management Dashboard {% endblock %}
+{% load static %}
+{% block headlibs %}
+{% load static %}
+    <!-- iCheck -->
+    <link href="{% static 'vendors/iCheck/skins/flat/green.css' %}" rel="stylesheet">
+    <!-- bootstrap-progressbar -->
+    <link href="{% static 'vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css' %}" rel="stylesheet">
+    <!-- JQVMap -->
+    <link href="{% static 'vendors/jqvmap/dist/jqvmap.min.css' %}" rel="stylesheet"/>
+    <!-- bootstrap-daterangepicker -->
+    <link href="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+{% endblock %}
+{% block pagecontent %}
+        <!-- page content -->
+        <div class="right_col" role="main">
+          {{block.super}}
+          <!-- top tiles -->
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>Management Dashboard</h3>
+              </div>
+            </div>
+            </div>
+            <div class="row">
+              <div class="col-md-5 col-sm-5 col-xs-5">
+              <canvas id="myChart" width="400" height="400"></canvas>
+            </div>
+            </div>
+        </div>
+        <!-- /page content -->
+{% endblock %}
+{% block footlibs %}
+    <!-- Chart.js -->
+    <script src="{% static 'vendors/Chart.js/dist/Chart.min.js' %}"></script>
+    <!-- gauge.js -->
+    <script src="{% static 'vendors/gauge.js/dist/gauge.min.js' %}"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="{% static 'vendors/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
+    <!-- iCheck -->
+    <script src="{% static 'vendors/iCheck/icheck.min.js' %}"></script>
+    <!-- Skycons -->
+    <script src="{% static 'vendors/skycons/skycons.js' %}"></script>
+    <!-- Flot -->
+    <script src="{% static 'vendors/Flot/jquery.flot.js' %}"></script>
+    <script src="{% static 'vendors/Flot/jquery.flot.pie.js' %}"></script>
+    <script src="{% static 'vendors/Flot/jquery.flot.time.js' %}"></script>
+    <script src="{% static 'vendors/Flot/jquery.flot.stack.js' %}"></script>
+    <script src="{% static 'vendors/Flot/jquery.flot.resize.js' %}"></script>
+    <!-- Flot plugins -->
+    <script src="{% static 'vendors/flot.orderbars/js/jquery.flot.orderBars.js' %}"></script>
+    <script src="{% static 'vendors/flot-spline/js/jquery.flot.spline.min.js' %}"></script>
+    <script src="{% static 'vendors/flot.curvedlines/curvedLines.js' %}"></script>
+    <!-- DateJS -->
+    <script src="{% static 'vendors/DateJS/build/date.js' %}"></script>
+    <!-- JQVMap -->
+    <script src="{% static 'vendors/jqvmap/dist/jquery.vmap.js' %}"></script>
+    <script src="{% static 'vendors/jqvmap/dist/maps/jquery.vmap.world.js' %}"></script>
+    <script src="{% static 'vendors/jqvmap/examples/js/jquery.vmap.sampledata.js' %}"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+{% endblock %}
+{% block scripts %}
+<!-- bootstrap-daterangepicker -->
+<script>
+  $(document).ready(function() {
+    var cb = function(start, end, label) {
+      console.log(start.toISOString(), end.toISOString(), label);
+      $('#reportrange_right span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+    };
+
+    var optionSet1 = {
+      startDate: moment(),
+      endDate: moment(),
+      minDate: '01/01/2012',
+      maxDate: '12/31/2020',
+      showDropdowns: true,
+      showWeekNumbers: true,
+      timePicker: false,
+      timePickerIncrement: 1,
+      timePicker12Hour: true,
+      ranges: {
+        'Today': [moment(), moment()],
+        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+        'This Month': [moment().startOf('month'), moment().endOf('month')],
+        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+      },
+      opens: 'right',
+      buttonClasses: ['btn btn-default'],
+      applyClass: 'btn-small btn-primary',
+      cancelClass: 'btn-small',
+      format: 'MM/DD/YYYY',
+      separator: ' to ',
+      locale: {
+        applyLabel: 'Submit',
+        cancelLabel: 'Clear',
+        fromLabel: 'From',
+        toLabel: 'To',
+        customRangeLabel: 'Custom',
+        daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+        monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        firstDay: 1
+      }
+    };
+
+    $('#reportrange_right span').html(moment().format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+
+    $('#reportrange_right').daterangepicker(optionSet1, cb);
+
+    $('#reportrange_right').on('show.daterangepicker', function() {
+      console.log("show event fired");
+    });
+    $('#reportrange_right').on('hide.daterangepicker', function() {
+      console.log("hide event fired");
+    });
+    $('#reportrange_right').on('apply.daterangepicker', function(ev, picker) {
+      console.log("apply event fired, start/end dates are " + picker.startDate.format('MMMM D, YYYY') + " to " + picker.endDate.format('MMMM D, YYYY'));
+      var start_date = picker.startDate.format('YYYY-MM-DD');
+      var end_date = picker.endDate.format('YYYY-MM-DD');
+      console.log(start_date);
+      console.log(end_date);
+      $.ajax({
+        type: "GET",
+        url: '{% url "date_filter_dashboard" %}',
+        data: { start_date: start_date, end_date: end_date},
+        dataType: "json",
+        contentType: "application/json",
+        success: function(dashboard_task_data){
+          console.log(dashboard_task_data.total_scheduled_tasks);
+          $('#total_scheduled_tasks').html(dashboard_task_data.total_scheduled_tasks);
+          $('#total_pending_tasks').html(dashboard_task_data.total_pending_tasks);
+          $('#total_in_progress_tasks').html(dashboard_task_data.total_in_progress_tasks);
+          $('#total_completed_tasks').html(dashboard_task_data.total_completed_tasks);
+          $('#total_cancelled_tasks').html(dashboard_task_data.total_cancelled_tasks);
+
+          $('#total_scheduled_tasks_sub').html(dashboard_task_data.total_scheduled_tasks + " scheduled tasks");
+          $('#total_pending_tasks_sub').html(dashboard_task_data.total_pending_tasks + " pending tasks");
+          $('#total_in_progress_tasks_sub').html(dashboard_task_data.total_in_progress_tasks + " in progress tasks");
+          $('#total_completed_tasks_sub').html(dashboard_task_data.total_completed_tasks + " completed tasks");
+          $('#total_cancelled_tasks_sub').html(dashboard_task_data.total_cancelled_tasks + " cancelled tasks");
+          var schedule_url = '{% url "view_tasks" "scheduled" "2018-01-01" "2018-01-02" %}'.replace('2018-01-01',start_date).replace('2018-01-02',end_date);
+          var pending_url = '{% url "view_tasks" "pending" "2018-01-01" "2018-01-02" %}'.replace('2018-01-01',start_date).replace('2018-01-02',end_date);
+          var progress_url = '{% url "view_tasks" "in_progress" "2018-01-01" "2018-01-02" %}'.replace('2018-01-01',start_date).replace('2018-01-02',end_date);
+          var completed_url = '{% url "view_tasks" "complete" "2018-01-01" "2018-01-02" %}'.replace('2018-01-01',start_date).replace('2018-01-02',end_date);
+          var cancelled_url = '{% url "view_tasks" "cancelled" "2018-01-01" "2018-01-02" %}'.replace('2018-01-01',start_date).replace('2018-01-02',end_date);
+          $('#total_scheduled_tasks').attr("href", schedule_url);
+          $('#total_pending_tasks').attr("href", pending_url);
+          $('#total_in_progress_tasks').attr("href", progress_url);
+          $('#total_completed_tasks').attr("href", completed_url);
+          $('#total_cancelled_tasks').attr("href", cancelled_url);
+          //$('#caregiver_detail_name').html(caregiver_data.name);
+          //$('#caregiver_detail_address').html('Address: ' + caregiver_data.address);
+          //$('#caregiver_detail_phone_number').html('Phone Number: ' + caregiver_data.phone_number);
+          //$('#caregiver_detail_dob').html('Date of Birth: ' + caregiver_data.date_of_birth);
+          //$('#caregiver_detail_email').html('Email: ' + caregiver_data.email_address);
+          //$('#caregiver_detail_gender').html('Gender: ' + caregiver_data.gender);
+          //$('#caregiver_email_hidden').val(caregiver_data.email_address);
+          //$('#caregiver_detail_img').html('<img src=' + caregiver_data.profile_picture + ' class="img-circle img-responsive">');
+        },
+        failure: function(){
+          alert('error fetching data');
+        }
+      });
+    });
+    $('#reportrange_right').on('cancel.daterangepicker', function(ev, picker) {
+      console.log("cancel event fired");
+    });
+
+    $('#options1').click(function() {
+      $('#reportrange_right').data('daterangepicker').setOptions(optionSet1, cb);
+    });
+
+    $('#options2').click(function() {
+      $('#reportrange_right').data('daterangepicker').setOptions(optionSet2, cb);
+    });
+
+    $('#destroy').click(function() {
+      $('#reportrange_right').data('daterangepicker').remove();
+    });
+  });
+</script>
+<script>
+  var ctx = document.getElementById('myChart').getContext('2d');
+  var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+          labels: {{ x_company_name_series | safe }},
+          datasets: [{
+              label: '# Client not well',
+              data: {{ y_count_series | safe }},
+              backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)'
+              ],
+              borderColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)'
+              ],
+              borderWidth: 1
+          }]
+      },
+      options: {
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero: true
+                  }
+              }]
+          }
+      }
+  });
+  </script>
+<!-- /bootstrap-daterangepicker -->
+
+    {% endblock %}

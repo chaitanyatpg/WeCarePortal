@@ -52,6 +52,13 @@
             <div class="menu_section">
               <h3>Modules</h3>
               <ul class="nav side-menu">
+                <li><a><i class="fa fa-home"></i>Management Portal<span class="fa fa-chevron-down"></span></a>
+                 <ul class="nav child_menu">
+                  <!-- {% if module_dict.MANAGEMENTPORTAL.MANAGEMENTDASHBOARD %} -->
+                  <li><a href={% url 'management_dashboard' %}>Management Dashboard</a></li>
+                <!-- {% endif %} -->
+                 </ul>
+                </li>                  
                 <li><a><i class="fa fa-home"></i>Admin Portal<span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu">
                     {% if module_dict.DASHBOARD.ADMINDASHBOARD %}

@@ -8,14 +8,18 @@ def add_roles_to_context(request):
         user_roles = [x.role for x in user_roles]
         module_dict = defaultdict(lambda: defaultdict(lambda: defaultdict(bool)))
         modules = ['DASHBOARD',
+                    'MANAGEMENTPORTAL',
                     'CLIENTPORTAL',
                     'CAREGIVERPORTAL',
                     'FAMILYPORTAL'
                     'PROVIDERPORTAL',
                     'HOMEASSESSMENTPORTAL',
                     'HOMEMODIFICATIONPORTAL',
-                    'MOVEMANAGEMENTPORTAL']
+                    'MOVEMANAGEMENTPORTAL'
+                    
+                    ]
         module_tabs = [['ADMINDASHBOARD','ADDCAREMANAGER'],
+                    ['MANAGEMENTDASHBOARD'],
                     ['CLIENTONBOARDING','FINDCAREGIVER','ASSIGN_TASKS','CREATE_TASKS','REGISTERTABLETCLIENT'],
                     ['CAREGIVERONBOARDING','EDIT_CAREGIVER','CAREGIVERDASHBOARD','CALENDAR'],
                     ['FAMILYDASHBOARD'],
@@ -32,6 +36,10 @@ def add_roles_to_context(request):
         #CAREMANAGER PERMISSIONS
         if 'CAREMANAGER' in user_roles:
             care_manager = CareManager.objects.get(user=request.user)
+            company_id = care_manager.company_id
+            company = Company.objects.get(company_id = company_id )
+            if company.is_parent == True:
+                module_dict['MANAGEMENTPORTAL']['MANAGEMENTDASHBOARD']=True
             module_dict['DASHBOARD']['ADMINDASHBOARD']=True
             module_dict['DASHBOARD']['CAREGIVER_SCHEDULE_DASHBOARD']=True
             module_dict['DASHBOARD']['CLIENT_TASK_DASHBOARD']=True
@@ -85,7 +93,7 @@ def add_roles_to_context(request):
             module_dict['REPORTING']['VIEWALLCLIENTSWITHOUTCAREGIVERS']=True
             module_dict['REPORTING']['VIEWDAILYACTIVITYREPORT']=True
             module_dict['PROVIDERPORTAL']['VITALSREPORT']=True
-
+            
         #CAREGIVER PERMISSIONS
         if 'CAREGIVER' in user_roles:
             module_dict['CAREGIVERPORTAL']['CAREGIVERDASHBOARD']=True

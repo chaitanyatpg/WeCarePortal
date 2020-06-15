@@ -92,6 +92,7 @@ class Company(models.Model):
     tax_rate = models.DecimalField(max_digits=5, decimal_places=2, null=True)
     logo = models.ImageField(upload_to=get_company_logo_upload_path, null=True)
     attorney_email = models.EmailField(null=True, blank=True)
+    is_parent =models.BooleanField(default=False)
 
 class User(AbstractUser):
 

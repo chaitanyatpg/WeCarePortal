@@ -233,6 +233,7 @@ urlpatterns = [
 
     url(r'^admin_send_call_request_to_caregiver/(?P<email>[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/$', views.admin_send_call_request_to_caregiver, name='admin_send_call_request_to_caregiver'),
 
+    url(r'^management_dashboard',views.management_dashboard,name='management_dashboard'),
     
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
