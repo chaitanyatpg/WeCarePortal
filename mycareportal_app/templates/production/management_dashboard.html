@@ -1,6 +1,7 @@
 {% extends "production/base.html" %}
 {% block title %} Management Dashboard {% endblock %}
 {% load static %}
+{% load mycareportal_app_extras%}
 {% block headlibs %}
 {% load static %}
     <!-- iCheck -->
@@ -17,18 +18,96 @@
         <div class="right_col" role="main">
           {{block.super}}
           <!-- top tiles -->
-          <div class="">
+          <div class="row">
+            <h1>Company Name: {{company_details.company_name}} </h1>
+            <h1>Address: {{company_details.address}}</h1>
+            <h1>Contact Number: {{company_details.contact_number}}</h1>
+          </div>
+          <hr>
+          <div class="row">
+            <h1>Total Clients : {{total_client}} </h1>
+            <h1>Total Clients At Risk : {{total_high_risk_client}} </h1>
+            <h1>Total Healthy Clients : {{total_healthy_client}} </h1>
+          </div>
+          <div class="row">
             <div class="page-title">
               <div class="title_left">
                 <h3>Management Dashboard</h3>
               </div>
+              <div class="title_right">
+                <div class="container">
+                  <div class="row">
+                    
+                    <div class="col-sm-6">
+                      <div id="reportrange_right" class="pull-left" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                        <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                        <span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
             </div>
             </div>
+            
             <div class="row">
               <div class="col-md-5 col-sm-5 col-xs-5">
-              <canvas id="myChart" width="400" height="400"></canvas>
+              <canvas id="myChart" style="width:400px; height: 400px;"></canvas>
+              <div style="text-align: center;font-weight: bold;"><span> Total Client At Risk (Company Wise)</span></div>
             </div>
+            <div class="col-md-5 col-sm-5 col-xs-5">
+              <canvas id="wellness_pie" style="width:200px; height: 200px;"></canvas>
+              <div style="text-align: center;font-weight: bold;"><span> Task Details</span></div>
+              </div>
             </div>
+            <div style="margin-top: 20px;"></div>
+            <hr>
+            <h3>Company Wise</h4>
+            <div class="row">
+              {% for pie_chart in company_wise_pie %}
+              <div class="col-md-5 col-sm-5 col-xs-5">
+               <canvas id="{{pie_chart.company_id}}" class="company-wise" style="width:200px; height: 200px;"></canvas>
+               <div style="text-align: center;font-weight: bold;"><span> {{pie_chart.company_name}}</span></div>
+                </div>
+              {% endfor %}
+            </div>
+            <div style="margin-top: 20px;"></div>
+            <hr>
+            <h3>High Risk Clients</h3>
+             <div class="row">
+              <table id="incident_table" class="table table-striped table-bordered">
+                <thead>
+                  <tr>
+                     <th>Company</th>
+                     <th>Client</th>
+                     <th>Body Temperature (&#8451;)</th>
+                     <th>Breathing Issue ?</th>
+                     <th>Cold or Cough ?</th>
+                     <th>Bad Throat ?</th>
+                     <th>Alert Date</th>
+                      
+                  </tr>
+              </thead>
+              <tbody>
+                {% for data in company_wise_risk_client %}
+                <tr>
+                    <td>{{ data.company.company_name }}</td>
+                    <td>{{ data.client.first_name|addstr_space:data.client.last_name }}</td>
+                    <td>{{ data.body_temperature_38_higher }}</td>
+                    <td>{{ data.breathing_issues }}</td>
+                    <td>{{ data.Cold_or_Cough }}</td>
+                    <td>{{ data.bad_throat}}</td>
+                    <td>{{ data.created }}</td>
+                    
+                    
+                </tr>
+                {% endfor %}
+            </tbody>
+              </table>
+             </div> 
+            
+
         </div>
         <!-- /page content -->
 {% endblock %}
@@ -67,10 +146,13 @@
 <!-- bootstrap-daterangepicker -->
 <script>
   $(document).ready(function() {
+    
     var cb = function(start, end, label) {
       console.log(start.toISOString(), end.toISOString(), label);
       $('#reportrange_right span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
     };
+
+    
 
     var optionSet1 = {
       startDate: moment(),
@@ -126,41 +208,12 @@
       console.log(end_date);
       $.ajax({
         type: "GET",
-        url: '{% url "date_filter_dashboard" %}',
+        url: '{% url "date_filter_management_dashboard" %}',
         data: { start_date: start_date, end_date: end_date},
         dataType: "json",
         contentType: "application/json",
-        success: function(dashboard_task_data){
-          console.log(dashboard_task_data.total_scheduled_tasks);
-          $('#total_scheduled_tasks').html(dashboard_task_data.total_scheduled_tasks);
-          $('#total_pending_tasks').html(dashboard_task_data.total_pending_tasks);
-          $('#total_in_progress_tasks').html(dashboard_task_data.total_in_progress_tasks);
-          $('#total_completed_tasks').html(dashboard_task_data.total_completed_tasks);
-          $('#total_cancelled_tasks').html(dashboard_task_data.total_cancelled_tasks);
-
-          $('#total_scheduled_tasks_sub').html(dashboard_task_data.total_scheduled_tasks + " scheduled tasks");
-          $('#total_pending_tasks_sub').html(dashboard_task_data.total_pending_tasks + " pending tasks");
-          $('#total_in_progress_tasks_sub').html(dashboard_task_data.total_in_progress_tasks + " in progress tasks");
-          $('#total_completed_tasks_sub').html(dashboard_task_data.total_completed_tasks + " completed tasks");
-          $('#total_cancelled_tasks_sub').html(dashboard_task_data.total_cancelled_tasks + " cancelled tasks");
-          var schedule_url = '{% url "view_tasks" "scheduled" "2018-01-01" "2018-01-02" %}'.replace('2018-01-01',start_date).replace('2018-01-02',end_date);
-          var pending_url = '{% url "view_tasks" "pending" "2018-01-01" "2018-01-02" %}'.replace('2018-01-01',start_date).replace('2018-01-02',end_date);
-          var progress_url = '{% url "view_tasks" "in_progress" "2018-01-01" "2018-01-02" %}'.replace('2018-01-01',start_date).replace('2018-01-02',end_date);
-          var completed_url = '{% url "view_tasks" "complete" "2018-01-01" "2018-01-02" %}'.replace('2018-01-01',start_date).replace('2018-01-02',end_date);
-          var cancelled_url = '{% url "view_tasks" "cancelled" "2018-01-01" "2018-01-02" %}'.replace('2018-01-01',start_date).replace('2018-01-02',end_date);
-          $('#total_scheduled_tasks').attr("href", schedule_url);
-          $('#total_pending_tasks').attr("href", pending_url);
-          $('#total_in_progress_tasks').attr("href", progress_url);
-          $('#total_completed_tasks').attr("href", completed_url);
-          $('#total_cancelled_tasks').attr("href", cancelled_url);
-          //$('#caregiver_detail_name').html(caregiver_data.name);
-          //$('#caregiver_detail_address').html('Address: ' + caregiver_data.address);
-          //$('#caregiver_detail_phone_number').html('Phone Number: ' + caregiver_data.phone_number);
-          //$('#caregiver_detail_dob').html('Date of Birth: ' + caregiver_data.date_of_birth);
-          //$('#caregiver_detail_email').html('Email: ' + caregiver_data.email_address);
-          //$('#caregiver_detail_gender').html('Gender: ' + caregiver_data.gender);
-          //$('#caregiver_email_hidden').val(caregiver_data.email_address);
-          //$('#caregiver_detail_img').html('<img src=' + caregiver_data.profile_picture + ' class="img-circle img-responsive">');
+        success: function(dashboard_data){
+          initiateGraph(start_date, end_date, dashboard_data)
         },
         failure: function(){
           alert('error fetching data');
@@ -182,47 +235,120 @@
     $('#destroy').click(function() {
       $('#reportrange_right').data('daterangepicker').remove();
     });
+
+    var start_date=undefined;
+    var end_date= undefined;
+    
+    initiateGraph(start_date, end_date)
   });
+
+  
 </script>
 <script>
-  var ctx = document.getElementById('myChart').getContext('2d');
-  var myChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-          labels: {{ x_company_name_series | safe }},
-          datasets: [{
-              label: '# Client not well',
-              data: {{ y_count_series | safe }},
-              backgroundColor: [
-                  'rgba(255, 99, 132, 0.2)',
-                  'rgba(54, 162, 235, 0.2)',
-                  'rgba(255, 206, 86, 0.2)',
-                  'rgba(75, 192, 192, 0.2)',
-                  'rgba(153, 102, 255, 0.2)',
-                  'rgba(255, 159, 64, 0.2)'
-              ],
-              borderColor: [
-                  'rgba(255, 99, 132, 1)',
-                  'rgba(54, 162, 235, 1)',
-                  'rgba(255, 206, 86, 1)',
-                  'rgba(75, 192, 192, 1)',
-                  'rgba(153, 102, 255, 1)',
-                  'rgba(255, 159, 64, 1)'
-              ],
-              borderWidth: 1
-          }]
-      },
-      options: {
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      beginAtZero: true
-                  }
+  function initiateGraph(start_date, end_date, dashboard_data) {
+
+      var ctx = document.getElementById('myChart').getContext('2d');
+      var myChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+              labels: start_date == undefined ? {{ x_company_name_series | safe }} : dashboard_data.x_company_name_series,
+              datasets: [{
+                  label: '# Client At High Risk',
+                  data: start_date == undefined ? {{ y_count_series | safe }} : dashboard_data.y_count_series,
+                  backgroundColor: [
+                      'rgba(255, 99, 132, 0.2)',
+                      'rgba(54, 162, 235, 0.2)',
+                      'rgba(255, 206, 86, 0.2)',
+                      'rgba(75, 192, 192, 0.2)',
+                      'rgba(153, 102, 255, 0.2)',
+                      'rgba(255, 159, 64, 0.2)'
+                  ],
+                  borderColor: [
+                      'rgba(255, 99, 132, 1)',
+                      'rgba(54, 162, 235, 1)',
+                      'rgba(255, 206, 86, 1)',
+                      'rgba(75, 192, 192, 1)',
+                      'rgba(153, 102, 255, 1)',
+                      'rgba(255, 159, 64, 1)'
+                  ],
+                  borderWidth: 1
               }]
+          },
+          options: {
+              onClick : (evt, item) => {
+                    console.log("asdasd", evt)
+              },
+              scales: {
+         yAxes: [{
+             ticks: {
+                 beginAtZero: true,
+                 userCallback: function(label, index, labels) {
+                     // when the floored value is the same as the value we have a whole number
+                     if (Math.floor(label) === label) {
+                         return label;
+                     }
+
+                 },
+             }
+         }],
+     }
           }
-      }
-  });
+      });
+
+      
+      
+      var pie = document.getElementById('wellness_pie').getContext('2d');
+      var wellness_pie = new Chart(pie, {
+        type: 'pie',
+        data: {
+                datasets: [{
+                              data: start_date == undefined ? {{ pie_chart | safe }} : dashboard_data.pie_chart,
+                              backgroundColor: [
+                                'rgb(236, 46, 8)',
+                                'rgb(236, 160, 8)',
+                                'rgb(63, 191, 65)'
+                              ]
+                          }],
+                labels:['Total Tasks', 'Total Pending Task', 'Total Completed Task']
+
+              },
+        options : {
+          responsive: true
+        }
+      });
+
+      $('.company-wise').each(function()
+      {
+        var pie_data = $(this).attr('id')
+        var pie = document.getElementById(pie_data).getContext('2d');
+        var data_set = (start_date == undefined ? {{ company_wise_pie | safe }} : dashboard_data.company_wise_pie);
+        var data = data_set.find(element => element.company_id === pie_data);
+        var series_data = data.data_set
+        var pie_data = new Chart(pie, {
+        type: 'pie',
+        data: {
+                datasets: [{
+                              data: series_data,
+                              backgroundColor: [
+                                'rgb(236, 46, 8)',
+                                'rgb(236, 160, 8)',
+                                'rgb(63, 191, 65)'
+                              ]
+                          }],
+                labels:['Total Tasks', 'Total Pending Task', 'Total Completed Task']
+
+              },
+        options : {
+          responsive: true
+        }
+      }); 
+    });
+      
+    }
+
   </script>
+  
+
 <!-- /bootstrap-daterangepicker -->
 
     {% endblock %}

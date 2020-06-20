@@ -598,6 +598,7 @@ class EditCompany(LoginRequiredMixin, View):
 
     def get(self, request):
         context = {}
+        is_parent_flag =True
         current_company = request.user.company
         company_edit_form = CompanyEditForm(initial=
         {
@@ -615,9 +616,15 @@ class EditCompany(LoginRequiredMixin, View):
             'attorney_email': current_company.attorney_email,
             'is_parent':current_company.is_parent
         })
+        caregiver = Caregiver.objects.filter(company = current_company).count()
+        client = Client.objects.filter(company = current_company).count()
+        if caregiver > 0 and  client > 0 :
+            is_parent_flag = False
+            
         context['company_edit_form'] = company_edit_form
         context['current_company'] = current_company
         context['all_timezones'] = pytz.all_timezones
+        context['is_parent_flag'] = is_parent_flag
         return render(request, 'production/edit_company.html', context)
 
     def post(self, request):
@@ -724,6 +731,7 @@ def date_filter_dashboard(request):
     #timezone.activate(client_timezone)
     #default_tasks = DefaultTasks.objects.count()
     #custom_tasks = Tasks.objects.filter(company=current_company).count()
+    print("start_date :",start_date)
     total_scheduled_tasks = TaskSchedule.objects.filter(company=current_company,date__range=[start_date,end_date]).count()
     total_pending_tasks = TaskSchedule.objects.filter(company=current_company,pending=True,date__range=[start_date,end_date]).count()
     total_in_progress_tasks = TaskSchedule.objects.filter(company=current_company,in_progress=True,date__range=[start_date,end_date]).count()
@@ -1626,16 +1634,100 @@ def management_dashboard(request):
         context = {}
         y_count_series = []
         x_company_name_series = []
+        pie_chart=[]
+        total_pending_tasks = 0
+        total_completed_tasks = 0
+        total_scheduled_tasks = 0
+        total_client = 0
+        total_high_risk_client = 0
+        company_wise_pie = []
+        company_wise_risk_client = []
+
         company_list = Company.objects.filter(account_number__startswith=request.user.company.account_number).exclude(account_number=request.user.company.account_number)
-        
+        print("Date :",datetime.date.today())
         for comp in company_list:
-            high_client = NotifyClientVitalTask.objects.filter(company=comp)
+            high_client = NotifyClientVitalTask.objects.filter(company=comp, created__range=[datetime.date.today(),datetime.date.today()])
             x_company_name_series.append(comp.company_name)
             y_count_series.append(high_client.count())
-        
+
+            company_wise_pie.append({
+                'company_id': "chart_"+str(comp.pk),
+                'company_name': comp.company_name,
+                'data_set': [TaskSchedule.objects.filter(company=comp,date__range=[datetime.date.today(),datetime.date.today()]).count(),
+                            TaskSchedule.objects.filter(company=comp,pending=True,date__range=[datetime.date.today(),datetime.date.today()]).count(),
+                            TaskSchedule.objects.filter(company=comp,complete=True,date__range=[datetime.date.today(),datetime.date.today()]).count()]
+            })
+
+            high_risk_client = NotifyClientVitalTask.objects.filter(company = comp)
+            for risk in high_risk_client:
+                company_wise_risk_client.append(risk)
+
+            total_scheduled_tasks = total_scheduled_tasks + TaskSchedule.objects.filter(company=comp,date__range=[datetime.date.today(),datetime.date.today()]).count()
+            total_pending_tasks = total_pending_tasks + TaskSchedule.objects.filter(company=comp,pending=True,date__range=[datetime.date.today(),datetime.date.today()]).count()
+            total_completed_tasks = total_completed_tasks + TaskSchedule.objects.filter(company=comp,complete=True,date__range=[datetime.date.today(),datetime.date.today()]).count()
+
+            total_client = total_client + Client.objects.filter(company = comp).count()
+            
+
+        total_healthy_client = total_client - len(company_wise_risk_client)
+        pie_chart = [total_scheduled_tasks, total_pending_tasks, total_completed_tasks]
+        context['company_details'] = request.user.company
+        context['pie_chart'] = pie_chart
         context['y_count_series'] = y_count_series
         context['x_company_name_series'] = x_company_name_series
-        print('x_company_name_series :',x_company_name_series)
-
+        context['company_wise_pie'] = company_wise_pie
+        context['company_wise_risk_client'] = company_wise_risk_client
+        context['total_healthy_client'] = total_healthy_client
+        context['total_client'] = total_client
+        context['total_high_risk_client'] = len(company_wise_risk_client)
+        
+        
         
     return render(request, 'production/management_dashboard.html', context)
+
+def date_filter_management_dashboard(request):
+    dashboard_data = {}
+    current_company = request.user.company
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    y_count_series = []
+    x_company_name_series = []
+    pie_chart=[]
+    total_pending_tasks = 0
+    total_completed_tasks = 0
+    total_scheduled_tasks = 0
+    company_wise_pie = []
+    company_list = Company.objects.filter(account_number__startswith=request.user.company.account_number).exclude(account_number=request.user.company.account_number)
+    
+    for comp in company_list:
+        high_client = NotifyClientVitalTask.objects.filter(company=comp, created__range=[start_date,end_date])
+        x_company_name_series.append(comp.company_name)
+        y_count_series.append(high_client.count())
+        total_scheduled_tasks = total_scheduled_tasks + TaskSchedule.objects.filter(company=comp,date__range=[start_date,end_date]).count()
+        total_pending_tasks = total_pending_tasks + TaskSchedule.objects.filter(company=comp,pending=True,date__range=[start_date,end_date]).count()
+        total_completed_tasks = total_completed_tasks + TaskSchedule.objects.filter(company=comp,complete=True,date__range=[start_date,end_date]).count()
+
+
+        company_wise_pie.append({
+                'company_id': "chart_"+str(comp.pk),
+                'company_name': comp.company_name,
+                'data_set': [TaskSchedule.objects.filter(company=comp,date__range=[start_date,end_date]).count(),
+                            TaskSchedule.objects.filter(company=comp,pending=True,date__range=[start_date,end_date]).count(),
+                            TaskSchedule.objects.filter(company=comp,complete=True,date__range=[start_date,end_date]).count()]
+        })
+
+
+        
+
+    
+    pie_chart = [total_scheduled_tasks, total_pending_tasks, total_completed_tasks]
+    dashboard_data['company_wise_pie'] = company_wise_pie
+    dashboard_data['pie_chart'] = pie_chart
+    dashboard_data['total_pending_tasks'] = total_pending_tasks
+    dashboard_data['total_pending_tasks'] = total_pending_tasks
+    dashboard_data['total_scheduled_tasks'] = total_scheduled_tasks
+    dashboard_data['y_count_series'] = y_count_series
+    dashboard_data['x_company_name_series'] = x_company_name_series
+       
+    
+    return HttpResponse(json.dumps(dashboard_data),content_type="application/json")

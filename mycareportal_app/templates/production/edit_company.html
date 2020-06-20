@@ -317,8 +317,9 @@
                     </div>
                   </div>
                  
+                  {% if is_parent_flag  %}
                   <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Is Parent</label>
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Is Parent Company</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if company_edit_form.is_parent.value == True %}
                       <input type="checkbox" class="form-control" checked="checked" name ="{{company_edit_form.is_parent.html_name}}"/>
@@ -327,7 +328,7 @@
                       {% endif %}
                     </div>
                   </div>
-
+                  {% endif %}
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Default Dashboard</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
