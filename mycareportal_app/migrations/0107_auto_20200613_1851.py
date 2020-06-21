@@ -17,10 +17,5 @@ class Migration(migrations.Migration):
             model_name='company',
             name='is_parent',
             field=models.BooleanField(default=False),
-        ),
-        migrations.AlterField(
-            model_name='activationcode',
-            name='activation_code',
-            field=models.CharField(default=shortuuid.main.ShortUUID.uuid, editable=False, max_length=22, unique=True),
-        ),
+        )
     ]

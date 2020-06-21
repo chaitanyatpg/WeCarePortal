@@ -36,9 +36,7 @@ def add_roles_to_context(request):
         #CAREMANAGER PERMISSIONS
         if 'CAREMANAGER' in user_roles:
             care_manager = CareManager.objects.get(user=request.user)
-            company_id = care_manager.company_id
-            company = Company.objects.get(company_id = company_id )
-            if company.is_parent == True:
+            if request.user.company.is_parent == True:
                 module_dict['MANAGEMENTPORTAL']['MANAGEMENTDASHBOARD']=True
             module_dict['DASHBOARD']['ADMINDASHBOARD']=True
             module_dict['DASHBOARD']['CAREGIVER_SCHEDULE_DASHBOARD']=True
