@@ -94,6 +94,24 @@ class Company(models.Model):
     attorney_email = models.EmailField(null=True, blank=True)
     is_parent =models.BooleanField(default=False)
 
+    def get_child_companies(self):
+        children = []
+        if self.parent_account_substring != "":
+            companies = Company.objects.all()
+            for company in companies:
+                if (company.account_number != None and len(company.account_number) >=5
+                    and company.account_number != self.account_number
+                    and company.account_number[:5] == self.parent_account_substring):
+                    children.append(company)
+        return children
+
+    @property
+    def parent_account_substring(self):
+        if self.is_parent and len(self.account_number) >= 5:
+            return self.account_number[:5]
+        else:
+            return ""
+
 class User(AbstractUser):
 
     company = models.ForeignKey(Company)
