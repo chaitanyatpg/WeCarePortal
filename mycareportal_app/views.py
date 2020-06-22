@@ -83,6 +83,8 @@ def home(request):
             return redirect('client_task_dashboard')
         elif current_company.default_dashboard == current_company.caregiver_schedule_dashboard:
             return redirect('caregiver_schedule_dashboard')
+        elif current_company.default_dashboard == current_company.management_dashboard:
+            return redirect('management_dashboard')
     elif "CAREGIVER" in user_roles:
         if "tablet_id" in request.session:
             if ClientTabletRegister.objects.filter(company=request.user.company,device_id=request.session["tablet_id"]).exists():
@@ -596,6 +598,7 @@ class EditCompany(LoginRequiredMixin, View):
 
     def get(self, request):
         context = {}
+        is_parent_flag =True
         current_company = request.user.company
         company_edit_form = CompanyEditForm(initial=
         {
@@ -610,11 +613,18 @@ class EditCompany(LoginRequiredMixin, View):
             'default_dashboard': current_company.default_dashboard,
             'tax_rate': current_company.tax_rate,
             'logo': current_company.logo,
-            'attorney_email': current_company.attorney_email
+            'attorney_email': current_company.attorney_email,
+            'is_parent':current_company.is_parent
         })
+        caregiver = Caregiver.objects.filter(company = current_company).count()
+        client = Client.objects.filter(company = current_company).count()
+        if caregiver > 0 and  client > 0 :
+            is_parent_flag = False
+
         context['company_edit_form'] = company_edit_form
         context['current_company'] = current_company
         context['all_timezones'] = pytz.all_timezones
+        context['is_parent_flag'] = is_parent_flag
         return render(request, 'production/edit_company.html', context)
 
     def post(self, request):
@@ -635,6 +645,8 @@ class EditCompany(LoginRequiredMixin, View):
                 current_company.tax_rate = company_edit_form.cleaned_data['tax_rate']
                 current_company.logo = company_edit_form.cleaned_data['logo']
                 current_company.attorney_email = company_edit_form.cleaned_data['attorney_email']
+                current_company.is_parent = company_edit_form.cleaned_data['is_parent']
+
                 current_company.save()
                 #send_mail('Test sendgrid', 'Test message', 'info@wecareportal.com', ['dhruv.ranjan@gmail.com'], fail_silently=False)
                 messages.success(request, "Company details successfully edited")
@@ -719,6 +731,7 @@ def date_filter_dashboard(request):
     #timezone.activate(client_timezone)
     #default_tasks = DefaultTasks.objects.count()
     #custom_tasks = Tasks.objects.filter(company=current_company).count()
+    print("start_date :",start_date)
     total_scheduled_tasks = TaskSchedule.objects.filter(company=current_company,date__range=[start_date,end_date]).count()
     total_pending_tasks = TaskSchedule.objects.filter(company=current_company,pending=True,date__range=[start_date,end_date]).count()
     total_in_progress_tasks = TaskSchedule.objects.filter(company=current_company,in_progress=True,date__range=[start_date,end_date]).count()
@@ -1534,10 +1547,10 @@ class ClientHighRisk(LoginRequiredMixin, View):
         notify_client_vital_task = NotifyClientVitalTask.objects.filter(company=current_company)
         print("notify_client_vital_task",notify_client_vital_task)
         context['notify_client_vital_task'] =notify_client_vital_task
-    
-        
+
+
         return render(request, "production/view_client_high_risk.html", context)
-        
+
 
 def viewclienthigh( request, *args, **kwargs):
     context = {}
@@ -1545,7 +1558,7 @@ def viewclienthigh( request, *args, **kwargs):
     notify_client_vital_task = NotifyClientVitalTask.objects.get(pk= id)
     notify_client_vital_task.is_active = False
     notify_client_vital_task.save()
-    
+
     return redirect("dashboard")
 
 def admin_send_call_request_to_caregiver(request, email):
@@ -1558,18 +1571,18 @@ def admin_send_call_request_to_caregiver(request, email):
             user_email = request.GET.get('email')
             care_giver_user = Caregiver.objects.get(company=company,
                                                     email_address = caregiver_email_id)
-            
-            
+
+
             if care_giver_user is not None:
                 user_token_map = UserFcmTokenMap.objects.get(user=care_giver_user.user)
 
-            
-                
-            
+
+
+
                 if user_token_map is not None:
-                    
+
                     url = "https://appr.tc/r/"+str(randint(100000, 999999))
-                    
+
                     data = {
                             "to": user_token_map.fcm_token,
                             "notification": {
@@ -1592,12 +1605,12 @@ def admin_send_call_request_to_caregiver(request, email):
                     messages.error(request, "Remote user never logged in")
     except Exception as ex:
         print("Exception :", ex)
-        
+
     if status == True:
         return redirect(url)
     elif status == False:
         return redirect('view_client_high_risk')
-    
+
 
 def get_clients_details(request):
     if request.method == "GET":
@@ -1611,6 +1624,110 @@ def get_clients_details(request):
               'caregiver':   caregiver,
               'family_member' : family_member
        }
-    
+
     return render(request, 'production/available_users_modal.html', context)
 
+
+@login_required
+def management_dashboard(request):
+    if request.method == "GET":
+        context = {}
+        y_count_series = []
+        x_company_name_series = []
+        pie_chart=[]
+        total_pending_tasks = 0
+        total_completed_tasks = 0
+        total_scheduled_tasks = 0
+        total_client = 0
+        total_high_risk_client = 0
+        company_wise_pie = []
+        company_wise_risk_client = []
+
+        company_list = request.user.company.get_child_companies()
+        print("Date :",datetime.date.today())
+        for comp in company_list:
+            high_client = NotifyClientVitalTask.objects.filter(company=comp, created__range=[datetime.date.today(),datetime.date.today()])
+            x_company_name_series.append(comp.company_name)
+            y_count_series.append(high_client.count())
+
+            company_wise_pie.append({
+                'company_id': "chart_"+str(comp.pk),
+                'company_name': comp.company_name,
+                'data_set': [TaskSchedule.objects.filter(company=comp,date__range=[datetime.date.today(),datetime.date.today()]).count(),
+                            TaskSchedule.objects.filter(company=comp,pending=True,date__range=[datetime.date.today(),datetime.date.today()]).count(),
+                            TaskSchedule.objects.filter(company=comp,complete=True,date__range=[datetime.date.today(),datetime.date.today()]).count()]
+            })
+
+            high_risk_client = NotifyClientVitalTask.objects.filter(company = comp)
+            for risk in high_risk_client:
+                company_wise_risk_client.append(risk)
+
+            total_scheduled_tasks = total_scheduled_tasks + TaskSchedule.objects.filter(company=comp,date__range=[datetime.date.today(),datetime.date.today()]).count()
+            total_pending_tasks = total_pending_tasks + TaskSchedule.objects.filter(company=comp,pending=True,date__range=[datetime.date.today(),datetime.date.today()]).count()
+            total_completed_tasks = total_completed_tasks + TaskSchedule.objects.filter(company=comp,complete=True,date__range=[datetime.date.today(),datetime.date.today()]).count()
+
+            total_client = total_client + Client.objects.filter(company = comp).count()
+
+
+        total_healthy_client = total_client - len(company_wise_risk_client)
+        pie_chart = [total_scheduled_tasks, total_pending_tasks, total_completed_tasks]
+        context['company_details'] = request.user.company
+        context['pie_chart'] = pie_chart
+        context['y_count_series'] = y_count_series
+        context['x_company_name_series'] = x_company_name_series
+        context['company_wise_pie'] = company_wise_pie
+        context['company_wise_risk_client'] = company_wise_risk_client
+        context['total_healthy_client'] = total_healthy_client
+        context['total_client'] = total_client
+        context['total_high_risk_client'] = len(company_wise_risk_client)
+
+
+
+    return render(request, 'production/management_dashboard.html', context)
+
+def date_filter_management_dashboard(request):
+    dashboard_data = {}
+    current_company = request.user.company
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    y_count_series = []
+    x_company_name_series = []
+    pie_chart=[]
+    total_pending_tasks = 0
+    total_completed_tasks = 0
+    total_scheduled_tasks = 0
+    company_wise_pie = []
+    company_list = Company.objects.filter(account_number__startswith=request.user.company.account_number).exclude(account_number=request.user.company.account_number)
+
+    for comp in company_list:
+        high_client = NotifyClientVitalTask.objects.filter(company=comp, created__range=[start_date,end_date])
+        x_company_name_series.append(comp.company_name)
+        y_count_series.append(high_client.count())
+        total_scheduled_tasks = total_scheduled_tasks + TaskSchedule.objects.filter(company=comp,date__range=[start_date,end_date]).count()
+        total_pending_tasks = total_pending_tasks + TaskSchedule.objects.filter(company=comp,pending=True,date__range=[start_date,end_date]).count()
+        total_completed_tasks = total_completed_tasks + TaskSchedule.objects.filter(company=comp,complete=True,date__range=[start_date,end_date]).count()
+
+
+        company_wise_pie.append({
+                'company_id': "chart_"+str(comp.pk),
+                'company_name': comp.company_name,
+                'data_set': [TaskSchedule.objects.filter(company=comp,date__range=[start_date,end_date]).count(),
+                            TaskSchedule.objects.filter(company=comp,pending=True,date__range=[start_date,end_date]).count(),
+                            TaskSchedule.objects.filter(company=comp,complete=True,date__range=[start_date,end_date]).count()]
+        })
+
+
+
+
+
+    pie_chart = [total_scheduled_tasks, total_pending_tasks, total_completed_tasks]
+    dashboard_data['company_wise_pie'] = company_wise_pie
+    dashboard_data['pie_chart'] = pie_chart
+    dashboard_data['total_pending_tasks'] = total_pending_tasks
+    dashboard_data['total_pending_tasks'] = total_pending_tasks
+    dashboard_data['total_scheduled_tasks'] = total_scheduled_tasks
+    dashboard_data['y_count_series'] = y_count_series
+    dashboard_data['x_company_name_series'] = x_company_name_series
+
+
+    return HttpResponse(json.dumps(dashboard_data),content_type="application/json")

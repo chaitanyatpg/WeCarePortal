@@ -278,9 +278,9 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Tax Rate</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not company_edit_form.tax_rate.value is None %}
-                        <input type="text" class="form-control" name = "{{company_edit_form.tax_rate.html_name}}" value = "{{company_edit_form.tax_rate.value}}" required="" />
+                        <input type="text" class="form-control" name = "{{company_edit_form.tax_rate.html_name}}" value = "{{company_edit_form.tax_rate.value}}" />
                       {% else %}
-                        <input type="text" class="form-control" name = "{{company_edit_form.tax_rate.html_name}}" required="" />
+                        <input type="text" class="form-control" name = "{{company_edit_form.tax_rate.html_name}}" />
                       {% endif %}
                     </div>
                   </div>
@@ -289,9 +289,9 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Attorney Email</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not company_edit_form.attorney_email.value is None %}
-                        <input type="text" class="form-control" name = "{{company_edit_form.attorney_email.html_name}}" value="{{company_edit_form.attorney_email.value}}" required="" />
+                        <input type="text" class="form-control" name = "{{company_edit_form.attorney_email.html_name}}" value="{{company_edit_form.attorney_email.value}}" />
                       {% else %}
-                        <input type="text" class="form-control" name = "{{company_edit_form.attorney_email.html_name}}" required="" />
+                        <input type="text" class="form-control" name = "{{company_edit_form.attorney_email.html_name}}" />
                       {% endif %}
                     </div>
                   </div>
@@ -317,6 +317,18 @@
                     </div>
                   </div>
 
+                  {% if is_parent_flag  %}
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Is Parent Company</label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if company_edit_form.is_parent.value == True %}
+                      <input type="checkbox" class="form-control" checked="checked" name ="{{company_edit_form.is_parent.html_name}}"/>
+                      {% else %}
+                      <input type="checkbox" class="form-control" name ="{{company_edit_form.is_parent.html_name}}"/>
+                      {% endif %}
+                    </div>
+                  </div>
+                  {% endif %}
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Default Dashboard</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">

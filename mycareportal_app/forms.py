@@ -71,6 +71,7 @@ class CompanyEditForm(forms.Form):
     tax_rate = forms.DecimalField(required=False)
     logo = forms.ImageField(label='Select file', required=False)
     attorney_email = forms.EmailField(required=False)
+    is_parent = forms.BooleanField(required=False)
 
     def clean_picture(self):
         picture = self.cleaned_data['logo']

@@ -1,0 +1,354 @@
+{% extends "production/base.html" %}
+{% block title %} Management Dashboard {% endblock %}
+{% load static %}
+{% load mycareportal_app_extras%}
+{% block headlibs %}
+{% load static %}
+    <!-- iCheck -->
+    <link href="{% static 'vendors/iCheck/skins/flat/green.css' %}" rel="stylesheet">
+    <!-- bootstrap-progressbar -->
+    <link href="{% static 'vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css' %}" rel="stylesheet">
+    <!-- JQVMap -->
+    <link href="{% static 'vendors/jqvmap/dist/jqvmap.min.css' %}" rel="stylesheet"/>
+    <!-- bootstrap-daterangepicker -->
+    <link href="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+{% endblock %}
+{% block pagecontent %}
+        <!-- page content -->
+        <div class="right_col" role="main">
+          {{block.super}}
+          <!-- top tiles -->
+          <div class="row">
+            <h1>Company Name: {{company_details.company_name}} </h1>
+            <h1>Address: {{company_details.address}}</h1>
+            <h1>Contact Number: {{company_details.contact_number}}</h1>
+          </div>
+          <hr>
+          <div class="row">
+            <h1>Total Clients : {{total_client}} </h1>
+            <h1>Total Clients At Risk : {{total_high_risk_client}} </h1>
+            <h1>Total Healthy Clients : {{total_healthy_client}} </h1>
+          </div>
+          <div class="row">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>Management Dashboard</h3>
+              </div>
+              <div class="title_right">
+                <div class="container">
+                  <div class="row">
+                    
+                    <div class="col-sm-6">
+                      <div id="reportrange_right" class="pull-left" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                        <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                        <span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-5 col-sm-5 col-xs-5">
+              <canvas id="myChart" style="width:400px; height: 400px;"></canvas>
+              <div style="text-align: center;font-weight: bold;"><span> Total Client At Risk (Company Wise)</span></div>
+            </div>
+            <div class="col-md-5 col-sm-5 col-xs-5">
+              <canvas id="wellness_pie" style="width:200px; height: 200px;"></canvas>
+              <div style="text-align: center;font-weight: bold;"><span> Task Details</span></div>
+              </div>
+            </div>
+            <div style="margin-top: 20px;"></div>
+            <hr>
+            <h3>Company Wise</h4>
+            <div class="row">
+              {% for pie_chart in company_wise_pie %}
+              <div class="col-md-5 col-sm-5 col-xs-5">
+               <canvas id="{{pie_chart.company_id}}" class="company-wise" style="width:200px; height: 200px;"></canvas>
+               <div style="text-align: center;font-weight: bold;"><span> {{pie_chart.company_name}}</span></div>
+                </div>
+              {% endfor %}
+            </div>
+            <div style="margin-top: 20px;"></div>
+            <hr>
+            <h3>High Risk Clients</h3>
+             <div class="row">
+              <table id="incident_table" class="table table-striped table-bordered">
+                <thead>
+                  <tr>
+                     <th>Company</th>
+                     <th>Client</th>
+                     <th>Body Temperature (&#8451;)</th>
+                     <th>Breathing Issue ?</th>
+                     <th>Cold or Cough ?</th>
+                     <th>Bad Throat ?</th>
+                     <th>Alert Date</th>
+                      
+                  </tr>
+              </thead>
+              <tbody>
+                {% for data in company_wise_risk_client %}
+                <tr>
+                    <td>{{ data.company.company_name }}</td>
+                    <td>{{ data.client.first_name|addstr_space:data.client.last_name }}</td>
+                    <td>{{ data.body_temperature_38_higher }}</td>
+                    <td>{{ data.breathing_issues }}</td>
+                    <td>{{ data.Cold_or_Cough }}</td>
+                    <td>{{ data.bad_throat}}</td>
+                    <td>{{ data.created }}</td>
+                    
+                    
+                </tr>
+                {% endfor %}
+            </tbody>
+              </table>
+             </div> 
+            
+
+        </div>
+        <!-- /page content -->
+{% endblock %}
+{% block footlibs %}
+    <!-- Chart.js -->
+    <script src="{% static 'vendors/Chart.js/dist/Chart.min.js' %}"></script>
+    <!-- gauge.js -->
+    <script src="{% static 'vendors/gauge.js/dist/gauge.min.js' %}"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="{% static 'vendors/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
+    <!-- iCheck -->
+    <script src="{% static 'vendors/iCheck/icheck.min.js' %}"></script>
+    <!-- Skycons -->
+    <script src="{% static 'vendors/skycons/skycons.js' %}"></script>
+    <!-- Flot -->
+    <script src="{% static 'vendors/Flot/jquery.flot.js' %}"></script>
+    <script src="{% static 'vendors/Flot/jquery.flot.pie.js' %}"></script>
+    <script src="{% static 'vendors/Flot/jquery.flot.time.js' %}"></script>
+    <script src="{% static 'vendors/Flot/jquery.flot.stack.js' %}"></script>
+    <script src="{% static 'vendors/Flot/jquery.flot.resize.js' %}"></script>
+    <!-- Flot plugins -->
+    <script src="{% static 'vendors/flot.orderbars/js/jquery.flot.orderBars.js' %}"></script>
+    <script src="{% static 'vendors/flot-spline/js/jquery.flot.spline.min.js' %}"></script>
+    <script src="{% static 'vendors/flot.curvedlines/curvedLines.js' %}"></script>
+    <!-- DateJS -->
+    <script src="{% static 'vendors/DateJS/build/date.js' %}"></script>
+    <!-- JQVMap -->
+    <script src="{% static 'vendors/jqvmap/dist/jquery.vmap.js' %}"></script>
+    <script src="{% static 'vendors/jqvmap/dist/maps/jquery.vmap.world.js' %}"></script>
+    <script src="{% static 'vendors/jqvmap/examples/js/jquery.vmap.sampledata.js' %}"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+{% endblock %}
+{% block scripts %}
+<!-- bootstrap-daterangepicker -->
+<script>
+  $(document).ready(function() {
+    
+    var cb = function(start, end, label) {
+      console.log(start.toISOString(), end.toISOString(), label);
+      $('#reportrange_right span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+    };
+
+    
+
+    var optionSet1 = {
+      startDate: moment(),
+      endDate: moment(),
+      minDate: '01/01/2012',
+      maxDate: '12/31/2020',
+      showDropdowns: true,
+      showWeekNumbers: true,
+      timePicker: false,
+      timePickerIncrement: 1,
+      timePicker12Hour: true,
+      ranges: {
+        'Today': [moment(), moment()],
+        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+        'This Month': [moment().startOf('month'), moment().endOf('month')],
+        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+      },
+      opens: 'right',
+      buttonClasses: ['btn btn-default'],
+      applyClass: 'btn-small btn-primary',
+      cancelClass: 'btn-small',
+      format: 'MM/DD/YYYY',
+      separator: ' to ',
+      locale: {
+        applyLabel: 'Submit',
+        cancelLabel: 'Clear',
+        fromLabel: 'From',
+        toLabel: 'To',
+        customRangeLabel: 'Custom',
+        daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+        monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        firstDay: 1
+      }
+    };
+
+    $('#reportrange_right span').html(moment().format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+
+    $('#reportrange_right').daterangepicker(optionSet1, cb);
+
+    $('#reportrange_right').on('show.daterangepicker', function() {
+      console.log("show event fired");
+    });
+    $('#reportrange_right').on('hide.daterangepicker', function() {
+      console.log("hide event fired");
+    });
+    $('#reportrange_right').on('apply.daterangepicker', function(ev, picker) {
+      console.log("apply event fired, start/end dates are " + picker.startDate.format('MMMM D, YYYY') + " to " + picker.endDate.format('MMMM D, YYYY'));
+      var start_date = picker.startDate.format('YYYY-MM-DD');
+      var end_date = picker.endDate.format('YYYY-MM-DD');
+      console.log(start_date);
+      console.log(end_date);
+      $.ajax({
+        type: "GET",
+        url: '{% url "date_filter_management_dashboard" %}',
+        data: { start_date: start_date, end_date: end_date},
+        dataType: "json",
+        contentType: "application/json",
+        success: function(dashboard_data){
+          initiateGraph(start_date, end_date, dashboard_data)
+        },
+        failure: function(){
+          alert('error fetching data');
+        }
+      });
+    });
+    $('#reportrange_right').on('cancel.daterangepicker', function(ev, picker) {
+      console.log("cancel event fired");
+    });
+
+    $('#options1').click(function() {
+      $('#reportrange_right').data('daterangepicker').setOptions(optionSet1, cb);
+    });
+
+    $('#options2').click(function() {
+      $('#reportrange_right').data('daterangepicker').setOptions(optionSet2, cb);
+    });
+
+    $('#destroy').click(function() {
+      $('#reportrange_right').data('daterangepicker').remove();
+    });
+
+    var start_date=undefined;
+    var end_date= undefined;
+    
+    initiateGraph(start_date, end_date)
+  });
+
+  
+</script>
+<script>
+  function initiateGraph(start_date, end_date, dashboard_data) {
+
+      var ctx = document.getElementById('myChart').getContext('2d');
+      var myChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+              labels: start_date == undefined ? {{ x_company_name_series | safe }} : dashboard_data.x_company_name_series,
+              datasets: [{
+                  label: '# Client At High Risk',
+                  data: start_date == undefined ? {{ y_count_series | safe }} : dashboard_data.y_count_series,
+                  backgroundColor: [
+                      'rgba(255, 99, 132, 0.2)',
+                      'rgba(54, 162, 235, 0.2)',
+                      'rgba(255, 206, 86, 0.2)',
+                      'rgba(75, 192, 192, 0.2)',
+                      'rgba(153, 102, 255, 0.2)',
+                      'rgba(255, 159, 64, 0.2)'
+                  ],
+                  borderColor: [
+                      'rgba(255, 99, 132, 1)',
+                      'rgba(54, 162, 235, 1)',
+                      'rgba(255, 206, 86, 1)',
+                      'rgba(75, 192, 192, 1)',
+                      'rgba(153, 102, 255, 1)',
+                      'rgba(255, 159, 64, 1)'
+                  ],
+                  borderWidth: 1
+              }]
+          },
+          options: {
+              onClick : (evt, item) => {
+                    console.log("asdasd", evt)
+              },
+              scales: {
+         yAxes: [{
+             ticks: {
+                 beginAtZero: true,
+                 userCallback: function(label, index, labels) {
+                     // when the floored value is the same as the value we have a whole number
+                     if (Math.floor(label) === label) {
+                         return label;
+                     }
+
+                 },
+             }
+         }],
+     }
+          }
+      });
+
+      
+      
+      var pie = document.getElementById('wellness_pie').getContext('2d');
+      var wellness_pie = new Chart(pie, {
+        type: 'pie',
+        data: {
+                datasets: [{
+                              data: start_date == undefined ? {{ pie_chart | safe }} : dashboard_data.pie_chart,
+                              backgroundColor: [
+                                'rgb(236, 46, 8)',
+                                'rgb(236, 160, 8)',
+                                'rgb(63, 191, 65)'
+                              ]
+                          }],
+                labels:['Total Tasks', 'Total Pending Task', 'Total Completed Task']
+
+              },
+        options : {
+          responsive: true
+        }
+      });
+
+      $('.company-wise').each(function()
+      {
+        var pie_data = $(this).attr('id')
+        var pie = document.getElementById(pie_data).getContext('2d');
+        var data_set = (start_date == undefined ? {{ company_wise_pie | safe }} : dashboard_data.company_wise_pie);
+        var data = data_set.find(element => element.company_id === pie_data);
+        var series_data = data.data_set
+        var pie_data = new Chart(pie, {
+        type: 'pie',
+        data: {
+                datasets: [{
+                              data: series_data,
+                              backgroundColor: [
+                                'rgb(236, 46, 8)',
+                                'rgb(236, 160, 8)',
+                                'rgb(63, 191, 65)'
+                              ]
+                          }],
+                labels:['Total Tasks', 'Total Pending Task', 'Total Completed Task']
+
+              },
+        options : {
+          responsive: true
+        }
+      }); 
+    });
+      
+    }
+
+  </script>
+  
+
+<!-- /bootstrap-daterangepicker -->
+
+    {% endblock %}
