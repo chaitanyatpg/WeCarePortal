@@ -9,7 +9,7 @@ import shortuuid.main
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('mycareportal_app', '0106_auto_20200603_2047'),
+        ('mycareportal_app', '0107_auto_20200607_2148'),
     ]
 
     operations = [
