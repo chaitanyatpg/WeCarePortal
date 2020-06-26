@@ -69,6 +69,8 @@ def home(request):
         company_created = current_company.created.replace(tzinfo=None)
         free_trial_days = (current - company_created).days
         messages.info(request, "Currently on day {0} of free trial".format(free_trial_days))
+    if "tablet_id" in request.session and not current_company.requires_tablet:
+        request.session.pop("tablet_id")
     if "CAREMANAGER" in user_roles:
         if "CAREGIVER" in user_roles and "tablet_id" in request.session:
             if ClientTabletRegister.objects.filter(company=request.user.company,device_id=request.session["tablet_id"]).exists():
