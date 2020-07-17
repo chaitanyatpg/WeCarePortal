@@ -59,6 +59,8 @@ urlpatterns = [
     url(r'^post_certification',client_views.post_certification,name='post_certification'),
     url(r'^post_transfer',client_views.post_transfer,name='post_transfer'),
     url(r'^caregiver_post_criteria',caregiver_views.caregiver_post_criteria,name='caregiver_post_criteria'),
+    url(r'^caregiver_post_payroll',caregiver_views.caregiver_post_payroll,name='caregiver_post_payroll'),
+    url(r'^client_post_invoice',client_views.client_post_invoice,name='client_post_invoice'),
     url(r'^caregiver_post_certification',caregiver_views.caregiver_post_certification,name='caregiver_post_certification'),
     url(r'^caregiver_post_transfer',caregiver_views.caregiver_post_transfer,name='caregiver_post_transfer'),
     #url(r'^edit_client/client_email=(?P<client_email>.*)$',client_views.EditClient.as_view(),name='edit_client'),

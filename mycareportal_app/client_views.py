@@ -287,6 +287,7 @@ class EditClient(LoginRequiredMixin, View):
             context['edit_client_form'] = edit_client_form
             client_attachments = self.get_client_attachments(current_company, client)
             context['client_attachments'] = client_attachments
+            context["client_invoice_form"] = ClientInvoiceForm()
             #initialize family contact forms
             family_details = client.family_contacts.filter(is_active=True)
             provider_details = client.provider.filter(is_active=True)
@@ -297,6 +298,7 @@ class EditClient(LoginRequiredMixin, View):
             context["provider_details"] = provider_details
             context["pharmacy_details"] = pharmacy_details
             context["payer_details"] = payer_details
+            context["client"] = client
             #Details forms
             context["family_details_form"] = FamilyDetailsForm()
             context["delete_family_details_form"] = DeleteFamilyDetailsForm()
@@ -2318,6 +2320,50 @@ def post_transfer(request):
         transfer_map.experience = experience
         transfer_map.save()
     return HttpResponse("Changed Status")
+
+
+
+@login_required
+def client_post_invoice(request):
+    
+    
+    if request.method == "POST":
+        
+        company = request.user.company
+        client_invoice_form = ClientInvoiceForm(request.POST)        
+        client_email = request.POST.get('client_email')
+        if client_invoice_form.is_valid():   
+            client_email = client_invoice_form.cleaned_data['client_email']
+            print("client_email",client_email)
+            regular_hourly_rate = client_invoice_form.cleaned_data['regular_hourly_rate']
+            print("client_email",client_email)
+            weekend_hourly_rate = client_invoice_form.cleaned_data['weekend_hourly_rate']
+            holiday_hourly_rate = client_invoice_form.cleaned_data['holiday_hourly_rate']
+            weekend_holiday_rate = client_invoice_form.cleaned_data['weekend_holiday_rate']
+            live_in_rate = client_invoice_form.cleaned_data['live_in_rate']
+            weekend_live_in_rate = client_invoice_form.cleaned_data['weekend_live_in_rate']
+            holiday_live_in_rate = client_invoice_form.cleaned_data['holiday_live_in_rate']
+            weekend_holiday_live_in_rate = client_invoice_form.cleaned_data['weekend_holiday_live_in_rate']
+            special_hourly_rate = client_invoice_form.cleaned_data['special_hourly_rate']
+            special_live_in_rate = client_invoice_form.cleaned_data['special_live_in_rate']
+            clientpayroll = Client.objects.get(company=company,email_address=client_email)
+            clientpayroll.regular_hourly_rate =regular_hourly_rate
+            clientpayroll.weekend_hourly_rate =weekend_hourly_rate
+            clientpayroll.holiday_hourly_rate = holiday_hourly_rate
+            clientpayroll.weekend_holiday_rate =weekend_holiday_rate
+            clientpayroll.live_in_rate =live_in_rate
+            clientpayroll.weekend_live_in_rate =weekend_live_in_rate
+            clientpayroll.holiday_live_in_rate =holiday_live_in_rate
+            clientpayroll.weekend_holiday_live_in_rate =weekend_holiday_live_in_rate
+            clientpayroll.special_hourly_rate =special_hourly_rate
+            clientpayroll.special_live_in_rate =special_live_in_rate
+            clientpayroll.save()       
+        return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client_email)
+
+
+
+
+
 
 @login_required
 def send_legal_email_incident(request):

@@ -416,6 +416,235 @@
         </div>
 
         <div class="row">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Invoice</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li>
+                        <a class="collapse-link">
+                          <i class="fa fa-chevron-up"></i>
+                        </a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                  
+              <form enctype="multipart/form-data" method='post' action="{% url 'client_post_invoice' %}">
+                {% csrf_token %}
+      
+                    
+                      <div class="row">
+                          <div class="x_panel">
+                   
+                  
+                              <div class="x_title">
+                                  <h2>Invoice Details
+                                    <small></small>
+                                  </h2>
+                                  <ul class="nav navbar-right panel_toolbox">
+                                    <li>
+                                      <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                      </a>
+                                    </li>
+                                  </ul>
+                                  <div class="clearfix"></div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="form-group">
+                                      <label class="col-md-6 col-sm-6 col-xs-12">Regular hourly rate
+                                        <br>
+                                      </label>
+                                      <div>
+                                        <label>
+                                          {% if not client.regular_hourly_rate is None %}
+                                          <input type="number" name="{{ client_invoice_form.regular_hourly_rate.html_name}}" min="0" step="any" value="{{client.regular_hourly_rate}}"> 
+                                          {% else %}
+                                          {{ client_invoice_form.regular_hourly_rate}}
+                                          {% endif %}
+                                        </label>
+                                      </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="form-group">
+                                      <label class="col-md-6 col-sm-6 col-xs-12">Weekend hourly rate
+                                        <br>
+                                      </label>
+                                      <div>
+                                        <label>
+                                          {% if not client.weekend_hourly_rate is None %}
+                                          <input type="number" name="{{ client_invoice_form.weekend_hourly_rate.html_name}}" min="0" step="any" value="{{client.weekend_hourly_rate}}"> 
+                                          {% else %}
+                                          {{ client_invoice_form.weekend_hourly_rate}}
+                                          {% endif %}
+                                        </label>
+                                      </div>
+                                    </div>
+                                  </div>
+                  
+                  
+
+                                  <div class="row">
+                                      <div class="form-group">
+                                        <label class="col-md-6 col-sm-6 col-xs-12">Holiday hourly rate
+                                          <br>
+                                        </label>
+                                        <div>
+                                          <label>
+                                              {% if not client.holiday_hourly_rate is None %}
+                                            <input type="number" name="{{ client_invoice_form.holiday_hourly_rate.html_name}}" min="0" step="any" value="{{client.holiday_hourly_rate}}"> {% else %}
+                                            {{ client_invoice_form.holiday_hourly_rate}}
+                                             {% endif %}
+                                          </label>
+                                        </div>
+                                      </div>
+                                    </div>
+                    
+                    
+                                    <div class="row">
+                                      <div class="form-group">
+                                        <label class="col-md-6 col-sm-6 col-xs-12">Weekend holiday rate
+                                          <br>
+                                        </label>
+                                        <div>
+                                          <label>
+                                            {% if not client.weekend_holiday_rate is None %}
+                                            <input type="number" name="{{ client_invoice_form.weekend_holiday_rate.html_name}}" min="0" step="any" value="{{client.weekend_holiday_rate}}"> {% else %}
+                                            {{ client_invoice_form.weekend_holiday_rate}}
+                                            {% endif %}
+                                          </label>
+                                        </div>
+                                      </div>
+                                    </div>
+                    
+                    
+                                    <div class="row">
+                                      <div class="form-group">
+                                        <label class="col-md-6 col-sm-6 col-xs-12">Live in rate
+                                          <br>
+                                        </label>
+                                        <div>
+                                          <label>
+                                            {% if not client.live_in_rate is None %}
+                                            <input type="number" name="{{ client_invoice_form.live_in_rate.html_name}}" min="0" step="any" value="{{client.live_in_rate}}">
+                                             {% else %}
+                                            {{ client_invoice_form.live_in_rate}}
+                                            {% endif %}
+                                          </label>
+                                        </div>
+                                      </div>
+                                    </div>
+                    
+                                    <div class="row">
+                                      <div class="form-group">
+                                        <label class="col-md-6 col-sm-6 col-xs-12">Weekend live in rate
+                                          <br>
+                                        </label>
+                                        <div>
+                                          <label>
+                                            {% if not client.weekend_live_in_rate is None %}
+                                            <input type="number" name="{{ client_invoice_form.weekend_live_in_rate.html_name}}" min="0" step="any" value="{{client.weekend_live_in_rate}}">
+                                             {% else %}
+                                            {{ client_invoice_form.weekend_live_in_rate}}
+                                            {% endif %}
+                                          </label>
+                                        </div>
+                                      </div>
+                                    </div>
+                    
+                                    <div class="row">
+                                      <div class="form-group">
+                                        <label class="col-md-6 col-sm-6 col-xs-12">Holiday live in rate
+                                          <br>
+                                        </label>
+                                        <div>
+                                          <label>
+                                            {% if not client.holiday_live_in_rate is None %}
+                                            <input type="number" name="{{ client_invoice_form.holiday_live_in_rate.html_name}}" min="0" step="any" value="{{client.holiday_live_in_rate}}"> {% else %}
+                                            {{ client_invoice_form.holiday_live_in_rate}}
+                                            {% endif %}
+                                          </label>
+                                        </div>
+                                      </div>
+                                    </div>
+                    
+                                    <div class="row">
+                                      <div class="form-group">
+                                        <label class="col-md-6 col-sm-6 col-xs-12">Weekend holiday live in rate
+                                          <br>
+                                        </label>
+                                        <div>
+                                          <label>
+                                            {% if not client.weekend_holiday_live_in_rate is None %}
+                                            <input type="number" name="{{ client_invoice_form.weekend_holiday_live_in_rate.html_name}}" min="0" step="any" value="{{client.weekend_holiday_live_in_rate}}"> {% else %}
+                                            {{ client_invoice_form.weekend_holiday_live_in_rate}}
+                                            {% endif %}
+                                          </label>
+                                        </div>
+                                      </div>
+                                    </div>
+                    
+                                    <div class="row">
+                                      <div class="form-group">
+                                        <label class="col-md-6 col-sm-6 col-xs-12">Special hourly rate
+                                          <br>
+                                        </label>
+                                        <div>
+                                          <label>
+                                            {% if not client.special_hourly_rate is None %}
+                                            <input type="number" name="{{ client_invoice_form.special_hourly_rate.html_name}}" min="0" step="any" value="{{client.special_hourly_rate}}"> 
+                                            {% else %}
+                                            {{ client_invoice_form.special_hourly_rate}}
+                                            {% endif %}
+                                          </label>
+                                        </div>
+                                      </div>
+                                    </div>
+                    
+                                    <div class="row">
+                                      <div class="form-group">
+                                        <label class="col-md-6 col-sm-6 col-xs-12">Special live in rate
+                                          <br>
+                                        </label>
+                                        <div>
+                                          <label>
+                                            {% if not client.special_live_in_rate is None %}
+                                            <input type="number" name="{{ client_invoice_form.special_live_in_rate.html_name}}" min="0" step="any" value="{{client.special_live_in_rate}}"> 
+                                            {% else %}
+                                            {{ client_invoice_form.special_live_in_rate}}
+                                            {% endif %}
+                                          </label>
+                                        </div>
+                                      </div>
+                                    </div>
+
+
+                                    <div class="ln_solid"></div>
+                                    <div class="form-group">
+                                      <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-8">
+                                          <input type="hidden" name='{{client_invoice_form.client_email.html_name}}' value='{{client_email}}'>
+                                        <button type="submit" class="btn btn-success">Submit</button>
+                                      </div>
+                                    </div>
+                  
+                  
+                  
+                  
+                        </div>
+                    </iv>
+              </form>
+                  </div>
+            </div>
+        </div>
+
+
+        <div class="row">
           <div class="x_panel">
             <div class="x_title">
               <h2>Client Match Criteria</h2><small>W=Want N=Need N/A=Not Applicable</small>
