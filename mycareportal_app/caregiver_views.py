@@ -500,8 +500,6 @@ def caregiver_post_payroll(request):
             weekend_live_in_rate = caregiver_payroll_form.cleaned_data['weekend_live_in_rate']
             holiday_live_in_rate = caregiver_payroll_form.cleaned_data['holiday_live_in_rate']
             weekend_holiday_live_in_rate = caregiver_payroll_form.cleaned_data['weekend_holiday_live_in_rate']
-            special_hourly_rate = caregiver_payroll_form.cleaned_data['special_hourly_rate']
-            special_live_in_rate = caregiver_payroll_form.cleaned_data['special_live_in_rate']
             caregiverpayroll = Caregiver.objects.get(company=current_company,email_address=caregiver_email)
             caregiverpayroll.weekend_hourly_rate =weekend_hourly_rate
             caregiverpayroll.holiday_hourly_rate = holiday_hourly_rate
@@ -510,8 +508,7 @@ def caregiver_post_payroll(request):
             caregiverpayroll.weekend_live_in_rate =weekend_live_in_rate
             caregiverpayroll.holiday_live_in_rate =holiday_live_in_rate
             caregiverpayroll.weekend_holiday_live_in_rate =weekend_holiday_live_in_rate
-            caregiverpayroll.special_hourly_rate =special_hourly_rate
-            caregiverpayroll.special_live_in_rate =special_live_in_rate
+         
             
             caregiverpayroll.save()    
         return HttpResponseRedirect(reverse('edit_caregiver') + "?caregiver_email=" + caregiver_email)    

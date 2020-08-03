@@ -417,8 +417,8 @@
 
         <div class="row">
             <div class="x_panel">
-                <div class="x_title">
-                    <h2>Invoice</h2>
+                  <div class="x_title">
+                    <h2>Payment Details</h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li>
                         <a class="collapse-link">
@@ -436,9 +436,7 @@
                     
                       <div class="row">
                           <div class="x_panel">
-                   
-                  
-                              <div class="x_title">
+                               <div class="x_title">
                                   <h2>Invoice Details
                                     <small></small>
                                   </h2>
@@ -452,7 +450,7 @@
                                   <div class="clearfix"></div>
                                 </div>
 
-
+                                <div class="x_content">
                                 <div class="row">
                                     <div class="form-group">
                                       <label class="col-md-6 col-sm-6 col-xs-12">Regular hourly rate
@@ -590,39 +588,8 @@
                                       </div>
                                     </div>
                     
-                                    <div class="row">
-                                      <div class="form-group">
-                                        <label class="col-md-6 col-sm-6 col-xs-12">Special hourly rate
-                                          <br>
-                                        </label>
-                                        <div>
-                                          <label>
-                                            {% if not client.special_hourly_rate is None %}
-                                            <input type="number" name="{{ client_invoice_form.special_hourly_rate.html_name}}" min="0" step="any" value="{{client.special_hourly_rate}}"> 
-                                            {% else %}
-                                            {{ client_invoice_form.special_hourly_rate}}
-                                            {% endif %}
-                                          </label>
-                                        </div>
-                                      </div>
-                                    </div>
                     
-                                    <div class="row">
-                                      <div class="form-group">
-                                        <label class="col-md-6 col-sm-6 col-xs-12">Special live in rate
-                                          <br>
-                                        </label>
-                                        <div>
-                                          <label>
-                                            {% if not client.special_live_in_rate is None %}
-                                            <input type="number" name="{{ client_invoice_form.special_live_in_rate.html_name}}" min="0" step="any" value="{{client.special_live_in_rate}}"> 
-                                            {% else %}
-                                            {{ client_invoice_form.special_live_in_rate}}
-                                            {% endif %}
-                                          </label>
-                                        </div>
-                                      </div>
-                                    </div>
+                              
 
 
                                     <div class="ln_solid"></div>
@@ -634,7 +601,7 @@
                                     </div>
                   
                   
-                  
+                  </div>
                   
                         </div>
                     </iv>

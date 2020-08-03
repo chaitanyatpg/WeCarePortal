@@ -513,7 +513,7 @@
                       <div class="clearfix"></div>
                     </div>
     
-    
+                   <div class="x_content">
                     <div class="row">
                       <div class="form-group">
                         <label class="col-md-6 col-sm-6 col-xs-12">Weekend hourly rate
@@ -631,47 +631,6 @@
                       </div>
                     </div>
     
-                    <div class="row">
-                      <div class="form-group">
-                        <label class="col-md-6 col-sm-6 col-xs-12">Special hourly rate
-                          <br>
-                        </label>
-                        <div>
-                          <label>
-                            {% if not caregiver.special_hourly_rate is None %}
-                            <input type="number" name="{{ caregiver_payroll_form.special_hourly_rate.html_name}}" min="0" step="any" value="{{caregiver.special_hourly_rate}}"> 
-                            {% else %}
-                            {{ caregiver_payroll_form.special_hourly_rate}}
-                            {% endif %}
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-    
-                    <div class="row">
-                      <div class="form-group">
-                        <label class="col-md-6 col-sm-6 col-xs-12">Special live in rate
-                          <br>
-                        </label>
-                        <div>
-                          <label>
-                            {% if not caregiver.special_live_in_rate is None %}
-                            <input type="number" name="{{ caregiver_payroll_form.special_live_in_rate.html_name}}" min="0" step="any" value="{{caregiver.special_live_in_rate}}"> 
-                            {% else %}
-                            {{caregiver_payroll_form.special_live_in_rate}}
-                            {% endif %}
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-    
-    
-    
-    
-    
-    
-    
-    
                     <div class="ln_solid"></div>
                     <div class="form-group">
                       <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-8">
@@ -679,7 +638,7 @@
                         <button type="submit" class="btn btn-success">Submit</button>
                       </div>
                     </div>
-    
+                </div>
                   </div>
                 </div>
     

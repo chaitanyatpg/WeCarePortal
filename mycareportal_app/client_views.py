@@ -2344,8 +2344,6 @@ def client_post_invoice(request):
             weekend_live_in_rate = client_invoice_form.cleaned_data['weekend_live_in_rate']
             holiday_live_in_rate = client_invoice_form.cleaned_data['holiday_live_in_rate']
             weekend_holiday_live_in_rate = client_invoice_form.cleaned_data['weekend_holiday_live_in_rate']
-            special_hourly_rate = client_invoice_form.cleaned_data['special_hourly_rate']
-            special_live_in_rate = client_invoice_form.cleaned_data['special_live_in_rate']
             clientpayroll = Client.objects.get(company=company,email_address=client_email)
             clientpayroll.regular_hourly_rate =regular_hourly_rate
             clientpayroll.weekend_hourly_rate =weekend_hourly_rate
@@ -2355,8 +2353,6 @@ def client_post_invoice(request):
             clientpayroll.weekend_live_in_rate =weekend_live_in_rate
             clientpayroll.holiday_live_in_rate =holiday_live_in_rate
             clientpayroll.weekend_holiday_live_in_rate =weekend_holiday_live_in_rate
-            clientpayroll.special_hourly_rate =special_hourly_rate
-            clientpayroll.special_live_in_rate =special_live_in_rate
             clientpayroll.save()       
         return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client_email)
 

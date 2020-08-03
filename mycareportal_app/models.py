@@ -212,15 +212,14 @@ class Caregiver(models.Model):
     hourly_rate = models.IntegerField(default=0)
     created = models.DateTimeField(auto_now_add=True)
     notes = models.CharField(max_length=1000, blank=True)
-    weekend_hourly_rate = models.DecimalField(max_length = 200,max_digits=10,decimal_places=3,null=True) 
-    holiday_hourly_rate = models.DecimalField(max_length = 200,max_digits=10,decimal_places=3,null=True) 
-    weekend_holiday_rate =models.DecimalField(max_length = 200,max_digits=10,decimal_places=3,null=True) 
+    weekend_hourly_rate = models.DecimalField(max_length = 200,max_digits=10,decimal_places=2,null=True) 
+    holiday_hourly_rate = models.DecimalField(max_length = 200,max_digits=10,decimal_places=2,null=True) 
+    weekend_holiday_rate =models.DecimalField(max_length = 200,max_digits=10,decimal_places=2,null=True) 
     live_in_rate =models.DecimalField(max_length = 200,max_digits=10,decimal_places=3,null=True) 
-    weekend_live_in_rate =models.DecimalField(max_length = 200,max_digits=10,decimal_places=3,null=True) 
-    holiday_live_in_rate =models.DecimalField(max_length = 200,max_digits=10,decimal_places=3,null=True) 
-    weekend_holiday_live_in_rate =models.DecimalField(max_length = 200,max_digits=10,decimal_places=3,null=True)
-    special_hourly_rate =models.DecimalField(max_length = 200,max_digits=10,decimal_places=3,null=True) 
-    special_live_in_rate =models.DecimalField(max_length = 200,max_digits=10,decimal_places=3,null=True) 
+    weekend_live_in_rate =models.DecimalField(max_length = 200,max_digits=10,decimal_places=2,null=True) 
+    holiday_live_in_rate =models.DecimalField(max_length = 200,max_digits=10,decimal_places=2,null=True) 
+    weekend_holiday_live_in_rate =models.DecimalField(max_length = 200,max_digits=10,decimal_places=2,null=True)
+
     #add location
     #add tags
 
@@ -394,16 +393,15 @@ class Client(SoftDeletionModel):
 
     notes = models.CharField(max_length=1000, blank=True)
     is_caregiver = models.BooleanField(default=False)
-    regular_hourly_rate =models.DecimalField(max_length = 200,max_digits=10,decimal_places=3,null=True) 
-    weekend_hourly_rate = models.DecimalField(max_length = 200,max_digits=10,decimal_places=3,null=True) 
-    holiday_hourly_rate = models.DecimalField(max_length = 200,max_digits=10,decimal_places=3,null=True) 
-    weekend_holiday_rate =models.DecimalField(max_length = 200,max_digits=10,decimal_places=3,null=True) 
+    regular_hourly_rate =models.DecimalField(max_length = 200,max_digits=10,decimal_places=2,null=True) 
+    weekend_hourly_rate = models.DecimalField(max_length = 200,max_digits=10,decimal_places=2,null=True) 
+    holiday_hourly_rate = models.DecimalField(max_length = 200,max_digits=10,decimal_places=2,null=True) 
+    weekend_holiday_rate =models.DecimalField(max_length = 200,max_digits=10,decimal_places=2,null=True) 
     live_in_rate =models.DecimalField(max_length = 200,max_digits=10,decimal_places=3,null=True) 
-    weekend_live_in_rate =models.DecimalField(max_length = 200,max_digits=10,decimal_places=3,null=True) 
-    holiday_live_in_rate =models.DecimalField(max_length = 200,max_digits=10,decimal_places=3,null=True) 
-    weekend_holiday_live_in_rate =models.DecimalField(max_length = 200,max_digits=10,decimal_places=3,null=True)
-    special_hourly_rate =models.DecimalField(max_length = 200,max_digits=10,decimal_places=3,null=True) 
-    special_live_in_rate =models.DecimalField(max_length = 200,max_digits=10,decimal_places=3,null=True) 
+    weekend_live_in_rate =models.DecimalField(max_length = 200,max_digits=10,decimal_places=2,null=True) 
+    holiday_live_in_rate =models.DecimalField(max_length = 200,max_digits=10,decimal_places=2,null=True) 
+    weekend_holiday_live_in_rate =models.DecimalField(max_length = 200,max_digits=10,decimal_places=2,null=True)
+    
 
 
 def get_client_attachment_upload_path(instance, filename):

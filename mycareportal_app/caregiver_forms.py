@@ -178,8 +178,6 @@ class CaregiverPayrollForm(forms.Form):
     weekend_live_in_rate = forms.DecimalField(required=False) 
     holiday_live_in_rate =forms.DecimalField(required=False) 
     weekend_holiday_live_in_rate = forms.DecimalField(required=False) 
-    special_hourly_rate = forms.DecimalField(required=False) 
-    special_live_in_rate =forms.DecimalField(required=False) 
     caregiver_email = forms.CharField(max_length=200)
     
     def clean(self):
