@@ -96,7 +96,10 @@
                     {% endif %}
                     {% if module_dict.DASHBOARD.VIEWCLIENTHIGHRISK %}
                     <li><a href={% url 'view_client_high_risk' %}>View Client At High risk</a></li>
-                  {% endif %}
+                    {% endif %}
+                    {% if module_dict.DASHBOARD.COMPANYHOLIDAY %}
+                    <li><a href={% url 'company_holiday' %}> Holiday Schedule</a></li>
+                    {% endif %}
                   </ul>
                 </li>
                 <li><a><i class="fa fa-home"></i>Reporting Portal<span class="fa fa-chevron-down"></span></a>

@@ -1488,3 +1488,13 @@ class NotifyClientVitalTask(models.Model):
     blood_sugar_fasting=models.CharField(max_length=100, blank=True, null=True)
     blood_sugar_non_fasting=models.CharField(max_length=100, blank=True, null=True)
     blood_pressure=models.CharField(max_length=100, blank=True, null=True)
+
+
+
+class CompanyHolidays(models.Model):
+    
+    company = models.ForeignKey(Company)
+    holiday_name = models.CharField(max_length=300, blank=True, null=True)
+    description =  models.CharField(max_length = 500,  blank=True, null=True)
+    date = models.DateField()
+    

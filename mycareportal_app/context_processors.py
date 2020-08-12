@@ -52,6 +52,7 @@ def add_roles_to_context(request):
             module_dict['DASHBOARD']['VIEWLOCATIONLOGS']=True
 
             module_dict['DASHBOARD']['VIEWCLIENTHIGHRISK']=True
+            module_dict['DASHBOARD']['COMPANYHOLIDAY']=True
             module_dict['CLIENTPORTAL']['VIEWINCIDENTSBYCLIENT']=True
             module_dict['CLIENTPORTAL']['CLIENTONBOARDING']=True
             module_dict['CLIENTPORTAL']['REGISTERTABLETCLIENT']=True

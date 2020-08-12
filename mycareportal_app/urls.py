@@ -227,6 +227,9 @@ urlpatterns = [
     
     url(r'^schedule_free_caregiver',caregiver_views.ScheduleFreeCaregiver.as_view(),name='schedule_free_caregiver'),
     url(r'^view_client_high_risk', views.ClientHighRisk.as_view(),name='view_client_high_risk'),
+    url(r'^company_holiday', views.CompanyHoliday.as_view(),name='company_holiday'),
+    url(r'^viwe_holiday_ids', views.view_company_holiday_id,name='viwe_holiday_ids'),
+    url(r'^delete_holiday_with_id', views.delete_holiday_with_id,name='delete_holiday_with_id'),
     url(r'^view_client_high/(?P<id>[0-9a-f-]+)',views.viewclienthigh,name='view_client_high'),
 
     url(r'^send_notification_to_admin', caregiver_views.send_notification_to_admin ,name='send_notification_to_admin'),
