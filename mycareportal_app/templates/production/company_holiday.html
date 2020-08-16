@@ -1,0 +1,413 @@
+{% extends "production/base.html" %}
+{% block title %}  Holiday Schedule{% endblock %}
+{% load mycareportal_app_extras%}
+{% block headlibs %}
+{% load static %}
+<!-- iCheck -->
+<link href="{% static 'vendors/iCheck/skins/flat/green.css' %}" rel="stylesheet">
+<!-- bootstrap-wysiwyg -->
+<link href="{% static 'vendors/google-code-prettify/bin/prettify.min.css' %}" rel="stylesheet">
+<!-- Select2 -->
+<link href="{% static 'vendors/select2/dist/css/select2.min.css' %}" rel="stylesheet">
+<!-- Switchery -->
+<link href="{% static 'vendors/switchery/dist/switchery.min.css' %}" rel="stylesheet">
+<!-- starrr -->
+<link href="{% static 'vendors/starrr/dist/starrr.css' %}" rel="stylesheet">
+<!-- bootstrap-daterangepicker -->
+<link href="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+<!-- FullCalendar -->
+<link href="{% static 'vendors/fullcalendar/dist/fullcalendar.min.css' %}" rel="stylesheet">
+<link href="{% static 'vendors/fullcalendar/dist/fullcalendar.print.css' %}" rel="stylesheet" media="print">
+<!-- Dropzone.js -->
+<link href="{% static 'vendors/dropzone/dist/min/dropzone.min.css' %}" rel="stylesheet">
+
+{% endblock %}
+{% block pagecontent %}
+<style>
+    .fc-time{
+   display : none;
+}
+</style>
+<!-- page content -->
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3> Holiday Schedule</h3>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        {{block.super}}
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Holidays</h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <div id="calendar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+      
+
+    </div>
+</div>
+<!-- add modal -->
+<div id="CalenderModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel2">Add Holiday</h4>
+            </div>
+            <div class="modalss">
+                <form id="edit_task_details" enctype="multipart/form-data" method="post"
+                    action="{% url 'company_holiday' %}" class="form-horizontal calender" role="form">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div id="testmodal2" style="padding: 5px 20px;">
+
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Holiday Name
+                                    <span class="required">*</span> </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                    <input type="text" required="required" class="form-control col-md-7 col-xs-12"
+                                        name="{{company_holiday_form.holiday_name.html_name}}">
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Description
+                                    <span class="required">*</span> </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" required="required" class="form-control col-md-7 col-xs-12"
+                                        name="{{company_holiday_form.description.html_name}}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Date<span
+                                        class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" readonly=true name="{{company_holiday_form.eventDate.html_name}}"
+                                        class="form-control" id="eventDate" value="eventDate">
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <button type="button" class="btn btn-default antoclose2" data-dismiss="modal">Close</button>
+                        <div>
+                            <button type="submit" class="btn btn-success edit_calendar_submit">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- edit modal -->
+<div id="CalenderEditModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel2">Holiday</h4>
+            </div>
+            <div class="modalss">
+                <form id="edit_task_details" enctype="multipart/form-data" method="post"
+                    action="{% url 'company_holiday' %}" class="form-horizontal calender" role="form">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div id="testmodal2" style="padding: 5px 20px;">
+
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Holiday Name
+                                    <span class="required">*</span> </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                    <input type="text" class="form-control" id="holiday_names" name="holiday_names"
+                                        value="holiday_names">
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Description
+                                    <span class="required">*</span> </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" required="required" class="form-control col-md-7 col-xs-12"
+                                        id="description" name="description">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Date<span
+                                        class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" readonly="true" class="form-control" id="dates" name="dates"
+                                        value="">
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-default antoclose2" data-dismiss="modal">Close</button>
+                    <form id="delete_holiday_details" enctype="multipart/form-data"
+                        action="{% url 'delete_holiday_with_id' %}" method="post" class="form-horizontal" role="form">
+                        {% csrf_token %}
+                        <input type="hidden" id="holiday_id_delete" name="{{delete_holiday_form.holiday_id.html_name}}">
+                        <button type="submit" class="btn btn-danger edit_calendar_submit">Delete Holiday</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div id="fc_edit" data-toggle="modal" data-target="#CalenderEditModal"></div>
+<div id="fc_add" data-toggle="modal" data-target="#CalenderModal"></div>
+{% endblock %}
+{% block footlibs %}
+<!-- bootstrap-progressbar -->
+<script src="{% static 'vendors/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
+<!-- iCheck -->
+<script src="{% static 'vendors/iCheck/icheck.min.js' %}"></script>
+<!-- bootstrap-daterangepicker -->
+<script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
+<script src="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+<!-- bootstrap-wysiwyg -->
+<script src="{% static 'vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js' %}"></script>
+<script src="{% static 'vendors/jquery.hotkeys/jquery.hotkeys.js' %}"></script>
+<script src="{% static 'vendors/google-code-prettify/src/prettify.js' %}"></script>
+<!-- jQuery Tags Input -->
+<script src="{% static 'vendors/jquery.tagsinput/src/jquery.tagsinput.js' %}"></script>
+<!-- Switchery -->
+<script src="{% static 'vendors/switchery/dist/switchery.min.js' %}"></script>
+<!-- Select2 -->
+<script src="{% static 'vendors/select2/dist/js/select2.full.min.js' %}"></script>
+<!-- Parsley -->
+<script src="{% static 'vendors/parsleyjs/dist/parsley.min.js' %}"></script>
+<!-- Autosize -->
+<script src="{% static 'vendors/autosize/dist/autosize.min.js' %}"></script>
+<!-- jQuery autocomplete -->
+<script src="{% static 'vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js' %}"></script>
+<!-- starrr -->
+<script src="{% static 'vendors/starrr/dist/starrr.js' %}"></script>
+<!-- FullCalendar -->
+<script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
+<script src="{% static 'vendors/fullcalendar/dist/fullcalendar.min.js' %}"></script>
+<!-- Fine Uploader -->
+<script src="{% static 'vendors/fine-uploader/jquery.fine-uploader.min.js' %}"></script>
+
+{% endblock %}
+{% block scripts %}
+
+
+
+
+
+<!-- FullCalendar -->
+<script>
+    $(window).load(function () {
+        var date = new Date(),
+            d = date.getDate(),
+            m = date.getMonth(),
+            y = date.getFullYear(),
+            started,
+            categoryClass;
+
+        var calendar = $('#calendar').fullCalendar({
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
+
+
+            dayClick: function (date, jsEvent, view) {
+                $("#CalenderModal").modal("show");
+                $("#eventDate").val(date.format());
+            },
+            selectable: true,
+            selectHelper: true,
+
+            eventClick: function (calEvent, jsEvent, view) {
+                $('#fc_edit').click();
+
+                
+                var holiday_id = calEvent.id;
+                $.ajax({
+                    type: "GET",
+                    url: '{% url "viwe_holiday_ids" %}',
+                    data: { holiday_id: holiday_id },
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: function (holiday_data) {
+                      
+                        $('#holiday_id_delete').val(holiday_data.holiday_id);
+                        $('#holiday_names').val(holiday_data.holiday_name);
+                        $('#description').val(holiday_data.description);
+                        $('#dates').val(holiday_data.date);
+
+
+                    },
+                    failure: function (client_data) {
+                        alert('error fetching client data');
+                    }
+                });
+
+          
+                categoryClass = $("#event_type").val();
+
+                $(".edit_calendar_submit").on("click", function () {
+                    var event_title = $("#task_name").val()
+                    calEvent.title = $("#task_name").val();
+
+                    calendar.fullCalendar('updateEvent', calEvent);
+                    $('.antoclose2').click();
+                });
+
+                calendar.fullCalendar('unselect');
+            },
+
+            editable: true,
+            events: [
+
+                {% for xy in company_holidays %}
+        
+                 
+            {
+                title: '{{xy.holiday_name}}',
+                start: '{{xy.date}}',
+                id: '{{xy.id}}'
+            },
+
+
+
+            {% endfor %}
+
+            ],
+        timeFormat: false
+            /*events: [{
+              title: 'Make Lunch',
+              start: new Date(y, m, 1)
+            }, {
+              title: 'Help move in',
+              start: new Date(y, m, d - 5),
+              end: new Date(y, m, d - 2)
+            }, {
+              title: 'Do Groceries',
+              start: new Date(y, m, d, 10, 30),
+              allDay: false
+            }, {
+              title: 'Deliver Medication',
+              start: new Date(y, m, d + 14, 12, 0),
+              end: new Date(y, m, d, 14, 0),
+              allDay: false
+            }, {
+              title: 'Drive to grandchildren',
+              start: new Date(y, m, d + 1, 8, 0),
+              end: new Date(y, m, d + 1, 10, 0),
+              allDay: false
+            }, {
+              title: 'Pick Up Dry cleaning',
+              start: new Date(y, m, d + 1, 2, 0),
+              end: new Date(y, m, d + 1, 2, 30),
+              allDay: false
+            }, {
+              title: 'Drive Home from Grandchildren',
+              start: new Date(y, m, d + 1, 19, 00),
+              end: new Date(y, m, d + 1, 21, 30),
+              allDay: false
+            },
+                  {
+              title: 'Testing link capability',
+              start: new Date(y, m, 28),
+              end: new Date(y, m, 29),
+              url: 'http://google.com/'
+            }]*/
+        });
+    });
+</script>
+<!-- /FullCalendar -->
+
+
+
+<script>
+    $(document).ready(function () {
+        autosize($('.resizable_textarea'));
+    });
+</script>
+
+
+
+
+<script>
+    $(document).ready(function () {
+        $('#holidaydate').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            calender_style: "picker_4"
+        }, function (start, end, label) {
+            console.log(start.toISOString(), end.toISOString(), label);
+        });
+        $('#holidaydate').val("");
+    });
+</script>
+
+
+
+
+
+<script type="text/javascript">
+    var delete_holiday_form = $('#delete_holiday_details');
+    delete_holiday_form.submit(function () {
+        
+        $.ajax({
+
+            type: delete_holiday_form.attr('method'),
+            url: delete_holiday_form.attr('action'),
+            data: delete_holiday_form.serialize(),
+            success: function (msg) {
+                console.log(msg);
+                var delete_holiday_id = $('#holiday_id_delete').val();
+                $('#calendar').fullCalendar('removeEvents', delete_holiday_id);
+            },
+            error: function () {
+                console.log("FAILURE");
+            }
+        });
+        return false;
+    });
+</script>
+
+
+
+{% endblock %}

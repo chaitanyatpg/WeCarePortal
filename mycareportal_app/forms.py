@@ -168,3 +168,18 @@ class CaregiverScheduleDashboardSettingsForm(forms.Form):
     late_filter = forms.BooleanField(required=False)
     missed_filter = forms.BooleanField(required=False)
     #caregiver_filter = forms.MultiValueField(required=False)
+
+class CompanyHolidayForm(forms.Form):
+    holiday_name =forms.CharField(max_length=300)
+    description = forms.CharField(max_length=1000)
+    eventDate = forms.DateField()
+
+
+
+class DeleteHolidayForm(forms.Form):
+
+    holiday_id = forms.IntegerField()
+
+    def clean(self):
+        cleaned_data = super(DeleteHolidayForm, self).clean()
+        return cleaned_data

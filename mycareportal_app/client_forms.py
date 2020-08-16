@@ -390,3 +390,21 @@ class CopyAssignTaskForm(forms.Form):
     def clean(self):
         cleaned_data = super(CopyAssignTaskForm, self).clean()
         return cleaned_data
+
+
+class ClientInvoiceForm(forms.Form):
+    
+    regular_hourly_rate = forms.DecimalField(required=False) 
+    weekend_hourly_rate = forms.DecimalField(required=False) 
+    holiday_hourly_rate = forms.DecimalField(required=False) 
+    weekend_holiday_rate =forms.DecimalField(required=False) 
+    live_in_rate =forms.DecimalField(required=False) 
+    weekend_live_in_rate = forms.DecimalField(required=False) 
+    holiday_live_in_rate =forms.DecimalField(required=False) 
+    weekend_holiday_live_in_rate = forms.DecimalField(required=False) 
+    
+    client_email = forms.CharField(max_length=200)
+
+    def clean(self):
+        cleaned_data = super(ClientInvoiceForm, self).clean()
+        return cleaned_data

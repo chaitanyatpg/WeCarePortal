@@ -59,6 +59,8 @@ urlpatterns = [
     url(r'^post_certification',client_views.post_certification,name='post_certification'),
     url(r'^post_transfer',client_views.post_transfer,name='post_transfer'),
     url(r'^caregiver_post_criteria',caregiver_views.caregiver_post_criteria,name='caregiver_post_criteria'),
+    url(r'^caregiver_post_payroll',caregiver_views.caregiver_post_payroll,name='caregiver_post_payroll'),
+    url(r'^client_post_invoice',client_views.client_post_invoice,name='client_post_invoice'),
     url(r'^caregiver_post_certification',caregiver_views.caregiver_post_certification,name='caregiver_post_certification'),
     url(r'^caregiver_post_transfer',caregiver_views.caregiver_post_transfer,name='caregiver_post_transfer'),
     #url(r'^edit_client/client_email=(?P<client_email>.*)$',client_views.EditClient.as_view(),name='edit_client'),
@@ -225,6 +227,9 @@ urlpatterns = [
     
     url(r'^schedule_free_caregiver',caregiver_views.ScheduleFreeCaregiver.as_view(),name='schedule_free_caregiver'),
     url(r'^view_client_high_risk', views.ClientHighRisk.as_view(),name='view_client_high_risk'),
+    url(r'^company_holiday', views.CompanyHoliday.as_view(),name='company_holiday'),
+    url(r'^viwe_holiday_ids', views.view_company_holiday_id,name='viwe_holiday_ids'),
+    url(r'^delete_holiday_with_id', views.delete_holiday_with_id,name='delete_holiday_with_id'),
     url(r'^view_client_high/(?P<id>[0-9a-f-]+)',views.viewclienthigh,name='view_client_high'),
 
     url(r'^send_notification_to_admin', caregiver_views.send_notification_to_admin ,name='send_notification_to_admin'),

@@ -238,8 +238,11 @@ class EditCaregiver(LoginRequiredMixin, View):
                 'notes': caregiver.notes
             })
             context['edit_caregiver_form'] = edit_caregiver_form
+            context['caregiver_email'] = caregiver_email
             caregiver_attachments = self.get_caregiver_attachments(current_company, caregiver)
             context['caregiver_attachments'] = caregiver_attachments
+            context["caregiver_payroll_form"] = CaregiverPayrollForm()
+            context['caregiver'] = caregiver
             #Client Criteria map
             client_match_categories = ClientMatchCategory.objects.all()
             client_match_criteria = ClientMatchCriteria.objects.filter(is_default=True) | ClientMatchCriteria.objects.filter(company=current_company)
@@ -473,6 +476,44 @@ def caregiver_post_transfer(request):
         transfer_map.experience = experience
         transfer_map.save()
     return HttpResponse("Changed Status")
+
+
+
+@login_required
+def caregiver_post_payroll(request):
+
+ 
+    if request.method == "POST":
+
+
+        company = request.user.company
+        caregiver_payroll_form = CaregiverPayrollForm(request.POST)
+        
+        current_company = request.user.company
+        caregiver_email = request.POST.get('caregiver_email')
+        if caregiver_payroll_form.is_valid():
+            caregiver_email = caregiver_payroll_form.cleaned_data['caregiver_email']
+            weekend_hourly_rate = caregiver_payroll_form.cleaned_data['weekend_hourly_rate']
+            holiday_hourly_rate = caregiver_payroll_form.cleaned_data['holiday_hourly_rate']
+            weekend_holiday_rate = caregiver_payroll_form.cleaned_data['weekend_holiday_rate']
+            live_in_rate = caregiver_payroll_form.cleaned_data['live_in_rate']
+            weekend_live_in_rate = caregiver_payroll_form.cleaned_data['weekend_live_in_rate']
+            holiday_live_in_rate = caregiver_payroll_form.cleaned_data['holiday_live_in_rate']
+            weekend_holiday_live_in_rate = caregiver_payroll_form.cleaned_data['weekend_holiday_live_in_rate']
+            caregiverpayroll = Caregiver.objects.get(company=current_company,email_address=caregiver_email)
+            caregiverpayroll.weekend_hourly_rate =weekend_hourly_rate
+            caregiverpayroll.holiday_hourly_rate = holiday_hourly_rate
+            caregiverpayroll.weekend_holiday_rate =weekend_holiday_rate
+            caregiverpayroll.live_in_rate =live_in_rate
+            caregiverpayroll.weekend_live_in_rate =weekend_live_in_rate
+            caregiverpayroll.holiday_live_in_rate =holiday_live_in_rate
+            caregiverpayroll.weekend_holiday_live_in_rate =weekend_holiday_live_in_rate
+         
+            
+            caregiverpayroll.save()    
+        return HttpResponseRedirect(reverse('edit_caregiver') + "?caregiver_email=" + caregiver_email)    
+        
+     
 
 class CaregiverDashboard(LoginRequiredMixin, View):
 
