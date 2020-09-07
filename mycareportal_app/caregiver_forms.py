@@ -121,6 +121,16 @@ class ScheduleShiftForm(forms.Form):
     start_minute = forms.CharField(max_length=10)
     end_hour = forms.CharField(max_length=10)
     end_minute = forms.CharField(max_length=10)
+    monday = forms.BooleanField(required=False)
+    tuesday = forms.BooleanField(required=False)
+    wednesday = forms.BooleanField(required=False)
+    thursday = forms.BooleanField(required=False)
+    friday = forms.BooleanField(required=False)
+    saturday = forms.BooleanField(required=False)
+    sunday = forms.BooleanField(required=False)
+    task_type = forms.CharField(max_length=100)
+
+
 
     def clean(self):
         cleaned_data = super(ScheduleShiftForm, self).clean()

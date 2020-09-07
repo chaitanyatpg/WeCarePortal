@@ -185,6 +185,101 @@
                             </div>
                           </div>
                         </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Task Frequency<span
+                                        class="required">*</span>
+                                </label>
+                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" checked="checked" value="One Time"
+                                                name="{{schedule_shift_form.task_type.html_name}}"> One Time
+                                            Task</input>
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" value="Daily"
+                                                name="{{schedule_shift_form.task_type.html_name}}"> Daily
+                                            Task</input>
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" value="Weekly"
+                                                name="{{schedule_shift_form.task_type.html_name}}"> Weekly
+                                            Task</input>
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" value="Bi-Weekly"
+                                                name="{{schedule_shift_form.task_type.html_name}}">
+                                            Bi-Weekly Task</input>
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" value="Monthly"
+                                                name="{{schedule_shift_form.task_type.html_name}}"> Monthly
+                                            Task</input>
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" value="Yearly"
+                                                name="{{schedule_shift_form.task_type.html_name}}"> Yearly
+                                            Task</input>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                    <div class="radio">
+                                        <label>
+                                            <input type="checkbox"
+                                                name="{{schedule_shift_form.monday.html_name}}">Monday</input>
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="checkbox"
+                                                name="{{schedule_shift_form.tuesday.html_name}}">Tuesday</input>
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="checkbox"
+                                                name="{{schedule_shift_form.wednesday.html_name}}">Wednesday</input>
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="checkbox"
+                                                name="{{schedule_shift_form.thursday.html_name}}">Thursday</input>
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="checkbox"
+                                                name="{{schedule_shift_form.friday.html_name}}">Friday</input>
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="checkbox"
+                                                name="{{schedule_shift_form.saturday.html_name}}">Saturday</input>
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="checkbox"
+                                                name="{{schedule_shift_form.sunday.html_name}}">Sunday</input>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                       </div>
                       <div class="modal-footer">
                         <input type="hidden" id="assign_caregiver_email" name="{{schedule_shift_form.caregiver_id.html_name}}" value={{caregiver.id}}>
