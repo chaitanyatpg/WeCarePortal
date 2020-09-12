@@ -483,13 +483,13 @@ def caregiver_post_transfer(request):
 @login_required
 def caregiver_post_payroll(request):
 
- 
+
     if request.method == "POST":
 
 
         company = request.user.company
         caregiver_payroll_form = CaregiverPayrollForm(request.POST)
-        
+
         current_company = request.user.company
         caregiver_email = request.POST.get('caregiver_email')
         if caregiver_payroll_form.is_valid():
@@ -509,12 +509,12 @@ def caregiver_post_payroll(request):
             caregiverpayroll.weekend_live_in_rate =weekend_live_in_rate
             caregiverpayroll.holiday_live_in_rate =holiday_live_in_rate
             caregiverpayroll.weekend_holiday_live_in_rate =weekend_holiday_live_in_rate
-         
-            
-            caregiverpayroll.save()    
-        return HttpResponseRedirect(reverse('edit_caregiver') + "?caregiver_email=" + caregiver_email)    
-        
-     
+
+
+            caregiverpayroll.save()
+        return HttpResponseRedirect(reverse('edit_caregiver') + "?caregiver_email=" + caregiver_email)
+
+
 
 class CaregiverDashboard(LoginRequiredMixin, View):
 
@@ -969,9 +969,9 @@ class ScheduleShifts(LoginRequiredMixin, View):
             friday = schedule_shifts_form.cleaned_data["friday"]
             saturday = schedule_shifts_form.cleaned_data["saturday"]
             sunday = schedule_shifts_form.cleaned_data["sunday"]
-            task_type = schedule_shifts_form.cleaned_data["task_type"]
+            frequency = schedule_shifts_form.cleaned_data["frequency"]
             assigned_caregiver = Caregiver.objects.get(company=current_company, id=caregiver_id)
-            
+
             assigned_client = Client.objects.get(company=current_company, id=client_id)
             start_time = ""
             end_time = ""
@@ -998,45 +998,30 @@ class ScheduleShifts(LoginRequiredMixin, View):
                                                     caregiver = assigned_caregiver,
                                                     client = assigned_client,
                                                     start_date = start_date,
-                                                    task_type = task_type,
+                                                    frequency = frequency,
                                                     end_date = end_date,
                                                     start_time = start_time,
                                                     end_time = end_time)
             caregiver_schedule_header.save()
             current_user = request.user
-            if task_type == "One Time":
-                self.save_one_time_task(caregiver_schedule_header,  current_user, day_dict, day_filter)
-            if task_type == "Daily":
-                self.save_daily_task(caregiver_schedule_header,  current_user, day_dict, day_filter)
-            if task_type == "Weekly":
-                self.save_weekly_task(caregiver_schedule_header,  current_user, day_dict, day_filter)
-                print(".task_type()")
-                print("save_weekly_task", self.save_weekly_task(caregiver_schedule_header, current_user, day_dict, day_filter))
-            if task_type == "Bi-Weekly":
-                self.save_bi_weekly_task(caregiver_schedule_header,  current_user, day_dict, day_filter)
-            if task_type == "Monthly":
-                self.save_monthly_task(caregiver_schedule_header,  current_user, day_dict, day_filter)
-            if task_type == "Yearly":
-                self.save_yearly_task(caregiver_schedule_header,  current_user, day_dict, day_filter)
-            messages.success(request, "Assigned   to caregiver {0} {1}".format(assigned_caregiver.first_name, assigned_caregiver.last_name))
+            if frequency == "One Time":
+                self.save_one_time_task(caregiver_schedule_header, current_user, day_dict, day_filter)
+            if frequency == "Daily":
+                self.save_daily_task(caregiver_schedule_header, current_user, day_dict, day_filter)
+            if frequency == "Weekly":
+                self.save_weekly_task(caregiver_schedule_header, current_user, day_dict, day_filter)
+            if frequency == "Bi-Weekly":
+                self.save_bi_weekly_task(caregiver_schedule_header, current_user, day_dict, day_filter)
+            if frequency == "Monthly":
+                self.save_monthly_task(caregiver_schedule_header, current_user, day_dict, day_filter)
+            if frequency == "Yearly":
+                self.save_yearly_task(caregiver_schedule_header, current_user, day_dict, day_filter)
+            messages.success(request, "Scheduled shifts for caregiver {0} {1}".format(assigned_caregiver.first_name, assigned_caregiver.last_name))
         else:
             form_errors = assign_task_form.errors.as_data()
             error_messaging.render_error_messages(request, form_errors)
-        # for i in range(date_range_num.days + 1):
-        #     new_date = (start_date + datetime.timedelta(days=i))
-        #     print(start_time)
-        #     print(end_time)
-        #     print(new_date)
-        #     caregiver_schedule = CaregiverSchedule(company=current_company,
-        #                                                 caregiver = assigned_caregiver,
-        #                                                 client = assigned_client,
-        #                                                 date = new_date,
-        #                                                 start_time = start_time,
-        #                                                 end_time = end_time,
-        #                                                 schedule_header=caregiver_schedule_header)
-        #     caregiver_schedule.save()
-          
         return HttpResponseRedirect(reverse('schedule_shifts') + "?caregiver_email=" + assigned_caregiver.email_address)
+
     def save_one_time_task(self, caregiver_schedule_header, current_user, day_dict, day_filter):
         save_task=True
         if day_filter:
@@ -1048,7 +1033,7 @@ class ScheduleShifts(LoginRequiredMixin, View):
                                             caregiver = caregiver_schedule_header.caregiver,
                                             date=caregiver_schedule_header.start_date,
                                             start_time=caregiver_schedule_header.start_time,
-                                            end_time=caregiver_schedule_header.end_time,       
+                                            end_time=caregiver_schedule_header.end_time,
                                             schedule_header = caregiver_schedule_header)
             caregiver_schedule.save()
 
@@ -1057,7 +1042,6 @@ class ScheduleShifts(LoginRequiredMixin, View):
         start_date = caregiver_schedule_header.start_date
         end_date = caregiver_schedule_header.end_date
         date_range_num = end_date - start_date
-        uploaded_task_attachments = []
         for i in range(date_range_num.days + 1):
             save_task=True
             new_date = (start_date + datetime.timedelta(days=i))
@@ -1071,11 +1055,9 @@ class ScheduleShifts(LoginRequiredMixin, View):
                                            caregiver = caregiver_schedule_header.caregiver,
                                             date=new_date,
                                             start_time=caregiver_schedule_header.start_time,
-                                            end_time=caregiver_schedule_header.end_time,       
+                                            end_time=caregiver_schedule_header.end_time,
                                             schedule_header = caregiver_schedule_header)
               caregiver_schedule.save()
-                
-              
 
     def save_weekly_task(self, caregiver_schedule_header, current_user, day_dict, day_filter):
 
@@ -1084,11 +1066,9 @@ class ScheduleShifts(LoginRequiredMixin, View):
         end_date = caregiver_schedule_header.end_date
         delta = datetime.timedelta(days=7) #per Week
 
-        uploaded_task_attachments = []
         while current_date <= end_date:
             save_task = True
             new_date = current_date
-           
             if day_filter:
                 if not(day_dict[new_date.weekday()]):
                     save_task=False
@@ -1098,19 +1078,18 @@ class ScheduleShifts(LoginRequiredMixin, View):
                                                         caregiver = caregiver_schedule_header.caregiver,
                                                         date=new_date,
                                                         start_time=caregiver_schedule_header.start_time,
-                                                       end_time=caregiver_schedule_header.end_time,       
+                                                       end_time=caregiver_schedule_header.end_time,
                                                        schedule_header = caregiver_schedule_header)
 
                 caregiver_schedule.save()
                 current_date += delta
-          
+
 
     def save_bi_weekly_task(self, caregiver_schedule_header, current_user, day_dict, day_filter):
         start_date = caregiver_schedule_header.start_date
         current_date = start_date
         end_date = caregiver_schedule_header.end_date
         delta = datetime.timedelta(days=14) #per Week
-        uploaded_task_attachments = []
         while current_date <= end_date:
             save_task = True
             new_date = current_date
@@ -1123,20 +1102,16 @@ class ScheduleShifts(LoginRequiredMixin, View):
                                                         caregiver = caregiver_schedule_header.caregiver,
                                                        date=new_date,
                                                         start_time=caregiver_schedule_header.start_time,
-                                                       end_time=caregiver_schedule_header.end_time,       
+                                                       end_time=caregiver_schedule_header.end_time,
                                                       schedule_header = caregiver_schedule_header)
-
                 caregiver_schedule.save()
                 current_date += delta
-                
-          
 
     def save_monthly_task(self, caregiver_schedule_header, current_user, day_dict, day_filter):
         start_date = caregiver_schedule_header.start_date
         current_date = start_date
         end_date = caregiver_schedule_header.end_date
         delta = relativedelta.relativedelta(months=1) #per Month
-        uploaded_task_attachments = []
         while current_date <= end_date:
             save_task = True
             new_date = current_date
@@ -1149,19 +1124,16 @@ class ScheduleShifts(LoginRequiredMixin, View):
                                                         caregiver = caregiver_schedule_header.caregiver,
                                                        date=new_date,
                                                         start_time=caregiver_schedule_header.start_time,
-                                                       end_time=caregiver_schedule_header.end_time,       
+                                                       end_time=caregiver_schedule_header.end_time,
                                                       schedule_header = caregiver_schedule_header)
-
                 caregiver_schedule.save()
                 current_date += delta
-   
 
     def save_yearly_task(self, caregiver_schedule_header, current_user, day_dict, day_filter):
         start_date = caregiver_schedule_header.start_date
         current_date = start_date
         end_date = caregiver_schedule_header.end_date
         delta = relativedelta.relativedelta(months=12) #per Year
-        uploaded_task_attachments = []
         while current_date <= end_date:
             save_task = True
             new_date = current_date
@@ -1169,19 +1141,15 @@ class ScheduleShifts(LoginRequiredMixin, View):
                 if not(day_dict[new_date.weekday()]):
                     save_task=False
             if save_task:
-
                 caregiver_schedule = CaregiverSchedule(company=caregiver_schedule_header.company,
                                                         client=caregiver_schedule_header.client,
                                                         caregiver = caregiver_schedule_header.caregiver,
                                                        date=new_date,
                                                         start_time=caregiver_schedule_header.start_time,
-                                                       end_time=caregiver_schedule_header.end_time,       
+                                                       end_time=caregiver_schedule_header.end_time,
                                                       schedule_header = caregiver_schedule_header)
-
                 caregiver_schedule.save()
                 current_date += delta
-            
-
 
 class ViewShifts(LoginRequiredMixin, View):
 
