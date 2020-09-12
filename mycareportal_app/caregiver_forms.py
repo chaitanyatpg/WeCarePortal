@@ -121,6 +121,16 @@ class ScheduleShiftForm(forms.Form):
     start_minute = forms.CharField(max_length=10)
     end_hour = forms.CharField(max_length=10)
     end_minute = forms.CharField(max_length=10)
+    monday = forms.BooleanField(required=False)
+    tuesday = forms.BooleanField(required=False)
+    wednesday = forms.BooleanField(required=False)
+    thursday = forms.BooleanField(required=False)
+    friday = forms.BooleanField(required=False)
+    saturday = forms.BooleanField(required=False)
+    sunday = forms.BooleanField(required=False)
+    frequency = forms.CharField(max_length=100)
+
+
 
     def clean(self):
         cleaned_data = super(ScheduleShiftForm, self).clean()
@@ -169,17 +179,17 @@ class DeleteScheduleForm(forms.Form):
         return cleaned_data
 
 class CaregiverPayrollForm(forms.Form):
-    
-      
-    weekend_hourly_rate = forms.DecimalField(required=False) 
-    holiday_hourly_rate = forms.DecimalField(required=False) 
-    weekend_holiday_rate =forms.DecimalField(required=False) 
-    live_in_rate =forms.DecimalField(required=False) 
-    weekend_live_in_rate = forms.DecimalField(required=False) 
-    holiday_live_in_rate =forms.DecimalField(required=False) 
-    weekend_holiday_live_in_rate = forms.DecimalField(required=False) 
+
+
+    weekend_hourly_rate = forms.DecimalField(required=False)
+    holiday_hourly_rate = forms.DecimalField(required=False)
+    weekend_holiday_rate =forms.DecimalField(required=False)
+    live_in_rate =forms.DecimalField(required=False)
+    weekend_live_in_rate = forms.DecimalField(required=False)
+    holiday_live_in_rate =forms.DecimalField(required=False)
+    weekend_holiday_live_in_rate = forms.DecimalField(required=False)
     caregiver_email = forms.CharField(max_length=200)
-    
+
     def clean(self):
         cleaned_data = super(CaregiverPayrollForm, self).clean()
         return cleaned_data

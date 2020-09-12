@@ -735,6 +735,7 @@ class CaregiverScheduleHeader(models.Model):
     end_date = models.DateField(null=True) #change b4 prod
     start_time = models.TimeField()
     end_time = models.TimeField()
+    frequency = models.CharField(max_length=100,blank=True,null=True)
     created = models.DateTimeField(auto_now_add=True)
 
 class CaregiverSchedule(models.Model):
