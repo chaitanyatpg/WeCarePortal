@@ -1148,6 +1148,14 @@ class Invoice(LoginRequiredMixin, View):
             context['client'] = client
             context['start_date'] = start_date
             context['end_date'] = end_date
+
+            invoice_header = InvoiceHeader.create_invoice(
+                current_company,
+                client,
+                start_date,
+                end_date
+            )
+
             task_objects = self.get_line_items(tasks, current_company)
             total_amt = self.get_total(task_objects)
             context['task_objects'] = task_objects
@@ -1737,7 +1745,7 @@ def date_filter_management_dashboard(request):
 
 
 class CompanyHoliday(LoginRequiredMixin, View):
-    
+
     def get(self, request):
         context = {}
         current_company = request.user.company
@@ -1747,32 +1755,32 @@ class CompanyHoliday(LoginRequiredMixin, View):
         context["delete_holiday_form"] = DeleteHolidayForm()
         return render(request, 'production/company_holiday.html', context)
 
-    
+
 
     def post(self, request):
         context = {}
         current_company = request.user.company
         company_holiday_form = CompanyHolidayForm(request.POST)
-      
+
         if company_holiday_form.is_valid():
             holiday_name = company_holiday_form.cleaned_data['holiday_name']
             description = company_holiday_form.cleaned_data['description']
             date = company_holiday_form.cleaned_data['eventDate']
-            
-           
-            
-            company_holiday = CompanyHolidays(company = current_company, 
+
+
+
+            company_holiday = CompanyHolidays(company = current_company,
                                               holiday_name = holiday_name,description=description,
                                               date = date)
             company_holiday.save()
             messages.success(request, "Holiday successfully added")
         return HttpResponseRedirect(reverse('company_holiday'))
-      
+
 
 
 @login_required
 def view_company_holiday_id(request):
-    
+
     if request.method == 'GET':
         context = {}
         current_company = request.user.company
@@ -1782,8 +1790,8 @@ def view_company_holiday_id(request):
         holiday_name = current_holiday.holiday_name
         description  = current_holiday.description
         holiday_date = current_holiday.date
-      
-       
+
+
         holiday_data = {
             'holiday_id':holiday_id,
             'holiday_name' : holiday_name,
@@ -1791,16 +1799,15 @@ def view_company_holiday_id(request):
             'date' : "{0}/{1}/{2}".format(holiday_date.month,holiday_date.day,holiday_date.year)
         }
         return HttpResponse(json.dumps(holiday_data), content_type="application/json")
- 
+
 
 @login_required
 def delete_holiday_with_id(request):
 
     if request.method == 'POST':
         context = {}
-        company = request.user.company      
+        company = request.user.company
         holiday_id = request.POST.get('holiday_id')
         current_holiday = CompanyHolidays.objects.get(company=company, id = holiday_id)
         current_holiday.delete()
-        return HttpResponse("Delete Successful") 
- 
+        return HttpResponse("Delete Successful")

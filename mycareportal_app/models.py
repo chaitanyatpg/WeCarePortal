@@ -379,10 +379,17 @@ class Client(SoftDeletionModel):
     date_of_birth = models.DateTimeField()
     phone_number = models.CharField(max_length=40)
     secondary_phone_number = models.CharField(max_length=40, blank=True)
+
     address = models.CharField(max_length=400)
     city = models.CharField(max_length=100)
     state = models.CharField(max_length=100)
     zip_code = models.CharField(max_length=10)
+
+    billing_address = models.CharField(max_length=400, blank=True, null=True)
+    billing_city = models.CharField(max_length=100, blank=True, null=True)
+    billing_state = models.CharField(max_length=100, blank=True, null=True)
+    billing_zip_code = models.CharField(max_length=10, blank=True, null=True)
+
     time_zone = models.CharField(max_length=50)
     profile_picture = models.ImageField(upload_to=get_client_profile_picture_upload_path)
 
@@ -1590,6 +1597,8 @@ class InvoiceHeader(models.Model):
         invoice_header.total_hours = total_hours
         invoice_header.total_cost = total_cost
         invoice_header.save()
+        invoice_header.invoice_number_string = invoice_header.create_invoice_number_string()
+        return invoice_header
 
     def get_caregiver_schedules(self):
         schedules = CaregiverSchedule(company=self.company,
