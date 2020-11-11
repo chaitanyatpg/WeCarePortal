@@ -1583,7 +1583,7 @@ class InvoiceHeader(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     invoice_notes = models.CharField(max_length=1000, blank=True, null=True)
-
+    
     @staticmethod
     @transaction.atomic
     def create_invoice(company, client, start_date, end_date):
@@ -1592,6 +1592,7 @@ class InvoiceHeader(models.Model):
                                        start_date = start_date,
                                        end_date = end_date
                                        )
+        print("models invoice_headerinvoice_header",invoice_header.company)
         invoice_header.save()
         schedules = invoice_header.get_caregiver_schedules()
         caregiver_to_rate_type_to_schedules = invoice_header.group_schedules_by_rate_type(schedules)
@@ -1619,7 +1620,7 @@ class InvoiceHeader(models.Model):
             rate_type = schedule.get_rate_type()
             caregiver_to_rate_type_to_schedules[schedule.caregiver][rate_type].append(schedule)
         return caregiver_to_rate_type_to_schedules
-
+     
     def get_totals(self, caregiver_to_rate_type_to_schedules, client):
         # caregiver -> rate_type -> (total_cost, total_hours) tuple
         caregiver_to_rate_type_to_total_cost = defaultdict(lambda: defaultdict(float))
@@ -1628,9 +1629,8 @@ class InvoiceHeader(models.Model):
             for rate_type in caregiver_to_rate_type_to_schedules[caregiver]:
                 for schedule in caregiver_to_rate_type_to_schedules[caregiver][rate_type]:
                     total_hours = schedule.get_hours_diff()
-                    rate = float(
-                        getattr(client, client.RATE_TYPE_TO_FIELD[rate_type].attname)
-                    )
+                  
+                    rate = float(getattr(client, client.RATE_TYPE_TO_FIELD[rate_type].attname))
                     total_cost = rate * total_hours
                     caregiver_to_rate_type_to_total_cost[caregiver][rate_type] += total_cost
                     caregiver_to_rate_type_to_total_hours[caregiver][rate_type] += total_hours
@@ -1652,9 +1652,7 @@ class InvoiceHeader(models.Model):
                     caregiver = caregiver,
                     hours = hours,
                     rate_type = RATE_TYPE_TO_DISPLAY_STRING[rate_type],
-                    rate = float(
-                        getattr(client, client.RATE_TYPE_TO_FIELD[rate_type].attname)
-                    ),
+                    rate = float(getattr(client, client.RATE_TYPE_TO_FIELD[rate_type].attname)),
                     total = cost
                 )
                 line_item.save()
