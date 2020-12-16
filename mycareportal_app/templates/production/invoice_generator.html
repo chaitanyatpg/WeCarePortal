@@ -152,8 +152,8 @@
             <td>{{ ii.caregiver.first_name}} {{ii.caregiver.last_name}}</td>
             <td>{{ ii.hours }}</td>
             <td> {{ ii.rate_type}}</td>
-            <td>$ {{ ii.rate }} </td>
-            <td>${{  ii.total  }}</td>
+            <td> {{ ii.rate }} </td>
+            <td>{{  ii.total  }}</td>
         </tr>
         {% endfor %}
    
@@ -175,7 +175,7 @@
         <tr>          
             <td class="text-right">
                 <ul>
-                    <li> <span style="font-size: 13px; font-weight: bold;"> Total </span>: $ {{invoice_header.total_cost}} </li>
+                    <li> <span style="font-size: 13px; font-weight: bold;"> Total </span>:  {{invoice_header.total_cost}} </li>
                 </ul>
             </td>
          

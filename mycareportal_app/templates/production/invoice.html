@@ -3,17 +3,32 @@
 {% load mycareportal_app_extras%}
 {% block headlibs %}
 {% load static %}
+
+<!-- iCheck -->
+<link href="{% static 'vendors/iCheck/skins/flat/green.css' %}" rel="stylesheet">
+<!-- bootstrap-wysiwyg -->
+<link href="{% static 'vendors/google-code-prettify/bin/prettify.min.css' %}" rel="stylesheet">
+<!-- Switchery -->
+<link href="{% static 'vendors/switchery/dist/switchery.min.css' %}" rel="stylesheet">
+<!-- starrr -->
+<link href="{% static 'vendors/starrr/dist/starrr.css' %}" rel="stylesheet">
+<!-- bootstrap-daterangepicker -->
+<link href="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+<!-- Select2 -->
+<link href="{% static 'vendors/select2/dist/css/select2.min.css' %}" rel="stylesheet">
+
+<!-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> -->
 {% endblock %}
 {% block pagecontent %}
 <!-- page content -->
 <style>
-  @media print
-{    
-    .no-print, .no-print *
-    {
-        display: none !important;
+  @media print {
+
+    .no-print,
+    .no-print * {
+      display: none !important;
     }
-}
+  }
 </style>
 
 <div class="right_col" role="main">
@@ -56,9 +71,9 @@
 
                 <div class="col-sm-4 invoice-col">
                   {% if invoice_header_data.company.logo %}
-                  <img src="{{current_company.logo.url}}" , style="width: 270px; height:200px"/>
+                  <img src="{{current_company.logo.url}}" , style="width: 270px; height:200px" />
                   {% else %}
-                  <img src="" , style="width: 270px; height:200px"/>
+                  <img src="" , style="width: 270px; height:200px" />
                   {% endif %}
 
                 </div>
@@ -98,29 +113,95 @@
                       </tr>
                     </thead>
 
-                    <input type="hidden" id="invoice_obj" value="invoice_line_values">
-                    {% for invoice in  invoice_line_items %}
-                 
-                    <tr>
-                  
-                    <td> {{invoice_header_data.client.first_name}} {{invoice_header_data.client.last_name}} </td>
-                    <td> {{invoice_header_data.client.address}} {{invoice_header_data.client.city}} <br>
-                      {{invoice_header_data.client.state}} {{invoice_header_data.client.zip_code}} <br>
-                      {{invoice_header_data.client.contact_number}}
-                    </td>
-                    <td>{{invoice.caregiver.first_name}} {{invoice.caregiver.last_name}}</td>
-                    <td>{{invoice.hours}}</td>
-                    <td>{{ invoice.rate_type}}</td>
-                    <td> {{ invoice.rate | to_currency }}<br></td>
-                    <td>{{invoice.total | to_currency }}</td>
-                  </tr>
 
-                  {% endfor %}
+                    {% for invoice in  invoice_line_items %}
+
+                    <tr>
+
+                      <td> {{invoice_header_data.client.first_name}} {{invoice_header_data.client.last_name}} </td>
+                      <td> {{invoice_header_data.client.address}} {{invoice_header_data.client.city}} <br>
+                        {{invoice_header_data.client.state}} {{invoice_header_data.client.zip_code}} <br>
+                        {{invoice_header_data.client.contact_number}}
+                      </td>
+                      <td>{{invoice.caregiver.first_name}} {{invoice.caregiver.last_name}}</td>
+                      <td>{{invoice.hours}}</td>
+                      <td>{{ invoice.rate_type}}</td>
+                      <td> {{ invoice.rate | to_currency }}<br></td>
+                      <td>{{invoice.total | to_currency }}</td>
+                    </tr>
+
+                    {% endfor %}
+
                   </table>
                 </div>
-                <!-- /.col -->
               </div>
+              {% if not submit and  invoice_line_items  %}
+              <div class="row">
+                <div class="col-xs-12 table">
+
+                  <table id="myTable" class="table order-list">
+                    <thead>
+
+                    </thead>
+
+                    <tr>
+                      <td class="col-sm-2">
+                        {{invoice_header_data.client.first_name}} {{invoice_header_data.client.last_name}}
+                      </td>
+                      <td class="col-sm-2">
+                        {{invoice_header_data.client.address}} {{invoice_header_data.client.city}} <br>
+                        {{invoice_header_data.client.state}} {{invoice_header_data.client.zip_code}} <br>
+                        {{invoice_header_data.client.contact_number}}
+
+                      </td>
+                      <td class="col-sm-2">
+                        <select required class="select2_single form-control" placeholder="Caregive Name"
+                          id="dropDownId">
+
+                          <option value="" selected> Caregiver Name</option>
+                          {% for invoice in  invoice_line_distinct %}
+                          <option
+                            value="{{invoice.caregiver.id}} {{invoice.caregiver.first_name}} {{invoice.caregiver.last_name}}">
+                            {{invoice.caregiver.first_name}}
+                            {{invoice.caregiver.last_name}}
+                          </option>
+
+                          {% endfor %}
+
+                        </select>
+                      </td>
+                      
+                      <td class="col-sm-2">
+                        <input type="number" placeholder="Hours/Day" name="invoice_field_hours_perday" id="hours_perday"
+                          class="form-control"/>
+                      </td>
+                      <td class="col-sm-2">
+                        <select required class="select2_single form-control" id="dropDownIdratetype">
+                          <option value="" selected>Rate Type</option>
+                          {% for invoice in  invoice_line_distinct %}
+                          <option value="{{invoice.rate_type}}">{{invoice.rate_type}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td class="col-sm-2">
+                        <input type="number" placeholder="Rate" name="invoice_field_rate" id="rate"
+                          class="form-control"/>
+                      </td>
+
+               
+                      <td>
+
+                        <input type="button" class="btn  btn-block " id="addFields" value="Add Row" />
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+
+              {% else %}
+            
               <!-- /.row -->
+              {% endif %}
               <br>
               <br>
               <br>
@@ -132,18 +213,16 @@
                   <div class="form-group">
                     <label for="invoice_notes" class="control-label col-md-3 col-sm-3 col-xs-12">Invoice Notes</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not submit and invoice_line_items %}
 
-               
+                      <input type="text" id="invoice_notes" class="form-control col-md-7 col-xs-12"
+                      name="invoice_notes">
+                       <input type="hidden" id="invoice_header_id" class="form-control col-md-7 col-xs-12"
+                      name="invoice_header_id" value="{{invoice_header_data.id}}">
+                      {% else %}
+                      : {{invoice_header_data.invoice_notes}}
+                      {% endif %}
 
-                        {% if submit %}
-                          : {{invoice_header_data.invoice_notes}}
-                        {% else %}
-                        <input type="text" id="invoice_notes" class="form-control col-md-7 col-xs-12"
-                        name="invoice_notes">
-                        <input type="hidden" id="invoice_header_id" class="form-control col-md-7 col-xs-12"
-                        name="invoice_header_id" value="{{invoice_header_data.id}}">
-                        {% endif %}
-                     
 
                       <!-- <input type="text" class="form-control col-md-7 col-xs-12" name="{{edit_client_form.middle_name.html_name}}"> -->
 
@@ -159,10 +238,8 @@
                     <div class="pull-right">
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Total </label>
-                  
-                        <!-- <input type="number" class="form-control col-md-7 col-xs-12" name="total"> -->
                         <span style="margin-left: 20px;"> {{invoice_header_data.total_cost | to_currency }} </span>
-                        <!-- <input type="text" class="form-control col-md-7 col-xs-12" name="{{edit_client_form.middle_name.html_name}}"> -->
+                      
                       </div>
                     </div>
                   </div>
@@ -175,7 +252,7 @@
                     <div class="form-group">
                       <label for="invoice_notes" class="control-label col-md-3 col-sm-3 col-xs-12">Invoice for the <br>
                         week of</label> {{start_date}} {{end_date}}
-
+                   
                     </div>
                   </div>
                   <!-- /.col -->
@@ -190,7 +267,8 @@
                   <div class="col-xs-12">
                     <button class="btn btn-default" onclick="window.print()"><i class="fa fa-print"></i> Print</button>
                     {% if submit %}
-                    <button id="stbutton" disabled class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit
+                    <button id="" disabled class="btn btn-success pull-right"><i class="fa fa-credit-card"></i>
+                      Submit
                       Invoice</button>
                     {% else %}
                     <button id="stbutton" class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit
@@ -224,8 +302,8 @@
   $(document).ready(function () {
 
     $("#download").on("click", function () {
-      
-       
+
+
       $.ajax({
         url: "{% url 'generate_pdf' %}",
         type: "GET",
@@ -249,10 +327,10 @@
           'client_contact_number': ' {{invoice_header_data.client.contact_number}}',
           'total': '{{invoice.total}}',
           'total_cost': ' {{invoice_header_data.total_cost}}',
-     
+
           "invoice_notes": $("input[name=invoice_notes]").val(),
           "invoice_number_string": '{{ invoice_header_data.invoice_number_string }}',
-          "invoice_header_id" : '{{ invoice_header_data.id }}'
+          "invoice_header_id": '{{ invoice_header_data.id }}'
 
         },
 
@@ -273,13 +351,7 @@
 
           console.log("9999993", data);
 
-          // var blob = new Blob([data]);
-          // alert(blob);
-          // var link=document.createElement('a');
-          // link.href=window.URL.createObjectURL(blob);
-          // link.download="download.pdf";
-          // link.click();
-          // window.location = "invoice";
+      
           setTimeout(function () {
             // window.location.replace("invoice");
           }, 3000);
@@ -293,24 +365,134 @@
   $(document).ready(function () {
     $("#stbutton").on("click", function () {
       var txt;
-      if (confirm("Submit Data")) {
-        $.ajax({
-          url: "{% url 'submit_invoice' %}",
-          type: "GET",
-          data: {
-            "invoice_notes": $("input[name=invoice_notes]").val(),
-            "invoice_header_id": $("input[name=invoice_header_id]").val(),
-          },
-          dataType: "json",
-          contentType: "application/json",
-          success: function (data) {
+      var arrValues = new Array();
+      var invoicedata = []
+      var myTab = document.getElementById('myTable');
+
+
+
+      if (myTab.rows.length > 1) {
+      
+        for (row = 1; row < myTab.rows.length; row++) {
+          var person = new Object();
+          // loop through each cell in a row.
+          for (c = 0; c < myTab.rows[row].cells.length; c++) {
+            var element = myTab.rows.item(row).cells[c];
+            if (element.childNodes[0].getAttribute('name') == 'caregiverid') {
+
+              person[element.childNodes[0].getAttribute('name')] = element.childNodes[0].value
+           
+
+            }
+            if (element.childNodes[0].getAttribute('name') == 'invoice_fieldhours_perday') {
+
+              person[element.childNodes[0].getAttribute('name')] = element.childNodes[0].value
+
+            }
+
+            if (element.childNodes[0].getAttribute('name') == 'invoice_fieldrate_type') {
+              person[element.childNodes[0].getAttribute('name')] = element.childNodes[0].value
+
+            }
+
+            if (element.childNodes[0].getAttribute('name') == 'invoice_fieldrate') {
+              person[element.childNodes[0].getAttribute('name')] = element.childNodes[0].value
+
+            }
+
           }
-        })
+
+          invoicedata.push(person)
+        }
       } else {
-        txt = " Cancel!";
+        
       }
 
+      $.ajax({
+        url: "{% url 'submit_invoice' %}",
+        type: "GET",
+
+        data: {
+          "invoice_field_array": JSON.stringify(invoicedata),
+          "invoice_header_id": $("input[name=invoice_header_id]").val(),
+          "invoice_notes": $("input[name=invoice_notes]").val(),
+          'start_date': '{{ start_date }}',
+          'end_date': '{{ end_date }}',
+          'email': '{{invoice_header_data.client.email_address}}'
+        },
+        dataType: "json",
+        contentType: "application/json",
+        success: function (data) {
+          location.reload();
+        }
+      })
     });
+
+  });
+</script>
+
+
+
+
+<script>
+  $(document).ready(function () {
+    var counter = 0;
+    $("#addFields").on("click", function () {
+        var newRow = $("<tr>");
+        var cols = "";
+
+        if ($('#dropDownIdratetype :selected').val()  && $('#dropDownId :selected').val() && $(
+            "input[name=invoice_field_hours_perday]").val() && $("input[name=invoice_field_rate]").val()) {
+              
+            invoice_field_rate= $("input[name=invoice_field_rate]").val(),
+            invoice_field_rate_type = $('#dropDownIdratetype :selected').val(),
+            invoice_field_caregiver_id = $('#dropDownId :selected').val(),
+            invoice_field_client_id = $("input[name=invoice_field_client_id]").val(),
+            invoice_field_hours_perday = $("input[name=invoice_field_hours_perday]").val(),
+            invoice_header_id = $("input[name=invoice_header_id]").val(),
+            caregiverId = invoice_field_caregiver_id.split(" ", 1),
+            caregiverName = invoice_field_caregiver_id.slice(1, 100)
+
+          cols +=
+            '<td><input type="text" style="font-size: 13px;" class="form-control" readonly name="invoice_fieldclient"  value="{{invoice_header_data.client.first_name}} {{invoice_header_data.client.last_name}} "/></td>';
+          // cols += '<td><input type="text"  style="font-size: 13px;" class="form-control" readonly name="invoice_fieldaddress" value="{{invoice_header_data.client.address}} {{invoice_header_data.client.city}} {{invoice_header_data.client.state}} {{invoice_header_data.client.zip_code}} {{invoice_header_data.client.contact_number}}" /></td>';
+          cols +=
+            '<td><input type="text" style="font-size: 13px;"   class="form-control" readonly name="invoice_field_caregiver"  value=" ' +
+            caregiverName + '"/></td>';
+          cols +=
+            '<td><input type="text" style="font-size: 13px;"  class="form-control" readonly name="invoice_fieldhours_perday"  value=" ' +
+            invoice_field_hours_perday + '"/></td>';
+
+          cols +=
+            '<td><input type="text" style="font-size: 13px;"  class="form-control" readonly name="invoice_fieldrate_type"  value=" ' +
+            invoice_field_rate_type + '"/></td>';
+          cols += '<td><input type="text"  class="form-control" readonly name="invoice_fieldrate"  value=" ' + invoice_field_rate + '"/></td>';
+
+          cols += '<td><input type="button" class="ibtnDel btn btn-md btn-danger "  value="Delete"></td>';
+          cols +=
+            '<td><input type="hidden" style="width:30%;"  class="form-control" readonly name="caregiverid"  value="' +
+            caregiverId + '"/></td>';
+
+          newRow.append(cols);
+          $("table.order-list").append(newRow);
+
+          $("input[name=invoice_field_hours_perday]").val(null),
+            $("input[name=invoice_field_rate]").val(null),
+            $('#dropDownId').val(null),
+            $('#dropDownIdratetype').val(null),
+            $("input[name=caregiverId]").val(null),
+            counter++;
+        } else {
+          alert("Please fill all the fields")
+        }
+
+      }),
+
+
+      $("table.order-list").on("click", ".ibtnDel", function (event) {
+        $(this).closest("tr").remove();
+        counter -= 1
+      })
   });
 </script>
 
