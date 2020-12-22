@@ -1132,7 +1132,7 @@ class ChooseClientForInvoice(LoginRequiredMixin, View):
         context['client_invoice_form'] = ChooseClientInvoiceForm()
         all_clients = Client.objects.filter(company=current_company).order_by('last_name')
         context['all_clients'] = all_clients
-        invoice_header = InvoiceHeader.objects.filter(company=current_company,submitted = True)
+        invoice_header = InvoiceHeader.objects.filter(company=current_company,submitted = True,cancelled =False)
        
         context['invoice_header'] = invoice_header
         return render(request, "production/choose_client_invoice.html", context)
@@ -1143,18 +1143,21 @@ class Invoice(LoginRequiredMixin, View):
         invoice_id = request.GET.get('invoice_id')
         current_company = request.user.company
         context = {}
+        current_company = Company.objects.get(company_id = current_company.company_id)
         context['current_company'] = current_company
+        current_date = datetime.date.today()
+        context['current_date'] =current_date
         if invoice_id:
             submit = True
             context['submit'] = submit
-            exits_invoice_header = InvoiceHeader.objects.filter(company = current_company, id = invoice_id,  submitted = True)
+            exits_invoice_header = InvoiceHeader.objects.filter(company = current_company, id = invoice_id,  submitted = True,cancelled =False)
             context['invoice_header_data'] = exits_invoice_header
             invoice_header_data = InvoiceHeader.objects.get(id = exits_invoice_header)
             context['invoice_header_data'] = invoice_header_data
+            context['start_date'] = invoice_header_data.start_date
+            context['end_date'] = invoice_header_data.end_date
             invoice_line_items = list(InvoiceLineItem.objects.filter(invoice_header = exits_invoice_header,company = current_company).order_by("id"))
             context['invoice_line_items'] = invoice_line_items
-            current_date = datetime.date.today()
-            context['current_date'] =current_date
         else:
             submit = False
             context['submit'] = submit
@@ -1170,17 +1173,16 @@ class Invoice(LoginRequiredMixin, View):
                 context['client'] = client
                 context['start_date'] = start_date
                 context['end_date'] = end_date
-                exits_invoice_header = InvoiceHeader.objects.filter(company = current_company,client = client, start_date = start_date,end_date = end_date ,  submitted = True)
+                exits_invoice_header = InvoiceHeader.objects.filter(company = current_company,client = client, start_date = start_date,end_date = end_date ,  submitted = True,cancelled =False)
 
                 if exits_invoice_header:
                     context['invoice_header_data'] = exits_invoice_header
-                    
                     invoice_header_data = InvoiceHeader.objects.get(id = exits_invoice_header)
                     context['invoice_header_data'] = invoice_header_data
                     invoice_line_items = list(InvoiceLineItem.objects.filter(invoice_header = invoice_header_data,company = current_company).order_by("id"))
                     context['invoice_line_items'] = invoice_line_items
-                    current_date = datetime.date.today()
-                    context['current_date'] =current_date
+                    caregiver = Caregiver.objects.filter(company = current_company)
+                    context['caregiver'] = caregiver
                     invoice_line_distinct = InvoiceLineItem.objects.filter(invoice_header =invoice_header_data).distinct('caregiver_id')
                     context['invoice_line_distinct'] = invoice_line_distinct
                 else:
@@ -1189,14 +1191,14 @@ class Invoice(LoginRequiredMixin, View):
                     context['invoice_header_data'] = invoice_header_data
                     invoice_line_items = list(InvoiceLineItem.objects.filter(invoice_header = invoice_header_data,company = current_company))
                     context['invoice_line_items'] = invoice_line_items
-                    current_date = datetime.date.today()
-                    context['current_date'] =current_date
                     task_objects = self.get_line_items(tasks, current_company)
                     total_amt = self.get_total(task_objects)
                     context['task_objects'] = task_objects
                     context['total_amt'] = total_amt
                     invoice_line_distinct = InvoiceLineItem.objects.filter(invoice_header =invoice_header_data).distinct('caregiver_id')
                     context['invoice_line_distinct'] = invoice_line_distinct
+                    caregiver = Caregiver.objects.filter(company = current_company)
+                    context['caregiver'] = caregiver
                     if current_company.tax_rate:
                         context['tax_amt'] = (total_amt * float(current_company.tax_rate / 100))
                         context['total_amt_tax'] = total_amt + (total_amt * float(current_company.tax_rate / 100))
@@ -1906,7 +1908,9 @@ def get_pdf(request):
     invoice_headerid = request.session.get('context').get('invoice_header_id')
     start_date = request.session.get('context').get('start_date')
     end_date = request.session.get('context').get('end_date')
-    company_logo = request.session.get('context').get('company_logo')
+    current_date = datetime.date.today()
+   
+    
     
     
     invoice_header = InvoiceHeader.objects.get(id = invoice_headerid )
@@ -1917,7 +1921,8 @@ def get_pdf(request):
         "invoice_line_items" : invoice_line_items,
         "start_date": start_date,
         "end_date": end_date,
-        "company_logo": company_logo
+        "current_date": current_date,
+        "current_company": current_company
     }
     
     pdf = render_to_pdf('production/invoice_generator.html',data)
@@ -1971,3 +1976,14 @@ def submit_invoice(request):
    
     return HttpResponse(json.dumps(invoiceadd), content_type="application/json")
 
+@login_required
+def cancel_invoice(request):
+    if request.method == "GET":
+        current_company = request.user.company
+        context = request.GET.copy()
+        invoice_id = request.GET.get('invoice_id')
+        invoice_header = InvoiceHeader.objects.get(id = invoice_id )
+        invoice_header.cancelled = True
+        invoice_header.save()
+
+    return HttpResponseRedirect(reverse('choose_client_for_invoice'))

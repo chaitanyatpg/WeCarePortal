@@ -1584,6 +1584,7 @@ class InvoiceHeader(models.Model):
     end_date = models.DateField()
     invoice_notes = models.CharField(max_length=1000, blank=True, null=True)
     submitted = models.BooleanField(default=False)
+    cancelled = models.BooleanField(default = False)
 
     @staticmethod
     @transaction.atomic

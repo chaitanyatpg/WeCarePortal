@@ -78,13 +78,13 @@
             <td></td>
             <td>
                 <div class="text-right h-text">INVOICE</div>
-                <div class="text-right">20/09/2021</div>
+                <div class="text-right">{{current_date}}</div>
 
             </td>
         <tr>
 
         <tr>
-            <td><img class="logo-img" src="{{company_logo}}"></td>
+            <td> {% if current_company.logo %} <img class="logo-img" src="{{current_company.logo.url}}">    {% endif %}</td>
             <td style="width: 75%;">
                 <ul>
                     <li> <strong>{{invoice_header.company.company_name}}</strong></li>
@@ -96,7 +96,7 @@
             </td>
             <td>
                 <ul>
-                    <li>Date : 20/09/2021</li>
+                    <li>Date : {{current_date}}</li>
                     <li>Invoice: {{ invoice_header.invoice_number_string }}</li>
                     <!-- <li>Tax ID : 87jJKSHUKWHKKKG</li> -->
                 </ul>

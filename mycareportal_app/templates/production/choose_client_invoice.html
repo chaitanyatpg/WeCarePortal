@@ -166,6 +166,7 @@
                             <th>Total Hour</th>
                             <th>Total Cost </th>
                             <th>View</th>
+                            <th>Action</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -177,10 +178,14 @@
                                 <td>{{invoice.end_date}}</td>
                                 <td>{{invoice.total_hours}}</td>
                                 <td>{{invoice.total_cost}} </td>
-                            <form method="get"  action="{% url 'invoice' %}" >
-                                <input type="hidden" name="invoice_id" value="{{invoice.id}}">
-                                <td><button id="download" class="btn btn-success edit_calendar_submit">View</button></td>
-                              </form>
+                                <form method="get"  action="{% url 'invoice' %}" >
+                                  <input type="hidden" name="invoice_id" value="{{invoice.id}}">
+                                  <td><button id="download" class="btn btn-success edit_calendar_submit">View</button></td>
+                                </form>
+                                <form method="get"  action="{% url 'cancel_invoice' %}" >
+                                  <input type="hidden" name="invoice_id" value="{{invoice.id}}">
+                                  <td><button  class="btn btn-success edit_calendar_submit">Cancel</button></td>
+                                </form>
                               </tr>
                             {% endfor %}
                         </tbody>
@@ -709,7 +714,5 @@
     });
   });
 </script>
-
-
 
 {% endblock %}

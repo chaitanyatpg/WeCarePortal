@@ -70,18 +70,15 @@
               <div class="row invoice-info">
 
                 <div class="col-sm-4 invoice-col">
-                  {% if invoice_header_data.company.logo %}
-                  <img src="{{current_company.logo.url}}" , style="width: 270px; height:200px" />
-                  {% else %}
-                  <img src="" , style="width: 270px; height:200px" />
+                  {% if current_company.logo %}
+                    <img src="{{current_company.logo.url}}"  style="width: 270px; height:200px;">
                   {% endif %}
 
                 </div>
 
                 <div class="col-sm-4 invoice-col">
-
                   <address>
-                    <strong>{{current_company.company_name}}dddddddd</strong>
+                    <strong>{{current_company.company_name}}</strong>
                     <br>{{current_company.address}}
                     <br>{{current_company.city}}, {{current_company.state}} {{current_company.zip_code}}
                     <br>Phone: {{current_company.contact_number}}
@@ -159,11 +156,11 @@
                           id="dropDownId">
 
                           <option value="" selected> Caregiver Name</option>
-                          {% for invoice in  invoice_line_distinct %}
+                          {% for invoice in  caregiver %}
                           <option
-                            value="{{invoice.caregiver.id}} {{invoice.caregiver.first_name}} {{invoice.caregiver.last_name}}">
-                            {{invoice.caregiver.first_name}}
-                            {{invoice.caregiver.last_name}}
+                            value="{{invoice.id}} {{invoice.first_name}} {{invoice.last_name}}">
+                            {{invoice.first_name}}
+                            {{invoice.last_name}}
                           </option>
 
                           {% endfor %}
@@ -271,7 +268,7 @@
                       Submit
                       Invoice</button>
                     {% else %}
-                    <button id="stbutton" class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit
+                    <button id="stbutton" class="btn btn-success pull-right" ><i class="fa fa-credit-card"></i> Submit
                       Invoice</button>
                     {% endif %}
                     <button class="btn btn-primary pull-right" id="download" style="margin-right: 5px;"><i
@@ -311,7 +308,6 @@
 
           "company_name": "{{current_company.company_name}}",
           "company_address": "{{current_company.address}}",
-          'company_logo': '{{current_company.logo.url}}',
           'company_city': '{{current_company.city}}',
           'company_state': '{{current_company.state}}',
           'company_zipcode': '{{current_company.zip_code}}',
@@ -339,17 +335,17 @@
         success: function (data) {
 
 
-          console.log("9999991 9999991")
+          
           window.location = "/billing/invoice/get_pdf";
           setTimeout(function () {
             window.location.replace("/mycareportal_app/");
-            console.log("9999992", data);
+            
           }, 3000);
         },
         error: function (data) {
           window.location = "/billing/invoice/get_pdf";
 
-          console.log("9999993", data);
+          
 
       
           setTimeout(function () {
@@ -363,7 +359,7 @@
 
 <script>
   $(document).ready(function () {
-    $("#stbutton").on("click", function () {
+    $("#stbutton").on("click", function ( ) {
       var txt;
       var arrValues = new Array();
       var invoicedata = []
@@ -372,7 +368,7 @@
 
 
       if (myTab.rows.length > 1) {
-      
+        $("#stbutton").attr("disabled", true);
         for (row = 1; row < myTab.rows.length; row++) {
           var person = new Object();
           // loop through each cell in a row.
