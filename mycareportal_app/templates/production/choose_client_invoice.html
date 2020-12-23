@@ -182,9 +182,9 @@
                                   <input type="hidden" name="invoice_id" value="{{invoice.id}}">
                                   <td><button id="download" class="btn btn-success edit_calendar_submit">View</button></td>
                                 </form>
-                                <form method="get"  action="{% url 'cancel_invoice' %}" >
+                                <form onSubmit="return confirm('Do you want to Cancel?') " method="get"  action="{% url 'cancel_invoice' %}" >
                                   <input type="hidden" name="invoice_id" value="{{invoice.id}}">
-                                  <td><button  class="btn btn-success edit_calendar_submit">Cancel</button></td>
+                                  <td><button  class="btn btn-success edit_calendar_submit"  >Cancel</button></td>
                                 </form>
                               </tr>
                             {% endfor %}
