@@ -1169,7 +1169,6 @@ class Invoice(LoginRequiredMixin, View):
                 end_date = client_invoice_form.cleaned_data['end_date']
                 tasks = TaskSchedule.objects.filter(company=current_company,
                                     date__range=(start_date, end_date))
-                
                 context['client'] = client
                 context['start_date'] = start_date
                 context['end_date'] = end_date
@@ -1208,6 +1207,9 @@ class Invoice(LoginRequiredMixin, View):
        
         return render(request, "production/invoice.html", context)
 
+
+       
+    
     def get_total(self, task_objects):
 
         total_amt = 0
@@ -1861,7 +1863,6 @@ def render_to_pdf(template_src, context_dict):
     result = BytesIO()
     pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
     if not pdf.err:
-
         return HttpResponse(result.getvalue(), content_type='application/pdf')
         
     return None
@@ -1870,7 +1871,7 @@ def render_to_pdf(template_src, context_dict):
 def generate_pdf(request):
     data ={}
     context = request.GET.copy()
-     
+
     current_company = request.user.company
     request.session['context'] = context
     company_name  = request.GET.get('company_name')
@@ -1897,11 +1898,6 @@ def generate_pdf(request):
     invoice_header_id = request.GET.get('invoice_header_id')
     return redirect('get_pdf')
 
- 
-
-
-
-
 
 def get_pdf(request):
     current_company = request.user.company
@@ -1926,7 +1922,6 @@ def get_pdf(request):
     }
     
     pdf = render_to_pdf('production/invoice_generator.html',data)
-    
     if pdf:
         response = HttpResponse(pdf, content_type='application/pdf')        
         filename = "Invoice_{}.pdf".format(request.session.get('context').get('company_name'))
@@ -1935,7 +1930,6 @@ def get_pdf(request):
         response['Content-Disposition'] = content
         return response
     return HttpResponse("Not found")
-
 
 @login_required
 def submit_invoice(request):

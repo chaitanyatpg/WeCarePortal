@@ -190,7 +190,6 @@ urlpatterns = [
     url(r'^get_caregiver_schedules_with_uids', views.get_caregiver_schedules_with_uids, name='get_caregiver_schedules_with_uids'),
     url(r'^client_task_dashboard', views.ClientTaskDashboard.as_view(), name='client_task_dashboard'),
     url(r'^get_client_tasks_with_uids', views.get_client_tasks_with_uids, name='get_client_tasks_with_uids'),
-
     url(r'^generate_pdf',views.generate_pdf,name='generate_pdf'),
     url(r'^submit_invoice',views.submit_invoice,name='submit_invoice'),
     
