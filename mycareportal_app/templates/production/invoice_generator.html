@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <style>
+    <style type="text/css">
         body {
             font-family: Arial, Helvetica, sans-serif;
             font-size: 12px;
@@ -18,9 +18,9 @@
 
         .second-table {
             width: 100%;
-            border: 2px solid #eee;
+            border: 1px solid #eee;
             text-align: left;
-            display: flex;
+            /* display: flex; */
             overflow: auto;
             padding: 5px;
             padding-top: 5px;
@@ -85,7 +85,7 @@
 
         <tr>
             <td> {% if current_company.logo %} <img class="logo-img" src="{{current_company.logo.url}}">    {% endif %}</td>
-            <td style="width: 75%;">
+            <td style="width: 50%;">
                 <ul>
                     <li> <strong>{{invoice_header.company.company_name}}</strong></li>
                     <li> {{invoice_header.company.address}}</li>
@@ -132,7 +132,6 @@
     </table>
 
     <table class="second-table">
-
         <tr>
             <th>Patient Name</th>
             <th style="width: 20%;">Service Address</th>
