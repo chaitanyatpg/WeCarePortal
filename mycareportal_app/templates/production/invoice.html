@@ -32,133 +32,139 @@
                 <!-- title row -->
                 <div class="row">
                   <div class="col-xs-12 invoice-header">
-                    <h1>
-                          Invoice
-                        <small class="pull-right">{{start_date}} - {{end_date}}</small>
+                    <h1 class="pull-right">
+                      Invoice <br>
+                      {{current_date}}
+                      <!-- <small >{{start_date}} - {{end_date}}</small> -->
                     </h1>
-                    {% if current_company.logo %}
-                      <img src="{{current_company.logo.url}}", style="width: 230px; height:200px"/>
-                    {% endif %}
+                  
                   </div>
                   <!-- /.col -->
                 </div>
                 <!-- info row -->
                 <div class="row invoice-info">
+  
                   <div class="col-sm-4 invoice-col">
-                    From
-                    <address>
-                                    <strong>{{current_company.company_name}}</strong>
-                                    <br>{{current_company.address}}
-                                    <br>{{current_company.city}}, {{current_company.state}} {{current_company.zip_code}}
-                                    <br>Phone: {{current_company.contact_number}}
-                                </address>
+                    {% if current_company.logo %}
+                    <img src="{{current_company.logo.url}}" , style="width: 270px; height:200px" />
+                    {% endif %}
+  
                   </div>
-                  <!-- /.col -->
-                  <div class="col-sm-4 invoice-col">
-                    To
-                    <address>
-                                    <strong>{{client.first_name}} {{client.last_name}}</strong>
-                                    <br>{{client.address}}
-                                    <br>{{client.city}}, {{client.state}} {{client.zip_code}}
-                                    <br>Phone: {{client.phone_number}}
-                                    <br>Email: {{client.email_address}}
-                                </address>
-                  </div>
-                  <!-- /.col -->
-                  <!--<div class="col-sm-4 invoice-col">
-                    <b>Invoice #007612</b>
-                    <br>
-                    <br>
-                    <b>Order ID:</b> 4F3S8J
-                    <br>
-                    <b>Payment Due:</b> 2/22/2014
-                    <br>
-                    <b>Account:</b> 968-34567
-                  </div>-->
-                  <!-- /.col -->
-                </div>
-                <!-- /.row -->
 
+                  <div class="col-sm-4 invoice-col">
+  
+                    <address>
+                      <strong>{{current_company.company_name}}dddddddd</strong>
+                      <br>{{current_company.address}}
+                      <br>{{current_company.city}}, {{current_company.state}} {{current_company.zip_code}}
+                      <br>Phone: {{current_company.contact_number}}
+                    </address>
+                  </div>
+                  <!-- /.col -->
+                  <div class="col-sm-4 invoice-col">
+  
+                    Date: <small>{{current_date}}</small><br>
+                    Invoice :
+                  </div>
+  
+                
+                </div>
+             
                 <!-- Table row -->
                 <div class="row">
                   <div class="col-xs-12 table">
                     <table class="table table-striped">
                       <thead>
                         <tr>
-                          <th>Caregiver</th>
-                          <th>Task</th>
-                          <th>Hourly</th>
-                          <th>Hours</th>
-                          <th style="width: 59%">Description</th>
-                          <th>Subtotal</th>
+                          <th>Patient Name</th>
+                          <th style="width: 25%">Service Address</th>
+                          <th>Assigned Caregiver</th>
+                          <th>Hours/Per Day</th>
+                          <th>Rate Type</th>
+                          <th>Rate</th>
+                          <th>Total</th>
                         </tr>
                       </thead>
-                      <tbody>
-                        {% for caregiver, tasks in task_objects.items %}
-                          {% for task, task_object in tasks.items %}
-                            <tr>
-                              <td>{{caregiver.first_name}} {{caregiver.last_name}}</td>
-                              <td>{{task}}</td>
-                              <td>{{task_object.hourly_rate | to_currency}}</td>
-                              <td>{{task_object.task_hours | round_2}}</td>
-                              <td>{{task_object.description}}</td>
-                              <td>{{task_object.total | to_currency}}</td>
-                            </tr>
-                          {% endfor %}
-                        {% endfor %}
-                      </tbody>
+  
+                      <td> {{invoice_header_data.client.first_name}} {{invoice_header_data.client.last_name}}   </td>
+                      <td> {{invoice_header_data.client.address}}  {{invoice_header_data.client.city}} <br>
+                         {{invoice_header_data.client.state}}  {{invoice_header_data.client.zip_code}} <br>
+                         {{invoice_header_data.client.contact_number}}
+                        </td> 
+                      <td>{{invoice_line_item.caregiver.first_name}}  {{invoice_line_item.caregiver.last_name}}</td>
+                      <td>{{invoice_line_item.hours}}</td>
+                      <td>{{ invoice_line_item.rate_type}}</td>
+                      <td> {{ invoice_line_item.rate}}<br></td>
+                      <td>{{invoice_line_item.total }}</td>
                     </table>
                   </div>
                   <!-- /.col -->
                 </div>
                 <!-- /.row -->
-
+                <br>
+                <br>
+                <br>
+                <br>
                 <div class="row">
                   <div class="col-xs-6">
+           
+                
+                   <div class="form-group">
+                    <label for="invoice_notes" class="control-label col-md-3 col-sm-3 col-xs-12">Invoice Notes</label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
 
-                    <div class="table-responsive">
-                      <table class="table">
-                        <tbody>
-                          <!--<tr>
-                            <th style="width:50%">Subtotal:</th>
-                            <td>{{total_amt}}</td>
-                          </tr>
-                          <tr>
-                            <th>Tax (9.3%)</th>
-                            <td>$10.34</td>
-                          </tr>!-->
-                          <tr>
-                            <th>Subtotal:</th>
-                            <td>{{total_amt | to_currency}}</td>
-                          </tr>
-                          <tr>
-                            <th>Tax(%):</th>
-                            <td>{{current_company.tax_rate}}</td>
-                          </tr>
-                          <tr>
-                            <th>Tax Amount:</th>
-                            <td>{{tax_amt | to_currency}}</td>
-                          </tr>
-                          <tr>
-                            <th>Total:</th>
-                            <td>{{total_amt_tax | to_currency}}</td>
-                          </tr>
-                        </tbody>
-                      </table>
+                      <input type="text" id="invoice_notes" class="form-control col-md-7 col-xs-12" name="invoice_notes">
+                      <input type="hidden" id="invoice_header_id" class="form-control col-md-7 col-xs-12" name="invoice_header_id" value="{{invoice_header_data.id}}">
+
+                      <!-- <input type="text" class="form-control col-md-7 col-xs-12" name="{{edit_client_form.middle_name.html_name}}"> -->
+
                     </div>
+                   </div> 
+               
+                
+                  <!-- /.col -->
+                </div>
+  
+                <div class="row">
+                  <div class="col-xs-12">
+                    <div class="pull-right">
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Total </label>
+                    
+                          <!-- <input type="number" class="form-control col-md-7 col-xs-12" name="total"> -->
+                         <span style="margin-left: 20px;">  {{invoice_header_data.total_cost }} </span>
+                          <!-- <input type="text" class="form-control col-md-7 col-xs-12" name="{{edit_client_form.middle_name.html_name}}"> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <br>
+  
+                <div class="row">
+                  <div class="col-xs-6">
+  
+                    <div class="form-group">
+                      <label for="invoice_notes" class="control-label col-md-3 col-sm-3 col-xs-12">Invoice for the  <br> week of</label> {{start_date}}  {{end_date}}
+                    
+                    </div>  
                   </div>
                   <!-- /.col -->
                 </div>
+                <br>
+                <br>
+  
                 <!-- /.row -->
-
+  
                 <!-- this row will not appear when printing -->
                 <div class="row no-print">
                   <div class="col-xs-12">
-                    <button class="btn btn-default" onclick="window.print();"><i class="fa fa-print"></i> Print</button>
-                    <button class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit Invoice</button>
-                    <button class="btn btn-primary pull-right" style="margin-right: 5px;"><i class="fa fa-download"></i> Generate PDF</button>
+                    <button class="btn btn-default" onclick="window.print();"><i class="fa fa-print" ></i> Print</button>
+                    <button  id="stbutton" class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit Invoice</button>
+                    <button class="btn btn-primary pull-right" id="download" style="margin-right: 5px;"><i
+                        class="fa fa-download"></i> Generate PDF</button>
                   </div>
                 </div>
+             
               </section>
             </div>
           </div>
@@ -171,3 +177,124 @@
   {% block footlibs %}
 
   {% endblock %}
+
+
+
+
+  {% block scripts %}
+
+
+<script>
+  $(document).ready(function () {
+    $("#download").on("click", function () {
+      $.ajax({
+
+        url: "{% url 'generate_pdf' %}",
+        type: "GET",
+        data: {
+
+      
+          "company_name": "{{current_company.company_name}}",
+          "company_address": "{{current_company.address}}",
+          'company_logo':'{{current_company.logo.url}}',
+          'company_city':'{{current_company.city}}',
+          'company_state':'{{current_company.state}}',
+          'company_zipcode':'{{current_company.zip_code}}',
+          'company_contactnumber':'{{current_company.contact_number}}',
+          'start_date': '{{start_date}}',
+          'end_date' : '{{end_date}}',
+          'client_firstname' : '{{invoice_header_data.client.first_name}}',
+          'client_lastname' : '{{invoice_header_data.client.last_name}} ',
+          'client_address' : '{{invoice_header_data.client.address}} ',
+          'client_city': '{{invoice_header_data.client.city}}',
+          'client_zipcode':'{{invoice_header_data.client.zipcode}}',
+          'client_state': '{{invoice_header_data.client.state}}',
+          'client_contact_number':' {{invoice_header_data.client.contact_number}}',
+          'caregiver_firstname':'{{invoice_line_item.caregiver.first_name}} ',
+          'caregiver_lastname': '{{invoice_line_item.caregiver.last_name}}',
+          'hours': '{{invoice_line_item.hours}}',
+          'rate_type': '{{ invoice_line_item.rate_type}}',
+          'rate':'{{invoice_line_item.rate}}',
+          'total':'{{invoice_line_item.total}}',
+          'total_cost':' {{invoice_header_data.total_cost}}',
+          "invoice_notes": $("input[name=invoice_notes]").val(),
+
+
+
+
+
+      
+
+        }, 
+        dataType: "json",
+        contentType: "application/json",
+        success: function(data){
+
+
+          console.log("9999991 9999991")
+          window.location = "/billing/invoice/get_pdf";
+
+          setTimeout(function() {
+            window.location.replace("/mycareportal_app/");
+            console.log("9999992", data);
+          }, 3000);
+        },
+        error: function(data){
+          window.location = "/billing/invoice/get_pdf";
+         
+          console.log("9999993", data);
+          // var blob = new Blob([data]);
+          // alert(blob);
+          // var link=document.createElement('a');
+          // link.href=window.URL.createObjectURL(blob);
+          // link.download="download.pdf";
+          // link.click();
+          // window.location = "invoice";
+          setTimeout(function () {
+            // window.location.replace("invoice");
+          }, 3000);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+
+
+$(document).ready(function(){
+
+
+$("#stbutton").on("click", function(){
+  
+   
+   $.ajax({
+
+url: "{% url 'submit_invoice' %}",
+type: "GET",
+data: {
+  "invoice_notes": $("input[name=invoice_notes]").val(),
+  "invoice_header_id":$("input[name=invoice_header_id]").val(),
+
+     },
+     dataType: "json",
+        contentType: "application/json",
+        success: function(data){
+          
+        }
+
+
+   })
+   
+
+
+
+
+}); 
+
+
+
+});
+</script>
+
+{% endblock %}

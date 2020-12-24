@@ -46,7 +46,9 @@ from django.core.urlresolvers import reverse
 
 from random import randint
 import requests
-
+from io import BytesIO
+from django.template.loader import get_template
+from xhtml2pdf import pisa
 # Create your views here.
 
 #@receiver(pre_save, sender=User)
@@ -1144,10 +1146,14 @@ class Invoice(LoginRequiredMixin, View):
             end_date = client_invoice_form.cleaned_data['end_date']
             tasks = TaskSchedule.objects.filter(company=current_company,
                                     date__range=(start_date, end_date))
+                                           
             context['current_company'] = current_company
             context['client'] = client
             context['start_date'] = start_date
             context['end_date'] = end_date
+       
+            invoice_header = InvoiceHeader.create_invoice(current_company,client,start_date,end_date)
+            
             task_objects = self.get_line_items(tasks, current_company)
             total_amt = self.get_total(task_objects)
             context['task_objects'] = task_objects
@@ -1158,8 +1164,22 @@ class Invoice(LoginRequiredMixin, View):
             else:
                 context['tax_amt'] = 0
                 context['total_amt_tax'] = total_amt
+            invoice_header_data = InvoiceHeader.objects.filter(client = client,company =current_company).last()
+            context['invoice_header_data'] = invoice_header_data
+            try:
+                invoice_line_item = InvoiceLineItem.objects.get(invoice_header = invoice_header_data,company = current_company)
+            except InvoiceLineItem.DoesNotExist:
+                invoice_line_item = None 
+            
+            context['invoice_line_item'] = invoice_line_item
+            current_date = datetime.date.today()
+            context['current_date'] =current_date
+            
         return render(request, "production/invoice.html", context)
 
+
+       
+    
     def get_total(self, task_objects):
 
         total_amt = 0
@@ -1737,7 +1757,7 @@ def date_filter_management_dashboard(request):
 
 
 class CompanyHoliday(LoginRequiredMixin, View):
-    
+
     def get(self, request):
         context = {}
         current_company = request.user.company
@@ -1747,32 +1767,32 @@ class CompanyHoliday(LoginRequiredMixin, View):
         context["delete_holiday_form"] = DeleteHolidayForm()
         return render(request, 'production/company_holiday.html', context)
 
-    
+
 
     def post(self, request):
         context = {}
         current_company = request.user.company
         company_holiday_form = CompanyHolidayForm(request.POST)
-      
+
         if company_holiday_form.is_valid():
             holiday_name = company_holiday_form.cleaned_data['holiday_name']
             description = company_holiday_form.cleaned_data['description']
             date = company_holiday_form.cleaned_data['eventDate']
-            
-           
-            
-            company_holiday = CompanyHolidays(company = current_company, 
+
+
+
+            company_holiday = CompanyHolidays(company = current_company,
                                               holiday_name = holiday_name,description=description,
                                               date = date)
             company_holiday.save()
             messages.success(request, "Holiday successfully added")
         return HttpResponseRedirect(reverse('company_holiday'))
-      
+
 
 
 @login_required
 def view_company_holiday_id(request):
-    
+
     if request.method == 'GET':
         context = {}
         current_company = request.user.company
@@ -1782,8 +1802,8 @@ def view_company_holiday_id(request):
         holiday_name = current_holiday.holiday_name
         description  = current_holiday.description
         holiday_date = current_holiday.date
-      
-       
+
+
         holiday_data = {
             'holiday_id':holiday_id,
             'holiday_name' : holiday_name,
@@ -1791,16 +1811,95 @@ def view_company_holiday_id(request):
             'date' : "{0}/{1}/{2}".format(holiday_date.month,holiday_date.day,holiday_date.year)
         }
         return HttpResponse(json.dumps(holiday_data), content_type="application/json")
- 
+
 
 @login_required
 def delete_holiday_with_id(request):
 
     if request.method == 'POST':
         context = {}
-        company = request.user.company      
+        company = request.user.company
         holiday_id = request.POST.get('holiday_id')
         current_holiday = CompanyHolidays.objects.get(company=company, id = holiday_id)
         current_holiday.delete()
-        return HttpResponse("Delete Successful") 
- 
+        return HttpResponse("Delete Successful")
+
+
+
+
+def render_to_pdf(template_src, context_dict={}):
+
+    template = get_template(template_src)
+    html  = template.render(context_dict)
+    result = BytesIO()
+    pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
+    if not pdf.err:
+        return HttpResponse(result.getvalue(), content_type='application/pdf')
+    return None
+    
+@login_required
+def generate_pdf(request):
+    context = request.GET.copy()
+
+    current_company = request.user.company
+    print("current_companycurrent_company",current_company.logo)
+    request.session['context'] = context
+    company_name  = request.GET.get('company_name')
+    company_address  = request.GET.get('company_address')
+    company_city  = request.GET.get('company_city')
+    company_state  = request.GET.get('company_state')
+    company_zipcode  = request.GET.get('company_zipcode')
+    company_contactnumber  = request.GET.get('company_contactnumber')
+    start_date  = request.GET.get('start_date')
+    end_date  = request.GET.get('end_date')
+    client_firstname  = request.GET.get('client_firstname')
+    client_lastname  = request.GET.get('client_lastname')
+    client_address  = request.GET.get('client_address')
+    client_city  = request.GET.get('client_city')
+    client_zipcode  = request.GET.get('client_zipcode')
+    client_state  = request.GET.get('client_state')
+    client_contact_number  = request.GET.get('client_contact_number')
+    caregiver_firstname  = request.GET.get('caregiver_firstname')
+    caregiver_lastname  = request.GET.get('caregiver_lastname')
+    hours  = request.GET.get('hours')
+    rate_type  = request.GET.get('rate_type')
+    rate  = request.GET.get('rate')
+    total  = request.GET.get('total')
+    total_cost  = request.GET.get('total_cost')
+    company_logo  = request.GET.get('company_logo')
+    invoice_notes  = request.GET.get('invoice_notes')
+
+    
+    
+    # x =  txt.split("#")
+    # company_logo = x[2]
+    company_address = request.GET.get('company_address')
+    return redirect('get_pdf')
+
+
+
+def get_pdf(request):
+    pdf = render_to_pdf('production/invoice_generator.html', request.session['context'])
+    if pdf:
+        response = HttpResponse(pdf, content_type='application/pdf')
+        filename = "Invoice_{}.pdf".format(request.session.get('context').get('company_name'))
+        content = "inline; filename={}".format(filename)
+        content = "attachment; filename={}".format(filename)
+        response['Content-Disposition'] = content
+        return response
+    return HttpResponse("Not found")
+
+@login_required
+def submit_invoice(request):
+    context = request.GET.copy()
+    invoice_notes  = request.GET.get('invoice_notes')
+    invoice_header_id  = request.GET.get('invoice_header_id')
+    print("invoice_header_idinvoice_header_id",invoice_header_id)
+    invoice_header = InvoiceHeader.objects.get(id =invoice_header_id)
+    invoice_header.invoice_notes =invoice_notes
+    invoice_header.save()
+    return HttpResponse("data submited sucessfully")
+
+    
+    
+

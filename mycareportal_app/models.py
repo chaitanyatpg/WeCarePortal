@@ -1,4 +1,5 @@
 from django.db import models
+from django.db import transaction
 #from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
 from PIL import Image
@@ -9,6 +10,9 @@ import datetime
 from datetime import timedelta
 import pytz
 import vinaigrette
+from collections import defaultdict
+from mycareportal_app.common.enums import RateType
+from mycareportal_app.common.enums import RATE_TYPE_TO_DISPLAY_STRING
 # Create your models here.
 
 class SoftDeletionQuerySet(models.QuerySet):
@@ -375,10 +379,17 @@ class Client(SoftDeletionModel):
     date_of_birth = models.DateTimeField()
     phone_number = models.CharField(max_length=40)
     secondary_phone_number = models.CharField(max_length=40, blank=True)
+
     address = models.CharField(max_length=400)
     city = models.CharField(max_length=100)
     state = models.CharField(max_length=100)
     zip_code = models.CharField(max_length=10)
+
+    billing_address = models.CharField(max_length=400, blank=True, null=True)
+    billing_city = models.CharField(max_length=100, blank=True, null=True)
+    billing_state = models.CharField(max_length=100, blank=True, null=True)
+    billing_zip_code = models.CharField(max_length=10, blank=True, null=True)
+
     time_zone = models.CharField(max_length=50)
     profile_picture = models.ImageField(upload_to=get_client_profile_picture_upload_path)
 
@@ -402,7 +413,16 @@ class Client(SoftDeletionModel):
     holiday_live_in_rate =models.DecimalField(max_length = 200,max_digits=10,decimal_places=2,null=True)
     weekend_holiday_live_in_rate =models.DecimalField(max_length = 200,max_digits=10,decimal_places=2,null=True)
 
-
+    RATE_TYPE_TO_FIELD = {
+        RateType.NORMAL: regular_hourly_rate,
+        RateType.WEEKEND: weekend_hourly_rate,
+        RateType.HOLIDAY: holiday_hourly_rate,
+        RateType.LIVE_IN: live_in_rate,
+        RateType.WEEKEND_HOLIDAY: weekend_holiday_rate,
+        RateType.WEEKEND_LIVE_IN: weekend_live_in_rate,
+        RateType.HOLIDAY_LIVE_IN: holiday_live_in_rate,
+        RateType.WEEKEND_HOLIDAY_LIVE_IN: weekend_holiday_live_in_rate
+    }
 
 def get_client_attachment_upload_path(instance, filename):
     return "company_{0}/client/client_{1}/attachments/{2}".format(instance.company.company_id,instance.client.id,filename)
@@ -737,6 +757,7 @@ class CaregiverScheduleHeader(models.Model):
     end_time = models.TimeField()
     frequency = models.CharField(max_length=100,blank=True,null=True)
     created = models.DateTimeField(auto_now_add=True)
+    live_in = models.BooleanField(default=False)
 
 class CaregiverSchedule(models.Model):
     schedule_header = models.ForeignKey(CaregiverScheduleHeader,null=True) #change b4 production
@@ -970,6 +991,57 @@ class CaregiverSchedule(models.Model):
             "created" : str(self.created)
         }
         return schedule_object
+
+    def get_rate_type(self):
+        weekend = self.is_weekday()
+        holiday = self.is_holiday()
+        live_in = self.is_live_in()
+        if weekend and holiday and live_in:
+            return RateType.WEEKEND_HOLIDAY_LIVE_IN
+        elif weekend and holiday:
+            return RateType.WEEKEND_HOLIDAY
+        elif holiday and live_in:
+            return RateType.HOLIDAY_LIVE_IN
+        elif weekend and live_in:
+            return RateType.WEEKEND_LIVE_IN
+        elif weekend:
+            return RateType.WEEKEND
+        elif holiday:
+            return RateType.HOLIDAY
+        elif live_in:
+            return RateType.LIVE_IN
+        else:
+            return RateType.NORMAL
+
+    def is_weekday(self):
+        return not self.is_weekend()
+
+    def is_weekend(self):
+        week_num = datetime.datetime.today().weekday()
+        if week_num < 5:
+            return False
+        else:
+            return True
+
+    def is_holiday(self):
+        if CompanyHolidays.objects.filter(company=self.company,
+                                          date = self.date).exists():
+            return True
+        else:
+            return False
+
+    def is_live_in(self):
+        if self.schedule_header.live_in:
+            return True
+        else:
+            return False
+
+    def get_hours_diff(self):
+        start = datetime.datetime.combine(self.date, self.start_time)
+        end = datetime.datetime.combine(self.date, self.end_time)
+        diff = end - start
+        diff_hours = diff.total_seconds()/3600
+        return diff_hours
 
     def __str__(self):
         return str(self.to_json_schedule())
@@ -1490,11 +1562,133 @@ class NotifyClientVitalTask(models.Model):
     blood_sugar_non_fasting=models.CharField(max_length=100, blank=True, null=True)
     blood_pressure=models.CharField(max_length=100, blank=True, null=True)
 
-
-
 class CompanyHolidays(models.Model):
 
     company = models.ForeignKey(Company)
     holiday_name = models.CharField(max_length=300, blank=True, null=True)
     description =  models.CharField(max_length = 500,  blank=True, null=True)
     date = models.DateField()
+
+class InvoiceHeader(models.Model):
+
+    INVOICE_NUM_END_LENGTH = 10
+
+    company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    created = models.DateTimeField(auto_now_add=True)
+    client = models.ForeignKey(Client)
+    total_cost = models.DecimalField(max_length=200, max_digits=10, decimal_places=2, default=0.0)
+    total_hours = models.DecimalField(max_length=200, max_digits=10, decimal_places=2, default=0.0)
+    invoice_number_string = models.CharField(max_length=20, unique=True, blank=True, null=True)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    invoice_notes = models.CharField(max_length=1000, blank=True, null=True)
+    
+    @staticmethod
+    @transaction.atomic
+    def create_invoice(company, client, start_date, end_date):
+        invoice_header = InvoiceHeader(company=company,
+                                       client=client,
+                                       start_date = start_date,
+                                       end_date = end_date
+                                       )
+        print("models invoice_headerinvoice_header",invoice_header.company)
+        invoice_header.save()
+        schedules = invoice_header.get_caregiver_schedules()
+        caregiver_to_rate_type_to_schedules = invoice_header.group_schedules_by_rate_type(schedules)
+        caregiver_to_rate_type_to_total_cost, caregiver_to_rate_type_to_total_hours = invoice_header.get_totals(caregiver_to_rate_type_to_schedules, client)
+        (total_hours, total_cost) = invoice_header.create_invoice_lines(caregiver_to_rate_type_to_total_cost,
+                                                                        caregiver_to_rate_type_to_total_hours,
+                                                                        client)
+        invoice_header.total_hours = total_hours
+        invoice_header.total_cost = total_cost
+        invoice_header.save()
+        invoice_header.invoice_number_string = invoice_header.create_invoice_number_string()
+        return invoice_header
+
+    def get_caregiver_schedules(self):
+        schedules = CaregiverSchedule.objects.filter(company=self.company,
+                                      client=self.client,
+                                      date__range=(self.start_date, self.end_date)
+                                      )
+        return schedules
+
+    def group_schedules_by_rate_type(self, schedules):
+        # Returns caregiver -> rate_type -> schedule list dict
+        caregiver_to_rate_type_to_schedules = defaultdict(lambda: defaultdict(list))
+        for schedule in schedules:
+            rate_type = schedule.get_rate_type()
+            caregiver_to_rate_type_to_schedules[schedule.caregiver][rate_type].append(schedule)
+        return caregiver_to_rate_type_to_schedules
+     
+    def get_totals(self, caregiver_to_rate_type_to_schedules, client):
+        # caregiver -> rate_type -> (total_cost, total_hours) tuple
+        caregiver_to_rate_type_to_total_cost = defaultdict(lambda: defaultdict(float))
+        caregiver_to_rate_type_to_total_hours = defaultdict(lambda: defaultdict(float))
+        for caregiver in caregiver_to_rate_type_to_schedules:
+            for rate_type in caregiver_to_rate_type_to_schedules[caregiver]:
+                for schedule in caregiver_to_rate_type_to_schedules[caregiver][rate_type]:
+                    total_hours = schedule.get_hours_diff()
+                  
+                    rate = float(getattr(client, client.RATE_TYPE_TO_FIELD[rate_type].attname))
+                    total_cost = rate * total_hours
+                    caregiver_to_rate_type_to_total_cost[caregiver][rate_type] += total_cost
+                    caregiver_to_rate_type_to_total_hours[caregiver][rate_type] += total_hours
+        return (caregiver_to_rate_type_to_total_cost, caregiver_to_rate_type_to_total_hours)
+
+    def create_invoice_lines(self, caregiver_to_rate_type_to_total_hours,
+                             caregiver_to_rate_type_to_total_cost,
+                             client):
+        # Also returns totals hours, cost
+        total_hours = 0.0
+        total_cost = 0.0
+        for caregiver in caregiver_to_rate_type_to_total_hours:
+            for rate_type in caregiver_to_rate_type_to_total_hours[caregiver]:
+                cost = caregiver_to_rate_type_to_total_hours[caregiver][rate_type]
+                hours = caregiver_to_rate_type_to_total_cost[caregiver][rate_type]
+                line_item = InvoiceLineItem(
+                    company = self.company,
+                    invoice_header = self,
+                    caregiver = caregiver,
+                    hours = hours,
+                    rate_type = RATE_TYPE_TO_DISPLAY_STRING[rate_type],
+                    rate = float(getattr(client, client.RATE_TYPE_TO_FIELD[rate_type].attname)),
+                    total = cost
+                )
+                line_item.save()
+                total_hours += hours
+                total_cost += cost
+        return (total_hours, total_cost)
+
+    def create_invoice_number_string(self):
+        # Might change later
+        # Must run after the invoice header is initially created
+        # so that auto added ID's are available
+
+        str_cid = str(self.company.company_id)
+        str_month = str(self.created.date().month)
+        str_day = str(self.created.date().day)
+        str_year = str(self.created.date().year)
+        full_invoice_number = ""
+        zero_num = self.INVOICE_NUM_END_LENGTH - len(str(self.id))
+        for i in range(zero_num):
+            full_invoice_number += "0"
+        full_invoice_number += str(self.id)
+        full_invoice_number_string = "{0}-{1}-{2}-{3}".format(
+            str_cid,
+            str_month+str_day,
+            str_year,
+            full_invoice_number
+        )
+        return full_invoice_number_string
+
+class InvoiceLineItem(models.Model):
+    company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    invoice_header = models.ForeignKey(InvoiceHeader)
+    caregiver = models.ForeignKey(Caregiver)
+    hours = models.DecimalField(max_length=200, max_digits=10, decimal_places=2)
+    rate_type = models.CharField(max_length=100, choices=RateType.choices())
+    rate = models.DecimalField(max_length=200, max_digits=10, decimal_places=2)
+    custom_service_charge = models.DecimalField(max_length=200, max_digits=10, decimal_places=2, default=0.00)
+    total = models.DecimalField(max_length=200, max_digits=10, decimal_places=2)
