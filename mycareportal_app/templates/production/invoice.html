@@ -3,253 +3,351 @@
 {% load mycareportal_app_extras%}
 {% block headlibs %}
 {% load static %}
+
+<!-- iCheck -->
+<link href="{% static 'vendors/iCheck/skins/flat/green.css' %}" rel="stylesheet">
+<!-- bootstrap-wysiwyg -->
+<link href="{% static 'vendors/google-code-prettify/bin/prettify.min.css' %}" rel="stylesheet">
+<!-- Switchery -->
+<link href="{% static 'vendors/switchery/dist/switchery.min.css' %}" rel="stylesheet">
+<!-- starrr -->
+<link href="{% static 'vendors/starrr/dist/starrr.css' %}" rel="stylesheet">
+<!-- bootstrap-daterangepicker -->
+<link href="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+<!-- Select2 -->
+<link href="{% static 'vendors/select2/dist/css/select2.min.css' %}" rel="stylesheet">
+
+<!-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> -->
 {% endblock %}
 {% block pagecontent %}
-  <!-- page content -->
-  <div class="right_col" role="main">
-    <div class="">
-      <div class="page-title">
-        <div class="title_left">
-          <h3>Invoice</h3>
-        </div>
+<!-- page content -->
+<style>
+  @media print {
+
+    .no-print,
+    .no-print * {
+      display: none !important;
+    }
+  }
+</style>
+
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title no-print">
+      <div class="title_left">
+        <h3>Invoice</h3>
       </div>
+    </div>
 
-      <div class="clearfix"></div>
+    <div class="clearfix"></div>
 
-      <div class="row">
-        <div class="col-md-12">
-          <div class="x_panel">
-            <div class="x_title">
-              <ul class="nav navbar-right panel_toolbox">
-                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                </li>
-              </ul>
-              <div class="clearfix"></div>
-            </div>
-            <div class="x_content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="x_panel">
+          <div class="x_title no-print">
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
 
-              <section class="content invoice">
-                <!-- title row -->
-                <div class="row">
-                  <div class="col-xs-12 invoice-header">
-                    <h1 class="pull-right">
-                      Invoice <br>
-                      {{current_date}}
-                      <!-- <small >{{start_date}} - {{end_date}}</small> -->
-                    </h1>
-                  
-                  </div>
-                  <!-- /.col -->
+            <section class="content invoice">
+              <!-- title row -->
+              <div class="row">
+                <div class="col-xs-12 invoice-header">
+                  <h1 class="pull-right">
+                    Invoice <br>
+                    {{current_date}}
+                    <!-- <small >{{start_date}} - {{end_date}}</small> -->
+                  </h1>
+
                 </div>
-                <!-- info row -->
-                <div class="row invoice-info">
-  
-                  <div class="col-sm-4 invoice-col">
-                    {% if current_company.logo %}
-                    <img src="{{current_company.logo.url}}" , style="width: 270px; height:200px" />
-                    {% endif %}
-  
-                  </div>
+                <!-- /.col -->
+              </div>
+              <!-- info row -->
+              <div class="row invoice-info">
 
-                  <div class="col-sm-4 invoice-col">
-  
-                    <address>
-                      <strong>{{current_company.company_name}}dddddddd</strong>
-                      <br>{{current_company.address}}
-                      <br>{{current_company.city}}, {{current_company.state}} {{current_company.zip_code}}
-                      <br>Phone: {{current_company.contact_number}}
-                    </address>
-                  </div>
-                  <!-- /.col -->
-                  <div class="col-sm-4 invoice-col">
-  
-                    Date: <small>{{current_date}}</small><br>
-                    Invoice :
-                  </div>
-  
-                
+                <div class="col-sm-4 invoice-col">
+                  {% if current_company.logo %}
+                    <img src="{{current_company.logo.url}}"  style="width: 270px; height:200px;">
+                  {% endif %}
+
                 </div>
-             
-                <!-- Table row -->
-                <div class="row">
-                  <div class="col-xs-12 table">
-                    <table class="table table-striped">
-                      <thead>
-                        <tr>
-                          <th>Patient Name</th>
-                          <th style="width: 25%">Service Address</th>
-                          <th>Assigned Caregiver</th>
-                          <th>Hours/Per Day</th>
-                          <th>Rate Type</th>
-                          <th>Rate</th>
-                          <th>Total</th>
-                        </tr>
-                      </thead>
-  
-                      <td> {{invoice_header_data.client.first_name}} {{invoice_header_data.client.last_name}}   </td>
-                      <td> {{invoice_header_data.client.address}}  {{invoice_header_data.client.city}} <br>
-                         {{invoice_header_data.client.state}}  {{invoice_header_data.client.zip_code}} <br>
-                         {{invoice_header_data.client.contact_number}}
-                        </td> 
-                      <td>{{invoice_line_item.caregiver.first_name}}  {{invoice_line_item.caregiver.last_name}}</td>
-                      <td>{{invoice_line_item.hours}}</td>
-                      <td>{{ invoice_line_item.rate_type}}</td>
-                      <td> {{ invoice_line_item.rate}}<br></td>
-                      <td>{{invoice_line_item.total }}</td>
-                    </table>
-                  </div>
-                  <!-- /.col -->
+
+                <div class="col-sm-4 invoice-col">
+                  <address>
+                    <strong>{{current_company.company_name}}</strong>
+                    <br>{{current_company.address}}
+                    <br>{{current_company.city}}, {{current_company.state}} {{current_company.zip_code}}
+                    <br>Phone: {{current_company.contact_number}}
+                  </address>
                 </div>
-                <!-- /.row -->
-                <br>
-                <br>
-                <br>
-                <br>
-                <div class="row">
-                  <div class="col-xs-6">
-           
-                
-                   <div class="form-group">
+                <!-- /.col -->
+                <div class="col-sm-4 invoice-col">
+
+                  Date: <small>{{current_date}}</small><br>
+                  Invoice : {{ invoice_header_data.invoice_number_string }}
+                </div>
+
+
+              </div>
+
+              <!-- Table row -->
+              <div class="row">
+                <div class="col-xs-12 table">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>Patient Name</th>
+                        <th style="width: 25%">Service Address</th>
+                        <th>Assigned Caregiver</th>
+                        <th>Hours/Per Day</th>
+                        <th>Rate Type</th>
+                        <th>Rate</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+
+
+                    {% for invoice in  invoice_line_items %}
+
+                    <tr>
+
+                      <td> {{invoice_header_data.client.first_name}} {{invoice_header_data.client.last_name}} </td>
+                      <td> {{invoice_header_data.client.address}} {{invoice_header_data.client.city}} <br>
+                        {{invoice_header_data.client.state}} {{invoice_header_data.client.zip_code}} <br>
+                        {{invoice_header_data.client.contact_number}}
+                      </td>
+                      <td>{{invoice.caregiver.first_name}} {{invoice.caregiver.last_name}}</td>
+                      <td>{{invoice.hours}}</td>
+                      <td>{{ invoice.rate_type}}</td>
+                      <td> {{ invoice.rate | to_currency }}<br></td>
+                      <td>{{invoice.total | to_currency }}</td>
+                    </tr>
+
+                    {% endfor %}
+
+                  </table>
+                </div>
+              </div>
+              {% if not submit and  invoice_line_items  %}
+              <div class="row">
+                <div class="col-xs-12 table">
+
+                  <table id="myTable" class="table order-list">
+                    <thead>
+
+                    </thead>
+
+                    <tr>
+                      <td class="col-sm-2">
+                        {{invoice_header_data.client.first_name}} {{invoice_header_data.client.last_name}}
+                      </td>
+                      <td class="col-sm-2">
+                        {{invoice_header_data.client.address}} {{invoice_header_data.client.city}} <br>
+                        {{invoice_header_data.client.state}} {{invoice_header_data.client.zip_code}} <br>
+                        {{invoice_header_data.client.contact_number}}
+
+                      </td>
+                      <td class="col-sm-2">
+                        <select required class="select2_single form-control" placeholder="Caregive Name"
+                          id="dropDownId">
+
+                          <option value="" selected> Caregiver Name</option>
+                          {% for invoice in  caregiver %}
+                          <option
+                            value="{{invoice.id}} {{invoice.first_name}} {{invoice.last_name}}">
+                            {{invoice.first_name}}
+                            {{invoice.last_name}}
+                          </option>
+
+                          {% endfor %}
+
+                        </select>
+                      </td>
+                      
+                      <td class="col-sm-2">
+                        <input type="number" placeholder="Hours/Day" name="invoice_field_hours_perday" id="hours_perday"
+                          class="form-control"/>
+                      </td>
+                      <td class="col-sm-2">
+                        <select required class="select2_single form-control" id="dropDownIdratetype">
+                          <option value="" selected>Rate Type</option>
+                          {% for invoice in  invoice_line_distinct %}
+                          <option value="{{invoice.rate_type}}">{{invoice.rate_type}} </option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td class="col-sm-2">
+                        <input type="number" placeholder="Rate" name="invoice_field_rate" id="rate"
+                          class="form-control"/>
+                      </td>
+
+               
+                      <td>
+
+                        <input type="button" class="btn  btn-block " id="addFields" value="Add Row" />
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+
+              {% else %}
+            
+              <!-- /.row -->
+              {% endif %}
+              <br>
+              <br>
+              <br>
+              <br>
+              <div class="row">
+                <div class="col-xs-6">
+
+
+                  <div class="form-group">
                     <label for="invoice_notes" class="control-label col-md-3 col-sm-3 col-xs-12">Invoice Notes</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
+                      {% if not submit and invoice_line_items %}
 
-                      <input type="text" id="invoice_notes" class="form-control col-md-7 col-xs-12" name="invoice_notes">
-                      <input type="hidden" id="invoice_header_id" class="form-control col-md-7 col-xs-12" name="invoice_header_id" value="{{invoice_header_data.id}}">
+                      <input type="text" id="invoice_notes" class="form-control col-md-7 col-xs-12"
+                      name="invoice_notes">
+                       <input type="hidden" id="invoice_header_id" class="form-control col-md-7 col-xs-12"
+                      name="invoice_header_id" value="{{invoice_header_data.id}}">
+                      {% else %}
+                      : {{invoice_header_data.invoice_notes}}
+                      {% endif %}
+
 
                       <!-- <input type="text" class="form-control col-md-7 col-xs-12" name="{{edit_client_form.middle_name.html_name}}"> -->
 
                     </div>
-                   </div> 
-               
-                
+                  </div>
+
+
                   <!-- /.col -->
                 </div>
-  
+
                 <div class="row">
                   <div class="col-xs-12">
                     <div class="pull-right">
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Total </label>
-                    
-                          <!-- <input type="number" class="form-control col-md-7 col-xs-12" name="total"> -->
-                         <span style="margin-left: 20px;">  {{invoice_header_data.total_cost }} </span>
-                          <!-- <input type="text" class="form-control col-md-7 col-xs-12" name="{{edit_client_form.middle_name.html_name}}"> -->
+                        <span style="margin-left: 20px;"> {{invoice_header_data.total_cost | to_currency }} </span>
+                      
                       </div>
                     </div>
                   </div>
                 </div>
                 <br>
-  
+
                 <div class="row">
                   <div class="col-xs-6">
-  
+
                     <div class="form-group">
-                      <label for="invoice_notes" class="control-label col-md-3 col-sm-3 col-xs-12">Invoice for the  <br> week of</label> {{start_date}}  {{end_date}}
-                    
-                    </div>  
+                      <label for="invoice_notes" class="control-label col-md-3 col-sm-3 col-xs-12">Invoice for the <br>
+                        week of</label> {{start_date}} {{end_date}}
+                   
+                    </div>
                   </div>
                   <!-- /.col -->
                 </div>
                 <br>
                 <br>
-  
+
                 <!-- /.row -->
-  
+
                 <!-- this row will not appear when printing -->
                 <div class="row no-print">
                   <div class="col-xs-12">
-                    <button class="btn btn-default" onclick="window.print();"><i class="fa fa-print" ></i> Print</button>
-                    <button  id="stbutton" class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit Invoice</button>
+                    <button class="btn btn-default" onclick="window.print()"><i class="fa fa-print"></i> Print</button>
+                    {% if submit %}
+                    <button id="" disabled class="btn btn-success pull-right"><i class="fa fa-credit-card"></i>
+                      Submit
+                      Invoice</button>
+                    {% else %}
+                    <button id="stbutton" class="btn btn-success pull-right" ><i class="fa fa-credit-card"></i> Submit
+                      Invoice</button>
+                    {% endif %}
                     <button class="btn btn-primary pull-right" id="download" style="margin-right: 5px;"><i
                         class="fa fa-download"></i> Generate PDF</button>
                   </div>
                 </div>
-             
-              </section>
-            </div>
+
+            </section>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <!-- /page content -->
-  {% endblock %}
-  {% block footlibs %}
+</div>
+<!-- /page content -->
+{% endblock %}
+{% block footlibs %}
 
-  {% endblock %}
+{% endblock %}
 
 
 
 
-  {% block scripts %}
+{% block scripts %}
 
 
 <script>
   $(document).ready(function () {
-    $("#download").on("click", function () {
-      $.ajax({
 
+    $("#download").on("click", function () {
+
+
+      $.ajax({
         url: "{% url 'generate_pdf' %}",
         type: "GET",
         data: {
 
-      
           "company_name": "{{current_company.company_name}}",
           "company_address": "{{current_company.address}}",
-          'company_logo':'{{current_company.logo.url}}',
-          'company_city':'{{current_company.city}}',
-          'company_state':'{{current_company.state}}',
-          'company_zipcode':'{{current_company.zip_code}}',
-          'company_contactnumber':'{{current_company.contact_number}}',
+          'company_city': '{{current_company.city}}',
+          'company_state': '{{current_company.state}}',
+          'company_zipcode': '{{current_company.zip_code}}',
+          'company_contactnumber': '{{current_company.contact_number}}',
           'start_date': '{{start_date}}',
-          'end_date' : '{{end_date}}',
-          'client_firstname' : '{{invoice_header_data.client.first_name}}',
-          'client_lastname' : '{{invoice_header_data.client.last_name}} ',
-          'client_address' : '{{invoice_header_data.client.address}} ',
+          'end_date': '{{end_date}}',
+          'client_firstname': '{{invoice_header_data.client.first_name}}',
+          'client_lastname': '{{invoice_header_data.client.last_name}} ',
+          'client_address': '{{invoice_header_data.client.address}} ',
           'client_city': '{{invoice_header_data.client.city}}',
-          'client_zipcode':'{{invoice_header_data.client.zipcode}}',
+          'client_zipcode': '{{invoice_header_data.client.zipcode}}',
           'client_state': '{{invoice_header_data.client.state}}',
-          'client_contact_number':' {{invoice_header_data.client.contact_number}}',
-          'caregiver_firstname':'{{invoice_line_item.caregiver.first_name}} ',
-          'caregiver_lastname': '{{invoice_line_item.caregiver.last_name}}',
-          'hours': '{{invoice_line_item.hours}}',
-          'rate_type': '{{ invoice_line_item.rate_type}}',
-          'rate':'{{invoice_line_item.rate}}',
-          'total':'{{invoice_line_item.total}}',
-          'total_cost':' {{invoice_header_data.total_cost}}',
+          'client_contact_number': ' {{invoice_header_data.client.contact_number}}',
+          'total': '{{invoice.total}}',
+          'total_cost': ' {{invoice_header_data.total_cost}}',
+
           "invoice_notes": $("input[name=invoice_notes]").val(),
+          "invoice_number_string": '{{ invoice_header_data.invoice_number_string }}',
+          "invoice_header_id": '{{ invoice_header_data.id }}'
 
+        },
 
-
-
-
-      
-
-        }, 
         dataType: "json",
         contentType: "application/json",
-        success: function(data){
+        success: function (data) {
 
 
-          console.log("9999991 9999991")
+          
           window.location = "/billing/invoice/get_pdf";
-
-          setTimeout(function() {
+          setTimeout(function () {
             window.location.replace("/mycareportal_app/");
-            console.log("9999992", data);
+            
           }, 3000);
         },
-        error: function(data){
+        error: function (data) {
           window.location = "/billing/invoice/get_pdf";
-         
-          console.log("9999993", data);
-          // var blob = new Blob([data]);
-          // alert(blob);
-          // var link=document.createElement('a');
-          // link.href=window.URL.createObjectURL(blob);
-          // link.download="download.pdf";
-          // link.click();
-          // window.location = "invoice";
+
+          
+
+      
           setTimeout(function () {
             // window.location.replace("invoice");
           }, 3000);
@@ -260,41 +358,138 @@
 </script>
 
 <script>
+  $(document).ready(function () {
+    $("#stbutton").on("click", function ( ) {
+      var txt;
+      var arrValues = new Array();
+      var invoicedata = []
+      var myTab = document.getElementById('myTable');
 
 
-$(document).ready(function(){
 
+      if (myTab.rows.length > 1) {
+        $("#stbutton").attr("disabled", true);
+        for (row = 1; row < myTab.rows.length; row++) {
+          var person = new Object();
+          // loop through each cell in a row.
+          for (c = 0; c < myTab.rows[row].cells.length; c++) {
+            var element = myTab.rows.item(row).cells[c];
+            if (element.childNodes[0].getAttribute('name') == 'caregiverid') {
 
-$("#stbutton").on("click", function(){
-  
-   
-   $.ajax({
+              person[element.childNodes[0].getAttribute('name')] = element.childNodes[0].value
+           
 
-url: "{% url 'submit_invoice' %}",
-type: "GET",
-data: {
-  "invoice_notes": $("input[name=invoice_notes]").val(),
-  "invoice_header_id":$("input[name=invoice_header_id]").val(),
+            }
+            if (element.childNodes[0].getAttribute('name') == 'invoice_fieldhours_perday') {
 
-     },
-     dataType: "json",
+              person[element.childNodes[0].getAttribute('name')] = element.childNodes[0].value
+
+            }
+
+            if (element.childNodes[0].getAttribute('name') == 'invoice_fieldrate_type') {
+              person[element.childNodes[0].getAttribute('name')] = element.childNodes[0].value
+
+            }
+
+            if (element.childNodes[0].getAttribute('name') == 'invoice_fieldrate') {
+              person[element.childNodes[0].getAttribute('name')] = element.childNodes[0].value
+
+            }
+
+          }
+
+          invoicedata.push(person)
+        }
+      } else {
+        
+      }
+
+      $.ajax({
+        url: "{% url 'submit_invoice' %}",
+        type: "GET",
+
+        data: {
+          "invoice_field_array": JSON.stringify(invoicedata),
+          "invoice_header_id": $("input[name=invoice_header_id]").val(),
+          "invoice_notes": $("input[name=invoice_notes]").val(),
+          'start_date': '{{ start_date }}',
+          'end_date': '{{ end_date }}',
+          'email': '{{invoice_header_data.client.email_address}}'
+        },
+        dataType: "json",
         contentType: "application/json",
-        success: function(data){
-          
+        success: function (data) {
+          location.reload();
+        }
+      })
+    });
+
+  });
+</script>
+
+
+
+
+<script>
+  $(document).ready(function () {
+    var counter = 0;
+    $("#addFields").on("click", function () {
+        var newRow = $("<tr>");
+        var cols = "";
+
+        if ($('#dropDownIdratetype :selected').val()  && $('#dropDownId :selected').val() && $(
+            "input[name=invoice_field_hours_perday]").val() && $("input[name=invoice_field_rate]").val()) {
+              
+            invoice_field_rate= $("input[name=invoice_field_rate]").val(),
+            invoice_field_rate_type = $('#dropDownIdratetype :selected').val(),
+            invoice_field_caregiver_id = $('#dropDownId :selected').val(),
+            invoice_field_client_id = $("input[name=invoice_field_client_id]").val(),
+            invoice_field_hours_perday = $("input[name=invoice_field_hours_perday]").val(),
+            invoice_header_id = $("input[name=invoice_header_id]").val(),
+            caregiverId = invoice_field_caregiver_id.split(" ", 1),
+            caregiverName = invoice_field_caregiver_id.slice(1, 100)
+
+          cols +=
+            '<td><input type="text" style="font-size: 13px;" class="form-control" readonly name="invoice_fieldclient"  value="{{invoice_header_data.client.first_name}} {{invoice_header_data.client.last_name}} "/></td>';
+          // cols += '<td><input type="text"  style="font-size: 13px;" class="form-control" readonly name="invoice_fieldaddress" value="{{invoice_header_data.client.address}} {{invoice_header_data.client.city}} {{invoice_header_data.client.state}} {{invoice_header_data.client.zip_code}} {{invoice_header_data.client.contact_number}}" /></td>';
+          cols +=
+            '<td><input type="text" style="font-size: 13px;"   class="form-control" readonly name="invoice_field_caregiver"  value=" ' +
+            caregiverName + '"/></td>';
+          cols +=
+            '<td><input type="text" style="font-size: 13px;"  class="form-control" readonly name="invoice_fieldhours_perday"  value=" ' +
+            invoice_field_hours_perday + '"/></td>';
+
+          cols +=
+            '<td><input type="text" style="font-size: 13px;"  class="form-control" readonly name="invoice_fieldrate_type"  value=" ' +
+            invoice_field_rate_type + '"/></td>';
+          cols += '<td><input type="text"  class="form-control" readonly name="invoice_fieldrate"  value=" ' + invoice_field_rate + '"/></td>';
+
+          cols += '<td><input type="button" class="ibtnDel btn btn-md btn-danger "  value="Delete"></td>';
+          cols +=
+            '<td><input type="hidden" style="width:30%;"  class="form-control" readonly name="caregiverid"  value="' +
+            caregiverId + '"/></td>';
+
+          newRow.append(cols);
+          $("table.order-list").append(newRow);
+
+          $("input[name=invoice_field_hours_perday]").val(null),
+            $("input[name=invoice_field_rate]").val(null),
+            $('#dropDownId').val(null),
+            $('#dropDownIdratetype').val(null),
+            $("input[name=caregiverId]").val(null),
+            counter++;
+        } else {
+          alert("Please fill all the fields")
         }
 
-
-   })
-   
+      }),
 
 
-
-
-}); 
-
-
-
-});
+      $("table.order-list").on("click", ".ibtnDel", function (event) {
+        $(this).closest("tr").remove();
+        counter -= 1
+      })
+  });
 </script>
 
 {% endblock %}

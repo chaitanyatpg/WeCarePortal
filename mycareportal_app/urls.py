@@ -192,10 +192,12 @@ urlpatterns = [
     url(r'^get_client_tasks_with_uids', views.get_client_tasks_with_uids, name='get_client_tasks_with_uids'),
     url(r'^generate_pdf',views.generate_pdf,name='generate_pdf'),
     url(r'^submit_invoice',views.submit_invoice,name='submit_invoice'),
-
     
     url(r'^billing/invoice/get_pdf',views.get_pdf,name='get_pdf'),
     url(r'^billing/invoice', views.Invoice.as_view(), name='invoice'),
+
+    url(r'^cancel_invoice',views.cancel_invoice,name='cancel_invoice'),
+
     url(r'^billing/choose_client_for_invoice', views.ChooseClientForInvoice.as_view(), name='choose_client_for_invoice'),
     url(r'^manager_choose_client', views.ManagerChooseClient.as_view(), name='manager_choose_client'),
     url(r'^manager_client_dashboard', views.ManagerClientDashboard.as_view(), name='manager_client_dashboard'),

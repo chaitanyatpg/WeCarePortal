@@ -1579,11 +1579,13 @@ class InvoiceHeader(models.Model):
     client = models.ForeignKey(Client)
     total_cost = models.DecimalField(max_length=200, max_digits=10, decimal_places=2, default=0.0)
     total_hours = models.DecimalField(max_length=200, max_digits=10, decimal_places=2, default=0.0)
-    invoice_number_string = models.CharField(max_length=20, unique=True, blank=True, null=True)
+    invoice_number_string = models.CharField(max_length=200, unique=True, blank=True, null=True)
     start_date = models.DateField()
     end_date = models.DateField()
     invoice_notes = models.CharField(max_length=1000, blank=True, null=True)
-    
+    submitted = models.BooleanField(default=False)
+    cancelled = models.BooleanField(default = False)
+
     @staticmethod
     @transaction.atomic
     def create_invoice(company, client, start_date, end_date):
@@ -1592,7 +1594,6 @@ class InvoiceHeader(models.Model):
                                        start_date = start_date,
                                        end_date = end_date
                                        )
-        print("models invoice_headerinvoice_header",invoice_header.company)
         invoice_header.save()
         schedules = invoice_header.get_caregiver_schedules()
         caregiver_to_rate_type_to_schedules = invoice_header.group_schedules_by_rate_type(schedules)
@@ -1602,8 +1603,11 @@ class InvoiceHeader(models.Model):
                                                                         client)
         invoice_header.total_hours = total_hours
         invoice_header.total_cost = total_cost
-        invoice_header.save()
+       
         invoice_header.invoice_number_string = invoice_header.create_invoice_number_string()
+        if invoice_header.total_cost:
+            invoice_header.submitted = True
+        invoice_header.save()
         return invoice_header
 
     def get_caregiver_schedules(self):

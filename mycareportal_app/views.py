@@ -49,6 +49,7 @@ import requests
 from io import BytesIO
 from django.template.loader import get_template
 from xhtml2pdf import pisa
+from decimal import Decimal
 # Create your views here.
 
 #@receiver(pre_save, sender=User)
@@ -1131,50 +1132,79 @@ class ChooseClientForInvoice(LoginRequiredMixin, View):
         context['client_invoice_form'] = ChooseClientInvoiceForm()
         all_clients = Client.objects.filter(company=current_company).order_by('last_name')
         context['all_clients'] = all_clients
+        invoice_header = InvoiceHeader.objects.filter(company=current_company,submitted = True,cancelled =False)
+       
+        context['invoice_header'] = invoice_header
         return render(request, "production/choose_client_invoice.html", context)
 
 class Invoice(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
+        invoice_id = request.GET.get('invoice_id')
         current_company = request.user.company
         context = {}
-        client_invoice_form = ChooseClientInvoiceForm(request.GET)
-        if client_invoice_form.is_valid():
-            client_email = client_invoice_form.cleaned_data['client_email']
-            client = Client.objects.get(company=current_company, email_address=client_email)
-            start_date = client_invoice_form.cleaned_data['start_date']
-            end_date = client_invoice_form.cleaned_data['end_date']
-            tasks = TaskSchedule.objects.filter(company=current_company,
-                                    date__range=(start_date, end_date))
-                                           
-            context['current_company'] = current_company
-            context['client'] = client
-            context['start_date'] = start_date
-            context['end_date'] = end_date
-       
-            invoice_header = InvoiceHeader.create_invoice(current_company,client,start_date,end_date)
-            
-            task_objects = self.get_line_items(tasks, current_company)
-            total_amt = self.get_total(task_objects)
-            context['task_objects'] = task_objects
-            context['total_amt'] = total_amt
-            if current_company.tax_rate:
-                context['tax_amt'] = (total_amt * float(current_company.tax_rate / 100))
-                context['total_amt_tax'] = total_amt + (total_amt * float(current_company.tax_rate / 100))
-            else:
-                context['tax_amt'] = 0
-                context['total_amt_tax'] = total_amt
-            invoice_header_data = InvoiceHeader.objects.filter(client = client,company =current_company).last()
+        current_company = Company.objects.get(company_id = current_company.company_id)
+        context['current_company'] = current_company
+        current_date = datetime.date.today()
+        context['current_date'] =current_date
+        if invoice_id:
+            submit = True
+            context['submit'] = submit
+            exits_invoice_header = InvoiceHeader.objects.filter(company = current_company, id = invoice_id,  submitted = True,cancelled =False)
+            context['invoice_header_data'] = exits_invoice_header
+            invoice_header_data = InvoiceHeader.objects.get(id = exits_invoice_header)
             context['invoice_header_data'] = invoice_header_data
-            try:
-                invoice_line_item = InvoiceLineItem.objects.get(invoice_header = invoice_header_data,company = current_company)
-            except InvoiceLineItem.DoesNotExist:
-                invoice_line_item = None 
-            
-            context['invoice_line_item'] = invoice_line_item
-            current_date = datetime.date.today()
-            context['current_date'] =current_date
-            
+            context['start_date'] = invoice_header_data.start_date
+            context['end_date'] = invoice_header_data.end_date
+            invoice_line_items = list(InvoiceLineItem.objects.filter(invoice_header = exits_invoice_header,company = current_company).order_by("id"))
+            context['invoice_line_items'] = invoice_line_items
+        else:
+            submit = False
+            context['submit'] = submit
+            client_invoice_form = ChooseClientInvoiceForm(request.GET)
+            if client_invoice_form.is_valid():
+                client_email = client_invoice_form.cleaned_data['client_email']
+                client = Client.objects.get(company=current_company, email_address=client_email)
+                start_date = client_invoice_form.cleaned_data['start_date']
+                end_date = client_invoice_form.cleaned_data['end_date']
+                tasks = TaskSchedule.objects.filter(company=current_company,
+                                    date__range=(start_date, end_date))
+                context['client'] = client
+                context['start_date'] = start_date
+                context['end_date'] = end_date
+                exits_invoice_header = InvoiceHeader.objects.filter(company = current_company,client = client, start_date = start_date,end_date = end_date ,  submitted = True,cancelled =False)
+
+                if exits_invoice_header:
+                    context['invoice_header_data'] = exits_invoice_header
+                    invoice_header_data = InvoiceHeader.objects.get(id = exits_invoice_header)
+                    context['invoice_header_data'] = invoice_header_data
+                    invoice_line_items = list(InvoiceLineItem.objects.filter(invoice_header = invoice_header_data,company = current_company).order_by("id"))
+                    context['invoice_line_items'] = invoice_line_items
+                    caregiver = Caregiver.objects.filter(company = current_company)
+                    context['caregiver'] = caregiver
+                    invoice_line_distinct = InvoiceLineItem.objects.filter(invoice_header =invoice_header_data).distinct('caregiver_id')
+                    context['invoice_line_distinct'] = invoice_line_distinct
+                else:
+                    invoice_header = InvoiceHeader.create_invoice(current_company,client,start_date,end_date)
+                    invoice_header_data = InvoiceHeader.objects.get(id =invoice_header.id)
+                    context['invoice_header_data'] = invoice_header_data
+                    invoice_line_items = list(InvoiceLineItem.objects.filter(invoice_header = invoice_header_data,company = current_company))
+                    context['invoice_line_items'] = invoice_line_items
+                    task_objects = self.get_line_items(tasks, current_company)
+                    total_amt = self.get_total(task_objects)
+                    context['task_objects'] = task_objects
+                    context['total_amt'] = total_amt
+                    invoice_line_distinct = InvoiceLineItem.objects.filter(invoice_header =invoice_header_data).distinct('caregiver_id')
+                    context['invoice_line_distinct'] = invoice_line_distinct
+                    caregiver = Caregiver.objects.filter(company = current_company)
+                    context['caregiver'] = caregiver
+                    if current_company.tax_rate:
+                        context['tax_amt'] = (total_amt * float(current_company.tax_rate / 100))
+                        context['total_amt_tax'] = total_amt + (total_amt * float(current_company.tax_rate / 100))
+                    else:
+                        context['tax_amt'] = 0
+                        context['total_amt_tax'] = total_amt 
+       
         return render(request, "production/invoice.html", context)
 
 
@@ -1240,6 +1270,8 @@ class Invoice(LoginRequiredMixin, View):
         end_minutes = (end_hour * 60) + end_minute
         total_time_hrs = abs(end_minutes - start_minutes) / 60
         return total_time_hrs
+
+
 
 class ManagerChooseClient(LoginRequiredMixin, View):
 
@@ -1825,24 +1857,22 @@ def delete_holiday_with_id(request):
         return HttpResponse("Delete Successful")
 
 
-
-
-def render_to_pdf(template_src, context_dict={}):
-
+def render_to_pdf(template_src, context_dict):
     template = get_template(template_src)
     html  = template.render(context_dict)
     result = BytesIO()
     pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
     if not pdf.err:
         return HttpResponse(result.getvalue(), content_type='application/pdf')
+        
     return None
-    
+
 @login_required
 def generate_pdf(request):
+    data ={}
     context = request.GET.copy()
 
     current_company = request.user.company
-    print("current_companycurrent_company",current_company.logo)
     request.session['context'] = context
     company_name  = request.GET.get('company_name')
     company_address  = request.GET.get('company_address')
@@ -1859,29 +1889,41 @@ def generate_pdf(request):
     client_zipcode  = request.GET.get('client_zipcode')
     client_state  = request.GET.get('client_state')
     client_contact_number  = request.GET.get('client_contact_number')
-    caregiver_firstname  = request.GET.get('caregiver_firstname')
-    caregiver_lastname  = request.GET.get('caregiver_lastname')
-    hours  = request.GET.get('hours')
-    rate_type  = request.GET.get('rate_type')
-    rate  = request.GET.get('rate')
     total  = request.GET.get('total')
     total_cost  = request.GET.get('total_cost')
     company_logo  = request.GET.get('company_logo')
     invoice_notes  = request.GET.get('invoice_notes')
-
-    
-    
-    # x =  txt.split("#")
-    # company_logo = x[2]
+    invoice_number_string  = request.GET.get('invoice_number_string')
     company_address = request.GET.get('company_address')
+    invoice_header_id = request.GET.get('invoice_header_id')
     return redirect('get_pdf')
 
 
-
 def get_pdf(request):
-    pdf = render_to_pdf('production/invoice_generator.html', request.session['context'])
+    current_company = request.user.company
+    invoice_headerid = request.session.get('context').get('invoice_header_id')
+    start_date = request.session.get('context').get('start_date')
+    end_date = request.session.get('context').get('end_date')
+    current_date = datetime.date.today()
+   
+    
+    
+    
+    invoice_header = InvoiceHeader.objects.get(id = invoice_headerid )
+    invoice_line_items =list(InvoiceLineItem.objects.filter(invoice_header = invoice_header,company =current_company))
+    data = {
+        
+        "invoice_header" : invoice_header,
+        "invoice_line_items" : invoice_line_items,
+        "start_date": start_date,
+        "end_date": end_date,
+        "current_date": current_date,
+        "current_company": current_company
+    }
+    
+    pdf = render_to_pdf('production/invoice_generator.html',data)
     if pdf:
-        response = HttpResponse(pdf, content_type='application/pdf')
+        response = HttpResponse(pdf, content_type='application/pdf')        
         filename = "Invoice_{}.pdf".format(request.session.get('context').get('company_name'))
         content = "inline; filename={}".format(filename)
         content = "attachment; filename={}".format(filename)
@@ -1891,15 +1933,51 @@ def get_pdf(request):
 
 @login_required
 def submit_invoice(request):
-    context = request.GET.copy()
-    invoice_notes  = request.GET.get('invoice_notes')
-    invoice_header_id  = request.GET.get('invoice_header_id')
-    print("invoice_header_idinvoice_header_id",invoice_header_id)
-    invoice_header = InvoiceHeader.objects.get(id =invoice_header_id)
-    invoice_header.invoice_notes =invoice_notes
-    invoice_header.save()
-    return HttpResponse("data submited sucessfully")
+    if request.method == "GET":
+        current_company = request.user.company
+        context = request.GET.copy()
+        invoice_notes  = request.GET.get('invoice_notes')
+        invoice_header_id  = request.GET.get('invoice_header_id')
+        invoice_headerlist  =  json.loads(request.GET.get('invoice_field_array'))
+        client_email  = request.GET.get('email')
+        invoice_header = InvoiceHeader.objects.get(id =invoice_header_id)
+        invoice_header.invoice_notes = invoice_notes
+        invoice_header.save()
+        start_date = invoice_header.start_date
+        end_date = invoice_header.end_date
+        invoiceadd = {
+            "client_email" :client_email
+        }
+        for k in invoice_headerlist:
+            hours_per_day = float(k['invoice_fieldhours_perday'])
+            caregiverid = k['caregiverid']
+            invoice_fieldrate_type = k['invoice_fieldrate_type']
+            caregiver = Caregiver.objects.get(id= caregiverid, company = current_company)
+            invoice_fieldrate = float(k['invoice_fieldrate'])
+            invoice_header = InvoiceHeader.objects.get(id =invoice_header_id)
+            inline_total = float(hours_per_day * invoice_fieldrate)
 
-    
-    
+            new_invoice_line = InvoiceLineItem(invoice_header = invoice_header,  company = current_company,
+                                                caregiver = caregiver,hours =hours_per_day,
+                                                rate_type = invoice_fieldrate_type,
+                                                rate =invoice_fieldrate,
+                                                total =  inline_total)
+            new_invoice_line.save()                                                                       
+            invoice_header.total_hours = invoice_header.total_hours + Decimal.from_float(hours_per_day)
+            invoice_header.total_cost = invoice_header.total_cost + Decimal.from_float(inline_total)
+            invoice_header.save()
+        
+   
+    return HttpResponse(json.dumps(invoiceadd), content_type="application/json")
 
+@login_required
+def cancel_invoice(request):
+    if request.method == "GET":
+        current_company = request.user.company
+        context = request.GET.copy()
+        invoice_id = request.GET.get('invoice_id')
+        invoice_header = InvoiceHeader.objects.get(id = invoice_id )
+        invoice_header.cancelled = True
+        invoice_header.save()
+
+    return HttpResponseRedirect(reverse('choose_client_for_invoice'))
