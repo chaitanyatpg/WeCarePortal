@@ -234,7 +234,7 @@
                                         </label>
                                     </div>
                                 </div>
-                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                 <div class="col-md-3 col-sm-3 col-xs-12">
                                     <div class="radio">
                                         <label>
                                             <input type="checkbox"
@@ -278,9 +278,24 @@
                                         </label>
                                     </div>
                                 </div>
+                            
+                              </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Live-In<span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              <label>
+                                <input type="checkbox"
+                                    name="{{schedule_shift_form.live_in.html_name}}"></input>
+                            </label>
+                              
                             </div>
                         </div>
                       </div>
+                    
                       <div class="modal-footer">
                         <input type="hidden" id="assign_caregiver_email" name="{{schedule_shift_form.caregiver_id.html_name}}" value={{caregiver.id}}>
                         <button type="submit" class="btn btn-success">Assign</a>

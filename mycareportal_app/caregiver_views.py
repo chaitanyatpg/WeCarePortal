@@ -971,6 +971,7 @@ class ScheduleShifts(LoginRequiredMixin, View):
             sunday = schedule_shifts_form.cleaned_data["sunday"]
             frequency = schedule_shifts_form.cleaned_data["frequency"]
             assigned_caregiver = Caregiver.objects.get(company=current_company, id=caregiver_id)
+            live_in = schedule_shifts_form.cleaned_data["live_in"]
 
             assigned_client = Client.objects.get(company=current_company, id=client_id)
             start_time = ""
@@ -1001,7 +1002,8 @@ class ScheduleShifts(LoginRequiredMixin, View):
                                                     frequency = frequency,
                                                     end_date = end_date,
                                                     start_time = start_time,
-                                                    end_time = end_time)
+                                                    end_time = end_time,
+                                                    live_in = live_in)
             caregiver_schedule_header.save()
             current_user = request.user
             if frequency == "One Time":
