@@ -1190,8 +1190,8 @@ class Invoice(LoginRequiredMixin, View):
                     context['invoice_line_items'] = invoice_line_items
                     caregiver = client.caregiver.all()
                     context['caregiver'] = caregiver
-                    invoice_line_distinct = InvoiceLineItem.objects.filter(invoice_header = invoice_header_data).distinct('caregiver_id')
-                    context['invoice_line_distinct'] = invoice_line_distinct
+                    invoice_rate_types = InvoiceRateType.objects.all()
+                    context['invoice_rate_types'] = invoice_rate_types
                     
                 else:
                     invoice_header = InvoiceHeader.create_invoice(current_company,client,start_date,end_date)
@@ -1203,10 +1203,11 @@ class Invoice(LoginRequiredMixin, View):
                     total_amt = self.get_total(task_objects)
                     context['task_objects'] = task_objects
                     context['total_amt'] = total_amt
-                    invoice_line_distinct = InvoiceLineItem.objects.filter(invoice_header =invoice_header_data).distinct('caregiver_id')
-                    context['invoice_line_distinct'] = invoice_line_distinct
+                    
                     caregiver = client.caregiver.all()
                     context['caregiver'] = caregiver
+                    invoice_rate_types = InvoiceRateType.objects.all()
+                    context['invoice_rate_types'] = invoice_rate_types
                     if current_company.tax_rate:
                         tax_amt= round((invoice_header.total_cost * float(current_company.tax_rate / 100)),2)
                         invoice_header_data.taxes = tax_amt
@@ -1959,18 +1960,23 @@ def submit_invoice(request):
         invoiceadd = {
             "client_email" :client_email
         }
+        print("invoice_headerlistinvoice_headerlist",invoice_headerlist)
         for k in invoice_headerlist:
             caregiverid = k['caregiverid']
-            invoice_fieldrate_type = k['invoice_fieldrate_type']
+            invoice_fieldrate_type = k['invoice_fieldrate_typeid']
             caregiver = Caregiver.objects.get(id= caregiverid, company = current_company)
             invoice_fieldrate = float(k['invoice_fieldrate'])
+            print("invoice_fieldrate_type",invoice_fieldrate_type)
             invoice_header = InvoiceHeader.objects.get(id =invoice_header_id)
-            if current_company.mileage_rate:
-
+            ratetypes = InvoiceRateType.objects.get(id = invoice_fieldrate_type)
+            print("rate_typesrate_types",ratetypes)
+            if current_company.mileage_rate and ratetypes.rate_types == "Mileage":
+                print("Ssssss")
                 inline_total = (float(invoice_fieldrate) * float(current_company.mileage_rate))/100
+                
                 if inline_total > 0:
                     new_invoice_line = InvoiceLineItem(invoice_header = invoice_header,  company = current_company,
-                                                       rate_type = invoice_fieldrate_type,
+                                                       rate_type = ratetypes.rate_types,
                                                        hours = 0,
                                                        caregiver = caregiver,
                                                        rate =invoice_fieldrate,
@@ -1979,7 +1985,16 @@ def submit_invoice(request):
                     
                     invoice_header.total_cost = invoice_header.total_cost + Decimal.from_float(inline_total)
                     invoice_header.save()
-        
+            else:
+                invoice_line = InvoiceLineItem(invoice_header = invoice_header,  company = current_company,
+                                                       rate_type = ratetypes.rate_types,
+                                                       hours = 0,
+                                                       caregiver = caregiver,
+                                                       rate =invoice_fieldrate,
+                                                       total =  invoice_fieldrate)
+                invoice_line.save()
+                invoice_header.total_cost = invoice_header.total_cost + Decimal.from_float(invoice_fieldrate)
+                invoice_header.save()
    
     return HttpResponse(json.dumps(invoiceadd), content_type="application/json")
 

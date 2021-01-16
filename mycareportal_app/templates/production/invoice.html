@@ -194,11 +194,23 @@
                           {% endfor %}
                         </select>
                       </td> -->
-                      <td class="col-sm-2"> <input class="form-control" placeholder="Rate Name"
-                          name="invoice_field_rate_type" type="text"></td>
+                      <td>
+                        <select required class="select2_single form-control" placeholder="Caregive Name"
+                        id="dropDownratetype">
+  
+                        <option value="" selected> Service Type</option>
+                        {% for ratetype in  invoice_rate_types %}
+                        <option value="{{ratetype.id}} {{ratetype.rate_types}}">
+                          {{ratetype.rate_types}}
+                        </option>
+  
+                        {% endfor %}
+  
+                      </select>
+                        </td>
                       <td class="col-sm-2">
-                        <input type="number" placeholder="Rate" name="invoice_field_rate" id="rate"
-                          class="form-control" />
+                        <input type="number" placeholder="" name="invoice_field_rate" id="rate"
+                          class="form-control"/>
                       </td>
 
 
@@ -428,7 +440,7 @@
 
             }
 
-            if (element.childNodes[0].getAttribute('name') == 'invoice_fieldrate_type') {
+            if (element.childNodes[0].getAttribute('name') == 'invoice_fieldrate_typeid') {
               person[element.childNodes[0].getAttribute('name')] = element.childNodes[0].value
 
             }
@@ -479,17 +491,23 @@
         var newRow = $("<tr>");
         var cols = "";
 
-        if ($("input[name=invoice_field_rate_type]").val() && $("input[name=invoice_field_rate]").val()) {
+        if (  $("input[name=invoice_field_rate]").val() && $('#dropDownId :selected').val() && $('#dropDownratetype :selected').val() ) {
 
           invoice_field_rate = $("input[name=invoice_field_rate]").val(),
             // invoice_field_rate_type = $('#dropDownIdratetype :selected').val(),
             invoice_field_caregiver_id = $('#dropDownId :selected').val(),
             // invoice_field_client_id = $("input[name=invoice_field_client_id]").val(),
-            invoice_field_rate_type = $("input[name=invoice_field_rate_type]").val(),
+            // invoice_field_rate_type = $("input[name=invoice_field_rate_type]").val(),
             invoice_field_hours_perday = $("input[name=invoice_field_hours_perday]").val(),
             invoice_header_id = $("input[name=invoice_header_id]").val(),
             caregiverId = invoice_field_caregiver_id.split(" ", 1),
+            
             caregiverName = invoice_field_caregiver_id.slice(2, 100)
+            invoice_field_rate_type_id =$('#dropDownratetype :selected').val(),
+            ratetypeid = invoice_field_rate_type_id.split(" ", 1),
+            alert("caregiverIdcaregiverId"+ratetypeid)
+            invoice_field_rate_type = invoice_field_rate_type_id.slice(2, 100),
+            alert("invoice_field_rate_type"+invoice_field_rate_type)
           
 
           // cols +=
@@ -514,6 +532,9 @@
           cols +=
             '<td><input type="hidden" style="width:30%;"  class="form-control" readonly name="caregiverid"  value="' +
             caregiverId + '"/></td>';
+            cols +=
+            '<td><input type="hidden" style="width:30%;"  class="form-control" readonly name="invoice_fieldrate_typeid"  value="' +
+              ratetypeid + '"/></td>';
 
           newRow.append(cols);
           $("table.order-list").append(newRow);
@@ -524,6 +545,8 @@
             $("input[name=invoice_field_rate_type]").val(null),
             // $('#dropDownIdratetype').val(null),
             $("input[name=caregiverId]").val(null),
+            $('#dropDownratetype').val(null),
+            
             counter++;
         } else {
           alert("Please fill all the fields")

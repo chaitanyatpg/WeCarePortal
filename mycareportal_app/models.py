@@ -1734,3 +1734,7 @@ class InvoiceLineItem(models.Model):
     rate = models.DecimalField(max_length=200, max_digits=10, decimal_places=2)
     custom_service_charge = models.DecimalField(max_length=200, max_digits=10, decimal_places=2, default=0.00)
     total = models.DecimalField(max_length=200, max_digits=10, decimal_places=2)
+
+
+class InvoiceRateType(models.Model):
+    rate_types = models.CharField(max_length=300)
