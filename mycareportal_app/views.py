@@ -1965,12 +1965,10 @@ def submit_invoice(request):
             invoice_fieldrate_type = k['invoice_fieldrate_typeid']
             caregiver = Caregiver.objects.get(id= caregiverid, company = current_company)
             invoice_fieldrate = float(k['invoice_fieldrate'])
-            print("invoice_fieldrate_type",invoice_fieldrate_type)
             invoice_header = InvoiceHeader.objects.get(id =invoice_header_id)
             ratetypes = InvoiceRateType.objects.get(id = invoice_fieldrate_type)
-            print("rate_typesrate_types",ratetypes)
             if current_company.mileage_rate and ratetypes.rate_types == "Mileage":
-                print("Ssssss")
+
                 inline_total = (float(invoice_fieldrate) * float(current_company.mileage_rate))/100
                 
                 if inline_total > 0:
