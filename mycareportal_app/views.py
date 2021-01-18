@@ -1960,7 +1960,6 @@ def submit_invoice(request):
         invoiceadd = {
             "client_email" :client_email
         }
-        print("invoice_headerlistinvoice_headerlist",invoice_headerlist)
         for k in invoice_headerlist:
             caregiverid = k['caregiverid']
             invoice_fieldrate_type = k['invoice_fieldrate_typeid']
