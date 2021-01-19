@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 
@@ -25,6 +24,7 @@
             padding: 5px;
             padding-top: 5px;
             padding-bottom: 5px;
+           
 
         }
 
@@ -32,7 +32,7 @@
             padding: 0 5px 0 5px;
         }
 
-        .main-table ul {
+        .main-table ul, .second-table ul {
             list-style-type: none;
         }
 
@@ -65,6 +65,12 @@
             margin-bottom: 0;
             padding: 0;
         }
+        table.border-0{
+                border:0px !important;
+            }
+            table td, table td * {
+    vertical-align: top;
+}
     </style>
 </head>
 
@@ -84,7 +90,8 @@
         <tr>
 
         <tr>
-            <td> {% if current_company.logo %} <img class="logo-img" src="{{current_company.logo.url}}">    {% endif %}</td>
+            <td> {% if current_company.logo %} <img class="logo-img" src="{{current_company.logo.url}}"> {% endif %}
+            </td>
             <td style="width: 50%;">
                 <ul>
                     <li> <strong>{{invoice_header.company.company_name}}</strong></li>
@@ -141,63 +148,88 @@
             <th>Rate</th>
             <th>Total</th>
         </tr>
-    
-        
-        {% for ii in invoice_line_items %}
-     
+
+
+        {% for invoice_data in invoice_line_items %}
+
         <tr>
-            <td>{{invoice_header.client.first_name}} {{invoice_header.client.last_name}}  </td>
-            <td>{{invoice_header.client.address}} {{invoice_header.client.city}} {{invoice_header.client.state}} {{invoice_header_data.client.zip_code}}    {{invoice_header_data.client.contact_number}}</td>
-            <td>{{ ii.caregiver.first_name}} {{ii.caregiver.last_name}}</td>
-            <td>{{ ii.hours }}</td>
-            <td> {{ ii.rate_type}}</td>
-            <td> {{ ii.rate }} </td>
-            <td>{{  ii.total  }}</td>
+            <td>{{invoice_header.client.first_name}} {{invoice_header.client.last_name}} </td>
+            <td>{{invoice_header.client.address}} {{invoice_header.client.city}} {{invoice_header.client.state}}
+                {{invoice_header_data.client.zip_code}} {{invoice_header_data.client.contact_number}}</td>
+            <td>{{ invoice_data.caregiver.first_name}} {{invoice_data.caregiver.last_name}}</td>
+            <td>{{ invoice_data.hours }}</td>
+            <td> {{ invoice_data.rate_type}}</td>
+            <td> {{ invoice_data.rate }} </td>
+            <td>{{  invoice_data.total  }}</td>
         </tr>
         {% endfor %}
-   
+
 
     </table>
 
-    <table  class="main-table">
+    <table class="main-table">
         <tr>
             <td class="vh-20"> </td>
         </tr>
         <tr>
             <td>
                 <ul>
-                    <li> <span style="font-size: 13px; font-weight: bold;"> Notes </span>: {{invoice_header.invoice_notes}}</li>
+                    <li> <span style="font-size: 13px; font-weight: bold;"> Notes </span>:
+                        {{invoice_header.invoice_notes}}</li>
                 </ul>
             </td>
-         
+
         </tr>
-        <tr>          
+        <tr>
             <td class="text-right">
                 <ul>
-                    <li> <span style="font-size: 13px; font-weight: bold;"> Total </span>:  {{invoice_header.total_cost}} </li>
+                    <li> <span style="font-size: 13px; font-weight: bold;"> Total </span>: {{invoice_header.total_cost}}
+                    </li>
                 </ul>
             </td>
-         
+
         </tr>
 
-        <tr>
+        <!-- <tr>
             <td class="vh-20"> </td>
-        </tr>
+        </tr> -->
         
-        <tr>
-            <td>
-                <ul>
-                    <li> <span style="font-size: 13px; font-weight: bold;"> Invoice for <br> the week of </span>: {{start_date}} {{end_date}}</li>
-                </ul>
-            </td>
-         
-        </tr>
-
-      
-
     </table>
 
+    <table class="second-table border-0">
+        <tr valign="top">
+            <td>
+                 <span style="font-size: 13px; font-weight: bold;"> Invoice for <br> the week of </span>:
+                        {{start_date}} {{end_date}}
+                      <hr>
+                      <p>Make all checks payable to Angels Home Care Services Inc. </p>
+            </td>
+            <!-- </tr>
+            <tr> -->
+            <td>
+                <ul>
+                    <li>Additional Notes</li>
+                </ul>
+
+                {% for additional in caregiver_schedule_notes %}
+                <ul>
+                <li>{{additional.date | date:"D"}} {{additional.start_time}} {{additional.end_time}} {{additional.caregiver.first_name}} {{additional.caregiver.last_name}} </li>
+                </ul>
+            
+
+                {% endfor %}
+
+            </td>
+        </tr>
+        <tr valign="top">
+            <td>
+            </td>
+        </tr>
+        <tr  valign="top" style="text-align: center;">
+            <td colspan="2"> Thank you for your business!
+            </td>
+        </tr>
+        </table>
 </body>
 
 </html>
-

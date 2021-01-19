@@ -173,7 +173,7 @@
                             {% for invoice in invoice_header %}
                               <tr>
                                 <td>{{ invoice.invoice_number_string }}</td>
-                                <td>{{invoice.client.first_name}} {{invoice.client.first_name}}</td>
+                                <td>{{invoice.client.first_name}} {{invoice.client.last_name}}</td>
                                 <td>{{invoice.start_date}}</td>
                                 <td>{{invoice.end_date}}</td>
                                 <td>{{invoice.total_hours}}</td>

@@ -453,29 +453,40 @@
                                 <div class="x_content">
                                 <div class="row">
                                     <div class="form-group">
-                                      <label class="col-md-6 col-sm-6 col-xs-12">Regular hourly rate
-                                        <br>
-                                      </label>
-                                      <div>
+                                      <label class="col-md-3 col-sm-3 col-xs-3">Regular hourly rate</label>
+                                      
+                                     
+                                      
+                                      <div class="col-md-3 col-sm-3 col-xs-3">
                                         <label>
                                           {% if not client.regular_hourly_rate is None %}
-                                          <input type="number" name="{{ client_invoice_form.regular_hourly_rate.html_name}}" min="0" step="any" value="{{client.regular_hourly_rate}}"> 
+                                          <input type="number" name="{{ client_invoice_form.regular_hourly_rate.html_name}}"  min="0" step="any" value="{{client.regular_hourly_rate}}"> 
                                           {% else %}
                                           {{ client_invoice_form.regular_hourly_rate}}
                                           {% endif %}
                                         </label>
                                       </div>
+                                      <div class="col-md-3 col-sm-3 col-xs-3">
+                                        <label >What percent of Weekend hourly rate &nbsp;
+                                          
+                                      </div>
+                                      <div class="col-md-3 col-sm-3 col-xs-3">
+                                        <input  type="number" step="any"
+                                            placeholder="enter percent" onchange="myFunction(this.value)" name="percent_Weekend_hourly_rate" ></label>
+                                      </div>
+
+                                      
                                     </div>
                                 </div>
 
 
                                 <div class="row">
                                     <div class="form-group">
-                                      <label class="col-md-6 col-sm-6 col-xs-12">Weekend hourly rate
+                                      <label class="col-md-3 col-sm-3 col-xs-3">Weekend hourly rate
                                         <br>
                                       </label>
                                       <div>
-                                        <label>
+                                        <label class="col-md-3 col-sm-3 col-xs-3">
                                           {% if not client.weekend_hourly_rate is None %}
                                           <input type="number" name="{{ client_invoice_form.weekend_hourly_rate.html_name}}" min="0" step="any" value="{{client.weekend_hourly_rate}}"> 
                                           {% else %}
@@ -484,16 +495,24 @@
                                         </label>
                                       </div>
                                     </div>
+
+                                    <div class="col-md-3 col-sm-3 col-xs-3"> 
+                                      <label>What of Holiday hourly rate </label>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 col-xs-3">
+                                       <input type="number" step="any"
+                                        onchange="myFunctions(this.value)"  name="percent_holiday_hourly_rate" placeholder="enter percent">
+                                    </div>
                                   </div>
                   
                   
 
                                   <div class="row">
                                       <div class="form-group">
-                                        <label class="col-md-6 col-sm-6 col-xs-12">Holiday hourly rate
+                                        <label class="col-md-3 col-sm-3 col-xs-3">Holiday hourly rate
                                           <br>
                                         </label>
-                                        <div>
+                                        <div class="col-md-3 col-sm-3 col-xs-3">
                                           <label>
                                               {% if not client.holiday_hourly_rate is None %}
                                             <input type="number" name="{{ client_invoice_form.holiday_hourly_rate.html_name}}" min="0" step="any" value="{{client.holiday_hourly_rate}}"> {% else %}
@@ -502,15 +521,27 @@
                                           </label>
                                         </div>
                                       </div>
+                                      <div class="col-md-3 col-sm-3 col-xs-3">
+                                        <label>What  of Weekend holiday rate  </label>
+                                      </div>
+
+                                      <div class="col-md-3 col-sm-3 col-xs-3">
+                                        <input type="number"  step="any"
+                                            placeholder="enter percent" onchange="myweekend_holiday_rate(this.value)" name="percent_weekend_holiday_rate">
+
+
+                                      </div>
+ 
+
                                     </div>
                     
                     
                                     <div class="row">
                                       <div class="form-group">
-                                        <label class="col-md-6 col-sm-6 col-xs-12">Weekend holiday rate
+                                        <label class="col-md-3 col-sm-3 col-xs-3">Weekend holiday rate
                                           <br>
                                         </label>
-                                        <div>
+                                        <div class="col-md-3 col-sm-3 col-xs-3">
                                           <label>
                                             {% if not client.weekend_holiday_rate is None %}
                                             <input type="number" name="{{ client_invoice_form.weekend_holiday_rate.html_name}}" min="0" step="any" value="{{client.weekend_holiday_rate}}"> {% else %}
@@ -519,15 +550,24 @@
                                           </label>
                                         </div>
                                       </div>
+                                      <div class="col-md-3 col-sm-3 col-xs-3">
+                                        <label>What percent of Live in rate </label>
+                                      </div>
+
+                                      <div class="col-md-3 col-sm-3 col-xs-3"> 
+                                        <input type="number"  step="any"
+                                            placeholder="enter percent" onchange="myLiveinrate(this.value)" name="percent_live_in_rate">
+
+                                      </div>
                                     </div>
                     
                     
                                     <div class="row">
                                       <div class="form-group">
-                                        <label class="col-md-6 col-sm-6 col-xs-12">Live in rate
+                                        <label class="col-md-3 col-sm-3 col-xs-3">Live in rate
                                           <br>
                                         </label>
-                                        <div>
+                                        <div class="col-md-3 col-sm-3 col-xs-3">
                                           <label>
                                             {% if not client.live_in_rate is None %}
                                             <input type="number" name="{{ client_invoice_form.live_in_rate.html_name}}" min="0" step="any" value="{{client.live_in_rate}}">
@@ -537,14 +577,22 @@
                                           </label>
                                         </div>
                                       </div>
+                                      <div class="col-md-3 col-sm-3 col-xs-3">
+                                        <label>What percent of Weekend live in rate </label>
+                                      </div>
+
+                                      <div class="col-md-3 col-sm-3 col-xs-3">
+                                        <input type="number"  step="any"
+                                            placeholder="enter percent" onchange="myWeekendliveinrate(this.value)" name="percent_weekend_live_in_rate">
+                                      </div>
                                     </div>
                     
                                     <div class="row">
                                       <div class="form-group">
-                                        <label class="col-md-6 col-sm-6 col-xs-12">Weekend live in rate
+                                        <label class="col-md-3 col-sm-3 col-xs-3">Weekend live in rate
                                           <br>
                                         </label>
-                                        <div>
+                                        <div class="col-md-3 col-sm-3 col-xs-3">
                                           <label>
                                             {% if not client.weekend_live_in_rate is None %}
                                             <input type="number" name="{{ client_invoice_form.weekend_live_in_rate.html_name}}" min="0" step="any" value="{{client.weekend_live_in_rate}}">
@@ -554,14 +602,25 @@
                                           </label>
                                         </div>
                                       </div>
+                                      <div class="col-md-3 col-sm-3 col-xs-3">
+                                        <label>What  of Holiday live in rate 
+                                          </label>
+                                      </div>
+
+                                      <div class="col-md-3 col-sm-3 col-xs-3">
+
+                                        <input type="number"  step="any"
+                                            placeholder="enter percent" onchange="myHolidayliveinrate(this.value)" name="percent_hoilday_live_in_rate">
+
+                                      </div>
                                     </div>
                     
                                     <div class="row">
                                       <div class="form-group">
-                                        <label class="col-md-6 col-sm-6 col-xs-12">Holiday live in rate
+                                        <label class="col-md-3 col-sm-3 col-xs-3">Holiday live in rate
                                           <br>
                                         </label>
-                                        <div>
+                                        <div class="col-md-3 col-sm-3 col-xs-3"> 
                                           <label>
                                             {% if not client.holiday_live_in_rate is None %}
                                             <input type="number" name="{{ client_invoice_form.holiday_live_in_rate.html_name}}" min="0" step="any" value="{{client.holiday_live_in_rate}}"> {% else %}
@@ -570,14 +629,24 @@
                                           </label>
                                         </div>
                                       </div>
+                                      <div class="col-md-3 col-sm-3 col-xs-3">
+                                        <label>What  of Weekend holiday live in rate </label>
+                                      </div>
+
+                                      <div class="col-md-3 col-sm-3 col-xs-3">
+
+                                        <input type="number"  step="any"
+                                            placeholder="enter percent" onchange="myWeekendholidayliveinrate(this.value)" name="percent_weekend_holiday_live_in_rate">
+
+                                      </div>
                                     </div>
                     
                                     <div class="row">
                                       <div class="form-group">
-                                        <label class="col-md-6 col-sm-6 col-xs-12">Weekend holiday live in rate
+                                        <label class="col-md-3 col-sm-3 col-xs-3">Weekend holiday live in rate
                                           <br>
                                         </label>
-                                        <div>
+                                        <div class="col-md-3 col-sm-3 col-xs-3">
                                           <label>
                                             {% if not client.weekend_holiday_live_in_rate is None %}
                                             <input type="number" name="{{ client_invoice_form.weekend_holiday_live_in_rate.html_name}}" min="0" step="any" value="{{client.weekend_holiday_live_in_rate}}"> {% else %}
@@ -585,7 +654,10 @@
                                             {% endif %}
                                           </label>
                                         </div>
+
+                                      
                                       </div>
+                                  
                                     </div>
                     
                     
@@ -2123,4 +2195,110 @@
     });
   </script>
 <!-- /jquery.inputmask -->
+
+<script>
+function myFunction(val){
+  percent_Weekend_hourly_rate= $("input[name=percent_Weekend_hourly_rate]").val();
+  regular_hourly_rates = $("input[name=regular_hourly_rate]").val();
+  values =   regular_hourly_rates * percent_Weekend_hourly_rate /100
+  regular_hourly_rates = ((regular_hourly_rates * 1) + (values * 1)).toFixed(2)
+  console.log("weekend_hourly_rate" + regular_hourly_rates )
+  $("input[name=weekend_hourly_rate]").val(regular_hourly_rates)
+  
+}
+</script>
+
+
+<script>
+
+function myFunctions(val){
+  percent_holiday_hourly_rate= $("input[name=percent_holiday_hourly_rate]").val();
+  // weekend_hourly_rate = $("input[name=weekend_hourly_rate]").val();
+  regular_hourly_rates = $("input[name=regular_hourly_rate]").val();
+  values =   regular_hourly_rates * percent_holiday_hourly_rate 
+  regular_hourly_rates =  (values * 1).toFixed(2)
+  console.log("regular_hourly_rates" + regular_hourly_rates )
+  $("input[name=holiday_hourly_rate]").val(regular_hourly_rates) 
+  
+}
+</script>
+
+
+<script>
+
+  function myweekend_holiday_rate(val){
+    percent_weekend_holiday_rate= $("input[name=percent_weekend_holiday_rate]").val();
+    // holiday_hourly_rate = $("input[name=holiday_hourly_rate]").val();
+    weekend_hourly_rate = $("input[name=weekend_hourly_rate]").val();
+  
+    values = weekend_hourly_rate   * percent_weekend_holiday_rate 
+    holiday_hourly_rate =  (values * 1).toFixed(2)
+    console.log("weekend_holiday_rate" + holiday_hourly_rate )
+    console.log("ihuhuhu" +values)
+    $("input[name=weekend_holiday_rate]").val(holiday_hourly_rate) 
+    
+  }
+</script>
+
+
+<script>
+
+  function myLiveinrate(val){
+    percent_live_in_rate= $("input[name=percent_live_in_rate]").val();
+    regular_hourly_rates = $("input[name=regular_hourly_rate]").val();
+    // weekend_holiday_rate = $("input[name=weekend_holiday_rate]").val();
+    values =   regular_hourly_rates * percent_live_in_rate /100
+    live_rate = ((regular_hourly_rates * 1) + (values * 1)).toFixed(2)
+    console.log("regular_hourly_rates " + live_rate )
+    $("input[name=live_in_rate]").val(live_rate) 
+    
+  }
+</script>
+
+<script>
+
+  function myWeekendliveinrate(val){ 
+    percent_weekend_live_in_rate= $("input[name=percent_weekend_live_in_rate]").val();
+    // live_in_rate = $("input[name=live_in_rate]").val();
+    live_in_rate = $("input[name=live_in_rate]").val();
+    values =   live_in_rate * percent_weekend_live_in_rate /100
+    live_in_rate = ((live_in_rate * 1) + (values * 1)).toFixed(2)
+    console.log("values" + values )
+    $("input[name=weekend_live_in_rate]").val(live_in_rate) 
+    
+  }
+</script>
+
+
+<script>
+
+  function myHolidayliveinrate(val){
+    percent_hoilday_live_in_rate = $("input[name=percent_hoilday_live_in_rate]").val();
+    live_in_rate = $("input[name=live_in_rate]").val();
+    values =  live_in_rate *  percent_hoilday_live_in_rate 
+    weekend_live_in_rate = (values * 1).toFixed(2)
+    console.log("weekend_live_in_rate" + weekend_live_in_rate )
+    $("input[name=holiday_live_in_rate]").val(weekend_live_in_rate) 
+    
+  }
+</script>
+
+
+
+
+<script>
+
+  function myWeekendholidayliveinrate(val){
+    percent_weekend_holiday_live_in_rate= $("input[name=percent_weekend_holiday_live_in_rate]").val();
+    // holiday_live_in_rate = $("input[name=holiday_live_in_rate]").val();
+    // console.log("weekend_holiday_live_in_rate" + holiday_live_in_rate )
+    weekend_live_in_rate = $("input[name=weekend_live_in_rate]").val();
+    console.log("percent_weekend_holiday_live_in_rate" + percent_weekend_holiday_live_in_rate )
+    values =   weekend_live_in_rate * percent_weekend_holiday_live_in_rate 
+    holiday_live_in_rate =  (values * 1).toFixed(2)
+    
+    $("input[name=weekend_holiday_live_in_rate]").val(holiday_live_in_rate) 
+    
+  }
+</script>
 {% endblock %}

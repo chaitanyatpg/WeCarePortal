@@ -129,6 +129,8 @@ class ScheduleShiftForm(forms.Form):
     saturday = forms.BooleanField(required=False)
     sunday = forms.BooleanField(required=False)
     frequency = forms.CharField(max_length=100)
+    live_in = forms.BooleanField(required=False)
+
 
 
 

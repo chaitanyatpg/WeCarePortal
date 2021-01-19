@@ -619,7 +619,8 @@ class EditCompany(LoginRequiredMixin, View):
             'tax_rate': current_company.tax_rate,
             'logo': current_company.logo,
             'attorney_email': current_company.attorney_email,
-            'is_parent':current_company.is_parent
+            'is_parent':current_company.is_parent,
+            'mileage_rate': current_company.mileage_rate
         })
         caregiver = Caregiver.objects.filter(company = current_company).count()
         client = Client.objects.filter(company = current_company).count()
@@ -627,6 +628,7 @@ class EditCompany(LoginRequiredMixin, View):
             is_parent_flag = False
 
         context['company_edit_form'] = company_edit_form
+        
         context['current_company'] = current_company
         context['all_timezones'] = pytz.all_timezones
         context['is_parent_flag'] = is_parent_flag
@@ -651,6 +653,9 @@ class EditCompany(LoginRequiredMixin, View):
                 current_company.logo = company_edit_form.cleaned_data['logo']
                 current_company.attorney_email = company_edit_form.cleaned_data['attorney_email']
                 current_company.is_parent = company_edit_form.cleaned_data['is_parent']
+                current_company.mileage_rate = company_edit_form.cleaned_data['mileage_rate']
+
+                
 
                 current_company.save()
                 #send_mail('Test sendgrid', 'Test message', 'info@wecareportal.com', ['dhruv.ranjan@gmail.com'], fail_silently=False)
@@ -1158,6 +1163,8 @@ class Invoice(LoginRequiredMixin, View):
             context['end_date'] = invoice_header_data.end_date
             invoice_line_items = list(InvoiceLineItem.objects.filter(invoice_header = exits_invoice_header,company = current_company).order_by("id"))
             context['invoice_line_items'] = invoice_line_items
+            caregiver_schedule_notes = CaregiverSchedule.objects.filter(company = current_company, client= invoice_header_data.client, date__range = (invoice_header_data.start_date, invoice_header_data.end_date))
+            context['caregiver_schedule_notes'] = caregiver_schedule_notes
         else:
             submit = False
             context['submit'] = submit
@@ -1173,17 +1180,19 @@ class Invoice(LoginRequiredMixin, View):
                 context['start_date'] = start_date
                 context['end_date'] = end_date
                 exits_invoice_header = InvoiceHeader.objects.filter(company = current_company,client = client, start_date = start_date,end_date = end_date ,  submitted = True,cancelled =False)
-
+                caregiver_schedule_notes = CaregiverSchedule.objects.filter(company = current_company, client= client, date__range = (start_date, end_date))
+                context['caregiver_schedule_notes'] = caregiver_schedule_notes
                 if exits_invoice_header:
                     context['invoice_header_data'] = exits_invoice_header
                     invoice_header_data = InvoiceHeader.objects.get(id = exits_invoice_header)
                     context['invoice_header_data'] = invoice_header_data
                     invoice_line_items = list(InvoiceLineItem.objects.filter(invoice_header = invoice_header_data,company = current_company).order_by("id"))
                     context['invoice_line_items'] = invoice_line_items
-                    caregiver = Caregiver.objects.filter(company = current_company)
+                    caregiver = client.caregiver.all()
                     context['caregiver'] = caregiver
-                    invoice_line_distinct = InvoiceLineItem.objects.filter(invoice_header =invoice_header_data).distinct('caregiver_id')
-                    context['invoice_line_distinct'] = invoice_line_distinct
+                    invoice_rate_types = InvoiceRateType.objects.all()
+                    context['invoice_rate_types'] = invoice_rate_types
+                    
                 else:
                     invoice_header = InvoiceHeader.create_invoice(current_company,client,start_date,end_date)
                     invoice_header_data = InvoiceHeader.objects.get(id =invoice_header.id)
@@ -1194,16 +1203,17 @@ class Invoice(LoginRequiredMixin, View):
                     total_amt = self.get_total(task_objects)
                     context['task_objects'] = task_objects
                     context['total_amt'] = total_amt
-                    invoice_line_distinct = InvoiceLineItem.objects.filter(invoice_header =invoice_header_data).distinct('caregiver_id')
-                    context['invoice_line_distinct'] = invoice_line_distinct
-                    caregiver = Caregiver.objects.filter(company = current_company)
+                    
+                    caregiver = client.caregiver.all()
                     context['caregiver'] = caregiver
+                    invoice_rate_types = InvoiceRateType.objects.all()
+                    context['invoice_rate_types'] = invoice_rate_types
                     if current_company.tax_rate:
-                        context['tax_amt'] = (total_amt * float(current_company.tax_rate / 100))
-                        context['total_amt_tax'] = total_amt + (total_amt * float(current_company.tax_rate / 100))
-                    else:
-                        context['tax_amt'] = 0
-                        context['total_amt_tax'] = total_amt 
+                        tax_amt= round((invoice_header.total_cost * float(current_company.tax_rate / 100)),2)
+                        invoice_header_data.taxes = tax_amt
+                        invoice_header_data.total_cost =  invoice_header_data.total_cost +  Decimal.from_float(invoice_header_data.taxes)
+                        invoice_header_data.save()
+                       
        
         return render(request, "production/invoice.html", context)
 
@@ -1217,6 +1227,7 @@ class Invoice(LoginRequiredMixin, View):
             for task in tasks.items():
                 total_amt += task[1]['total']
         return total_amt
+
 
     def get_line_items(self, tasks, current_company):
         line_items = []
@@ -1905,11 +1916,11 @@ def get_pdf(request):
     start_date = request.session.get('context').get('start_date')
     end_date = request.session.get('context').get('end_date')
     current_date = datetime.date.today()
+  
    
     
-    
-    
     invoice_header = InvoiceHeader.objects.get(id = invoice_headerid )
+    caregiver_schedule_notes = CaregiverSchedule.objects.filter(company = current_company, client = invoice_header.client, date__range = (invoice_header.start_date, invoice_header.end_date))
     invoice_line_items =list(InvoiceLineItem.objects.filter(invoice_header = invoice_header,company =current_company))
     data = {
         
@@ -1918,7 +1929,8 @@ def get_pdf(request):
         "start_date": start_date,
         "end_date": end_date,
         "current_date": current_date,
-        "current_company": current_company
+        "current_company": current_company,
+        "caregiver_schedule_notes":caregiver_schedule_notes
     }
     
     pdf = render_to_pdf('production/invoice_generator.html',data)
@@ -1949,24 +1961,37 @@ def submit_invoice(request):
             "client_email" :client_email
         }
         for k in invoice_headerlist:
-            hours_per_day = float(k['invoice_fieldhours_perday'])
             caregiverid = k['caregiverid']
-            invoice_fieldrate_type = k['invoice_fieldrate_type']
+            invoice_fieldrate_type = k['invoice_fieldrate_typeid']
             caregiver = Caregiver.objects.get(id= caregiverid, company = current_company)
             invoice_fieldrate = float(k['invoice_fieldrate'])
             invoice_header = InvoiceHeader.objects.get(id =invoice_header_id)
-            inline_total = float(hours_per_day * invoice_fieldrate)
+            ratetypes = InvoiceRateType.objects.get(id = invoice_fieldrate_type)
+            if current_company.mileage_rate and ratetypes.rate_types == "Mileage":
 
-            new_invoice_line = InvoiceLineItem(invoice_header = invoice_header,  company = current_company,
-                                                caregiver = caregiver,hours =hours_per_day,
-                                                rate_type = invoice_fieldrate_type,
-                                                rate =invoice_fieldrate,
-                                                total =  inline_total)
-            new_invoice_line.save()                                                                       
-            invoice_header.total_hours = invoice_header.total_hours + Decimal.from_float(hours_per_day)
-            invoice_header.total_cost = invoice_header.total_cost + Decimal.from_float(inline_total)
-            invoice_header.save()
-        
+                inline_total = (float(invoice_fieldrate) * float(current_company.mileage_rate))/100
+                
+                if inline_total > 0:
+                    new_invoice_line = InvoiceLineItem(invoice_header = invoice_header,  company = current_company,
+                                                       rate_type = ratetypes.rate_types,
+                                                       hours = 0,
+                                                       caregiver = caregiver,
+                                                       rate =invoice_fieldrate,
+                                                       total =  inline_total)
+                    new_invoice_line.save()                                                                       
+                    
+                    invoice_header.total_cost = invoice_header.total_cost + Decimal.from_float(inline_total)
+                    invoice_header.save()
+            else:
+                invoice_line = InvoiceLineItem(invoice_header = invoice_header,  company = current_company,
+                                                       rate_type = ratetypes.rate_types,
+                                                       hours = 0,
+                                                       caregiver = caregiver,
+                                                       rate =invoice_fieldrate,
+                                                       total =  invoice_fieldrate)
+                invoice_line.save()
+                invoice_header.total_cost = invoice_header.total_cost + Decimal.from_float(invoice_fieldrate)
+                invoice_header.save()
    
     return HttpResponse(json.dumps(invoiceadd), content_type="application/json")
 
@@ -1974,6 +1999,7 @@ def submit_invoice(request):
 def cancel_invoice(request):
     if request.method == "GET":
         current_company = request.user.company
+        
         context = request.GET.copy()
         invoice_id = request.GET.get('invoice_id')
         invoice_header = InvoiceHeader.objects.get(id = invoice_id )
@@ -1981,3 +2007,47 @@ def cancel_invoice(request):
         invoice_header.save()
 
     return HttpResponseRedirect(reverse('choose_client_for_invoice'))
+
+@login_required
+def update_invoice_detail(request):
+    if request.method == "GET":
+        
+        current_company = request.user.company
+        
+        context = request.GET.copy()
+        invoice_linelist  =  json.loads(request.GET.get('invoice_line_array'))
+        
+        ratetype = request.GET.get('ratetype')        
+        data = {
+            "ratetype" : "sucess"
+        }
+
+        for i in invoice_linelist:
+            invoice_line_id = int(i['invoic_line_id'])
+            change_hours = float(i['change_hours'])
+            change_ratetype = i['change_ratetype']
+            change_rate = float(i['change_rate'])
+            invoice_line_item = InvoiceLineItem.objects.get(id = invoice_line_id)
+            invoice_line_hours =  invoice_line_item.hours
+            invoice_line_total = invoice_line_item.total
+            invoice_line_rate = invoice_line_item.rate
+            
+            invoice_header = InvoiceHeader.objects.get(id = invoice_line_item.invoice_header.id)
+            invoice_header_total = float(invoice_header.total_cost) - float(invoice_line_total)
+            invoice_header.total_cost = float(invoice_header_total)
+            invoice_header.save()
+            invoice_line_item.hours = change_hours
+            invoice_line_item.rate = change_rate
+            invoice_line_item.rate_type = change_ratetype
+            invoice_line_item.total = float(change_hours) * float(change_rate)
+            invoice_header.total_cost =  float(invoice_header.total_cost) + float(invoice_line_item.total)
+            if invoice_header.taxes:
+                invoice_header.total_cost = invoice_header.total_cost - float(invoice_header.taxes)
+                tax_amt= round((invoice_header.total_cost * float(current_company.tax_rate / 100)),2)
+                invoice_header.taxes = tax_amt
+                invoice_header.total_cost =  (invoice_header.total_cost * 1) +  float(tax_amt)
+            invoice_header.save()
+            invoice_line_item.save()
+          
+
+        return HttpResponse(json.dumps(data), content_type="application/json")

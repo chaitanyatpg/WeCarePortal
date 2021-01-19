@@ -98,6 +98,7 @@ class Company(models.Model):
     attorney_email = models.EmailField(null=True, blank=True)
     is_parent =models.BooleanField(default=False)
     requires_tablet = models.BooleanField(default=True)
+    mileage_rate =   models.DecimalField( max_digits=10, decimal_places=2, null=True)
 
     def get_child_companies(self):
         children = []
@@ -993,7 +994,8 @@ class CaregiverSchedule(models.Model):
         return schedule_object
 
     def get_rate_type(self):
-        weekend = self.is_weekday()
+        regular = self.is_weekday()
+        weekend = self.is_weekend()
         holiday = self.is_holiday()
         live_in = self.is_live_in()
         if weekend and holiday and live_in:
@@ -1014,10 +1016,14 @@ class CaregiverSchedule(models.Model):
             return RateType.NORMAL
 
     def is_weekday(self):
-        return not self.is_weekend()
+        week_num_day = self.date.weekday()
+        if week_num_day < 5:
+            return True
+        else:
+            return False
 
     def is_weekend(self):
-        week_num = datetime.datetime.today().weekday()
+        week_num = self.date.weekday()
         if week_num < 5:
             return False
         else:
@@ -1585,6 +1591,7 @@ class InvoiceHeader(models.Model):
     invoice_notes = models.CharField(max_length=1000, blank=True, null=True)
     submitted = models.BooleanField(default=False)
     cancelled = models.BooleanField(default = False)
+    taxes =   models.DecimalField(max_length=200, max_digits=10, decimal_places=2, default=0.0)
 
     @staticmethod
     @transaction.atomic
@@ -1622,7 +1629,9 @@ class InvoiceHeader(models.Model):
         caregiver_to_rate_type_to_schedules = defaultdict(lambda: defaultdict(list))
         for schedule in schedules:
             rate_type = schedule.get_rate_type()
+            
             caregiver_to_rate_type_to_schedules[schedule.caregiver][rate_type].append(schedule)
+            
         return caregiver_to_rate_type_to_schedules
      
     def get_totals(self, caregiver_to_rate_type_to_schedules, client):
@@ -1631,14 +1640,43 @@ class InvoiceHeader(models.Model):
         caregiver_to_rate_type_to_total_hours = defaultdict(lambda: defaultdict(float))
         for caregiver in caregiver_to_rate_type_to_schedules:
             for rate_type in caregiver_to_rate_type_to_schedules[caregiver]:
-                for schedule in caregiver_to_rate_type_to_schedules[caregiver][rate_type]:
-                    total_hours = schedule.get_hours_diff()
-                  
-                    rate = float(getattr(client, client.RATE_TYPE_TO_FIELD[rate_type].attname))
-                    total_cost = rate * total_hours
-                    caregiver_to_rate_type_to_total_cost[caregiver][rate_type] += total_cost
-                    caregiver_to_rate_type_to_total_hours[caregiver][rate_type] += total_hours
+                for schedule in caregiver_to_rate_type_to_schedules[caregiver][rate_type]:                    
+                    if TaskSchedule.objects.filter(client = client.id, date = schedule.date,complete = True).exists():
+                        task_schedules = TaskSchedule.objects.get(client = client.id,  date = schedule.date,complete = True)
+                        if task_schedules:
+                            if rate_type == RateType.LIVE_IN or rate_type == RateType.WEEKEND_LIVE_IN  or rate_type == RateType.HOLIDAY_LIVE_IN or rate_type == RateType.WEEKEND_HOLIDAY_LIVE_IN:
+                                total_hours = 24.0
+                                rate = float(getattr(client, client.RATE_TYPE_TO_FIELD[rate_type].attname))
+                                if rate < 1.0:
+                                    rate_type = RateType.LIVE_IN
+                                    rate = float(getattr(client, client.RATE_TYPE_TO_FIELD[RateType.LIVE_IN].attname))
+                                    total_cost = rate * total_hours
+                                else:
+                                    total_cost = rate * total_hours
+                                    
+                                caregiver_to_rate_type_to_total_cost[caregiver][rate_type] += total_cost
+                                caregiver_to_rate_type_to_total_hours[caregiver][rate_type] += total_hours
+                            else:
+                                total_hours = schedule.get_hours_diff()
+                                rate = float(getattr(client, client.RATE_TYPE_TO_FIELD[rate_type].attname))
+
+                                if rate < 1.0:
+                                    rate_type = RateType.NORMAL
+                                    rate = float(getattr(client, client.RATE_TYPE_TO_FIELD[RateType.NORMAL].attname))
+                                    total_cost = rate * total_hours
+                                    caregiver_to_rate_type_to_total_cost[caregiver][rate_type] += total_cost
+                                    caregiver_to_rate_type_to_total_hours[caregiver][rate_type] += total_hours    
+                                else:
+                                    total_cost = rate * total_hours
+                                    caregiver_to_rate_type_to_total_cost[caregiver][rate_type] += total_cost
+                                    caregiver_to_rate_type_to_total_hours[caregiver][rate_type] += total_hours
+                      
+                                   
+                              
+                    
+                        
         return (caregiver_to_rate_type_to_total_cost, caregiver_to_rate_type_to_total_hours)
+    
 
     def create_invoice_lines(self, caregiver_to_rate_type_to_total_hours,
                              caregiver_to_rate_type_to_total_cost,
@@ -1696,3 +1734,7 @@ class InvoiceLineItem(models.Model):
     rate = models.DecimalField(max_length=200, max_digits=10, decimal_places=2)
     custom_service_charge = models.DecimalField(max_length=200, max_digits=10, decimal_places=2, default=0.00)
     total = models.DecimalField(max_length=200, max_digits=10, decimal_places=2)
+
+
+class InvoiceRateType(models.Model):
+    rate_types = models.CharField(max_length=300)

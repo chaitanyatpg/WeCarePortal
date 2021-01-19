@@ -1,0 +1,28 @@
+[
+
+
+    {
+        "model":"mycareportal_app.invoiceratetype",
+        "pk": 1,
+        "fields": {
+			
+			"rate_types": "Supplies"
+		}
+    },
+    {
+        "model":"mycareportal_app.invoiceratetype",
+        "pk": 2,
+        "fields": {
+			
+			"rate_types": "Mileage"
+		}
+    },
+    {
+        "model":"mycareportal_app.invoiceratetype",
+        "pk": 3,
+        "fields": {
+			
+			"rate_types": "Miscellaneous"
+		}
+    }
+]
