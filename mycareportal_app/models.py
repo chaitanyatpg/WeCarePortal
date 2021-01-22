@@ -1642,7 +1642,7 @@ class InvoiceHeader(models.Model):
             for rate_type in caregiver_to_rate_type_to_schedules[caregiver]:
                 for schedule in caregiver_to_rate_type_to_schedules[caregiver][rate_type]:                    
                     if TaskSchedule.objects.filter(client = client.id, date = schedule.date,complete = True).exists():
-                        task_schedules = TaskSchedule.objects.get(client = client.id,  date = schedule.date,complete = True)
+                        task_schedules = TaskSchedule.objects.filter(client = client.id,  date = schedule.date,complete = True)
                         if task_schedules:
                             if rate_type == RateType.LIVE_IN or rate_type == RateType.WEEKEND_LIVE_IN  or rate_type == RateType.HOLIDAY_LIVE_IN or rate_type == RateType.WEEKEND_HOLIDAY_LIVE_IN:
                                 total_hours = 24.0
