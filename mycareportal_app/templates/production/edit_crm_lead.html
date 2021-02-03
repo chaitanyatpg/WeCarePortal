@@ -1,0 +1,636 @@
+{% extends "production/base.html" %}
+{% block title %} Add Lead{% endblock %}
+{% load mycareportal_app_extras%}
+{% block headlibs %}
+{% load static %}
+<!-- iCheck -->
+<link href="{% static 'vendors/iCheck/skins/flat/green.css' %}" rel="stylesheet">
+<!-- bootstrap-wysiwyg -->
+<link href="{% static 'vendors/google-code-prettify/bin/prettify.min.css' %}" rel="stylesheet">
+<!-- Select2 -->
+<link href="{% static 'vendors/select2/dist/css/select2.min.css' %}" rel="stylesheet">
+<!-- Switchery -->
+<link href="{% static 'vendors/switchery/dist/switchery.min.css' %}" rel="stylesheet">
+<!-- starrr -->
+<link href="{% static 'vendors/starrr/dist/starrr.css' %}" rel="stylesheet">
+<!-- bootstrap-daterangepicker -->
+<link href="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+<!-- FullCalendar -->
+<link href="{% static 'vendors/fullcalendar/dist/fullcalendar.min.css' %}" rel="stylesheet">
+<link href="{% static 'vendors/fullcalendar/dist/fullcalendar.print.css' %}" rel="stylesheet" media="print">
+<!-- Dropzone.js -->
+<link href="{% static 'vendors/dropzone/dist/min/dropzone.min.css' %}" rel="stylesheet">
+
+{% endblock %}
+{% block pagecontent %}
+<style>
+    .fc-time {
+        display: none;
+    }
+</style>
+<!-- page content -->
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3></h3>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        {{block.super}}
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Create Lead <small>Lead Information</small></h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content"> <br />
+                        {% if client_success_msg is not None %}
+                        <div class="alert alert-success">
+                            {{ client_success_msg }}
+                        </div>
+                        {% endif %}
+                        {% if crm_lead_form.errors %}
+                        {% for field in crm_lead_form %}
+                        {% for error in field.errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{error}}</strong>
+                        </div>
+                        {% endfor %}
+                        {% endfor %}
+                        {% for error in crm_lead_form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            <string>{{error}}</strong>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        <form enctype="multipart/form-data" method='post' action="{% url 'edit_crm_lead' %}"
+                            class="form-horizontal form-label-left">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Lead Owner
+                                    <span class="required">*</span> </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {% if not crm_lead_form.lead_owner.value is None %}
+                                    <input type="text" readonly required="required"
+                                        class="form-control col-md-7 col-xs-12"
+                                        name="{{crm_lead_form.lead_owner.html_name}}"
+                                        value="{{ current_company.company_name }}">
+                                    {% else %}
+                                    <input type="text" readonly required="required"
+                                        class="form-control col-md-7 col-xs-12"
+                                        name="{{crm_lead_form.lead_owner.html_name}}"
+                                        value="{{ current_company.company_name }}">
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Lead First
+                                    Name
+                                    <span class="required">*</span> </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {% if not crm_lead_form.lead_first_name.value is None %}
+                                    <input type="text" required="required" class="form-control col-md-7 col-xs-12"
+                                        name="{{crm_lead_form.lead_first_name.html_name}}"
+                                        value="{{crm_lead_form.lead_first_name.value}}">
+                                    {% else %}
+                                    <input type="text" required="required" class="form-control col-md-7 col-xs-12"
+                                        name="{{crm_lead_form.lead_first_name.html_name}}">
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name"> Lead Last Name
+                                    <span class="required">*</span> </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {% if not crm_lead_form.lead_last_name.value is None %}
+                                    <input type="text" required="required" class="form-control col-md-7 col-xs-12"
+                                        name="{{crm_lead_form.lead_last_name.html_name}}"
+                                        value="{{crm_lead_form.lead_last_name.value}}">
+                                    {% else %}
+                                    <input type="text" required="required" class="form-control col-md-7 col-xs-12"
+                                        name="{{crm_lead_form.lead_last_name.html_name}}">
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Gender <span
+                                        class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <label class="btn btn-default" data-toggle-class="btn-primary"
+                                        data-toggle-passive-class="btn-default">
+                                        {% if crm_lead_form.lead_gender.value == 'M' %}
+
+                                        <input type="radio" name="{{crm_lead_form.lead_gender.html_name}}" value="M"
+                                            checked="checked" required="required">
+                                        {% else %}
+
+                                        <input type="radio" name="{{crm_lead_form.lead_gender.html_name}}" value="M"
+                                            required="required">
+                                        {% endif %}
+                                        &nbsp; Male &nbsp; </label>
+                                    <label class="btn btn-default" data-toggle-class="btn-primary"
+                                        data-toggle-passive-class="btn-default">
+                                        {% if crm_lead_form.lead_gender.value == 'F' %}
+                                        <input type="radio" name="{{crm_lead_form.lead_gender.html_name}}" value="F"
+                                            checked="checked" required="required">
+                                        {% else %}
+                                        <input type="radio" name="{{crm_lead_form.lead_gender.html_name}}" value="F"
+                                            required="required">
+                                        {% endif %}
+                                        Female </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Date Of Birth <span
+                                        class="required">*</span> </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {% if not crm_lead_form.date_of_birth.value is None %}
+                                    <input type="text" id="birthday" readonly="true"
+                                        class="date-picker form-control col-md-7 col-xs-12" required="required"
+                                        name={{crm_lead_form.date_of_birth.html_name}}
+                                        value={{crm_lead_form.date_of_birth.value}}>
+                                    {% else %}
+                                    <input type="text" id="birthday" readonly="true"
+                                        class="date-picker form-control col-md-7 col-xs-12" required="required"
+                                        name={{crm_lead_form.date_of_birth.html_name}}>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Phone Number <span
+                                        class="required">*</span> </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {% if not crm_lead_form.phone_number.value is None %}
+                                    <input type="text" class="form-control col-md-7 col-xs-12"
+                                        data-inputmask="'mask': '(999)-999-9999'" required="required"
+                                        name={{crm_lead_form.phone_number.html_name}}
+                                        value={{crm_lead_form.phone_number.value}}>
+                                    {% else %}
+                                    <input type="text" class="form-control col-md-7 col-xs-12"
+                                        data-inputmask="'mask': '(999)-999-9999'" required="required"
+                                        name={{crm_lead_form.phone_number.html_name}}>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12"> Secondary Phone Number <span
+                                        class="required">*</span> </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {% if not crm_lead_form.secondary_phone_number.value is None %}
+                                    <input type="text" class="form-control col-md-7 col-xs-12"
+                                        data-inputmask="'mask': '(999)-999-9999'"
+                                        name={{crm_lead_form.secondary_phone_number.html_name}}
+                                        value={{crm_lead_form.secondary_phone_number.value}}>
+                                    {% else %}
+                                    <input type="text" class="form-control col-md-7 col-xs-12"
+                                        data-inputmask="'mask': '(999)-999-9999'"
+                                        name={{crm_lead_form.secondary_phone_number.html_name}}>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Email Address<span
+                                        class="required">*</span> </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {% if not crm_lead_form.lead_email.value is None %}
+                                    <input type="text" class="form-control col-md-7 col-xs-12" required="required"
+                                        name={{crm_lead_form.lead_email.html_name}}
+                                        value={{crm_lead_form.lead_email.value}}>
+                                    {% else %}
+                                    <input type="text" class="form-control col-md-7 col-xs-12" required="required"
+                                        name={{crm_lead_form.lead_email.html_name}}>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="item form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">Address <span
+                                        class="required">*</span> </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {% if not crm_lead_form.lead_address.value is None %}
+                                    <input type="text" class="form-control col-md-7 col-xs-12"
+                                        name="{{crm_lead_form.lead_address.html_name}}"
+                                        value="{{crm_lead_form.lead_address.value}}"></textarea>
+                                    {% else %}
+                                    <input type="text" class="form-control col-md-7 col-xs-12"
+                                        name="{{crm_lead_form.lead_address.html_name}}"></textarea>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">City<span
+                                        class="required">*</span> </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {% if not crm_lead_form.city.value is None %}
+                                    <input type="text" class="form-control col-md-7 col-xs-12"
+                                        name="{{crm_lead_form.city.html_name}}" value="{{crm_lead_form.city.value}}">
+                                    {% else %}
+                                    <input type="text" class="form-control col-md-7 col-xs-12"
+                                        name="{{crm_lead_form.city.html_name}}">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">State<span
+                                        class="required">*</span> </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {% if not crm_lead_form.state.value is None %}
+                                    <select required class="select2_single form-control" tabindex="-1"
+                                        name={{crm_lead_form.state.html_name}} value={{crm_lead_form.state.value}}>
+                                        <option selected=selected>{{crm_lead_form.state.value}}</option>
+                                        <option value="Other">Other</option>
+                                        <option value="AL">Alabama</option>
+                                        <option value="AK">Alaska</option>
+                                        <option value="AZ">Arizona</option>
+                                        <option value="AR">Arkansas</option>
+                                        <option value="CA">California</option>
+                                        <option value="CO">Colorado</option>
+                                        <option value="CT">Connecticut</option>
+                                        <option value="DE">Delaware</option>
+                                        <option value="DC">District Of Columbia</option>
+                                        <option value="FL">Florida</option>
+                                        <option value="GA">Georgia</option>
+                                        <option value="HI">Hawaii</option>
+                                        <option value="ID">Idaho</option>
+                                        <option value="IL">Illinois</option>
+                                        <option value="IN">Indiana</option>
+                                        <option value="IA">Iowa</option>
+                                        <option value="KS">Kansas</option>
+                                        <option value="KY">Kentucky</option>
+                                        <option value="LA">Louisiana</option>
+                                        <option value="ME">Maine</option>
+                                        <option value="MD">Maryland</option>
+                                        <option value="MA">Massachusetts</option>
+                                        <option value="MI">Michigan</option>
+                                        <option value="MN">Minnesota</option>
+                                        <option value="MS">Mississippi</option>
+                                        <option value="MO">Missouri</option>
+                                        <option value="MT">Montana</option>
+                                        <option value="NE">Nebraska</option>
+                                        <option value="NV">Nevada</option>
+                                        <option value="NH">New Hampshire</option>
+                                        <option value="NJ">New Jersey</option>
+                                        <option value="NM">New Mexico</option>
+                                        <option value="NY">New York</option>
+                                        <option value="NC">North Carolina</option>
+                                        <option value="ND">North Dakota</option>
+                                        <option value="OH">Ohio</option>
+                                        <option value="OK">Oklahoma</option>
+                                        <option value="OR">Oregon</option>
+                                        <option value="PA">Pennsylvania</option>
+                                        <option value="RI">Rhode Island</option>
+                                        <option value="SC">South Carolina</option>
+                                        <option value="SD">South Dakota</option>
+                                        <option value="TN">Tennessee</option>
+                                        <option value="TX">Texas</option>
+                                        <option value="UT">Utah</option>
+                                        <option value="VT">Vermont</option>
+                                        <option value="VA">Virginia</option>
+                                        <option value="WA">Washington</option>
+                                        <option value="WV">West Virginia</option>
+                                        <option value="WI">Wisconsin</option>
+                                        <option value="WY">Wyoming</option>
+                                        <option value="Andra Pradesh">Andra Pradesh</option>
+                                        <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                        <option value="Assam">Asssam</option>
+                                        <option value="Bihar">Bihar</option>
+                                        <option value="Chhattisgarh">Chhattisgarh</option>
+                                        <option value="Goa">Goa</option>
+                                        <option value="Gujarat">Gujarat</option>
+                                        <option value="Haryana">Haryana</option>
+                                        <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                        <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                                        <option value="Jharkhand">Jharkhand</option>
+                                        <option value="Karnataka">Karnataka</option>
+                                        <option value="Kerala">Kerala</option>
+                                        <option value="Madya Pradesh">Madya Pradesh</option>
+                                        <option value="Maharashtra">Maharashtra</option>
+                                        <option value="Manipur">Manipur</option>
+                                        <option value="Meghalaya">Meghalaya</option>
+                                        <option value="Mizoram">Mizoram</option>
+                                        <option value="Nagaland">Nagaland</option>
+                                        <option valule="Orissa">Orissa</option>
+                                        <option value="Punjab">Punjab</option>
+                                        <option value="Rajasthan">Rajasthan</option>
+                                        <option value="Sikkim">Sikkim</option>
+                                        <option vaule="Tamil Nadu">Tamil Nadu</option>
+                                        <option value="Telagana">Telagana</option>
+                                        <option value="Tripura">Tripura</option>
+                                        <option value="Uttaranchal">Uttaranchal</option>
+                                        <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                        <option value="West Bengal">West Bengal</option>
+                                    </select>
+                                    {% else %}
+                                    <select class="select2_single form-control" tabindex="-1"
+                                        name={{crm_lead_form.state.html_name}}>
+                                       
+                                        <option value="Other">Other</option>
+                                        <option value="AL">Alabama</option>
+                                        <option value="AK">Alaska</option>
+                                        <option value="AZ">Arizona</option>
+                                        <option value="AR">Arkansas</option>
+                                        <option value="CA">California</option>
+                                        <option value="CO">Colorado</option>
+                                        <option value="CT">Connecticut</option>
+                                        <option value="DE">Delaware</option>
+                                        <option value="DC">District Of Columbia</option>
+                                        <option value="FL">Florida</option>
+                                        <option value="GA">Georgia</option>
+                                        <option value="HI">Hawaii</option>
+                                        <option value="ID">Idaho</option>
+                                        <option value="IL">Illinois</option>
+                                        <option value="IN">Indiana</option>
+                                        <option value="IA">Iowa</option>
+                                        <option value="KS">Kansas</option>
+                                        <option value="KY">Kentucky</option>
+                                        <option value="LA">Louisiana</option>
+                                        <option value="ME">Maine</option>
+                                        <option value="MD">Maryland</option>
+                                        <option value="MA">Massachusetts</option>
+                                        <option value="MI">Michigan</option>
+                                        <option value="MN">Minnesota</option>
+                                        <option value="MS">Mississippi</option>
+                                        <option value="MO">Missouri</option>
+                                        <option value="MT">Montana</option>
+                                        <option value="NE">Nebraska</option>
+                                        <option value="NV">Nevada</option>
+                                        <option value="NH">New Hampshire</option>
+                                        <option value="NJ">New Jersey</option>
+                                        <option value="NM">New Mexico</option>
+                                        <option value="NY">New York</option>
+                                        <option value="NC">North Carolina</option>
+                                        <option value="ND">North Dakota</option>
+                                        <option value="OH">Ohio</option>
+                                        <option value="OK">Oklahoma</option>
+                                        <option value="OR">Oregon</option>
+                                        <option value="PA">Pennsylvania</option>
+                                        <option value="RI">Rhode Island</option>
+                                        <option value="SC">South Carolina</option>
+                                        <option value="SD">South Dakota</option>
+                                        <option value="TN">Tennessee</option>
+                                        <option value="TX">Texas</option>
+                                        <option value="UT">Utah</option>
+                                        <option value="VT">Vermont</option>
+                                        <option value="VA">Virginia</option>
+                                        <option value="WA">Washington</option>
+                                        <option value="WV">West Virginia</option>
+                                        <option value="WI">Wisconsin</option>
+                                        <option value="WY">Wyoming</option>
+                                        <option value="Andra Pradesh">Andra Pradesh</option>
+                                        <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                        <option value="Assam">Asssam</option>
+                                        <option value="Bihar">Bihar</option>
+                                        <option value="Chhattisgarh">Chhattisgarh</option>
+                                        <option value="Goa">Goa</option>
+                                        <option value="Gujarat">Gujarat</option>
+                                        <option value="Haryana">Haryana</option>
+                                        <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                        <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                                        <option value="Jharkhand">Jharkhand</option>
+                                        <option value="Karnataka">Karnataka</option>
+                                        <option value="Kerala">Kerala</option>
+                                        <option value="Madya Pradesh">Madya Pradesh</option>
+                                        <option value="Maharashtra">Maharashtra</option>
+                                        <option value="Manipur">Manipur</option>
+                                        <option value="Meghalaya">Meghalaya</option>
+                                        <option value="Mizoram">Mizoram</option>
+                                        <option value="Nagaland">Nagaland</option>
+                                        <option valule="Orissa">Orissa</option>
+                                        <option value="Punjab">Punjab</option>
+                                        <option value="Rajasthan">Rajasthan</option>
+                                        <option value="Sikkim">Sikkim</option>
+                                        <option vaule="Tamil Nadu">Tamil Nadu</option>
+                                        <option value="Telagana">Telagana</option>
+                                        <option value="Tripura">Tripura</option>
+                                        <option value="Uttaranchal">Uttaranchal</option>
+                                        <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                        <option value="West Bengal">West Bengal</option>
+                                    </select>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">ZIP code<span
+                                        class="required">*</span> </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {% if not crm_lead_form.zip_code.value is None %}
+                                    <input type="text" class="form-control col-md-7 col-xs-12"
+                                        name={{crm_lead_form.zip_code.html_name}}
+                                        value={{crm_lead_form.zip_code.value}}>
+                                    {% else %}
+                                    <input type="text" class="form-control col-md-7 col-xs-12"
+                                        name={{crm_lead_form.zip_code.html_name}}>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <!-- <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Profile Picture</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {{crm_lead_form.profile_picture.label_tag}}{{crm_lead_form.profile_picture}}
+                                </div>
+                            </div> -->
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Lead Source</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {% if not crm_lead_form.lead_source.value is None %}
+                                    <select required class="select2_single form-control" tabindex="-1"
+                                        name={{crm_lead_form.lead_source.html_name}}
+                                        value={{crm_lead_form.state.value}}>
+                                        <option value="" disabled selected>Select Status</option>
+                                        <option selected=selected>{{crm_lead_form.lead_source.value}}</option>
+                                        <option value="Advertisement">Advertisement</option>
+                                        <option value="Cold Call">Cold Call</option>
+                                        <option value="Employee Referral">Employee Referral</option>
+                                        <option value="External Referral">External Referral</option>
+                                        <option value="Chat">Chat</option>
+                                        <option value="Twitter">Twitter</option>
+                                        <option value="Facebook">Facebook</option>
+                                        <option value="Seminar">Seminar</option>
+                                        <option value="WebSearch">WebSearch</option>
+
+
+
+
+                                    </select>
+                                    {% else %}
+                                    <select class="select2_single form-control" tabindex="-1"
+                                        name={{crm_lead_form.lead_source.html_name}}>
+                                        <option value="" disabled selected>Select Status</option>
+                                        <option value="Advertisement">Advertisement</option>
+                                        <option value="Cold Call">Cold Call</option>
+                                        <option value="Employee Referral">Employee Referral</option>
+                                        <option value="External Referral">External Referral</option>
+                                        <option value="Chat">Chat</option>
+                                        <option value="Twitter">Twitter</option>
+                                        <option value="Facebook">Facebook</option>
+                                        <option value="Seminar">Seminar</option>
+                                        <option value="WebSearch">WebSearch</option>
+
+
+                                    </select>
+
+                                    {% endif %}
+
+
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Lead Status</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {% if not crm_lead_form.lead_status.value is None %}
+                                    <select required class="select2_single form-control" tabindex="-1"
+                                        name={{crm_lead_form.lead_status.html_name}}
+                                        value={{crm_lead_form.lead_status.value}}>
+                                        <option value="" disabled selected>Select Status</option>
+                                        <option selected=selected>{{crm_lead_form.lead_status.value}}</option>
+                                        <option value="Attempted To Contact">Attempted To Contact</option>
+                                        <option value="Contact In Future">Contact In Future</option>
+                                        <option value="Contacted">Contacted</option>
+                                        <option value="Junk Lead">Junk Lead</option>
+                                        <option value="Lost Lead">Lost Lead</option>
+                                        <option value="Not Contacted">Not Contacted</option>
+
+
+
+                                    </select>
+                                    {% else %}
+                                    <select class="select2_single form-control" tabindex="-1"
+                                        name={{crm_lead_form.lead_status.html_name}}>
+                                        <option value="" disabled selected>Select Status</option>
+                                        <option value="Attempted To Contact">Attempted To Contact</option>
+                                        <option value="Contact In Future">Contact In Future</option>
+                                        <option value="Contacted">Contacted</option>
+                                        <option value="Junk Lead">Junk Lead</option>
+                                        <option value="Lost Lead">Lost Lead</option>
+                                        <option value="Not Contacted">Not Contacted</option>
+
+
+                                    </select>
+
+                                    {% endif %}
+
+
+
+                                </div>
+                            </div>
+
+                            <!-- <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Additional Attachments</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {{crm_lead_form.attachment.label_tag}}{{crm_lead_form.attachment}}
+                                </div>
+                            </div> -->
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Description</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {% if not crm_lead_form.lead_discription.value is None %}
+                                    <textarea type="text" rows="4" cols="50" class="form-control col-md-7 col-xs-12"
+                                        name={{crm_lead_form.lead_discription.html_name}}
+                                        value={{crm_lead_form.lead_discription.value}}>{{crm_lead_form.lead_discription.value}}</textarea>
+                                    {% else %}
+                                    <textarea type="text" rows="4" cols="50" class="form-control col-md-7 col-xs-12"
+                                        name={{crm_lead_form.lead_discription.html_name}}></textarea>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+
+                            <div class="ln_solid"></div>
+                            <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-8">
+                                    <input type="hidden" name='{{crm_lead_form.lead_email.html_name}}' value='{{lead_email}}'>
+                                    <button type="submit" class="btn btn-success">Update</button>
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+{% block footlibs %}
+<!-- bootstrap-progressbar -->
+<script src="{% static 'vendors/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
+<!-- iCheck -->
+<script src="{% static 'vendors/iCheck/icheck.min.js' %}"></script>
+<!-- bootstrap-daterangepicker -->
+<script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
+<script src="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+<!-- bootstrap-wysiwyg -->
+<script src="{% static 'vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js' %}"></script>
+<script src="{% static 'vendors/jquery.hotkeys/jquery.hotkeys.js' %}"></script>
+<script src="{% static 'vendors/google-code-prettify/src/prettify.js' %}"></script>
+<!-- jQuery Tags Input -->
+<script src="{% static 'vendors/jquery.tagsinput/src/jquery.tagsinput.js' %}"></script>
+<!-- Switchery -->
+<script src="{% static 'vendors/switchery/dist/switchery.min.js' %}"></script>
+<!-- Select2 -->
+<script src="{% static 'vendors/select2/dist/js/select2.full.min.js' %}"></script>
+<!-- Parsley -->
+<script src="{% static 'vendors/parsleyjs/dist/parsley.min.js' %}"></script>
+<!-- Autosize -->
+<script src="{% static 'vendors/autosize/dist/autosize.min.js' %}"></script>
+<!-- jQuery autocomplete -->
+<script src="{% static 'vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js' %}"></script>
+<!-- starrr -->
+<script src="{% static 'vendors/starrr/dist/starrr.js' %}"></script>
+<!-- FullCalendar -->
+<script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
+<script src="{% static 'vendors/fullcalendar/dist/fullcalendar.min.js' %}"></script>
+<!-- Fine Uploader -->
+<script src="{% static 'vendors/fine-uploader/jquery.fine-uploader.min.js' %}"></script>
+<!-- Datatables -->
+
+{% endblock %}
+{% block scripts %}
+
+
+
+<!-- bootstrap-daterangepicker -->
+
+<script>
+    $(document).ready(function () {
+        $('#birthday').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            calender_style: "picker_4"
+        }, function (start, end, label) {
+            console.log(start.toISOString(), end.toISOString(), label);
+        });
+        
+        
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#incident_table').DataTable({
+            dom: "Bfrtip",
+            sScrollX: "100%",
+            bScrollCollapse: false,
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+        });
+    });
+</script>
+{% endblock %}

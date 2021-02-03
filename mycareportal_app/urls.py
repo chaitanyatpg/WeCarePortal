@@ -239,6 +239,16 @@ urlpatterns = [
     url(r'^schedule_free_caregiver',caregiver_views.ScheduleFreeCaregiver.as_view(),name='schedule_free_caregiver'),
     url(r'^view_client_high_risk', views.ClientHighRisk.as_view(),name='view_client_high_risk'),
     url(r'^company_holiday', views.CompanyHoliday.as_view(),name='company_holiday'),
+    url(r'^company_crm', views.CompanyCrm.as_view(),name='company_crm'),
+    url(r'^client_lead_crm', views.AddCrmLead.as_view(),name='client_lead_crm'),
+    url(r'^edit_crm_lead', views.EditCrmLead.as_view(),name='edit_crm_lead'),    
+    url(r'^convert_lead_client',views.convert_lead,name='convert_lead_client'),
+    url(r'^crm_follow_up/(?P<id>[0-9a-f-]+)', views.CrmNotesFollowUP.as_view(),name='crm_follow_up'),    
+    url(r'^save_crm_notes',views.savecrm_notes,name='save_crm_notes'),
+    url(r'^update_lead_status',views.update_lead_status,name='update_lead_status'),
+    url(r'^delete_lead_client/(?P<id>[0-9a-f-]+)', views.LeadDelete.as_view(),name='delete_lead_client'),    
+
+
     url(r'^viwe_holiday_ids', views.view_company_holiday_id,name='viwe_holiday_ids'),
     url(r'^delete_holiday_with_id', views.delete_holiday_with_id,name='delete_holiday_with_id'),
     url(r'^view_client_high/(?P<id>[0-9a-f-]+)',views.viewclienthigh,name='view_client_high'),
