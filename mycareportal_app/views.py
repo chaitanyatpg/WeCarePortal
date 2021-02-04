@@ -2059,14 +2059,8 @@ class CompanyCrm(LoginRequiredMixin, View):
     def get(self, request):
         context = {}
         current_company = request.user.company
-        print("dddddddddddddd")
         lead_detail = CrmClientLead.objects.filter(company = current_company)
         context['lead_detail'] = lead_detail
-        print("lead_detaillead_detail",lead_detail)
-        
-        
-        
-        # context['company_holiday_form'] = CompanyHolidayForm()
         
         return render(request, 'production/company_crm_home.html', context)
 
@@ -2129,7 +2123,6 @@ class AddCrmLead(LoginRequiredMixin, View):
         return HttpResponseRedirect(reverse('company_crm'))
 
     def parse_date(self,client_birthday):
-        # caregiver_birthday = client_birthday.date()
         output_month = client_birthday.month
         output_day = client_birthday.day
         output_year = client_birthday.year
@@ -2169,7 +2162,7 @@ def savecrm_notes(request):
         crm_lead_notes = CrmNotes.objects.filter(crm_client =lead_details )
         context['crm_lead_notes'] = crm_lead_notes
         data = {
-            "daa" : "sucess"
+            "data" : "sucess"
         }
         return HttpResponse(json.dumps(data), content_type="application/json")
 
@@ -2188,7 +2181,7 @@ def update_lead_status(request):
         crm_lead_detail.lead_status = lead_status
         crm_lead_detail.save()
         data = {
-            "daa" : "sucess"
+            "data" : "sucess"
         }
         return HttpResponse(json.dumps(data), content_type="application/json")
 
@@ -2212,9 +2205,7 @@ def convert_lead(request):
         context = request.GET.copy()
         lead_id = request.GET.get('lead_id')
         lead_crm = CrmClientLead.objects.get(id = lead_id )
-        print("jfs 9900")
         try:
-            print("jfs jkfsbfhsb",lead_crm.lead_email_address)
             lead_email = lead_crm.lead_email_address
             new_client = Client(company = current_company,
                                 email_address = lead_crm.lead_email_address,
@@ -2255,7 +2246,7 @@ class EditCrmLead(LoginRequiredMixin, View):
        
         current_company = Company.objects.get(company_id = current_company.company_id)
         context['current_company'] = current_company    
-        print("lead_details.lead_date_of_birth",lead_details.lead_date_of_birth)
+        
         
 
         if lead_details:
@@ -2283,8 +2274,6 @@ class EditCrmLead(LoginRequiredMixin, View):
             context['crm_lead_form'] = crm_lead_form
             # context['lead_value'] = lead_id
             context['lead_email'] = lead_details.lead_email_address
-            print("lead_details.lead_date_of_birth ---",lead_details.lead_date_of_birth)
-            print("hhh777")
         return render(request, 'production/edit_crm_lead.html', context)
 
     def post(self,request):
@@ -2314,7 +2303,6 @@ class EditCrmLead(LoginRequiredMixin, View):
         return HttpResponseRedirect(reverse('edit_crm_lead') + "?lead_email=" + lead_client.lead_email_address)
         
     def parse_date(self,client_birthday):
-        # caregiver_birthday = client_birthday.date()
         if client_birthday:
             output_month = client_birthday.month
             output_day = client_birthday.day
