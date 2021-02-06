@@ -72,7 +72,10 @@
                             <td>{{lead.lead_source}}</td>
                             <td>{{lead.lead_status}}</td>
                             <td><a href="{% url 'crm_follow_up' lead.id %}"><button>View</button> </a></td>
-                            <td> <a href="{% url 'delete_lead_client' lead.id %}"> <button>Delete</button> </a></td>
+                            <form onSubmit="return confirm('Do you want to Delete?') " method="get"  action="{% url 'delete_lead_client' lead.id %}" >
+                                <td>  <button >Delete</button> </td>
+                            </form>
+                            
                         </tr>
                         {% endfor %}
                     </tbody>
