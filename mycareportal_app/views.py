@@ -2051,3 +2051,261 @@ def update_invoice_detail(request):
           
 
         return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+
+class CompanyCrm(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {}
+        current_company = request.user.company
+        lead_detail = CrmClientLead.objects.filter(company = current_company)
+        context['lead_detail'] = lead_detail
+        
+        return render(request, 'production/company_crm_home.html', context)
+
+
+
+class AddCrmLead(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {}
+        current_company = request.user.company
+        current_company = Company.objects.get(company_id = current_company.company_id)
+        context['current_company'] = current_company    
+        context['crm_lead_form'] = CrmLeadForm()
+        return render(request, 'production/add_crm_client_lead.html', context)
+    
+    def post(self,request):
+        
+        context = {}
+        current_company = request.user.company
+        crm_lead_form = CrmLeadForm(request.POST)
+        context['crm_lead_form'] = crm_lead_form
+        if crm_lead_form.is_valid():
+            lead_owner = crm_lead_form.cleaned_data['lead_owner']
+            lead_first_name = crm_lead_form.cleaned_data['lead_first_name']
+            lead_last_name = crm_lead_form.cleaned_data['lead_last_name']
+            lead_gender = crm_lead_form.cleaned_data['lead_gender']
+            phone_number = crm_lead_form.cleaned_data['phone_number']
+            lead_date_of_birth = crm_lead_form.cleaned_data['date_of_birth']
+            secondary_phone_number = crm_lead_form.cleaned_data['secondary_phone_number']
+            lead_email = crm_lead_form.cleaned_data['lead_email']
+            city = crm_lead_form.cleaned_data['city']
+            state = crm_lead_form.cleaned_data['state']
+            zip_code = crm_lead_form.cleaned_data['zip_code']
+            lead_status = crm_lead_form.cleaned_data['lead_status']
+            lead_source = crm_lead_form.cleaned_data['lead_source']
+            lead_address = crm_lead_form.cleaned_data['lead_address']
+            lead_discription = crm_lead_form.cleaned_data['lead_discription']
+            try:
+                lead_crm = CrmClientLead(company = current_company,
+                                         lead_owner = lead_owner,
+                                         lead_last_name = lead_last_name,
+                                         lead_first_name = lead_first_name,
+                                         gender = lead_gender,
+                                         lead_contact_number = phone_number,
+                                         lead_date_of_birth = lead_date_of_birth,
+                                         lead_secondary_phone_number =secondary_phone_number,
+                                         lead_email_address = lead_email,
+                                         lead_source =lead_source,
+                                         lead_status= lead_status,
+                                         lead_state= state,
+                                         lead_city = city,
+                                         lead_zip_code = zip_code,
+                                         lead_address =lead_address,
+                                         description = lead_discription)
+                                        
+                lead_crm.save()
+                messages.success(request, "Lead successfully added. Add additional Details Below.")
+            except IntegrityError as e:
+                messages.error(request, "Lead already exists. Please enter a new Client.")
+        return HttpResponseRedirect(reverse('company_crm'))
+
+    def parse_date(self,client_birthday):
+        output_month = client_birthday.month
+        output_day = client_birthday.day
+        output_year = client_birthday.year
+        output_string = "{0}/{1}/{2}".format(output_month,output_day,output_year)
+        return output_string
+            
+
+
+
+class CrmNotesFollowUP(LoginRequiredMixin, View):
+
+    def get(self, request,*args, **kwargs):
+        context = {}
+        id = kwargs['id']
+        lead_details = CrmClientLead.objects.get(pk = id)
+        context['lead_details'] = lead_details
+        current_company = Company.objects.get(pk = lead_details.company_id)
+        context['current_company'] = current_company
+        crm_lead_notes = CrmNotes.objects.filter(crm_client =lead_details)
+        context['crm_lead_notes'] = crm_lead_notes     
+        return render(request, 'production/crm_notes_follow_up.html', context)
+
+@login_required
+def savecrm_notes(request):
+    if request.method == "GET":
+        context = {}
+        current_company = request.user.company
+        lead_details_id  =  json.loads(request.GET.get('lead_details_id'))
+        lead_details_notes = json.dumps(request.GET.get('lead_details_notes'))
+        lead_details = CrmClientLead.objects.get(id =  lead_details_id)
+        lead_details_notes = json.loads(lead_details_notes)
+
+        crm_notes = CrmNotes(company = current_company,crm_client = lead_details, notes = lead_details_notes)
+
+        crm_notes.save()
+        
+        crm_lead_notes = CrmNotes.objects.filter(crm_client =lead_details )
+        context['crm_lead_notes'] = crm_lead_notes
+        data = {
+            "data" : "sucess"
+        }
+        return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+
+@login_required
+def update_lead_status(request):
+    if request.method == "GET":
+        context = {}
+        current_company = request.user.company
+        lead_details_id  =  json.loads(request.GET.get('lead_details_id'))
+        lead_status = json.dumps(request.GET.get('lead_status'))
+        lead_details = CrmClientLead.objects.get(id =  lead_details_id)
+        lead_status = json.loads(lead_status)
+        crm_lead_detail = CrmClientLead.objects.get(id = lead_details_id)
+        crm_lead_detail.lead_status = lead_status
+        crm_lead_detail.save()
+        data = {
+            "data" : "sucess"
+        }
+        return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+
+class LeadDelete(LoginRequiredMixin, View):
+    
+    def get(self, request,*args, **kwargs):
+        context = {}
+        id = kwargs['id']
+        lead_details = CrmClientLead.objects.get(id = id).delete()
+        return HttpResponseRedirect(reverse('company_crm'))
+
+
+
+@login_required
+def convert_lead(request):
+    if request.method == "GET":
+        current_company = request.user.company
+        
+        context = request.GET.copy()
+        lead_id = request.GET.get('lead_id')
+        lead_crm = CrmClientLead.objects.get(id = lead_id )
+        try:
+            lead_email = lead_crm.lead_email_address
+            new_client = Client(company = current_company,
+                                email_address = lead_crm.lead_email_address,
+                                first_name = lead_crm.lead_first_name,
+                                last_name = lead_crm.lead_last_name,
+                                gender = lead_crm.gender,
+                                date_of_birth = lead_crm.lead_date_of_birth,
+                                phone_number = lead_crm.lead_contact_number,
+                                secondary_phone_number = lead_crm.lead_secondary_phone_number,
+                                address = lead_crm.lead_address,
+                                city = lead_crm.lead_city,
+                                state = lead_crm.lead_state,
+                                zip_code = lead_crm.lead_zip_code
+                                )
+            
+            new_client.save()
+            
+            
+            
+            messages.success(request, "Lead {0} {1} successfully Converted To Client!".format( lead_crm.lead_first_name, lead_crm.lead_last_name))
+            lead_crm = CrmClientLead.objects.get(id = lead_id ).delete()
+            return HttpResponseRedirect(reverse('edit_client') + "?client_email=" +  lead_email)
+            
+        except IntegrityError as e:
+            messages.error(request, "Client already exists. Please enter a new client.")
+    return HttpResponseRedirect(reverse('company_crm'))
+
+
+
+class EditCrmLead(LoginRequiredMixin, View):
+    
+    def get(self, request,*args, **kwargs):
+        context = {}
+        current_company = request.user.company
+        lead_email = request.GET.get('lead_email')
+        lead_details = CrmClientLead.objects.get(company = current_company,lead_email_address = lead_email)
+        # lead_id = request.GET.get('lead_id')
+       
+        current_company = Company.objects.get(company_id = current_company.company_id)
+        context['current_company'] = current_company    
+        
+        
+
+        if lead_details:
+            lead_details = CrmClientLead.objects.get(id = lead_details.id)
+            current_company = request.user.company
+            current_company = Company.objects.get(company_id = current_company.company_id)
+            
+            crm_lead_form = CrmLeadForm(initial=
+            {
+             "lead_first_name" : lead_details.lead_first_name,
+             "lead_last_name"  :lead_details.lead_last_name,
+             "lead_email" : lead_details.lead_email_address,
+             "lead_gender" : lead_details.gender,
+             "lead_address" : lead_details.lead_address,
+             "city": lead_details.lead_city,
+             "state": lead_details.lead_state,
+             "zip_code":lead_details.lead_zip_code,
+             "phone_number":lead_details.lead_contact_number,
+             "date_of_birth" : self.parse_date(lead_details.lead_date_of_birth),
+             "secondary_phone_number":lead_details.lead_secondary_phone_number,
+             "lead_status":lead_details.lead_status,
+             "lead_source":lead_details.lead_source,
+             "lead_discription":lead_details.description
+            })
+            context['crm_lead_form'] = crm_lead_form
+            # context['lead_value'] = lead_id
+            context['lead_email'] = lead_details.lead_email_address
+        return render(request, 'production/edit_crm_lead.html', context)
+
+    def post(self,request):
+        context = {}
+        current_company = request.user.company
+        crm_lead_form = CrmLeadForm(request.POST)
+        context['crm_lead_form'] = crm_lead_form        
+        email =  crm_lead_form.data['lead_email']
+        if crm_lead_form.is_valid():
+            lead_client = CrmClientLead.objects.get(lead_email_address = email)
+            lead_client.lead_first_name = crm_lead_form.cleaned_data['lead_first_name']
+            lead_client.lead_last_name = crm_lead_form.cleaned_data['lead_last_name']
+            lead_client.lead_date_of_birth = crm_lead_form.cleaned_data['date_of_birth']
+            lead_client.gender = crm_lead_form.cleaned_data['lead_gender']
+            lead_client.lead_source =  crm_lead_form.cleaned_data['lead_source']
+            lead_client.lead_contact_number =  crm_lead_form.cleaned_data['phone_number']
+            lead_client.lead_secondary_phone_number =crm_lead_form.cleaned_data['secondary_phone_number']
+            lead_client.lead_status = crm_lead_form.cleaned_data['lead_status']
+            lead_client.lead_address = crm_lead_form.cleaned_data['lead_address']
+            lead_client.lead_city = crm_lead_form.cleaned_data['city']
+            lead_client.lead_state = crm_lead_form.cleaned_data['state']
+            lead_client.lead_zip_code = crm_lead_form.cleaned_data['zip_code']
+            lead_client.description = crm_lead_form.cleaned_data['lead_discription']
+            lead_client.save()
+            messages.success(request, "Lead {0} {1} successfully edited!".format(lead_client.lead_first_name,lead_client.lead_last_name))
+
+        return HttpResponseRedirect(reverse('edit_crm_lead') + "?lead_email=" + lead_client.lead_email_address)
+        
+    def parse_date(self,client_birthday):
+        if client_birthday:
+            output_month = client_birthday.month
+            output_day = client_birthday.day
+            output_year = client_birthday.year
+            output_string = "{0}/{1}/{2}".format(output_month,output_day,output_year)
+            return output_string

@@ -1738,3 +1738,36 @@ class InvoiceLineItem(models.Model):
 
 class InvoiceRateType(models.Model):
     rate_types = models.CharField(max_length=300)
+
+
+class CrmClientLead(models.Model):
+    company = models.ForeignKey(Company)
+    created = models.DateTimeField(auto_now_add=True)
+    lead_owner =  models.CharField(max_length=300)
+    lead_first_name = models.CharField(max_length=100)
+    lead_last_name = models.CharField(max_length=100)
+    lead_date_of_birth =models.DateTimeField(null=True)
+    gender = models.CharField(max_length=1)
+    lead_email_address = models.CharField(max_length = 100,unique=True)
+    lead_source = models.CharField(max_length=100)
+    lead_contact_number = models.CharField(max_length=40)
+    lead_secondary_phone_number = models.CharField(max_length=40, blank=True)
+    lead_status =  models.CharField(max_length=100)
+    lead_address = models.CharField(max_length=400)
+    lead_city = models.CharField(max_length=100)
+    lead_state = models.CharField(max_length=100)
+    lead_zip_code = models.CharField(max_length=10)
+    description = models.CharField(max_length=1000, blank=True)
+    
+
+class CrmNotes(models.Model):
+
+    company = models.ForeignKey(Company)
+    created = models.DateTimeField(auto_now_add=True)
+    crm_client = models.ForeignKey(CrmClientLead)
+    notes = models.CharField(max_length=1000, blank=True)
+
+
+
+
+    

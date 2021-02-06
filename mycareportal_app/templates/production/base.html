@@ -100,6 +100,10 @@
                     {% if module_dict.DASHBOARD.COMPANYHOLIDAY %}
                     <li><a href={% url 'company_holiday' %}> Holiday Schedule</a></li>
                     {% endif %}
+
+                    {% if module_dict.DASHBOARD.MANAGECRM %}
+                    <li><a href={% url 'company_crm' %}> Manage CRM</a></li>
+                    {% endif %}
                   </ul>
                 </li>
                 <li><a><i class="fa fa-home"></i>Reporting Portal<span class="fa fa-chevron-down"></span></a>

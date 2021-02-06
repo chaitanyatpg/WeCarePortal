@@ -184,3 +184,23 @@ class DeleteHolidayForm(forms.Form):
     def clean(self):
         cleaned_data = super(DeleteHolidayForm, self).clean()
         return cleaned_data
+
+
+class CrmLeadForm(forms.Form):
+
+    lead_owner = forms.CharField(max_length=300)
+    lead_first_name = forms.CharField(max_length=100)
+    lead_last_name = forms.CharField(max_length=100)
+    lead_email = forms.CharField(max_length=200)
+    lead_gender = forms.CharField(max_length=1)   
+    lead_address = forms.CharField(max_length=400, required=False)
+    city = forms.CharField(max_length=100, required=False)
+    state = forms.CharField(max_length=100, required=False)
+    zip_code = forms.CharField(max_length=10, required=False)
+    date_of_birth =  forms.DateTimeField()
+    phone_number = forms.CharField(max_length=20, required=False)
+    secondary_phone_number = forms.CharField(max_length=20, required=False)
+    lead_status = forms.CharField(max_length=100, required=False)
+    lead_source = forms.CharField(max_length=100, required=False)
+    lead_discription = forms.CharField(max_length= 1000, required=False)
+
