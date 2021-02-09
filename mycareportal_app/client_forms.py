@@ -402,9 +402,19 @@ class ClientInvoiceForm(forms.Form):
     weekend_live_in_rate = forms.DecimalField(required=False) 
     holiday_live_in_rate =forms.DecimalField(required=False) 
     weekend_holiday_live_in_rate = forms.DecimalField(required=False) 
-    
     client_email = forms.CharField(max_length=200)
 
     def clean(self):
         cleaned_data = super(ClientInvoiceForm, self).clean()
         return cleaned_data
+
+class FindClientTaskForm(forms.Form):
+
+    client_email = forms.CharField(max_length=100)
+    date_value = forms.DateField()
+    
+    def clean(self):
+        cleaned_data = super(FindClientTaskForm, self).clean()
+        return cleaned_data
+
+

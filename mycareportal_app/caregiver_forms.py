@@ -195,3 +195,15 @@ class CaregiverPayrollForm(forms.Form):
     def clean(self):
         cleaned_data = super(CaregiverPayrollForm, self).clean()
         return cleaned_data
+        
+class UpdateAdminManageTaskForm(forms.Form):
+
+    comment = forms.CharField(max_length=500, required=False)
+    status = forms.CharField(max_length=50)
+    task_id = forms.IntegerField()
+    client_id = forms.IntegerField()
+    
+
+    def clean(self):
+        cleaned_data = super(UpdateAdminManageTaskForm, self).clean()
+        return cleaned_data
