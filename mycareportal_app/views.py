@@ -41,6 +41,7 @@ from mycareportal_app.common.core.event import Event
 import uuid
 from mycareportal_app.client_forms import *
 from mycareportal_app.family_forms import *
+from mycareportal_app.caregiver_forms import *
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
@@ -1292,23 +1293,29 @@ class ManagerChooseClient(LoginRequiredMixin, View):
         #context['add_client_form'] = ClientRegistrationForm()
         all_clients = Client.objects.filter(company=current_company).order_by('last_name')
         context['all_clients'] = all_clients
-        context['find_client_form'] = FindClientForm()
+        context['find_client_task_form'] = FindClientTaskForm()
         return render(request, 'production/choose_client_manager.html', context)
 
 class ManagerClientDashboard(LoginRequiredMixin, View):
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
 
         context = {}
         current_company = request.user.company
-        find_client_form = FindClientForm(request.GET)
+        find_client_task_form = FindClientTaskForm(request.GET)
         context['all_timezones'] = pytz.all_timezones
-        if find_client_form.is_valid():
-            client_email = find_client_form.cleaned_data['client_email']
+        context["update_task_form"] = UpdateAdminManageTaskForm()
+        
+        if find_client_task_form.is_valid():
+            client_email = find_client_task_form.cleaned_data['client_email']
+            date_value = find_client_task_form.cleaned_data['date_value']
             client = Client.objects.get(company=current_company, email_address=client_email)
             related_clients = []
             related_clients.append(client)
             related_caregivers = []
+            context['client_email'] = client_email
+            
+            
             for client in related_clients:
                 client_caregivers = client.caregiver.all()
                 related_caregivers += client_caregivers
@@ -1317,18 +1324,19 @@ class ManagerClientDashboard(LoginRequiredMixin, View):
             context['active_caregivers'] = active_caregivers
             context['related_caregivers'] = related_caregivers
             #Get displayable family contact data
+        
 
             #Get Tasks for related clients for the current day
             client_tasks = {}
             current_date = datetime.date.today()
             for client_data in related_clients:
-                current_client_tasks = self.get_client_tasks(client_data, current_company)
+                current_client_tasks = self.get_client_tasks(client_data, current_company,date_value)
                 #client_name = '{0} {1}'.format(client_data.first_name, client_data.last_name)
                 client_tasks[client_data] = list(current_client_tasks)
             context["client_tasks"] = client_tasks
-            #Get Update Form
-            context["update_task_form"] = UpdateTaskForm()
-            return render(request, 'production/manager_client_dashboard.html', context)
+            
+       
+        return render(request, 'production/manager_client_dashboard.html', context)
 
     def post(self, request):
         context = {}
@@ -1338,11 +1346,40 @@ class ManagerClientDashboard(LoginRequiredMixin, View):
             comment = update_task_form.cleaned_data["comment"]
             task_id = update_task_form.cleaned_data["task_id"]
             client_id = update_task_form.cleaned_data["client_id"]
+            status = update_task_form.cleaned_data["status"]
             client = Client.objects.get(company=current_company,id=client_id)
             task = TaskSchedule.objects.get(company=current_company,client=client,id=task_id)
+            if status == "pending":
+                task.pending = True
+                task.complete = False
+                task.in_progress = False
+                task.cancelled = False
+            elif status == "complete":
+                task.pending = False
+                task.complete = True
+                task.in_progress = False
+                task.cancelled = False
+            elif status == "in_progress":
+                task.pending = False
+                task.complete = False
+                task.in_progress = True
+                task.cancelled = False
+            elif status == "cancelled":
+                task.pending = False
+                task.complete = False
+                task.in_progress = False
+                task.cancelled = True
+            if status == "complete":
+                task.completed_by = self.request.user
+                task.completed_timestamp = datetime.datetime.now()
+            else:
+                task.completed_by = None
+            task.save()
+            date = self.parse_dates(task.date)
+            
             self.save_task_comments(request, update_task_form, task, current_company, client, comment)
             messages.success(request, "Edited Task: {0}".format(task.activity_task))
-        return HttpResponseRedirect(reverse('manager_client_dashboard') + "?client_email=" + client.email_address)
+        return HttpResponseRedirect(reverse('manager_client_dashboard') + "?date_value=" + str(task.date) + "&client_email=" + client.email_address)
 
     def get_active_caregivers(self, current_company, related_clients, related_caregivers):
         client_timezone = pytz.timezone(related_clients[0].time_zone)
@@ -1356,17 +1393,27 @@ class ManagerClientDashboard(LoginRequiredMixin, View):
         return active_caregivers
 
 
-    def get_client_tasks(self, client_data, current_company):
-        client_timezone = pytz.timezone(client_data.time_zone)
+    def get_client_tasks(self, client_data, current_company,date_value):
+        # client_timezone = pytz.timezone(client_data.time_zone)
         #current_date = datetime.date.today()
-        current_date = (timezone.now().astimezone(client_timezone)).date()
-        timezone.activate(client_timezone)
-        client_tasks = TaskSchedule.objects.filter(company=current_company,client=client_data,date=current_date).order_by('cancelled','pending','in_progress','complete')
+        current_date = date_value
+        # timezone.activate(client_timezone)
+        client_tasks = TaskSchedule.objects.filter(company=current_company,client=client_data,date=current_date)
         client_tasks = list(map(lambda x: (x,
         TaskComment.objects.filter(company=current_company,client=client_data,task_schedule=x).order_by('created'),
         TaskAttachment.objects.filter(company=current_company,client=client_data,task_schedule=x).order_by('created'),
         TaskLink.objects.filter(company=current_company,client=client_data,task_schedule=x).order_by('created')),client_tasks))
         return client_tasks
+        
+        
+    
+    def parse_dates(self,task_date):
+        # caregiver_birthday = caregiver_birthday.date()
+        output_month = task_date.month
+        output_day = task_date.day
+        output_year = task_date.year
+        output_string = "{0}/{1}/{2}".format(output_month,output_day,output_year)
+        return output_string
 
     def save_task_comments(self, request, update_task_form, task, current_company, client, comment):
 
@@ -1821,9 +1868,6 @@ class CompanyHoliday(LoginRequiredMixin, View):
             holiday_name = company_holiday_form.cleaned_data['holiday_name']
             description = company_holiday_form.cleaned_data['description']
             date = company_holiday_form.cleaned_data['eventDate']
-
-
-
             company_holiday = CompanyHolidays(company = current_company,
                                               holiday_name = holiday_name,description=description,
                                               date = date)
@@ -2309,3 +2353,7 @@ class EditCrmLead(LoginRequiredMixin, View):
             output_year = client_birthday.year
             output_string = "{0}/{1}/{2}".format(output_month,output_day,output_year)
             return output_string
+
+
+
+    
