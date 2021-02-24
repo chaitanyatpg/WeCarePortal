@@ -54,7 +54,7 @@ AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER = 'dranjanwecare'
-EMAIL_HOST_PASSWORD = 'thepianoman2342'
+EMAIL_HOST_PASSWORD = 'WeCare2Send_g_ps_01C'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
