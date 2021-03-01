@@ -64,7 +64,7 @@ class CareManagerEmailProcessor(EmailProcessor):
         
     
         email = EmailMultiAlternatives(
-                    subject, message, from_email = user.email, to=caremanager_email, bcc = caregiver_email_address, cc=cc_email,
+                    subject, message, from_email = user.email, to=caremanager_email, bcc = caregiver_email_address,
 
         )
         email.attach_alternative(message, "text/html")
