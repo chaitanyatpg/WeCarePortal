@@ -75,10 +75,14 @@ class CompanyEditForm(forms.Form):
     mileage_rate= forms.DecimalField( required=False )
 
     def clean_picture(self):
-        picture = self.cleaned_data['logo']
-        if picture:
-            if picture._size > self.MAX_UPLOAD_SIZE:
-                raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
+        
+        try:
+            picture = self.cleaned_data['logo']
+            if picture:
+                if picture._size > self.MAX_UPLOAD_SIZE:
+                    raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
+        except KeyError:
+            raise forms.ValidationError('Upload Valid Image Example PNG and JPEG are allowed')
 
     def clean(self):
         cleaned_data = super(CompanyEditForm, self).clean()
@@ -203,4 +207,6 @@ class CrmLeadForm(forms.Form):
     lead_status = forms.CharField(max_length=100, required=False)
     lead_source = forms.CharField(max_length=100, required=False)
     lead_discription = forms.CharField(max_length= 1000, required=False)
+
+
 

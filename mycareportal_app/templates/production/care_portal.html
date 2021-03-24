@@ -64,9 +64,9 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">First Name <span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not add_client_form.first_name.value is None %}
-                        <input type="text" required="required" class="form-control col-md-7 col-xs-12" name="{{add_client_form.first_name.html_name}}" value="{{add_client_form.first_name.value}}">
+                        <input type="text" required="required" tabindex="1" class="form-control col-md-7 col-xs-12" name="{{add_client_form.first_name.html_name}}" value="{{add_client_form.first_name.value}}">
                       {% else %}
-                        <input type="text" required="required" class="form-control col-md-7 col-xs-12" name="{{add_client_form.first_name.html_name}}">
+                        <input type="text" required="required" tabindex="1" class="form-control col-md-7 col-xs-12" name="{{add_client_form.first_name.html_name}}">
                       {% endif %}
                     </div>
                   </div>
@@ -74,9 +74,9 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Last Name <span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not add_client_form.last_name.value is None %}
-                        <input type="text" required="required" class="form-control col-md-7 col-xs-12" name="{{add_client_form.last_name.html_name}}" value="{{add_client_form.last_name.value}}">
+                        <input type="text" tabindex="2" required="required" class="form-control col-md-7 col-xs-12" name="{{add_client_form.last_name.html_name}}" value="{{add_client_form.last_name.value}}">
                       {% else %}
-                        <input type="text" required="required" class="form-control col-md-7 col-xs-12" name="{{add_client_form.last_name.html_name}}">
+                        <input type="text" tabindex="2" required="required" class="form-control col-md-7 col-xs-12" name="{{add_client_form.last_name.html_name}}">
                       {% endif %}
                     </div>
                   </div>
@@ -84,9 +84,9 @@
                     <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Middle Name / Initial</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not add_client_form.middle_name.value is None %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" name="{{add_client_form.middle_name.html_name}}" value="{{add_client_form.middle_name.value}}">
+                        <input type="text" tabindex="3" class="form-control col-md-7 col-xs-12" name="{{add_client_form.middle_name.html_name}}" value="{{add_client_form.middle_name.value}}">
                       {% else %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" name="{{add_client_form.middle_name.html_name}}">
+                        <input type="text" tabindex="3" class="form-control col-md-7 col-xs-12" name="{{add_client_form.middle_name.html_name}}">
                       {% endif %}
                     </div>
                   </div>
@@ -95,10 +95,10 @@
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       <div>
                         <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-                          <input type="radio" name="{{add_client_form.gender.html_name}}" value="M" required="required">
+                          <input type="radio" tabindex="4" name="{{add_client_form.gender.html_name}}"  value="M" required="required">
                           &nbsp; Male &nbsp; </label>
                         <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-                          <input type="radio" name="{{add_client_form.gender.html_name}}" value="F" required="required">
+                          <input type="radio" name="{{add_client_form.gender.html_name}}" tabindex="4"  value="F" required="required">
                           Female </label>
                       </div>
                     </div>
@@ -107,9 +107,9 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Date Of Birth <span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not add_client_form.date_of_birth.value is None %}
-                        <input type="text" id="birthday" readonly="true" class="date-picker form-control col-md-7 col-xs-12" required="required" name={{add_client_form.date_of_birth.html_name}} value={{add_client_form.date_of_birth.value}}>
+                        <input type="text" tabindex="5" id="birthday" readonly="true" class="date-picker form-control col-md-7 col-xs-12" required="required" name={{add_client_form.date_of_birth.html_name}} value={{add_client_form.date_of_birth.value}}>
                       {% else %}
-                        <input type="text" id="birthday" readonly="true" class="date-picker form-control col-md-7 col-xs-12" required="required" name={{add_client_form.date_of_birth.html_name}}>
+                        <input type="text" tabindex="5" id="birthday" readonly="true" class="date-picker form-control col-md-7 col-xs-12" required="required" name={{add_client_form.date_of_birth.html_name}}>
                       {% endif %}
                     </div>
                   </div>
@@ -117,9 +117,9 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Phone Number <span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not add_client_form.phone_number.value is None %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '(999)-999-9999'" required="required" name={{add_client_form.phone_number.html_name}} value={{add_client_form.phone_number.value}}>
+                        <input type="text" tabindex="6" required="required"  class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '(999)-999-9999'"  name={{add_client_form.phone_number.html_name}} value={{add_client_form.phone_number.value}}>
                       {% else %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '(999)-999-9999'" required="required" name={{add_client_form.phone_number.html_name}}>
+                        <input type="text" tabindex="6" required="required"  class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '(999)-999-9999'"  name={{add_client_form.phone_number.html_name}}>
                       {% endif %}
                     </div>
                   </div>
@@ -127,9 +127,9 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Secondary Phone Number</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not add_client_form.secondary_phone_number.value is None %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '(999)-999-9999'" name={{add_client_form.secondary_phone_number.html_name}} value={{add_client_form.secondary_phone_number.value}}>
+                        <input type="text" tabindex="7" class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '(999)-999-9999'" name={{add_client_form.secondary_phone_number.html_name}} value={{add_client_form.secondary_phone_number.value}}>
                       {% else %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '(999)-999-9999'" name={{add_client_form.secondary_phone_number.html_name}}>
+                        <input type="text" tabindex="7" class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '(999)-999-9999'" name={{add_client_form.secondary_phone_number.html_name}}>
                       {% endif %}
                     </div>
                   </div>
@@ -137,9 +137,9 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Email Address<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not add_client_form.email.value is None %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name={{add_client_form.email.html_name}} value={{add_client_form.email.value}}>
+                        <input type="email" tabindex="8" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" class="form-control col-md-7 col-xs-12" required="required" name={{add_client_form.email.html_name}} value={{add_client_form.email.value}}>
                       {% else %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name={{add_client_form.email.html_name}}>
+                        <input type="email" tabindex="8" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" class="form-control col-md-7 col-xs-12" required="required" name={{add_client_form.email.html_name}}>
                       {% endif %}
                     </div>
                   </div>
@@ -147,9 +147,9 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">Address <span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not add_client_form.address.value is None %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name="{{add_client_form.address.html_name}}" value="{{add_client_form.address.value}}"></textarea>
+                        <input type="text" tabindex="9" class="form-control col-md-7 col-xs-12" required="required" name="{{add_client_form.address.html_name}}" value="{{add_client_form.address.value}}"></textarea>
                       {% else %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name="{{add_client_form.address.html_name}}"></textarea>
+                        <input type="text" tabindex="9" class="form-control col-md-7 col-xs-12" required="required" name="{{add_client_form.address.html_name}}"></textarea>
                       {% endif %}
                     </div>
                   </div>
@@ -157,9 +157,9 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">City<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not add_client_form.city.value is None %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name="{{add_client_form.city.html_name}}" value="{{add_client_form.city.value}}">
+                        <input type="text" tabindex="10" class="form-control col-md-7 col-xs-12" required="required" name="{{add_client_form.city.html_name}}" value="{{add_client_form.city.value}}">
                       {% else %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name="{{add_client_form.city.html_name}}">
+                        <input type="text" tabindex="10" class="form-control col-md-7 col-xs-12" required="required" name="{{add_client_form.city.html_name}}">
                       {% endif %}
                     </div>
                   </div>
@@ -167,7 +167,7 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">State<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not add_client_form.state_value is None %}
-                      <select required class="select2_single form-control" tabindex="-1" name={{add_client_form.state.html_name}} value={{add_client_form.state.value}}>
+                      <select required class="select2_single form-control" tabindex="11" name={{add_client_form.state.html_name}} value={{add_client_form.state.value}}>
                             <option value="" disabled selected>Select State</option>
                             <option value="Other">Other</option>
                             <option value="AL">Alabama</option>
@@ -252,7 +252,7 @@
                             <option value="West Bengal">West Bengal</option>
                       </select>
                       {% else %}
-                      <select class="select2_single form-control" tabindex="-1" name={{add_client_form.state.html_name}}>
+                      <select class="select2_single form-control" tabindex="11" name={{add_client_form.state.html_name}}>
                             <option value="" disabled selected>Select State</option>
                             <option value="Other">Other</option>
                             <option value="AL">Alabama</option>
@@ -343,16 +343,16 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">ZIP code<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not add_client_form.zip_code.value is None %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name={{add_client_form.zip_code.html_name}} value={{add_client_form.zip_code.value}}>
+                        <input type="text" tabindex="12" class="form-control col-md-7 col-xs-12" required="required" name={{add_client_form.zip_code.html_name}} value={{add_client_form.zip_code.value}}>
                       {% else %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name={{add_client_form.zip_code.html_name}}>
+                        <input type="text" tabindex="12" class="form-control col-md-7 col-xs-12" required="required" name={{add_client_form.zip_code.html_name}}>
                       {% endif %}
                     </div>
                   </div>
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Time Zone<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                      <select required class="select2_time_zone form-control" tabindex="-1" name={{add_client_form.time_zone.html_name}}>
+                      <select required class="select2_time_zone form-control" tabindex="13" name={{add_client_form.time_zone.html_name}}>
                         <option></option>
                         {% for timezone in all_timezones %}
                           <option value='{{timezone}}'>{{timezone}}</option>
@@ -362,17 +362,18 @@
                   </div>
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Profile Picture</label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
+                      <div class="col-md-6 col-sm-6 col-xs-12" tabindex="14">
                         {{add_client_form.profile_picture.label_tag}}{{add_client_form.profile_picture}}
+                
                       </div>
                   </div>
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Referral Source</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not add_client_form.referrer.value is None %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" name={{add_client_form.referrer.html_name}} value={{add_client_form.referrer.value}}>
+                        <input type="text" tabindex="15" class="form-control col-md-7 col-xs-12" name={{add_client_form.referrer.html_name}} value={{add_client_form.referrer.value}}>
                       {% else %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" name={{add_client_form.referrer.html_name}}>
+                        <input type="text" tabindex="15" class="form-control col-md-7 col-xs-12" name={{add_client_form.referrer.html_name}}>
                       {% endif %}
                     </div>
                   </div>
@@ -386,9 +387,9 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Additional Notes</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not add_client_form.notes.value is None %}
-                        <textarea type="text" class="form-control col-md-7 col-xs-12" name={{add_client_form.notes.html_name}} value={{add_client_form.notes.value}}>{{add_client_form.notes.value}}</textarea>
+                        <textarea type="text" tabindex="16" class="form-control col-md-7 col-xs-12" name={{add_client_form.notes.html_name}} value={{add_client_form.notes.value}}>{{add_client_form.notes.value}}</textarea>
                       {% else %}
-                        <textarea type="text" class="form-control col-md-7 col-xs-12" name={{add_client_form.notes.html_name}}></textarea>
+                        <textarea type="text" tabindex="16" class="form-control col-md-7 col-xs-12" name={{add_client_form.notes.html_name}}></textarea>
                       {% endif %}
                     </div>
                   </div>
@@ -396,7 +397,7 @@
                   <div class="form-group">
                       <label class="control-label col-md-3 col-sm-3 col-xs-12">Add Client As Caregiver</label>
                       <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input type="checkbox" class="form-control" name = "{{add_client_form.is_caregiver.html_name}}"/>
+                        <input type="checkbox" tabindex="17" class="form-control" name = "{{add_client_form.is_caregiver.html_name}}"/>
                       </div>
                     </div>
 
@@ -407,7 +408,7 @@
                   <div class="ln_solid"></div>
                   <div class="form-group">
                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                      <button type="submit" class="btn btn-success">Submit</button>
+                      <button type="submit" tabindex="18" class="btn btn-success">Submit</button>
                     </div>
                   </div>
                 </form>
@@ -465,6 +466,7 @@
         $('#birthday').daterangepicker({
           singleDatePicker: true,
           showDropdowns: true,
+          maxDate: "10/12/2019",
           calender_style: "picker_4"
         }, function(start, end, label) {
           console.log(start.toISOString(), end.toISOString(), label);
