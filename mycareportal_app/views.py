@@ -51,8 +51,13 @@ from io import BytesIO
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 from decimal import Decimal
+from django.core.files import File
+
+
 # Create your views here.
 
+
+# from django.http import FileResponse
 #@receiver(pre_save, sender=User)
 #def user_sign_up_(sender, instance, **kwargs):
 #    if instance._state.adding:
@@ -2355,5 +2360,57 @@ class EditCrmLead(LoginRequiredMixin, View):
             return output_string
 
 
-
+def render_to_pdfs(template_src, context_dict):
+    template = get_template(template_src)
+    html  = template.render(context_dict)
+    result = BytesIO()
+    output_filename = "mycareportal_app/download_invoice_pdf/Invoice.pdf"
+    result_file = open(output_filename, "w+b")
+    file = open('mycareportal_app/download_invoice_pdf/Invoice.pdf', "w+b")
+    pdf = pisa.pisaDocument(html.encode('utf-8'), dest=file,encoding='utf-8')
+    file.seek(0)
+    pdf = file.read()
+    file.close()
     
+    return None
+
+@login_required
+def send_email_invoice(request):
+
+    if request.method == "GET":
+        data ={}
+        context = request.GET.copy()
+        user = request.user
+        current_company = request.user.company
+        request.session['context'] = context
+        invoice_header_id = request.GET.get('invoice_header_id')
+        start_date  = request.GET.get('start_date')
+        end_date  = request.GET.get('end_date')
+        current_date = datetime.date.today()
+        invoice_header = InvoiceHeader.objects.get(id = invoice_header_id )
+        caregiver_schedule_notes = CaregiverSchedule.objects.filter(company = current_company, client = invoice_header.client, date__range = (invoice_header.start_date, invoice_header.end_date))
+        invoice_line_items =list(InvoiceLineItem.objects.filter(invoice_header = invoice_header,company =current_company))
+        data = {
+            "invoice_header" : invoice_header,
+            "invoice_line_items" : invoice_line_items,
+            "start_date": start_date,
+            "end_date": end_date,
+            "current_date": current_date,
+            "current_company": current_company,
+            "caregiver_schedule_notes":caregiver_schedule_notes
+        }
+
+        post_pdf = render_to_pdfs('production/invoice_generator.html',data)
+        toemail = invoice_header.client.email_address
+        client = Client.objects.get(email_address = toemail)
+        
+        email_manager = CareManagerEmailProcessor()
+        email_manager.send_invoice_mail_by_caremanager(user,current_company,client)
+        invoiceadd = {
+            "client_email" :invoice_header.client.email_address
+        }
+        
+        
+    return HttpResponse(json.dumps(invoiceadd), content_type="application/json")
+            
+            

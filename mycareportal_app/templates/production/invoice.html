@@ -1,5 +1,5 @@
 {% extends "production/base.html" %}
-{% block title %} Choose Client {% endblock %}
+{% block title %} Client Invoice {% endblock %}
 {% load mycareportal_app_extras%}
 {% block headlibs %}
 {% load static %}
@@ -351,8 +351,11 @@
                     <button id="stbutton" class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit
                       Invoice</button>
                     {% endif %}
+                   
                     <button class="btn btn-primary pull-right" id="download" style="margin-right: 5px;"><i
                         class="fa fa-download"></i> Generate PDF</button>
+                        <button class="btn btn-primary pull-right" id="sendemail"><i
+                          class=""></i> Send Email</button>
                   </div>
                 </div>
 
@@ -425,9 +428,6 @@
         error: function (data) {
           window.location = "/billing/invoice/get_pdf";
 
-
-
-
           setTimeout(function () {
             // window.location.replace("invoice");
           }, 3000);
@@ -435,6 +435,60 @@
       });
     });
   });
+</script>
+
+<script>
+$(document).ready(function (){
+
+  $("#sendemail").on("click", function () {
+    if (confirm("Do you want to Send Email ?")) {
+   $("#sendemail").attr("disabled", true);
+    $.ajax({
+        url: "{% url 'send_email_invoice' %}",
+        type: "GET",
+        data: {
+
+          'start_date': '{{start_date}}',
+          'end_date': '{{end_date}}',
+          "invoice_header_id": '{{ invoice_header_data.id }}'
+
+        },
+
+        dataType: "json",
+        contentType: "application/json",
+        success: function (data) {
+          
+          console.log("datadatadata",data)
+          window.location.reload()
+          alert("Email Sent sucessfully")
+          setTimeout(function () {
+            
+            
+
+          }, 3000);
+        },
+        error: function (data) {
+          
+          console.log("datadatadata",data)
+          window.location.reload()
+          // window.location = "/billing/invoice/get_pdf";
+          
+          setTimeout(function () {
+            // window.location.replace("invoice");
+          }, 3000);
+        }
+      });
+    }
+    else {
+      console.log("---")
+    }
+    });
+ 
+
+  })
+
+
+
 </script>
 
 <script>

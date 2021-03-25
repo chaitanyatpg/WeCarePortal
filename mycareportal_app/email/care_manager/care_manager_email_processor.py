@@ -7,6 +7,7 @@ from django.core import mail
 from django.core.mail import EmailMessage
 from django.core.mail import get_connection
 from django.core.mail import EmailMultiAlternatives
+import datetime
 
 class CareManagerEmailProcessor(EmailProcessor):
 
@@ -61,13 +62,34 @@ class CareManagerEmailProcessor(EmailProcessor):
         to_list = []
         to_list_manager = []
         
-        
+    
         email = EmailMultiAlternatives(
-                    subject, message, from_email = user.email, to=caremanager_email, bcc = caregiver_email_address, 
+                    subject, message, from_email = user.email, to=caremanager_email, bcc = caregiver_email_address,
 
         )
         email.attach_alternative(message, "text/html")
         email.send()
+
+
+
+
+    def send_invoice_mail_by_caremanager(self,user, current_company,client):
+    
+        subject = "Invoice details"
+        message = render_to_string('invoice_email_from_caremanager.html', {
+            'user': user,
+            'company': current_company,
+            })
+     
+        ccemail = ["mkumar@wecareportal.com"]
+        email = email = EmailMultiAlternatives(subject,message,from_email = user.email, to = ccemail)
+        
+        email.attach_alternative(message, "text/html'")
+        email.attach_file('mycareportal_app/download_invoice_pdf/Invoice.pdf')
+        email.send()
+
+        
+
 
         
 
