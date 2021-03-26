@@ -32,11 +32,14 @@ class ClientRegistrationForm(forms.Form):
 
 
     def clean_picture(self):
-        picture = self.cleaned_data['profile_picture']
-        if picture:
-            if picture._size > self.MAX_UPLOAD_SIZE:
-                raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
-
+        
+        try:
+            picture = self.cleaned_data['profile_picture']
+            if picture:
+                if picture._size > self.MAX_UPLOAD_SIZE:
+                    raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
+        except KeyError:
+            raise forms.ValidationError('Upload Valid Image Example PNG and JPEG are allowed')
         #if not picture:
         #    return None
         #if not picture.content_type or not picture.content_type.startswith('image'):
@@ -44,7 +47,7 @@ class ClientRegistrationForm(forms.Form):
         #return picture
 
     def clean(self):
-
+        
         cleaned_data = super(ClientRegistrationForm, self).clean()
         password = cleaned_data.get('password')
         confirm_password = cleaned_data.get('confirm_password')
@@ -55,6 +58,8 @@ class ClientRegistrationForm(forms.Form):
                             params={'value': 'Passwords do not match'})
         self.clean_picture()
         return cleaned_data
+
+    
 
 class EditClientDetailsForm(forms.Form):
 
@@ -81,19 +86,21 @@ class EditClientDetailsForm(forms.Form):
     notes = forms.CharField(max_length=1000, required=False)
 
     def clean_picture(self):
-        picture = self.cleaned_data['profile_picture']
-        if picture:
-            if picture._size > self.MAX_UPLOAD_SIZE:
-                raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
+        print("self.cleaned_dataself.cleaned_data",self.cleaned_data)
+        # if self.cleaned_data['profile_picture']:
+        try:
+            picture = self.cleaned_data['profile_picture']
+            if picture:
+                if picture._size > self.MAX_UPLOAD_SIZE:
+                    raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
         #picture = self.cleaned_data['profile_picture']
-        #if not picture:
-        #    return None
-        #if not picture.content_type or not picture.content_type.startswith('image'):
+        except KeyError:
+            raise forms.ValidationError('Upload Valid Image Example PNG and JPEG are allowed')
+        # if not picture.content_type or not picture.content_type.startswith('image'):
         #    raise forms.ValidationError('Image file type is not recognized. Please try again')
-        #return picture
+        # return picture
 
     def clean(self):
-
         cleaned_data = super(EditClientDetailsForm, self).clean()
         password = cleaned_data.get('password')
         confirm_password = cleaned_data.get('confirm_password')

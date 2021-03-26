@@ -28,10 +28,13 @@ class CaregiverRegistrationForm(forms.Form):
     notes = forms.CharField(max_length=1000, required=False)
 
     def clean_picture(self):
-        picture = self.cleaned_data['profile_picture']
-        if picture:
-            if picture._size > self.MAX_UPLOAD_SIZE:
-                raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
+        try:
+            picture = self.cleaned_data['profile_picture']
+            if picture:
+                if picture._size > self.MAX_UPLOAD_SIZE:
+                    raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
+        except KeyError:
+            raise forms.ValidationError('Upload Valid Image Example PNG and JPEG are allowed')
         #picture = self.cleaned_data['profile_picture']
         #if not picture:
         #    return None
@@ -70,10 +73,14 @@ class CaregiverEditForm(forms.Form):
     notes = forms.CharField(max_length=1000, required=False)
 
     def clean_picture(self):
-        picture = self.cleaned_data['profile_picture']
-        if picture:
-            if picture._size > self.MAX_UPLOAD_SIZE:
-                raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
+        
+        try:
+            picture = self.cleaned_data['profile_picture']
+            if picture:
+                if picture._size > self.MAX_UPLOAD_SIZE:
+                    raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
+        except KeyError:
+            raise forms.ValidationError('Upload Valid Image Example PNG and JPEG are allowed')
         #picture = self.cleaned_data['profile_picture']
         #if not picture:
         #    return None

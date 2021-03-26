@@ -1374,6 +1374,7 @@ ul.msg_list li a .message {
   -webkit-box-shadow: none;
   right: 0;
   left: auto;
+  min-width: 128px !important;
   width: 220px; }
 
 .navbar-nav .open .dropdown-menu.msg_list {

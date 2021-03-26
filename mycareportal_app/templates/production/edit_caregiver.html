@@ -349,9 +349,9 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Email Address<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not edit_caregiver_form.email.value is None %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name={{edit_caregiver_form.email.html_name}} value={{edit_caregiver_form.email.value}}>
+                        <input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" class="form-control col-md-7 col-xs-12" required="required" name={{edit_caregiver_form.email.html_name}} value={{edit_caregiver_form.email.value}}>
                       {% else %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" required="required" name={{edit_caregiver_form.email.html_name}}>
+                        <input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" class="form-control col-md-7 col-xs-12" required="required" name={{edit_caregiver_form.email.html_name}}>
                       {% endif %}
                     </div>
                   </div>
@@ -1013,6 +1013,7 @@
         $('#birthday').daterangepicker({
           singleDatePicker: true,
           showDropdowns: true,
+          maxDate: "10/12/2019",
           calender_style: "picker_4"
         }, function(start, end, label) {
           console.log(start.toISOString(), end.toISOString(), label);
