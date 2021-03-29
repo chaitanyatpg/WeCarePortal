@@ -191,6 +191,10 @@ urlpatterns = [
     url(r'^client_task_dashboard', views.ClientTaskDashboard.as_view(), name='client_task_dashboard'),
     url(r'^get_client_tasks_with_uids', views.get_client_tasks_with_uids, name='get_client_tasks_with_uids'),
     url(r'^generate_pdf',views.generate_pdf,name='generate_pdf'),
+
+    url(r'^send_email_invoice',views.send_email_invoice, name='send_email_invoice'),
+
+    
     url(r'^submit_invoice',views.submit_invoice,name='submit_invoice'),
 
     url(r'^update_invoice',views.update_invoice_detail,name='update_invoice'),
