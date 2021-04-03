@@ -37,7 +37,7 @@
                     <p></p>
                     <form method='post' action="{% url 'move_manage_wizard' %}" class="form-horizontal form-label-left">
                     {% csrf_token %}
-                    <div id="wizard" class="form_wizard wizard_horizontal">
+                    <div id="wizard" class="form_wizard wizard_horizontal">                      
                       <ul class="wizard_steps">
                         <li>
                           <a href="#step-1">
@@ -79,7 +79,7 @@
                       <div id="step-1">
                         <div class="row">
                             <div class="form-group">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Client</label>
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Client<span class="required">*</span></label>
                               <div class="col-md-6 col-sm-6 col-xs-12">
                                 <select required id='client_dropdown' class="select2_group form-control" name={{create_move_task_form.client_uid.html_name}} tabindex="-1">
                                   <option disabled selected value> -- select an option -- </option>
@@ -95,15 +95,17 @@
                               <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Maximum Distance of New Address<span class="required">*</span>
                               </label>
                               <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input type="text" name={{create_move_task_form.new_address_max_distance.html_name}} required="required" class="form-control col-md-7 col-xs-12">
+                                <input type="number" name={{create_move_task_form.new_address_max_distance.html_name}} required="required" class="form-control col-md-7 col-xs-12">
+                                 <span class="required"  style="color: red;" id="fname_error_message"></span>
                               </div>
                             </div>
                           </div>
                           <div class="row">
                             <div class="form-group">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12">Type of Home</label>
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">Type of Home<span class="required">*</span></label>
                               <div class="col-md-6 col-sm-6 col-xs-12">
                                 <select required class="form-control" name={{create_move_task_form.type_of_home.html_name}}>
+                                  <span></span>
                                   <option disabled selected value> -- select an option -- </option>
                                   <option value="HOUSE">House</option>
                                   <option value="TOWNHOUSE">Townhouse</option>
@@ -115,14 +117,14 @@
                           </div>
                           <div class="row">
                             <div class="form-group">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12">Provides Move Assistance</label>
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">Provides Move Assistance<span class="required">*</span></label>
                               <div class="col-md-6 col-sm-6 col-xs-12">
                                 <div id="gender" class="btn-group" data-toggle="buttons">
-                                  <label class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-                                    <input type="radio" name="{{create_move_task_form.provides_assistance.html_name}}" value="Y"> &nbsp; Yes &nbsp;
+                                  <label class="btn btn-default" data-toggle-class="btn-default" data-toggle-passive-class="btn-primary">
+                                    <input type="radio" class="btn-primary" name="{{create_move_task_form.provides_assistance.html_name}}" value="Y"> &nbsp; Yes &nbsp;
                                   </label>
-                                  <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-                                    <input type="radio" name="{{create_move_task_form.provides_assistance.html_name}}" value="N"> No
+                                  <label class="btn btn-default" data-toggle-class="btn-default" data-toggle-passive-class="btn-primary">
+                                    <input type="radio" class="btn-primary" name="{{create_move_task_form.provides_assistance.html_name}}" value="N"> No
                                   </label>
                                 </div>
                               </div>
@@ -137,6 +139,7 @@
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
                               <input type="text" id="first-name" name="{{create_move_task_form.minimum_cost.html_name}}" required="required" class="form-control col-md-7 col-xs-12">
+                              <span class="required"  style="color: red;" id="mincosterror"></span>
                             </div>
                           </div>
                           <div class="form-group">
@@ -144,6 +147,7 @@
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
                               <input type="text" id="last-name" name="{{create_move_task_form.maximum_cost.html_name}}" required="required" class="form-control col-md-7 col-xs-12">
+                              <span class="required"  style="color: red;" id="maxcosterror"></span>
                             </div>
                           </div>
 
@@ -151,7 +155,7 @@
                       <div id="step-3">
 
                           <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Type of Area</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Type of Area<span class="required">*</span></label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <select class="form-control" required name="{{create_move_task_form.type_of_area.html_name}}">
                             <option disabled selected value> -- select an option -- </option>
@@ -163,10 +167,10 @@
                         </div>
                       </div>
                       <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Handicap Friendly</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Handicap Friendly<span class="required">*</span></label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <div class="btn-group" data-toggle="buttons">
-                            <label class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                            <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
                               <input type="radio" name="{{create_move_task_form.handicap_friendly.html_name}}" value="Y"> &nbsp; Yes &nbsp;
                             </label>
                             <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
@@ -178,10 +182,10 @@
 
 
                       <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Furnished</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Furnished<span class="required">*</span></label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <div class="btn-group" data-toggle="buttons">
-                            <label class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                            <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
                               <input type="radio" name="{{create_move_task_form.furnished.html_name}}" value="Y"> &nbsp; Yes &nbsp;
                             </label>
                             <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
@@ -312,18 +316,84 @@
     <!-- jQuery Smart Wizard -->
     <script>
       $(document).ready(function() {
-        $('#wizard').smartWizard();
-
+        $('#wizard').smartWizard({hideButtonsOnDisabled :true,keyNavigation: true,onLeaveStep:leaveAStepCallback});
+        var value = false;
         $('#wizard_verticle').smartWizard({
-          transitionEffect: 'slide'
+          transitionEffect: 'slide',
         });
 
+        function leaveAStepCallback(obj){
+                        var step_num= obj.attr('rel'); 
+                        console.log("step_numstep_num",step_num)
+                        // get the current step number
+                        validateSteps(step_num)
+                        return  value;
+                        //  return false to stay on step and true to continue navigation
+                      }
+                      function validateSteps(stepnumber){
+                      var isStepValid = true;
+                        
+                        // validate step 1
+                        if(stepnumber == 1){
+                          if (  $("input[name=new_address_max_distance]").val()  ) {
+                           console.log("ssss")
+                           value = true;
+                          }
+                          else {
+                            value = false;
+                            $("#fname_error_message").html("field required");
+                          }
+                          if (  $('#client_dropdown :selected').val() ){
+                           console.log("ssss")
+                           value = false;
+                          }
+                          else {
+                            value = false;
+                            $("#fname_error_me").html("field required");
+                          }
+
+                          if (  $('#client_dropdown :selected').val() && $("input[name=new_address_max_distance]").val()   ) {
+                           console.log("ssss")
+                           value = true;
+                          }
+
+                          
+                        }
+                    
+                        if (stepnumber == 2) {
+                          if (  $("input[name=minimum_cost]").val()) {
+                           console.log("ssss")
+                           value = false;
+                          }
+                          else {
+                            value = false;
+                            $("#mincosterror").html("field required");
+                          }
+                          if (  $("input[name=maximum_cost]").val()  ) {
+                           console.log("ssss")
+                           value = false;
+                          }
+                          else {
+                            value = false;
+                            $("#maxcosterror").html("field required");
+                          }
+                          if (  $("input[name=maximum_cost]").val() &&  $("input[name=minimum_cost]").val()){
+                            value = true
+                          }
+                          
+                         
+                        }
+                      
+                       
+                      }
         $('.buttonNext').addClass('btn btn-success');
         $('.buttonPrevious').addClass('btn btn-primary');
         $('.buttonFinish').addClass('btn btn-default');
         $('.buttonFinish').attr("type", "submit");
       });
     </script>
+      
+     </script>
     <!-- /jQuery Smart Wizard -->
 
     <!--<script>
