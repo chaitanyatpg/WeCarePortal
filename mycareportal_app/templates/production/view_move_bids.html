@@ -19,7 +19,7 @@
 
             {{block.super}}
             <div class="row">
-              <div class="col-md-12">
+              <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
                     <h2>{{task.client.first_name}} {{task.client.last_name}}</h2>
@@ -154,7 +154,7 @@
                             <div class="form-group col-md-12 col-lg-12 col-sm-12">
                               <label class="control-label">Cost<span class="required">*</span>
                               </label>
-                              <input type="text" value={{bid.cost}} class="form-control" required="required">
+                              <input type="text" readonly value={{bid.cost}} class="form-control" required="required">
                             </div>
                           </div>
                           <input type="hidden" value={{bid.uid}}>
