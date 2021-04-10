@@ -106,6 +106,7 @@ class AddClient(LoginRequiredMixin, View):
     def post(self, request):
         context = {}
         current_company = request.user.company
+        context['all_timezones'] = pytz.all_timezones
         add_client_form = ClientRegistrationForm(request.POST,request.FILES)
         context['add_client_form'] = add_client_form
         client_email = add_client_form.data['email']
@@ -215,8 +216,10 @@ class AddClient(LoginRequiredMixin, View):
                 messages.error(request, "Client already exists. Please enter a new client.")
         else:
             form_errors = add_client_form.errors.as_data()
+            context['all_timezones'] = pytz.all_timezones
             error_messaging.render_error_messages(request, form_errors)
-        return redirect('add_client')
+        return render(request, 'production/care_portal.html', context)
+        # return redirect('add_client')
 
     def parse_date(self,client_birthday):
         caregiver_birthday = client_birthday.date()
