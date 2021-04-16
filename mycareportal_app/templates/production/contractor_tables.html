@@ -86,18 +86,20 @@
                             <td>{{contractor.first_name|addstr_space:contractor.last_name}}</td>
                             <td>{{contractor.phone_number}}</td>
                             <td>{{contractor.email_address}}</td>
-                            <td>
-                              <form method="post" action="{% url 'choose_contractor' task_id=task.uid contractor_id=contractor.uid %}">
-                                {% csrf_token %}
-                                {% if contractor in task.chosen_contractors.all %}
-                                <button class="btn-success" type="submit">
-                                  <i class="fa fa-sign-out pull-right"></i>Assigned</a>
-                                {% else %}
-                                <button type="submit">
-                                  <i class="fa fa-sign-out pull-right"></i>Unassigned</a>
-                                {% endif %}
-                              </form>
-                            </td>
+                            <form method="post" action="{% url 'choose_contractor'  %}">
+                              {% csrf_token %}
+                              {% if contractor in task.chosen_contractors.all %}
+             
+                                <input type="hidden" name="{{assign_contractor_form.is_unassign.html_name}}" value="True">
+                              <!--<td><input class="btn-danger" type="submit" value="Assigned"></td>-->
+                              <td><button class="btn-danger" type="button" onclick="unassign_caregiver_modal_show('{{contractor.email_address}}');"><i class="fa fa-sign-out pull-right"></i>Assigned</a></td>
+                              {% else %}
+      
+                                <input type="hidden" name="{{assign_contractor_form.is_unassign.html_name}}" value="False">
+                              <!--<td><input type="submit" value="Unassigned"></td>-->
+                              <td><button type="button" onclick="assign_caregiver_modal_show('{{contractor.email_address}}');"><i class="fa fa-sign-out pull-right"></i>Unassigned</a></td>
+                              {% endif %}
+                            </form>
                             <!--<td>
                               <a href="{% url 'home_dashboard' %}">Assign</a>
                             </td>-->
@@ -137,6 +139,60 @@
                 </div>
               </div>
             </div>
+            </div>
+          </div>
+
+          <div id="AssignCaregiverModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h4 class="modal-title" id="myModalLabel2">Assign Contractor</h4>
+                </div>
+                <form method="post" action="{% url 'choose_contractor' %}">
+                
+                  {% csrf_token %}
+                  <div class="modal-body">
+                    Are you sure you want to assign this contractor?
+                  </div>
+                  <div class="modal-footer">
+                    <input type="hidden" id="assign_caregiver_email" name="{{assign_contractor_form.contractor_email.html_name}}">
+                    <input type="hidden" name="{{assign_contractor_form.taskuid.html_name}}" value="{{task_id}}">
+                    <input type="hidden" name="{{assign_contractor_form.is_unassign.html_name}}" value="False">
+                    <button type="button" class="btn btn-danger antoclose2" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Assign</a>
+                    <!--<button type="button" class="btn btn-success edit_calendar_submit">Save changes</button>-->
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <div id="UnassignCaregiverModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h4 class="modal-title" id="myModalLabel2">Edit Assigned Contractor</h4>
+                </div>
+                <div id="calendar"></div>
+                <form method="post" action="{% url 'choose_contractor'  %}">
+                  {% csrf_token %}
+                  <div class="modal-body">
+                    Are you sure you want to unassign this contractor? 
+
+                  </div>
+                  <div class="modal-footer">
+                    <input type="hidden" id="unassign_caregiver_email" name="{{assign_contractor_form.contractor_email.html_name}}">
+                    <input type="hidden" id="unassign_caregiver_email" name="{{assign_contractor_form.taskuid.html_name}}" value="{{task_id}}">
+                    <input type="hidden" name="{{assign_contractor_form.is_unassign.html_name}}" value="True">
+                    <button type="button" class="btn btn-danger antoclose2" data-dismiss="modal">Close</button>
+                    <!--<button class="btn btn-success">Add new shifts</a>-->
+                    <button class="btn btn-success">Unassign</a>
+                    <!--<button type="button" class="btn btn-success edit_calendar_submit">Save changes</button>-->
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>
@@ -241,4 +297,22 @@
       });
     </script>
     <!-- /Datatables -->
+
+
+    <script type="text/javascript">
+      function assign_caregiver_modal_show(caregiver_email){
+        $('#assign_caregiver_email').val(caregiver_email);
+        $('#AssignCaregiverModal').modal()
+      };
+    </script>
+
+
+      <!-- Unassign Caregiver Modal -->
+  <script type="text/javascript">
+    function unassign_caregiver_modal_show(caregiver_email){
+      $('#unassign_caregiver_email').val(caregiver_email);
+      $('#UnassignCaregiverModal').modal()
+    };
+  </script>
+  <!-- end Assign Caregiver modal -->
 {% endblock %}

@@ -35,7 +35,7 @@
 
                     <!-- Smart Wizard -->
                     <p></p>
-                    <form method='post' action="{% url 'move_manage_wizard' %}" class="form-horizontal form-label-left">
+                    <form id ="target" method='post' action="{% url 'move_manage_wizard' %}" class="form-horizontal form-label-left">
                     {% csrf_token %}
                     <div id="wizard" class="form_wizard wizard_horizontal">                      
                       <ul class="wizard_steps">
@@ -104,7 +104,7 @@
                             <div class="form-group">
                               <label class="control-label col-md-3 col-sm-3 col-xs-12">Type of Home<span class="required">*</span></label>
                               <div class="col-md-6 col-sm-6 col-xs-12">
-                                <select required class="form-control" name={{create_move_task_form.type_of_home.html_name}}>
+                                <select required id="typehome" class="form-control" name={{create_move_task_form.type_of_home.html_name}}>
                                   <span></span>
                                   <option disabled selected value> -- select an option -- </option>
                                   <option value="HOUSE">House</option>
@@ -138,7 +138,7 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Minimum Cost<span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                              <input type="text" id="first-name" name="{{create_move_task_form.minimum_cost.html_name}}" required="required" class="form-control col-md-7 col-xs-12">
+                              <input type="number" id="first-name" name="{{create_move_task_form.minimum_cost.html_name}}" required="required" class="form-control col-md-7 col-xs-12">
                               <span class="required"  style="color: red;" id="mincosterror"></span>
                             </div>
                           </div>
@@ -146,7 +146,7 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Maximum Cost<span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                              <input type="text" id="last-name" name="{{create_move_task_form.maximum_cost.html_name}}" required="required" class="form-control col-md-7 col-xs-12">
+                              <input type="number" id="last-name" name="{{create_move_task_form.maximum_cost.html_name}}" required="required" class="form-control col-md-7 col-xs-12">
                               <span class="required"  style="color: red;" id="maxcosterror"></span>
                             </div>
                           </div>
@@ -157,7 +157,7 @@
                           <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Type of Area<span class="required">*</span></label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <select class="form-control" required name="{{create_move_task_form.type_of_area.html_name}}">
+                          <select class="form-control" id ="typearea" required name="{{create_move_task_form.type_of_area.html_name}}">
                             <option disabled selected value> -- select an option -- </option>
                             <option value="CITY">City</option>
                             <option value="URBAN">Urban</option>
@@ -171,10 +171,10 @@
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <div class="btn-group" data-toggle="buttons">
                             <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-                              <input type="radio" name="{{create_move_task_form.handicap_friendly.html_name}}" value="Y"> &nbsp; Yes &nbsp;
+                              <input type="radio" name="{{create_move_task_form.handicap_friendly.html_name}}" value="Y" required> &nbsp; Yes &nbsp;
                             </label>
                             <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-                              <input type="radio" name="{{create_move_task_form.handicap_friendly.html_name}}" value="N"> No
+                              <input type="radio" name="{{create_move_task_form.handicap_friendly.html_name}}" value="N" required> No
                             </label>
                           </div>
                         </div>
@@ -186,10 +186,10 @@
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <div class="btn-group" data-toggle="buttons">
                             <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-                              <input type="radio" name="{{create_move_task_form.furnished.html_name}}" value="Y"> &nbsp; Yes &nbsp;
+                              <input type="radio" name="{{create_move_task_form.furnished.html_name}}" value="Y" required> &nbsp; Yes &nbsp;
                             </label>
                             <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-                              <input type="radio" name="{{create_move_task_form.furnished.html_name}}" value="N"> No
+                              <input type="radio" name="{{create_move_task_form.furnished.html_name}}" value="N" required> No
                             </label>
                           </div>
                         </div>
@@ -316,78 +316,150 @@
     <!-- jQuery Smart Wizard -->
     <script>
       $(document).ready(function() {
-        $('#wizard').smartWizard({hideButtonsOnDisabled :true,keyNavigation: true,onLeaveStep:leaveAStepCallback});
+        $('#wizard').smartWizard({
+           onFinish:onFinishCallback,selected: 0,
+           hideButtonsOnDisabled :true,
+           keyNavigation: true,onLeaveStep:leaveAStepCallback,
+          });
         var value = false;
         $('#wizard_verticle').smartWizard({
-          transitionEffect: 'slide',
+          transitionEffect: 'fade',
+  
+ 
         });
 
-        function leaveAStepCallback(obj){
+   
+
+
+        function onFinishCallback(objs, context){
+          // value = false
+          var step_num = objs.attr('rel'); 
+          // validateSteps(step_num,context)
+        // if(validateAllSteps()){
+
+
+        //     $('form').submit();
+        // }
+        console.log("finis me 111",step_num)
+        if (step_num == 1) {  
+         
+          var getSelectedValue =  document.querySelector( 'input[name="handicap_friendly"]:checked'); 
+          
+          var getValue =  document.querySelector( 'input[name="furnished"]:checked'); 
+          var assistance =  document.querySelector( 'input[name="provides_assistance"]:checked'); 
+          if (  $('#typearea :selected').val() && getSelectedValue && getValue){
+                           console.log("finis me")
+                        
+                           $('#target').submit();
+                          }
+        else {
+        console.log("eeeeeeee",context.toStep)
+        alert("please select all the field")
+        if(context.toStep == 2 ){
+      value = true
+                      }
+              }
+         }
+
+        }
+       
+
+        function leaveAStepCallback(obj,context){
                         var step_num= obj.attr('rel'); 
+                        console.log("context",context.toStep)
+
                         console.log("step_numstep_num",step_num)
-                        // get the current step number
-                        validateSteps(step_num)
+                        validateSteps(step_num,context)
+                        
                         return  value;
                         //  return false to stay on step and true to continue navigation
                       }
-                      function validateSteps(stepnumber){
+                    
+                      function validateSteps(stepnumber,context){
                       var isStepValid = true;
                         
                         // validate step 1
                         if(stepnumber == 1){
+
+                          var assistance =  document.querySelector( 'input[name="provides_assistance"]:checked'); 
                           if (  $("input[name=new_address_max_distance]").val()  ) {
-                           console.log("ssss")
-                           value = true;
+                           console.log("ssss")     
+                           $("#fname_error_message").html("field required").hide();                  
                           }
                           else {
                             value = false;
-                            $("#fname_error_message").html("field required");
+                            $("#fname_error_message").html("field required").show();
                           }
-                          if (  $('#client_dropdown :selected').val() ){
+                          if (  $('#client_dropdown :selected').val()){
                            console.log("ssss")
                            value = false;
                           }
                           else {
                             value = false;
                             $("#fname_error_me").html("field required");
+                            console.log("context.toStep 0000",context.toStep)
                           }
 
-                          if (  $('#client_dropdown :selected').val() && $("input[name=new_address_max_distance]").val()   ) {
-                           console.log("ssss")
+                          if ($('#client_dropdown :selected').val() && $("input[name=new_address_max_distance]").val() && $('#typehome :selected').val()  && assistance) {
+                            
                            value = true;
+                           
                           }
-
-                          
+                          else{
+                            alert("please select all the field")
+                          }
                         }
+                        $("#mincosterror").html("field required").hide();
+                          $("#maxcosterror").html("field required").hide();
                     
                         if (stepnumber == 2) {
-                          if (  $("input[name=minimum_cost]").val()) {
-                           console.log("ssss")
-                           value = false;
-                          }
-                          else {
-                            value = false;
-                            $("#mincosterror").html("field required");
-                          }
-                          if (  $("input[name=maximum_cost]").val()  ) {
-                           console.log("ssss")
-                           value = false;
-                          }
-                          else {
-                            value = false;
-                            $("#maxcosterror").html("field required");
-                          }
-                          if (  $("input[name=maximum_cost]").val() &&  $("input[name=minimum_cost]").val()){
-                            value = true
-                          }
-                          
-                         
-                        }
-                      
                        
+                          if (  $("input[name=minimum_cost]").val()) {
+                           console.log("ssss",stepnumber)
+                           value = true;
+                           $("#mincosterror").html("field required").hide();
+                          }
+                          else {
+                            value = false;
+                             if(context.toStep == 1 ){
+                              
+                                value = true;
+                               }
+                            $("#mincosterror").html("field required").show();
+                          }
+                          if ($("input[name=maximum_cost]").val()) {
+                           console.log("ssss")
+                           value = true;
+                           $("#maxcosterror").html("field required").hide();
+                          }
+                          else {
+                            value = false; 
+                            if(context.toStep == 1 ){
+                                
+                                value = true;
+                                $("#maxcosterror").html("field required").hide();
+                               }
+                            
+                           
+                            $("#maxcosterror").html("field required").show();
+                          }           
+                        }
+
+
+                        if (stepnumber == 3) {
+
+                          console.log("hello")
+ 
+                        }
+
+
+
+                     
                       }
-        $('.buttonNext').addClass('btn btn-success');
+        
+     
         $('.buttonPrevious').addClass('btn btn-primary');
+        $('.buttonNext').addClass('btn btn-success'); 
         $('.buttonFinish').addClass('btn btn-default');
         $('.buttonFinish').attr("type", "submit");
       });

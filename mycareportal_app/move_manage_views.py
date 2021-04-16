@@ -107,7 +107,7 @@ class AcceptMoveBid(LoginRequiredMixin, View):
                                             client = task.client)
         move_manage_project.save()
         messages.success(request, "Accepted Bid from {0} {1} and created Move Management project".format(bid.move_manager.first_name, bid.move_manager.last_name))
-        return redirect('view_move_bids', task_id=bid.move_manage_task.uid)
+        return redirect('home_dashboard')
 
 class AddMoveManager(LoginRequiredMixin, View):
 
@@ -330,7 +330,6 @@ class MoveManageWizard(LoginRequiredMixin, View):
             move_task.save()
             messages.success(request, "Created relocation task")
         else:
-            print(create_move_task_form.errors)
             messages.error(request, "Error creating relocation task")
         return redirect('home_dashboard')
 
@@ -343,6 +342,7 @@ class ChooseMoveContractorForTask(LoginRequiredMixin, View):
         task = MoveManageTask.objects.get(company=current_company, uid=task_id)
         all_move_managers = MoveManager.objects.filter(company=current_company).order_by('last_name')
 
+        context['assign_move_manager_form'] = AssignMoveManagerForm()
         context['all_move_managers'] = all_move_managers
         context['task_id'] = task_id
         context['task'] = task
@@ -351,13 +351,29 @@ class ChooseMoveContractorForTask(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         context = {}
         current_company = request.user.company
-        task_id = self.kwargs['task_id']
-        move_manager_id = self.kwargs['manager_id']
-        task = MoveManageTask.objects.get(company=current_company, uid=task_id)
-        move_manager = MoveManager.objects.get(company=current_company, uid=move_manager_id)
-        task.chosen_manager.add(move_manager)
-        task.save()
-        return redirect('choose_move_contractor', task_id=task_id)
+        # task_id = self.kwargs['task_id']
+        # move_manager_id = self.kwargs['manager_id']
+        assign_move_manager_form = AssignMoveManagerForm(request.POST)
+        if assign_move_manager_form.is_valid():
+            move_manager_email = assign_move_manager_form.cleaned_data['move_manager_email']
+            taskuid = assign_move_manager_form.cleaned_data['taskuid']
+            is_unassign = assign_move_manager_form.cleaned_data['is_unassign']
+            
+            task = MoveManageTask.objects.get(company=current_company, uid=taskuid)
+            move_manager = MoveManager.objects.get(company=current_company, email_address =move_manager_email)
+            
+            if is_unassign == "True":
+                task.chosen_manager.remove(move_manager)
+                bids = MoveManageTaskBid.objects.filter(company = current_company,move_manage_task =task,move_manager =move_manager)
+                bids.delete()
+            else:
+                task.chosen_manager.add(move_manager)
+                task.save()
+
+            # task = MoveManageTask.objects.get(company=current_company, uid=task_id)
+            # move_manager = MoveManager.objects.get(company=current_company, uid=move_manager_id)
+       
+        return redirect('choose_move_contractor', task_id=taskuid)
 
 class MoveInventory(LoginRequiredMixin, View):
 
@@ -687,3 +703,32 @@ def save_move_status(request):
             return HttpResponse("Saved Status")
         else:
             return HttpResponse("Please Enter Status")
+
+
+
+class RejectMoveBid(LoginRequiredMixin, View):
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        context={}
+        current_company = request.user.company
+        bid_id = self.kwargs['bid_id']
+        bid = MoveManageTaskBid.objects.get(company=current_company, uid=bid_id)
+        task = bid.move_manage_task
+        task_id =bid.move_manage_task.uid
+        # Set chosen bid of the task
+        if task.chosen_bid:
+            messages.success(request, "Bid is already Accpected".format(bid.move_manager.first_name, bid.move_manager.last_name))
+        else:
+            bid.delete()
+            messages.success(request, "Reject Bid from {0} {1}".format(bid.move_manager.first_name, bid.move_manager.last_name))
+        # task.save()
+        # Create new Move Management project
+        # move_manage_project = MoveManagementProject(company=current_company,
+        #                                     move_manage_task = task,
+        #                                     estimated_budget = bid.cost,
+        #                                     move_manager = bid.move_manager,
+        #                                     client = task.client)
+        # move_manage_project.save()
+        
+        return redirect('view_move_bids', task_id=task_id)

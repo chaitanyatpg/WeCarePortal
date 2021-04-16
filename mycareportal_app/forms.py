@@ -210,3 +210,12 @@ class CrmLeadForm(forms.Form):
 
 
 
+class AssignContractorForm(forms.Form):
+
+    contractor_email = forms.CharField(max_length=100)
+    taskuid = forms.CharField(max_length=100)
+    is_unassign = forms.CharField(initial="False", required=False)
+
+    def clean(self):
+        cleaned_data = super(AssignContractorForm, self).clean()
+        return cleaned_data

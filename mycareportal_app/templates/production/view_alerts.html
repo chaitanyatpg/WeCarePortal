@@ -63,7 +63,8 @@
                     {% csrf_token %}
                     <div class="row">
                       <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Client</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Client<span
+                          class="required">*</span></label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
                           <select required id='client_dropdown' class="select2_group form-control" name={{create_task_form.client_uid.html_name}} tabindex="-1">
                             <option disabled selected value> -- select an option -- </option>
@@ -77,7 +78,8 @@
                     <label></label>
                     <div class="row">
                       <div class="form-group">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12">Choose Category</label>
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">Choose Category<span
+                            class="required">*</span></label>
                           <div class="col-md-9 col-sm-9 col-xs-12">
                             <select required class="select2_group form-control" name={{create_task_form.assessment_category_uid.html_name}}>
                               <option disabled selected value> -- select an option -- </option>
@@ -125,7 +127,8 @@
                       <label></label>
                       <div class="row">
                         <div class="form-group">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12">Task Name</label>
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">Task Name<span
+                            class="required">*</span></label>
                           <div class="col-md-9 col-sm-9 col-xs-12">
                             <input type="text" class="form-control col-md-10" name="{{create_task_form.task_name.html_name}}" required="required" />
                           </div>
@@ -134,7 +137,8 @@
                       <label></label>
                       <div class="row">
                         <div class="form-group">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12">Task Description</label>
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">Task Description<span
+                            class="required">*</span></label>
                           <div class="col-md-9 col-sm-9 col-xs-12">
                             <textarea type="text" class="form-control col-md-10" required="required" name={{create_task_form.task_description.html_name}}></textarea>
                           </div>
@@ -255,9 +259,9 @@
                           <form action="{% url 'choose_contractor' task_id=task.uid %}" style="float: left;">
                             <button type="submit" class="btn btn-success">Choose Contractor</button>
                           </form>
-                          <form action="enter_alert.html" style="float: left;">
+                          <!-- <form action="enter_alert.html" style="float: left;">
                             <button type="submit" class="btn btn-info">Edit</button>
-                          </form>
+                          </form> -->
                           <form action="{% url 'view_bids' task_id=task.uid %}" style="float: left;">
                             <button type="submit" class="btn btn-warning">View Bids</button>
                           </form>

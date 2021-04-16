@@ -152,13 +152,18 @@
                             </div>
                           </div>
                           <input type="hidden" value={{bid.uid}}>
-                          <button type="button" class="btn btn-warning">Modify</button>
+                          <!-- <button type="button" class="btn btn-warning">Modify</button> -->
                         </form>
                         <form method="post" action="{%url 'accept_bid' bid_id=bid.uid %}" class="form-horizontal form-label-left input_mask" style="float: left;">
                           {% csrf_token %}
                           <button type="submit" class="btn btn-success">Accept</button>
                         </form>
-                        <button type="button" class="btn btn-danger">Reject</button>
+                       
+
+                       <form onSubmit="return confirm('Do you want to Reject Bid?') " method="POST" action="{%url 'reject_bid' bid_id=bid.uid %}">
+                        {% csrf_token %}
+                        <td><button  class="btn btn-danger" >Reject</button></td>
+                      </form>
                       </div>
 
                   </div>

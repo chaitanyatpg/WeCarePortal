@@ -876,7 +876,7 @@ class ChooseContractorForTask(LoginRequiredMixin, View):
         task_id = self.kwargs['task_id']
         task = HomeModificationTask.objects.get(company=current_company, uid=task_id)
         all_home_mod_managers = HomeModificationUser.objects.filter(company=current_company).order_by('last_name')
-
+        context["assign_contractor_form"] = AssignContractorForm()
         context['all_home_mod_managers'] = all_home_mod_managers
         context['task_id'] = task_id
         context['task'] = task
@@ -886,17 +886,34 @@ class ChooseContractorForTask(LoginRequiredMixin, View):
 
         context = {}
         current_company = request.user.company
-        task_id = self.kwargs['task_id']
-        contractor_id = self.kwargs['contractor_id']
-        print(task_id)
-        print(contractor_id)
-        task = HomeModificationTask.objects.get(company=current_company, uid=task_id)
-        contractor = HomeModificationUser.objects.get(company=current_company, uid=contractor_id)
-        print(task.uid)
-        print(contractor.uid)
-        task.chosen_contractors.add(contractor)
-        task.save()
-        return redirect('choose_contractor', task_id=task_id)
+        # task_id = self.kwargs['task_id']
+        # contractor_id = self.kwargs['contractor_id']
+        assign_contractor_form = AssignContractorForm(request.POST)
+        print("assign_contractor_form",assign_contractor_form)
+        if assign_contractor_form.is_valid():
+            contractor_email = assign_contractor_form.cleaned_data['contractor_email']
+            taskuid = assign_contractor_form.cleaned_data['taskuid']
+            is_unassign = assign_contractor_form.cleaned_data['is_unassign']
+            task = HomeModificationTask.objects.get(company=current_company, uid=taskuid)
+            contractor = HomeModificationUser.objects.get(company=current_company, email_address = contractor_email )
+            
+            print("hellooo",taskuid)
+            if is_unassign == "True":
+                task.chosen_contractors.remove(contractor)
+                bids = HomeModTaskBid.objects.filter(company=current_company, home_mod_task=task,contractor =contractor)
+                bids.delete()
+            else:
+                task.chosen_contractors.add(contractor)
+                
+            task.save()
+            
+        
+        # contractor = HomeModificationUser.objects.get(company=current_company, uid=contractor_id)
+        # print(task.uid)
+        # print(contractor.uid)
+        # task.chosen_contractors.add(contractor)
+        
+        return redirect('choose_contractor', task_id=taskuid)
 
 
 class HomeDashboard(LoginRequiredMixin, View):
