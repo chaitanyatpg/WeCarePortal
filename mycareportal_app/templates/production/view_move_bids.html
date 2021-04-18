@@ -164,7 +164,11 @@
                           {% csrf_token %}
                           <button type="submit" class="btn btn-success">Accept</button>
                         </form>
-                        <button type="button" class="btn btn-danger">Reject</button>
+                        <form onSubmit="return confirm('Do you want to Reject Bid?') " method="POST" action="{%url 'reject_move_bid' bid_id=bid.uid %}">
+                          {% csrf_token %}
+                          <td><button  class="btn btn-danger" >Reject</button></td>
+                        </form>
+                        
                       </div>
 
                   </div>

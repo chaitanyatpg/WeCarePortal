@@ -174,3 +174,16 @@ class BidForm(forms.Form):
     start_date = forms.DateField(required=True)
     end_date = forms.DateField(required=True)
     cost = forms.IntegerField(required=True)
+
+
+
+
+class AssignMoveManagerForm(forms.Form):
+
+    move_manager_email = forms.CharField(max_length=100)
+    taskuid = forms.CharField(max_length=100)
+    is_unassign = forms.CharField(initial="False", required=False)
+
+    def clean(self):
+        cleaned_data = super(AssignMoveManagerForm, self).clean()
+        return cleaned_data

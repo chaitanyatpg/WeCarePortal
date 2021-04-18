@@ -289,7 +289,7 @@ class AcceptBid(LoginRequiredMixin, View):
                                             client = task.client)
         home_mod_project.save()
         messages.success(request, "Accepted Bid from {0} {1} for task {2} and created project".format(bid.contractor.first_name, bid.contractor.last_name, task.task_name))
-        return redirect('view_bids', task_id=bid.home_mod_task.uid)
+        return redirect('home_dashboard')
 
 class UpdateProjects(LoginRequiredMixin, View):
 
@@ -529,3 +529,29 @@ def save_status(request):
             return HttpResponse("Saved Status")
         else:
             return HttpResponse("Please Enter Status")
+
+
+
+class RejectBid(LoginRequiredMixin, View):
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        context={}
+        current_company = request.user.company
+        bid_id = self.kwargs['bid_id']
+        bid = HomeModTaskBid.objects.get(company=current_company, uid=bid_id)
+        task_id = bid.home_mod_task.uid
+        task = bid.home_mod_task
+        # Set chosen bid of the task
+        if task.chosen_bid:
+            messages.success(request, "Bid is already Accpected".format(bid.contractor.first_name, bid.contractor.last_name))
+        else:
+            bid.delete()
+            messages.success(request, "Reject Bid from {0} {1} for task ".format(bid.contractor.first_name, bid.contractor.last_name))
+
+        # task.save()
+        
+        # Create new Home Mod project
+  
+        
+        return redirect('view_bids', task_id=task_id)

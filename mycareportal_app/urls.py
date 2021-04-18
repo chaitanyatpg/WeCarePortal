@@ -141,11 +141,15 @@ urlpatterns = [
     url(r'^home_dashboard', views.HomeDashboard.as_view(), name='home_dashboard'),
     url(r'^choose_contractor/(?P<task_id>[0-9a-f-]+)/$', views.ChooseContractorForTask.as_view(), name='choose_contractor'),
     url(r'^choose_contractor/(?P<task_id>[0-9a-f-]+)/(?P<contractor_id>[0-9a-f-]+)/$', views.ChooseContractorForTask.as_view(), name='choose_contractor'),
+
+    url(r'^choose_contractor', views.ChooseContractorForTask.as_view(), name='choose_contractor'),
     url(r'^view_bids/(?P<task_id>[0-9a-f-]+)/$', home_mod_views.ViewBids.as_view(), name='view_bids'),
     url(r'^view_bids', home_mod_views.ViewBids.as_view(), name='view_bids'),
     url(r'^modify_bid', home_mod_views.ModifyBid.as_view(), name="modify_bid"),
     url(r'^accept_bid/(?P<bid_id>[0-9a-f-]+)/$', home_mod_views.AcceptBid.as_view(), name="accept_bid"),
+    
     url(r'^update_projects', home_mod_views.UpdateProjects.as_view(), name='update_projects'),
+    url(r'^reject_bid/(?P<bid_id>[0-9a-f-]+)/$', home_mod_views.RejectBid.as_view(), name="reject_bid"),
     url(r'^home_modification/view_project/(?P<home_mod_project_id>[0-9a-f-]+)/$', home_mod_views.ViewProject.as_view(), name="view_project"),
     url(r'^home_modification/view_project_no_edit/(?P<task_id>[0-9a-f-]+)/$', home_mod_views.ViewProjectDisabled.as_view(), name="view_project_disabled"),
     url(r'^home_modification/save_project_budget', home_mod_views.save_project_budget, name="save_project_budget"),
@@ -160,6 +164,7 @@ urlpatterns = [
     url(r'^move_management/move_manage_wizard', move_manage_views.MoveManageWizard.as_view(),name='move_manage_wizard'),
     url(r'^move_management/choose_move_contractor/(?P<task_id>[0-9a-f-]+)/$', move_manage_views.ChooseMoveContractorForTask.as_view(), name='choose_move_contractor'),
     url(r'^move_management/choose_move_contractor/(?P<task_id>[0-9a-f-]+)/(?P<manager_id>[0-9a-f-]+)/$', move_manage_views.ChooseMoveContractorForTask.as_view(), name='choose_move_contractor'),
+    url(r'^choose_move_contractor', move_manage_views.ChooseMoveContractorForTask.as_view(), name='choose_move_contractor'),
     url(r'^move_management/move_inventory/(?P<task_id>[0-9a-f-]+)/$', move_manage_views.MoveInventory.as_view(), name='move_inventory'),
     url(r'^move_management/move_inventory', move_manage_views.MoveInventory.as_view(), name='move_inventory'),
     url(r'^move_management/edit_move_inventory/(?P<inventory_id>[0-9a-f-]+)/$', move_manage_views.EditMoveInventory.as_view(), name='edit_move_inventory'),
@@ -167,7 +172,9 @@ urlpatterns = [
     url(r'^move_management/move_manager_dashboard', move_manage_views.MoveManagerDashboard.as_view(), name='move_manager_dashboard'),
     url(r'^move_management/view_move_bids/(?P<task_id>[0-9a-f-]+)/$', move_manage_views.ViewMoveBids.as_view(), name='view_move_bids'),
     url(r'^move_management/view_move_bids', move_manage_views.ViewMoveBids.as_view(), name='view_move_bids'),
+    
     url(r'^move_management/accept_move_bid/(?P<bid_id>[0-9a-f-]+)/$', move_manage_views.AcceptMoveBid.as_view(), name="accept_move_bid"),
+    url(r'^move_management/reject_move_bid/(?P<bid_id>[0-9a-f-]+)/$', move_manage_views.RejectMoveBid.as_view(), name="reject_move_bid"),
     url(r'^move_management/update_move_projects', move_manage_views.UpdateMoveProjects.as_view(), name="update_move_projects"),
     url(r'^move_management/view_move_project/(?P<move_project_id>[0-9a-f-]+)/$', move_manage_views.ViewMoveProject.as_view(), name="view_move_project"),
     url(r'^move_management/view_move_project_no_edit/(?P<task_id>[0-9a-f-]+)/$', move_manage_views.ViewMoveProjectDisabled.as_view(), name="view_move_project_disabled"),
