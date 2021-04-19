@@ -59,13 +59,13 @@
                 {% for field in form %}
                   {% for error in field.errors %}
                     <div class="alert alert-danger">
-                      <span style="font-family: -webkit-pictograph; font-size: 17px;">{{error}}</span>
+                      <span style="font-family: sans-serif; font-size: 17px;">{{error}}</span>
                     </div>
                   {% endfor %}
                 {% endfor %}
                 {% for error in form.non_field_errors %}
                   <div class="alert alert-danger">
-                    <span style="font-family: -webkit-pictograph; font-size: 17px;">{{error}}</span>
+                    <span style="font-family: sans-serif; font-size: 17px;">{{error}}</span>
                   </div>
                 {% endfor %}
               {% endif %}
