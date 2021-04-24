@@ -89,6 +89,8 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'mycareportal.urls'
 AUTH_USER_MODEL = 'mycareportal_app.User'
 #LOGIN_REDIRECT_URL = 'dashboard'
+AUTHENTICATION_BACKENDS= ('mycareportal_app.backened.CaseInsensitiveModelBackend',)
+
 
 TEMPLATES = [
     {

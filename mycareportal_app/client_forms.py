@@ -39,7 +39,7 @@ class ClientRegistrationForm(forms.Form):
                 if picture._size > self.MAX_UPLOAD_SIZE:
                     raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
         except KeyError:
-            raise forms.ValidationError('Upload Valid Image Example PNG and JPEG are allowed')
+            raise forms.ValidationError('Formats supported JPEG, PNG, JPG')
         #if not picture:
         #    return None
         #if not picture.content_type or not picture.content_type.startswith('image'):
@@ -95,7 +95,8 @@ class EditClientDetailsForm(forms.Form):
                     raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
         #picture = self.cleaned_data['profile_picture']
         except KeyError:
-            raise forms.ValidationError('Upload Valid Image Example PNG and JPEG are allowed')
+            raise forms.ValidationError('Formats supported JPEG, PNG, JPG')
+            
         # if not picture.content_type or not picture.content_type.startswith('image'):
         #    raise forms.ValidationError('Image file type is not recognized. Please try again')
         # return picture
