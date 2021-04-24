@@ -29,7 +29,7 @@
     <div class="main_container">
       <div class="col-md-3 left_col">
         <div class="left_col scroll-view">
-          <div class="navbar nav_title" style="border: 0;"> <a href="#" class="site_title"><i class="fa fa-laptop"></i> <span>myCareportal</span></a> </div>
+          <div class="navbar nav_title" style="border: 0;"> <a href="" class="site_title"><i class="fa fa-laptop"></i> <span>myCareportal</span></a> </div>
           <div class="clearfix"></div>
 
           <!-- menu profile quick info -->
@@ -189,6 +189,9 @@
                     {% if module_dict.CAREGIVERPORTAL.SCHEDULEFREECAREGIVER %}
                       <li><a href={% url 'schedule_free_caregiver' %}>Schedule Free Caregiver</a></li>
                     {% endif %}
+                    {% if module_dict.CAREGIVERPORTAL.CHOOSECAREGIVERPAYROLL %}
+                    <li><a href={% url 'caregiverpayroll' %}>Caregiver Payroll</a></li>
+                   {% endif %}
                 
                   </ul>
                 </li>

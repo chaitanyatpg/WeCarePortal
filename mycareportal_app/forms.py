@@ -219,3 +219,14 @@ class AssignContractorForm(forms.Form):
     def clean(self):
         cleaned_data = super(AssignContractorForm, self).clean()
         return cleaned_data
+
+
+class ChooseCaregiverPayrollForm(forms.Form):
+
+    # caregiver_email = forms.CharField(max_length=100)
+    start_date = forms.DateField()
+    end_date = forms.DateField()
+
+    def clean(self):
+        cleaned_data = super(ChooseCaregiverPayrollForm, self).clean()
+        return cleaned_data

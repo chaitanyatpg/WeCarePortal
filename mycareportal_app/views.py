@@ -52,6 +52,7 @@ from django.template.loader import get_template
 from xhtml2pdf import pisa
 from decimal import Decimal
 from django.core.files import File
+import xlwt
 
 
 # Create your views here.
@@ -1202,6 +1203,8 @@ class Invoice(LoginRequiredMixin, View):
                 context['client'] = client
                 context['start_date'] = start_date
                 context['end_date'] = end_date
+                invoice_rate_types = InvoiceRateType.objects.all()
+                context['invoice_rate_types'] = invoice_rate_types
                 exits_invoice_header = InvoiceHeader.objects.filter(company = current_company,client = client, start_date = start_date,end_date = end_date ,  submitted = True,cancelled =False)
                 caregiver_schedule_notes = CaregiverSchedule.objects.filter(company = current_company, client= client, date__range = (start_date, end_date))
                 context['caregiver_schedule_notes'] = caregiver_schedule_notes
@@ -1213,8 +1216,7 @@ class Invoice(LoginRequiredMixin, View):
                     context['invoice_line_items'] = invoice_line_items
                     caregiver = client.caregiver.all()
                     context['caregiver'] = caregiver
-                    invoice_rate_types = InvoiceRateType.objects.all()
-                    context['invoice_rate_types'] = invoice_rate_types
+                    
                     
                 else:
                     invoice_header = InvoiceHeader.create_invoice(current_company,client,start_date,end_date)
@@ -1371,7 +1373,9 @@ class ManagerClientDashboard(LoginRequiredMixin, View):
             status = update_task_form.cleaned_data["status"]
             client = Client.objects.get(company=current_company,id=client_id)
             task = TaskSchedule.objects.get(company=current_company,client=client,id=task_id)
+            
             if status == "pending":
+                
                 task.pending = True
                 task.complete = False
                 task.in_progress = False
@@ -1386,6 +1390,8 @@ class ManagerClientDashboard(LoginRequiredMixin, View):
                 task.complete = False
                 task.in_progress = True
                 task.cancelled = False
+                
+                
             elif status == "cancelled":
                 task.pending = False
                 task.complete = False
@@ -1393,6 +1399,12 @@ class ManagerClientDashboard(LoginRequiredMixin, View):
                 task.cancelled = True
             if status == "complete":
                 task.completed_by = self.request.user
+                for i in client.caregiver.all():
+                    caregiver = CaregiverSchedule.objects.filter(company=current_company,caregiver_id = i.id,date = task.date, start_time = task.start_time, end_time=task.end_time)
+                    if caregiver:
+                        for i in caregiver:
+                            caregiverval = Caregiver.objects.get(company= current_company,id = i.caregiver.id)
+                            task.completed_by_caregiver = caregiverval
                 task.completed_timestamp = datetime.datetime.now()
             else:
                 task.completed_by = None
@@ -1981,10 +1993,7 @@ def get_pdf(request):
     invoice_headerid = request.session.get('context').get('invoice_header_id')
     start_date = request.session.get('context').get('start_date')
     end_date = request.session.get('context').get('end_date')
-    current_date = datetime.date.today()
-  
-   
-    
+    current_date = datetime.date.today()    
     invoice_header = InvoiceHeader.objects.get(id = invoice_headerid )
     caregiver_schedule_notes = CaregiverSchedule.objects.filter(company = current_company, client = invoice_header.client, date__range = (invoice_header.start_date, invoice_header.end_date))
     invoice_line_items =list(InvoiceLineItem.objects.filter(invoice_header = invoice_header,company =current_company))
@@ -2101,12 +2110,15 @@ def update_invoice_detail(request):
             invoice_header = InvoiceHeader.objects.get(id = invoice_line_item.invoice_header.id)
             invoice_header_total = float(invoice_header.total_cost) - float(invoice_line_total)
             invoice_header.total_cost = float(invoice_header_total)
+            invoice_header_total_hours =  float(invoice_header.total_hours) - float(invoice_line_hours)
+            invoice_header.total_hours = invoice_header_total_hours
             invoice_header.save()
             invoice_line_item.hours = change_hours
             invoice_line_item.rate = change_rate
             invoice_line_item.rate_type = change_ratetype
             invoice_line_item.total = float(change_hours) * float(change_rate)
             invoice_header.total_cost =  float(invoice_header.total_cost) + float(invoice_line_item.total)
+            invoice_header.total_hours =  float(invoice_header.total_hours) + float(invoice_line_item.hours)
             if invoice_header.taxes:
                 invoice_header.total_cost = invoice_header.total_cost - float(invoice_header.taxes)
                 tax_amt= round((invoice_header.total_cost * float(current_company.tax_rate / 100)),2)
@@ -2386,7 +2398,7 @@ def render_to_pdfs(template_src, context_dict):
     file = open('mycareportal_app/download_invoice_pdf/Invoice.pdf', "w+b")
     pdf = pisa.pisaDocument(html.encode('utf-8'), dest=file,encoding='utf-8')
     file.seek(0)
-    pdf = file.read()
+    pdf = file.read()               
     file.close()
     
     return None
@@ -2430,4 +2442,292 @@ def send_email_invoice(request):
         
     return HttpResponse(json.dumps(invoiceadd), content_type="application/json")
             
+     
+
+class ChooseCaregiverPayroll(LoginRequiredMixin, View):
+    
+    def get(self, request,*args, **kwargs):
+        context = {}
+        current_company = request.user.company
+        context['current_company'] = current_company
+        context['choose_caregiver_payroll_form'] = ChooseCaregiverPayrollForm()
+        all_caregivers = Caregiver.objects.all()
+        payroll_header = PayrollHeader.objects.filter(company=current_company,submitted = True,cancelled =False)
+        context['payroll_header'] = payroll_header
+
+        context['all_caregivers'] = all_caregivers
+        return render(request, 'production/choose_caregiverpayroll.html', context)
+    
+  
+
+
+class Payroll(LoginRequiredMixin, View):
+    
+    
+    def get(self, request,*args, **kwargs):
+        context = {}
+        payroll_id = request.GET.get('payroll_id')
+        current_company = request.user.company
+        context['current_company'] = current_company
+        current_date = datetime.date.today()
+        context['current_date'] =current_date
+        if payroll_id:
+            submit = True
+            context['submit'] = submit
+            exits_invoice_header = PayrollHeader.objects.filter(company = current_company, id = payroll_id,  submitted = True,cancelled =False)
+            context['payroll_header'] = exits_invoice_header
+            payroll_header = PayrollHeader.objects.filter(id = exits_invoice_header)
+            context['payroll_header'] = payroll_header
+            payroll_line_item = []
+            for i in payroll_header:
+                payroll_item = PayrollLineItem.objects.filter(payroll_header = i.id)
+                payroll_line_item.append(payroll_item)
+                payroll_header = PayrollHeader.objects.get(id = i.id)
+                context['payroll_header'] = payroll_header
+                context['payroll_line_item'] = payroll_line_item
+            # payroll_line_item = PayrollLineItem.objects.filter(payroll_header = payroll_header,company = current_company).order_by("id")
+            # context['payroll_line_item'] = payroll_line_item
+            # caregiver_schedule_notes = CaregiverSchedule.objects.filter(company = current_company, client= invoice_header_data.client, date__range = (invoice_header_data.start_date, invoice_header_data.end_date))
+            # context['caregiv  er_schedule_notes'] = caregiver_schedule_notes
+        else:
+            submit = False
+            context['submit'] = submit
+            caregiver = Caregiver.objects.filter(company = current_company )
+            context['caregiver'] = caregiver
+            invoice_rate_types = InvoiceRateType.objects.all()
+            context['invoice_rate_types'] = invoice_rate_types
+            choose_caregiver_payroll_form = ChooseCaregiverPayrollForm(request.GET)
+            if choose_caregiver_payroll_form.is_valid():
+                # caregiver_email = choose_caregiver_payroll_form.cleaned_data['caregiver_email']
+                # caregiver = Caregiver.objects.get(company=current_company, email_address=caregiver_email)
+                start_date = choose_caregiver_payroll_form.cleaned_data['start_date']
+                end_date = choose_caregiver_payroll_form.cleaned_data['end_date']
+                # context['caregiver'] = caregiver
+                context['start_date'] = start_date
+                context['end_date'] = end_date
+                caregivers = Caregiver.objects.filter(company= current_company)
+                exits_payroll_header = PayrollHeader.objects.filter(company = current_company, start_date = start_date,end_date = end_date ,  submitted = True, cancelled = False)
+                if exits_payroll_header:
+                    
+                    payroll_headers = list(PayrollHeader.objects.filter(start_date = start_date,end_date = end_date ,  submitted = True, cancelled = False))
+                    # context['payroll_header'] = payroll_headers
+                    payroll_line_item = []
+                    for i in payroll_headers: 
+                        payroll_item = PayrollLineItem.objects.filter(payroll_header = i.id)
+                        payroll_line_item.append(payroll_item)
+                        payroll_header = PayrollHeader.objects.get(id = i.id)
+                        context['payroll_header'] = payroll_header
+                        context['payroll_line_item'] = payroll_line_item
+                else:
+                    
+                    for caregiver in caregivers:
+                        payroll_header = PayrollHeader.create_payroll(current_company,caregiver,start_date,end_date)
+                        payroll_header = list(PayrollHeader.objects.filter(start_date = start_date,end_date = end_date ,  submitted = True,cancelled= False))
+                        context['payroll_header'] = payroll_header
+                        payroll_line_item = []
+                        for i in payroll_header: 
+                            payroll_item = PayrollLineItem.objects.filter(payroll_header = i.id)
+                            payroll_line_item.append(payroll_item)
+                            payroll_header = PayrollHeader.objects.get(id = i.id)
+                            context['payroll_header'] = payroll_header
+                            context['payroll_line_item'] = payroll_line_item
+
+        return render(request, 'production/payroll.html', context)
+
+
+
+@login_required
+def update_payroll_detail(request):
+    if request.method == "GET":
+        
+        current_company = request.user.company
+        
+        context = request.GET.copy()
+        payroll_linelist  =  json.loads(request.GET.get('payroll_line_array'))
+        ratetype = request.GET.get('ratetype')           
+        data = {
+            "ratetype" : "sucess"
+        }
+        for i in payroll_linelist:
+            invoice_line_id = int(i['payroll_line_id'])
+            change_hours = float(i['change_hours'])
+            change_ratetype = i['change_ratetype']
+            change_rate = float(i['change_rate'])
+            payroll_line_item = PayrollLineItem.objects.get(id = invoice_line_id)
+            payroll_line_hours =  payroll_line_item.hours
+            payroll_line_total = payroll_line_item.total
+            payroll_line_rate = payroll_line_item.rate
+            payroll_header = PayrollHeader.objects.get(id = payroll_line_item.payroll_header.id)
+            payroll_header_total = float(payroll_header.total_cost) - float(payroll_line_total)
+            payroll_header_total_hours =  float(payroll_header.total_hours) - float(payroll_line_hours)
+            payroll_header.total_cost = float(payroll_header_total)
+            payroll_header.total_hours =  float(payroll_header_total_hours)
+            payroll_header.save()
+            payroll_line_item.hours = change_hours
+            payroll_line_item.rate = change_rate
+            payroll_line_item.rate_type = change_ratetype
+            payroll_line_item.total = float(change_hours) * float(change_rate)
+            payroll_header.total_cost =  float(payroll_header.total_cost) + float(payroll_line_item.total)
+            payroll_header.total_hours = float(payroll_header.total_hours) +  float(payroll_line_item.hours)
+            # if invoice_header.taxes:
+            #     invoice_header.total_cost = invoice_header.total_cost - float(invoice_header.taxes)
+            #     tax_amt= round((invoice_header.total_cost * float(current_company.tax_rate / 100)),2)
+            #     invoice_header.taxes = tax_amt
+            #     invoice_header.total_cost =  (invoice_header.total_cost * 1) +  float(tax_amt)
+            payroll_header.save()
+            payroll_line_item.save()
+          
+
+        return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+
+
+
+
+
+
+
+@login_required
+def submit_payroll(request):
+    if request.method == "GET":
+        current_company = request.user.company
+        context = request.GET.copy()
+        payroll_notes  = request.GET.get('payroll_notes')
+        payroll_header_id  = request.GET.get('payroll_header_id')
+        payroll_headerlist  =  json.loads(request.GET.get('invoice_field_array'))
+        client_email  = request.GET.get('email')
+        payroll_header = PayrollHeader.objects.get(id =payroll_header_id)
+        
+        payroll_header.save()
+
+        start_date = payroll_header.start_date
+        end_date = payroll_header.end_date
+        
+        invoiceadd = {
+            "client_email" :client_email
+        }
+        for k in payroll_headerlist:
             
+            caregiverid = k['caregiverid']
+            invoice_fieldrate_type = k['invoice_fieldrate_typeid']
+            caregiver = Caregiver.objects.get(id = caregiverid, company = current_company)
+            invoice_fieldrate = float(k['invoice_fieldrate'])
+            payroll_header = PayrollHeader.objects.get(id =payroll_header_id)
+            payroll_header =PayrollHeader.objects.filter(start_date = payroll_header.start_date , end_date = payroll_header.end_date )
+            for i in payroll_header:
+                if caregiver.id == i.caregiver.id:
+                    caregiver = Caregiver.objects.get(id = i.caregiver.id, company = current_company)
+                    ratetypes = InvoiceRateType.objects.get(id = invoice_fieldrate_type)
+                    payroll_header = PayrollHeader.objects.get(company = current_company,id = i.id)
+                    if current_company.mileage_rate and ratetypes.rate_types == "Mileage":
+                        inline_total = (float(invoice_fieldrate) * float(current_company.mileage_rate))/100
+                        if inline_total > 0:
+                            new_payroll_line = PayrollLineItem(payroll_header = payroll_header,  company = current_company,
+                                                           rate_type = ratetypes.rate_types,
+                                                           hours = 0,
+                                                           caregiver = caregiver,
+                                                           rate = invoice_fieldrate,
+                                                           total =  inline_total)
+                            new_payroll_line.save()                                                                       
+                            i.total_cost = i.total_cost + Decimal.from_float(inline_total)
+                            i.save()
+                    else:
+                        payroll_line = PayrollLineItem(payroll_header = payroll_header,  company = current_company,
+                                                       rate_type = ratetypes.rate_types,
+                                                       hours = 0,
+                                                       caregiver = caregiver,
+                                                       rate =invoice_fieldrate,
+                                                       total =  invoice_fieldrate)
+                        payroll_line.save()
+                        i.total_cost = i.total_cost + Decimal.from_float(invoice_fieldrate)
+                        i.save()
+   
+    return HttpResponse(json.dumps(invoiceadd), content_type="application/json")
+
+
+@login_required    
+def generate_payroll_excel(request):
+
+    context ={}
+    context = request.GET.copy()
+    current_company = request.user.company
+    request.session['context'] = context  
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    payroll_header_id = request.GET.get('payroll_header_id')
+    
+    invoiceadd = {
+            "client_email" : "vall"
+    }
+    if payroll_header_id:
+        return redirect('getpayroll_excel')
+    
+
+
+def getpayroll_excel(request):
+    current_company = request.user.company
+    payroll_header_id = request.session.get('context').get('payroll_header_id')
+    start_date = request.session.get('context').get('start_date')
+    end_date = request.session.get('context').get('end_date')
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="CaregiverPayroll.xls"'
+        
+    payroll = PayrollHeader.objects.get(id = payroll_header_id)
+    payroll_header = list(PayrollHeader.objects.filter(start_date = payroll.start_date,end_date = payroll.end_date))
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Caregiver Payroll')
+    row_num = 0
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    columns = [ 'Employee Name','From Period','To Period','Hours', 'Rate Type','Rate','Total' ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style) 
+    font_style = xlwt.XFStyle()
+    caregivers = Caregiver.objects.filter(company= current_company)
+    for caregiver in caregivers:
+        payroll_header = list(PayrollHeader.objects.filter(start_date = payroll.start_date,end_date = payroll.end_date ,  submitted = True))
+        payroll_line_item = []
+        for i in payroll_header: 
+            payroll_item = PayrollLineItem.objects.filter(payroll_header = i.id)
+            payroll_line_item.append(payroll_item)
+    
+        
+    for i in payroll_line_item:
+        for row in i.values_list('caregiver','payroll_header','caregiver','hours', 'rate_type','rate','total'):
+            row_num += 1
+            for col_num in range(len(row)):
+                if col_num == 0:
+                    caregiver = Caregiver.objects.get(id = row[col_num])
+                    # row[col_num] = tuple(caregiver.first_name )
+                    ws.write(row_num, col_num, (caregiver.first_name," ",caregiver.last_name) )
+                elif col_num == 1:
+
+                    payroll = PayrollHeader.objects.get(id = row[col_num])
+                    # date_time = datetime.datetime.strptime(cr_date, '%Y-%m-%d %H:%M:%S.%f')
+                    date_time =  payroll.start_date.strftime('%Y-%m-%d')
+                    end_time =  payroll.end_date.strftime('%Y-%m-%d')
+                    ws.write(row_num, col_num, (date_time))
+                    ws.write(row_num, 2, (end_time))
+            
+                elif col_num > 2:
+                    ws.write(row_num, col_num, row[col_num])
+    
+    wb.save(response)
+    
+    
+    return response
+  
+
+@login_required
+def cancel_payroll(request):
+    if request.method == "GET":
+        current_company = request.user.company
+        
+        context = request.GET.copy()
+        payroll_id = request.GET.get('payroll_id')
+        payroll_header = PayrollHeader.objects.get(id = payroll_id )
+        payroll_header.cancelled = True
+        payroll_header.save()
+
+    return HttpResponseRedirect(reverse('caregiverpayroll'))

@@ -494,6 +494,7 @@ def caregiver_post_payroll(request):
         caregiver_email = request.POST.get('caregiver_email')
         if caregiver_payroll_form.is_valid():
             caregiver_email = caregiver_payroll_form.cleaned_data['caregiver_email']
+            regular_hourly_rate = caregiver_payroll_form.cleaned_data['regular_hourly_rate']
             weekend_hourly_rate = caregiver_payroll_form.cleaned_data['weekend_hourly_rate']
             holiday_hourly_rate = caregiver_payroll_form.cleaned_data['holiday_hourly_rate']
             weekend_holiday_rate = caregiver_payroll_form.cleaned_data['weekend_holiday_rate']
@@ -502,6 +503,7 @@ def caregiver_post_payroll(request):
             holiday_live_in_rate = caregiver_payroll_form.cleaned_data['holiday_live_in_rate']
             weekend_holiday_live_in_rate = caregiver_payroll_form.cleaned_data['weekend_holiday_live_in_rate']
             caregiverpayroll = Caregiver.objects.get(company=current_company,email_address=caregiver_email)
+            caregiverpayroll.regular_hourly_rate =regular_hourly_rate
             caregiverpayroll.weekend_hourly_rate =weekend_hourly_rate
             caregiverpayroll.holiday_hourly_rate = holiday_hourly_rate
             caregiverpayroll.weekend_holiday_rate =weekend_holiday_rate
@@ -760,7 +762,11 @@ class CaregiverDashboard(LoginRequiredMixin, View):
                     task.cancelled = True
                 if status == "complete":
                     task.completed_by = self.request.user
-                    task.completed_timestamp = datetime.datetime.now()
+                    caregiver = Caregiver.objects.get(company = current_company,email_address = self.request.user.email)
+                    if caregiver:
+                        task.completed_timestamp = datetime.datetime.now()
+                        task.completed_by_caregiver = caregiver
+                    
                 else:
                     task.completed_by = None
                 task.save()
