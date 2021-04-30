@@ -20,6 +20,7 @@ class ClientRegistrationForm(forms.Form):
     address = forms.CharField(max_length=400)
     city = forms.CharField(max_length=100)
     state = forms.CharField(max_length=100)
+    other_state_name = forms.CharField(max_length=100,required=False)
     zip_code = forms.CharField(max_length=10)
     time_zone = forms.CharField(max_length=50)
     profile_picture = forms.ImageField(label='Select file', required=False)

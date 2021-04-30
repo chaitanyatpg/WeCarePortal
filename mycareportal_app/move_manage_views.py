@@ -134,10 +134,13 @@ class AddMoveManager(LoginRequiredMixin, View):
             phone_number = add_move_manager_form.cleaned_data['phone_number']
             email = add_move_manager_form.cleaned_data['email']
             profile_picture = add_move_manager_form.cleaned_data['profile_picture']
+            other_state_name = add_move_manager_form.cleaned_data['other_state_name']
             company = request.user.company
             #Create home mod user auth model and save
             try:
                 with transaction.atomic():
+                    if state == "Other":
+                        state = other_state_name
                     new_user = User.objects.create_user(username=email,
                                                         email=email,
                                                         first_name=first_name,

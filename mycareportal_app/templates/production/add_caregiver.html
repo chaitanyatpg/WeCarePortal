@@ -112,9 +112,9 @@
                   </div>
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">State<span class="required">*</span> </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-md-6 col-sm-6 col-xs-12" onchange="update_state()">
                       {% if not add_caregiver_form.state_value is None %}
-                      <select required class="select2_single form-control" tabindex="7" name={{add_caregiver_form.state.html_name}} value={{add_caregiver_form.state.value}}>
+                      <select required class="select2_single form-control" tabindex="7" id="dropDownId" name={{add_caregiver_form.state.html_name}} value={{add_caregiver_form.state.value}}>
                             <option value="" disabled selected>Select State</option>
                             <option value="Other">Other</option>
                             <option value="AL">Alabama</option>
@@ -199,7 +199,7 @@
                             <option value="West Bengal">West Bengal</option>
                       </select>
                       {% else %}
-                      <select required class="select2_single form-control" tabindex="7" name={{add_caregiver_form.state.html_name}}>
+                      <select required class="select2_single form-control" tabindex="7" id="dropDownId" name={{add_caregiver_form.state.html_name}}>
                             <option value="" disabled selected>Select State</option>
                             <option value="Other">Other</option>
                             <option value="AL">Alabama</option>
@@ -285,6 +285,19 @@
                       </select>
                       {% endif %}
                     </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div  id="selectlead" style="display:none"> 
+                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Other State name<span class="required">*</span> </label>
+                     <div class="col-md-6 col-sm-6 col-xs-12">
+                       {% if not add_client_form.otr_state_name is None %}
+                       <input type="text"  class="form-control col-md-7 col-xs-12"  name={{add_caregiver_form.other_state_name.html_name}} value={{add_caregiver_form.other_state_name.value}}>
+                       {% else %}
+                       <input type="text"  class="form-control col-md-7 col-xs-12"  name={{add_caregiver_form.other_state_name.html_name}}>
+                       {% endif %}
+                     </div>
+                   </div>
                   </div>
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">ZIP code<span class="required">*</span> </label>
@@ -500,5 +513,24 @@
     });
   </script>
 <!-- /jquery.inputmask -->
+
+
+<script>
+  function update_state() {
+      // Get the checkbox
+      values = $('#dropDownId :selected').val()
+      console.log("ssss ---",values)
+      // Get the output text
+      var selectlead = document.getElementById("selectlead");
+      
+      if (values === "Other") {
+          selectlead.style.display = "block";
+    
+      } else {
+          selectlead.style.display = "none";
+      
+      }
+  }
+</script>
 
 {% endblock %}

@@ -129,10 +129,17 @@ class AddClient(LoginRequiredMixin, View):
             profile_picture = add_client_form.cleaned_data['profile_picture']
             referrer = add_client_form.cleaned_data['referrer']
             notes = add_client_form.cleaned_data['notes']
+            other_state_name = add_client_form.cleaned_data['other_state_name']
             company = request.user.company
             #Create Client object and save
+
             is_caregiver = add_client_form.cleaned_data['is_caregiver']
             try:
+                if state == "Other":
+                    state = other_state_name
+               
+                    
+
                 new_client = Client(company = company,
                                     email_address = email,
                                     first_name = first_name,
