@@ -70,9 +70,12 @@ class AddCaregiver(LoginRequiredMixin, View):
             profile_picture = add_caregiver_form.cleaned_data['profile_picture']
             notes = add_caregiver_form.cleaned_data['notes']
             company = request.user.company
+            other_state_name = add_caregiver_form.cleaned_data['other_state_name']
             #Create caregiver user auth model and save
             try:
                 with transaction.atomic():
+                    if state == "Other":
+                        state = other_state_name
                     existing_user_flag = False
                     if User.objects.filter(username=email, email=email).exists():
                         new_user = User.objects.get(username=email)

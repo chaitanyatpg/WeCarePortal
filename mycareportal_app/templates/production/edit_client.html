@@ -160,8 +160,8 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">State<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not edit_client_form.state.value is None %}
-                      <select required class="select2_single form-control" tabindex="-1" name={{edit_client_form.state.html_name}} value={{edit_client_form.state.value}}>
-                            <option selected=selected>{{edit_client_form.state.value}}</option>
+                      <select required class="select2_single form-control" tabindex="" name={{edit_client_form.state.html_name}} value={{edit_client_form.state.value}}>
+                            <option   selected=selected>{{edit_client_form.state.value}}</option>
                             <option value="Other">Other</option>
                             <option value="AL">Alabama</option>
                           	<option value="AK">Alaska</option>
@@ -2289,6 +2289,7 @@ function myFunctions(val){
 
 
 
+
 <script>
 
   function myWeekendholidayliveinrate(val){
@@ -2304,4 +2305,20 @@ function myFunctions(val){
     
   }
 </script>
+
+
+<script>
+      $(document).ready(function() {
+        $(".select2_single").select2({
+          placeholder: "Select a state",
+          allowClear: true
+        });
+        $(".select2_group").select2({});
+        $(".select2_multiple").select2({
+          maximumSelectionLength: 4,
+          placeholder: "With Max Selection limit 4",
+          allowClear: true
+        });
+      });
+    </script>
 {% endblock %}
