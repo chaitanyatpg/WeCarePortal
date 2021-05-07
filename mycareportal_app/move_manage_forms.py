@@ -50,6 +50,7 @@ class MoveManagerEditForm(forms.Form):
     address = forms.CharField(max_length=400, required=False)
     city = forms.CharField(max_length=100, required=False)
     state = forms.CharField(max_length=100, required=False)
+    other_state_name = forms.CharField(max_length=100,required=False)
     zip_code = forms.CharField(max_length=10, required=False)
     date_of_birth = forms.DateTimeField(required=False)
     phone_number = forms.CharField(max_length=20, required=False)

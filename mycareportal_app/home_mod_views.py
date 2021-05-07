@@ -178,6 +178,7 @@ class EditHomeModUser(LoginRequiredMixin, View):
                 phone_number = edit_home_mod_user_form.cleaned_data['phone_number']
                 email = edit_home_mod_user_form.cleaned_data['email']
                 profile_picture = edit_home_mod_user_form.cleaned_data['profile_picture']
+                other_state_name = edit_home_mod_user_form.cleaned_data['other_state_name']
                 #Get current caregiver
                 home_mod_user = HomeModificationUser.objects.get(company=current_company,email_address=email)
                 home_mod_user.first_name = first_name
@@ -190,6 +191,9 @@ class EditHomeModUser(LoginRequiredMixin, View):
                 home_mod_user.zip_code = zip_code
                 home_mod_user.date_of_birth = date_of_birth
                 home_mod_user.phone_number = phone_number
+                if home_mod_user.state == "Other":
+                    home_mod_user.state = other_state_name
+
                 if profile_picture != None and home_mod_user.profile_picture != profile_picture:
                     home_mod_user.profile_picture = profile_picture
                 if home_mod_user.email_address != None and home_mod_user.email_address != email:

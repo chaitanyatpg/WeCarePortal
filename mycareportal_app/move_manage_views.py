@@ -254,6 +254,7 @@ class EditMoveManager(LoginRequiredMixin, View):
                 phone_number = edit_move_manager_form.cleaned_data['phone_number']
                 email = edit_move_manager_form.cleaned_data['email']
                 profile_picture = edit_move_manager_form.cleaned_data['profile_picture']
+                other_state_name = edit_move_manager_form.cleaned_data['other_state_name']
                 #Get current
                 move_manager = MoveManager.objects.get(company=current_company,email_address=email)
                 move_manager.first_name = first_name
@@ -266,6 +267,10 @@ class EditMoveManager(LoginRequiredMixin, View):
                 move_manager.zip_code = zip_code
                 move_manager.date_of_birth = date_of_birth
                 move_manager.phone_number = phone_number
+                if move_manager.state == "Other":
+                    move_manager.state = other_state_name
+
+                
                 if profile_picture != None and move_manager.profile_picture != profile_picture:
                     move_manager.profile_picture = profile_picture
                 if move_manager.email_address != None and move_manager.email_address != email:
