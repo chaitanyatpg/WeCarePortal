@@ -295,6 +295,10 @@ class EditCaregiver(LoginRequiredMixin, View):
                 rating = edit_caregiver_form.cleaned_data['rating']
                 hourly_rate = edit_caregiver_form.cleaned_data['hourly_rate']
                 notes = edit_caregiver_form.cleaned_data['notes']
+                other_state_name = edit_caregiver_form.cleaned_data['other_state_name']
+                if state == "Other":
+                    state = other_state_name
+                
                 #Get current caregiver
                 caregiver = Caregiver.objects.get(company=current_company,email_address=email)
                 if self.arg_diff(caregiver.first_name, first_name):

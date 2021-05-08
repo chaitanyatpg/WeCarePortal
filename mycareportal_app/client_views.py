@@ -360,6 +360,10 @@ class EditClient(LoginRequiredMixin, View):
                 client.time_zone = edit_client_form.cleaned_data['time_zone']
                 client.referrer = edit_client_form.cleaned_data['referrer']
                 client.notes = edit_client_form.cleaned_data['notes']
+                other_state_name = edit_client_form.cleaned_data['other_state_name']
+                if client.state == "Other":
+                    client.state = other_state_name
+                
                 if edit_client_form.cleaned_data['profile_picture'] != None and client.profile_picture != edit_client_form.cleaned_data['profile_picture']:
                     client.profile_picture = edit_client_form.cleaned_data['profile_picture']
                 client.save()
