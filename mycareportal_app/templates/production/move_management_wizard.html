@@ -121,10 +121,10 @@
                               <div class="col-md-6 col-sm-6 col-xs-12">
                                 <div id="gender" class="btn-group" data-toggle="buttons">
                                   <label class="btn btn-default" data-toggle-class="btn-default" data-toggle-passive-class="btn-primary">
-                                    <input type="radio" class="btn-primary" name="{{create_move_task_form.provides_assistance.html_name}}" value="Y"> &nbsp; Yes &nbsp;
+                                    <input required type="radio" class="btn-primary" name="{{create_move_task_form.provides_assistance.html_name}}" value="Y"> &nbsp; Yes &nbsp;
                                   </label>
                                   <label class="btn btn-default" data-toggle-class="btn-default" data-toggle-passive-class="btn-primary">
-                                    <input type="radio" class="btn-primary" name="{{create_move_task_form.provides_assistance.html_name}}" value="N"> No
+                                    <input required type="radio" class="btn-primary" name="{{create_move_task_form.provides_assistance.html_name}}" value="N"> No
                                   </label>
                                 </div>
                               </div>
@@ -138,7 +138,7 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Minimum Cost<span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                              <input type="number" id="first-name" name="{{create_move_task_form.minimum_cost.html_name}}" required="required" class="form-control col-md-7 col-xs-12">
+                              <input type="number"  id="first-name" name="{{create_move_task_form.minimum_cost.html_name}}" required="required" class="form-control col-md-7 col-xs-12">
                               <span class="required"  style="color: red;" id="mincosterror"></span>
                             </div>
                           </div>
@@ -332,7 +332,10 @@
 
 
         function onFinishCallback(objs, context){
+
+
           // value = false
+          console.log("finish clicked")
           var step_num = objs.attr('rel'); 
           // validateSteps(step_num,context)
         // if(validateAllSteps()){
@@ -346,15 +349,15 @@
           var getSelectedValue =  document.querySelector( 'input[name="handicap_friendly"]:checked'); 
           
           var getValue =  document.querySelector( 'input[name="furnished"]:checked'); 
-          var assistance =  document.querySelector( 'input[name="provides_assistance"]:checked'); 
-          if (  $('#typearea :selected').val() && getSelectedValue && getValue){
+          var assistance =  document.querySelector( 'input[name="provides_assistance"]:checked');  
+          if (  $('#typearea :selected').val() && getSelectedValue && getValue && $("input[name=new_address_max_distance]").val() && $("input[name=minimum_cost]").val() && $("input[name=maximum_cost]").val() ){
                            console.log("finis me")
                         
                            $('#target').submit();
                           }
         else {
         console.log("eeeeeeee",context.toStep)
-        alert("please select all the field")
+        alert("Please Select All The Fields")
         if(context.toStep == 2 ){
       value = true
                       }
