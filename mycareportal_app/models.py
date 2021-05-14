@@ -1174,6 +1174,7 @@ class HomeModTaskBid(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     cost = models.IntegerField()
+    bid_live = models.BooleanField(default=True)
 
 class HomeModProject(models.Model):
 
@@ -1351,6 +1352,7 @@ class MoveManageTaskBid(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     cost = models.IntegerField()
+    bid_live = models.BooleanField(default=True)
 
 class MoveManagementProject(models.Model):
 

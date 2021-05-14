@@ -8,6 +8,30 @@
     <link href="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
 {% endblock %}
 {% block pagecontent %}
+
+<style>
+   main-table{
+      border-collapse:collapse;
+  
+  }
+  .main-table td{
+      
+      height:50px;
+      position:relative;
+      width:75px;
+      text-align:center
+     
+  }
+  .main-table th{
+      
+      
+      position:relative;
+      width:65px;
+      text-align:center
+     
+  }
+</style>
+
         <!-- page content -->
         <div class="right_col" role="main">
           <div class="">
@@ -142,8 +166,45 @@
                                   </div>
                                   <input type="hidden" name={{bid_form.task_uid.html_name}} value={{task.uid}}>
                                   <button type="submit" class="btn btn-success">Place Bid</button>
-                                  <button type="button" class="btn btn-danger">Not Bidding</button>
+                                  <button type="button" class="btn btn-danger">Reject Bid</button>
                                 </form>
+                                
+                            {% if move_manage_task_bids %}
+                              <h5>The Bid Status For Above task</h5> 
+                             <div class="row">
+                              
+                              <div class="col-xs-12">
+                                <table   id="lineitemid" style="width: 100%;" class="main-table">
+                              <thead >
+                              <tr>
+                              <th>Cost</th>&nbsp;
+                              <th>Move Manager</th>
+                              <th>Move Manager Task</th>
+                              <th>Status</th>
+                              </tr>
+                            </thead>
+
+                            {% endif %}
+
+                              {% for bids in move_manage_task_bids %}
+
+                              {% if bids.move_manage_task.uid == task.uid %}
+                              <tr>
+                              <td>{{bids.cost}}</td>
+                              <td>{{bids.move_manager.first_name|addstr_space:bids.move_manager.last_name}}</td>
+                              <td>{{bids.move_manage_task.type_of_home}}</td>
+                              {% if bids.bid_live %}
+                              <td>Pending</td>
+                              {% else %}
+                              <td>Rejected</td>
+                              {% endif %}
+
+                              </tr>
+                              {% endif %}
+                             {% endfor %}
+                            </table>
+                          </div>
+                        </div>
                               </div>
 
                               <div class="clearfix"></div>

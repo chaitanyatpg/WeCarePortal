@@ -660,7 +660,9 @@ class EditCompany(LoginRequiredMixin, View):
                 current_company.attorney_email = company_edit_form.cleaned_data['attorney_email']
                 current_company.is_parent = company_edit_form.cleaned_data['is_parent']
                 current_company.mileage_rate = company_edit_form.cleaned_data['mileage_rate']
-
+                other_state_name = company_edit_form.cleaned_data['other_state_name']
+                if current_company.state == "Other":
+                    current_company.state = other_state_name
                 
 
                 current_company.save()
@@ -889,7 +891,6 @@ class ChooseContractorForTask(LoginRequiredMixin, View):
         # task_id = self.kwargs['task_id']
         # contractor_id = self.kwargs['contractor_id']
         assign_contractor_form = AssignContractorForm(request.POST)
-        print("assign_contractor_form",assign_contractor_form)
         if assign_contractor_form.is_valid():
             contractor_email = assign_contractor_form.cleaned_data['contractor_email']
             taskuid = assign_contractor_form.cleaned_data['taskuid']
@@ -897,7 +898,7 @@ class ChooseContractorForTask(LoginRequiredMixin, View):
             task = HomeModificationTask.objects.get(company=current_company, uid=taskuid)
             contractor = HomeModificationUser.objects.get(company=current_company, email_address = contractor_email )
             
-            print("hellooo",taskuid)
+            
             if is_unassign == "True":
                 task.chosen_contractors.remove(contractor)
                 bids = HomeModTaskBid.objects.filter(company=current_company, home_mod_task=task,contractor =contractor)

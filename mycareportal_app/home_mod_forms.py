@@ -22,10 +22,13 @@ class HomeModManagerRegistrationForm(forms.Form):
     profile_picture = forms.ImageField(label='Select file', required=False)
 
     def clean_picture(self):
-        picture = self.cleaned_data['profile_picture']
-        if picture:
-            if picture._size > self.MAX_UPLOAD_SIZE:
-                raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
+        try:
+            picture = self.cleaned_data['profile_picture']
+            if picture:
+                if picture._size > self.MAX_UPLOAD_SIZE:
+                    raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
+        except KeyError:
+            raise forms.ValidationError('Formats supported JPEG, PNG, JPG')
         #picture = self.cleaned_data['profile_picture']
         #if not picture:
         #    return None
@@ -58,10 +61,14 @@ class HomeModUserEditForm(forms.Form):
     profile_picture = forms.ImageField(label='Select file', required=False)
 
     def clean_picture(self):
-        picture = self.cleaned_data['profile_picture']
-        if picture:
-            if picture._size > self.MAX_UPLOAD_SIZE:
-                raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
+        
+        try:
+            picture = self.cleaned_data['profile_picture']
+            if picture:
+                if picture._size > self.MAX_UPLOAD_SIZE:
+                    raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
+        except KeyError:
+            raise forms.ValidationError('Formats supported JPEG, PNG, JPG')
         #picture = self.cleaned_data['profile_picture']
         #if not picture:
         #    return None

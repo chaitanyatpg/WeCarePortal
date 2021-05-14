@@ -82,11 +82,33 @@
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       <div>
                         <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                          {% if not add_caregiver_form.gender.value is None %}
+
+                          {% if add_caregiver_form.gender.value == "M" %}
+
+                          <input type="radio" tabindex="4" checked name="{{add_caregiver_form.gender.html_name}}" value="M" required="required">
+                          &nbsp; Male &nbsp; </label>
+                        <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                          <input type="radio" tabindex="4" name="{{add_caregiver_form.gender.html_name}}" tabindex="1" value="F">
+                          Female </label>
+                          {% endif %}
+
+                          {% if add_caregiver_form.gender.value == "F" %}
+
+                          <input type="radio" tabindex="4"  name="{{add_caregiver_form.gender.html_name}}" value="M" required="required">
+                          &nbsp; Male &nbsp; </label>
+                        <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                          <input type="radio" tabindex="4" checked name="{{add_caregiver_form.gender.html_name}}" tabindex="1" value="F">
+                          Female </label>
+                          {% endif %}
+
+                          {% else %}
                           <input type="radio" tabindex="4" name="{{add_caregiver_form.gender.html_name}}" value="M" required="required">
                           &nbsp; Male &nbsp; </label>
                         <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
                           <input type="radio" tabindex="4" name="{{add_caregiver_form.gender.html_name}}" tabindex="1" value="F">
                           Female </label>
+                          {% endif %}
                       </div>
                     </div>
                   </div>
@@ -291,7 +313,7 @@
                     <div  id="selectlead" style="display:none"> 
                      <label class="control-label col-md-3 col-sm-3 col-xs-12">Other State name<span class="required">*</span> </label>
                      <div class="col-md-6 col-sm-6 col-xs-12">
-                       {% if not add_client_form.otr_state_name is None %}
+                       {% if not add_client_form.other_state_name.value is None %}
                        <input type="text"  class="form-control col-md-7 col-xs-12"  name={{add_caregiver_form.other_state_name.html_name}} value={{add_caregiver_form.other_state_name.value}}>
                        {% else %}
                        <input type="text"  class="form-control col-md-7 col-xs-12"  name={{add_caregiver_form.other_state_name.html_name}}>
@@ -313,7 +335,7 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Date Of Birth <span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not add_caregiver_form.date_of_birth.value is None %}
-                        <input type="text" tabindex="9" id="birthday" data-readonly required class="date-picker form-control col-md-7 col-xs-12" required="required" name={{add_caregiver_form.date_of_birth.html_name}} value={{add_caregiver_form.date_of_birth.value}}>
+                        <input type="text" tabindex="9" id="birthdayatfr" data-readonly required class="date-picker form-control col-md-7 col-xs-12" required="required" name={{add_caregiver_form.date_of_birth.html_name}} value={{add_caregiver_form.date_of_birth.value}}>
                       {% else %}
                         <input type="text" tabindex="9" id="birthday" data-readonly required class="date-picker form-control col-md-7 col-xs-12" required="required" name={{add_caregiver_form.date_of_birth.html_name}}>
                       {% endif %}
@@ -504,6 +526,21 @@
         $('#birthday').val("");
       });
     </script>
+
+
+<script>
+  $(document).ready(function() {
+    $('#birthdayatfr').daterangepicker({
+      singleDatePicker: true,
+      showDropdowns: true,
+      maxDate: new Date,
+      calender_style: "picker_4"
+    }, function(start, end, label) {
+      console.log(start.toISOString(), end.toISOString(), label);
+    });
+    // $('#birthday').val("");
+  });
+</script>
 <!-- /bootstrap-daterangepicker -->
 
 <!-- jquery.inputmask -->
