@@ -22,10 +22,13 @@ class MoveManagerRegistrationForm(forms.Form):
     profile_picture = forms.ImageField(label='Select file', required=False)
 
     def clean_picture(self):
-        picture = self.cleaned_data['profile_picture']
-        if picture:
-            if picture._size > self.MAX_UPLOAD_SIZE:
-                raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
+        try:
+            picture = self.cleaned_data['profile_picture']
+            if picture:
+                if picture._size > self.MAX_UPLOAD_SIZE:
+                    raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
+        except KeyError:
+            raise forms.ValidationError('Formats supported JPEG, PNG, JPG')
         #picture = self.cleaned_data['profile_picture']
         #if not picture:
         #    return None
@@ -58,10 +61,13 @@ class MoveManagerEditForm(forms.Form):
     profile_picture = forms.ImageField(label='Select file', required=False)
 
     def clean_picture(self):
-        picture = self.cleaned_data['profile_picture']
-        if picture:
-            if picture._size > self.MAX_UPLOAD_SIZE:
-                raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
+        try:
+            picture = self.cleaned_data['profile_picture']
+            if picture:
+                if picture._size > self.MAX_UPLOAD_SIZE:
+                    raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
+        except KeyError:
+            raise forms.ValidationError('Formats supported JPEG, PNG, JPG')
         #picture = self.cleaned_data['profile_picture']
         #if not picture:
         #    return None
@@ -111,11 +117,11 @@ class CreateMoveTaskForm(forms.Form):
     )
 
     client_uid = forms.UUIDField(required=True)
-    new_address_max_distance = forms.IntegerField(required=True)
+    new_address_max_distance = forms.DecimalField(required=True)
     type_of_home = forms.ChoiceField(HOME_TYPE_CHOICES,required=True)
     provides_assistance = forms.BooleanField(required=True)
-    minimum_cost = forms.IntegerField(required=True)
-    maximum_cost = forms.IntegerField(required=True)
+    minimum_cost = forms.DecimalField(required=True)
+    maximum_cost = forms.DecimalField(required=True)
     type_of_area = forms.ChoiceField(AREA_TYPE_CHOICES,required=True)
     handicap_friendly = forms.BooleanField(required=True)
     furnished = forms.BooleanField(required=True)

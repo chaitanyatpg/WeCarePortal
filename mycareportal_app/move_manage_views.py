@@ -42,6 +42,8 @@ class MoveManagerDashboard(LoginRequiredMixin, View):
                                                         user=request.user)
         move_manage_tasks = MoveManageTask.objects.filter(company=current_company,
                                                             chosen_manager=move_manage_user).order_by('-created')
+        move_manage_task_bids = MoveManageTaskBid.objects.filter(company=current_company,move_manager=move_manage_user)
+        context['move_manage_task_bids'] = move_manage_task_bids
         context['move_manage_user'] = move_manage_user
         context['move_manage_tasks'] = move_manage_tasks
         context['bid_form'] = BidForm()
@@ -94,7 +96,7 @@ class AcceptMoveBid(LoginRequiredMixin, View):
         context={}
         current_company = request.user.company
         bid_id = self.kwargs['bid_id']
-        bid = MoveManageTaskBid.objects.get(company=current_company, uid=bid_id)
+        bid = MoveManageTaskBid.objects.get(company=current_company, uid=bid_id,bid_live = True)
         task = bid.move_manage_task
         # Set chosen bid of the task
         task.chosen_bid = bid
@@ -319,7 +321,7 @@ class MoveManageWizard(LoginRequiredMixin, View):
             furnished = create_move_task_form.cleaned_data['furnished']
 
             client = Client.objects.get(company=current_company, uid = client_uid)
-            print(client)
+            
 
             move_task = MoveManageTask(company=current_company,
                                         client=client,
@@ -721,15 +723,25 @@ class RejectMoveBid(LoginRequiredMixin, View):
         context={}
         current_company = request.user.company
         bid_id = self.kwargs['bid_id']
-        bid = MoveManageTaskBid.objects.get(company=current_company, uid=bid_id)
-        task = bid.move_manage_task
-        task_id =bid.move_manage_task.uid
+        taskbid = MoveManageTaskBid.objects.get(company=current_company, uid=bid_id)
+        task_id =taskbid.move_manage_task.uid
+        if MoveManageTaskBid.objects.filter(company=current_company, uid=bid_id,bid_live = True).exists():
+            bid = MoveManageTaskBid.objects.get(company=current_company, uid=bid_id,bid_live = True)
+            
+            task = bid.move_manage_task
+            
         # Set chosen bid of the task
-        if task.chosen_bid:
-            messages.success(request, "Bid is already Accpected".format(bid.move_manager.first_name, bid.move_manager.last_name))
+            if task.chosen_bid:
+                messages.success(request, "Bid is already Accpected".format(bid.move_manager.first_name, bid.move_manager.last_name))
+            else:
+                bid.bid_live = False
+                bid.save()
+         
         else:
-            bid.delete()
-            messages.success(request, "Reject Bid from {0} {1}".format(bid.move_manager.first_name, bid.move_manager.last_name))
+            messages.success(request, "Bid not exist")
+        return redirect('view_move_bids', task_id=task_id)    
+                # delete()
+            # messages.success(request, "Reject Bid from {0} {1}".format(bid.move_manager.first_name, bid.move_manager.last_name))
         # task.save()
         # Create new Move Management project
         # move_manage_project = MoveManagementProject(company=current_company,
@@ -738,5 +750,5 @@ class RejectMoveBid(LoginRequiredMixin, View):
         #                                     move_manager = bid.move_manager,
         #                                     client = task.client)
         # move_manage_project.save()
+        # return redirect('home_dashboard')
         
-        return redirect('view_move_bids', task_id=task_id)

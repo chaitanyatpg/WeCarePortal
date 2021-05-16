@@ -421,7 +421,7 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Attachments</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {{edit_caregiver_form.attachment.label_tag}}{{edit_caregiver_form.attachment}}
-                      <ul>
+                      <!-- <ul>
                       {% for attachment in caregiver_attachments %}
                           <li>
                             <a href="{{attachment.attachment.url}}"  target="_blank"><i class="fa fa-paperclip"></i>{{attachment.attachment|trunc_path}}</a>
@@ -429,8 +429,34 @@
                             <span>by {{attachment.user.first_name|addstr_space:attachment.user.last_name}}</span>
                           </li>
                       {% endfor %}
-                      </ul>
+                      </ul> -->
                     </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12"></label>
+                    <div class="col-md-5 col-sm-5 col-xs-12">
+                      <ul>
+                        <input type="hidden" name="caregiver_id" value="{{caregivers.id}}">
+                        
+                        {% for attachment in caregiver_attachments %}
+                            <li>
+                              <a href="{{attachment.attachment.url}}"  target="_blank"><i class="fa fa-paperclip"></i>{{attachment.attachment|trunc_path}}</a>
+                              <span>Uploaded on {{attachment.created}}</span>
+                              
+                              <span>by {{attachment.user.first_name|addstr_space:attachment.user.last_name}}</span>
+                              <span> 
+                                
+                                  <button type="button" style="background: none; border: 0; color: red;"  value="{{attachment.id}}" onClick="valueclick(this.value);"><i  class="glyphicon glyphicon-remove"></i> </button> 
+                                
+                               </span>  
+                            </li>
+                        {% endfor %}
+                        </ul>
+                   
+                    
+                    </div>
+                   
                   </div>
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Additional Notes</label>
@@ -1074,6 +1100,38 @@
           selectlead.style.display = "none";
       
       }
+  }
+</script>
+
+
+<script>
+  function valueclick(attachmentid){
+
+    if(confirm("Do you want to Delete ?")){
+
+      $.ajax({
+
+url: "{% url 'delete_caregiver_attachment' %}",
+type: "GET",
+
+data: {
+
+  "attachment_id": attachmentid,
+  "caregiver_id" :$("input[name=caregiver_id]").val(),
+
+},
+dataType: "json",
+contentType: "application/json",
+success: function (data) {
+  location.reload();
+
+}
+
+});
+
+    }
+    console.log("attachmentidattachmentid",attachmentid)
+
   }
 </script>
 

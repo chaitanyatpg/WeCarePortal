@@ -219,6 +219,7 @@ class EditCaregiver(LoginRequiredMixin, View):
         if find_caregiver_form.is_valid():
             caregiver_email = find_caregiver_form.cleaned_data['caregiver_email']
             caregiver = Caregiver.objects.get(company=current_company,email_address=caregiver_email)
+            context['caregivers'] = caregiver
             caregiver_birthday = self.parse_date(caregiver.date_of_birth)
             edit_caregiver_form = CaregiverEditForm(initial=
             {
@@ -1468,3 +1469,26 @@ def send_notification_to_admin(request):
     if response.status_code == 200:
         status = True
     return redirect('caregiver_dashboard')
+
+
+
+
+@login_required
+def delete_caregiver_attachment(request):
+    
+    if request.method == "GET":
+        data = {
+            "ratet" : "sucess"
+        }
+        company = request.user.company
+        attachment_id = request.GET['attachment_id']
+        caregiver_id = request.GET['caregiver_id']
+        caregiver = Caregiver.objects.get(id = caregiver_id)
+        print("clientclient",caregiver)
+        attachment = CaregiverAttachment.objects.get(id = attachment_id,caregiver = caregiver)
+        attachment.delete()
+        print("attachmentattachment",attachment)
+
+    # return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client.email_address)
+    return HttpResponse(json.dumps(data), content_type="application/json")
+        

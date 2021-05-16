@@ -73,6 +73,7 @@ class CompanyEditForm(forms.Form):
     attorney_email = forms.EmailField(required=False)
     is_parent = forms.BooleanField(required=False)
     mileage_rate= forms.DecimalField( required=False )
+    other_state_name = forms.CharField(max_length=100,required=False)
 
     def clean_picture(self):
         

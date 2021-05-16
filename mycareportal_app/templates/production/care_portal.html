@@ -97,22 +97,49 @@
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Gender <span class="required">*</span></label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                      <div>
+
+
+                      {% if not add_client_form.gender.value is None %}
+
+                      {% if add_client_form.gender.value == "M" %}
+                      <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                        <input type="radio" tabindex="4" checked name="{{add_client_form.gender.html_name}}"  value="M" required="required">
+                        &nbsp; Male &nbsp; </label>
+
+                        <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                          <input type="radio" name="{{add_client_form.gender.html_name}}" tabindex="4"  value="F" required="required">
+                          Female </label>
+                        {% endif %}
+                        {% if add_client_form.gender.value == "F" %}
+
+                        <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                          <input type="radio" tabindex="4" checked name="{{add_client_form.gender.html_name}}"  value="M" required="required">
+                          &nbsp; Male &nbsp; </label>
+                      <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                        <input type="radio" checked name="{{add_client_form.gender.html_name}}" tabindex="4"  value="F" required="required">
+                        Female </label>
+                        {% endif %}
+                      {% else %}
+                      
+                      
                         <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
                           <input type="radio" tabindex="4" name="{{add_client_form.gender.html_name}}"  value="M" required="required">
                           &nbsp; Male &nbsp; </label>
                         <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
                           <input type="radio" name="{{add_client_form.gender.html_name}}" tabindex="4"  value="F" required="required">
                           Female </label>
-                      </div>
+                          {% endif %}
+                      
                     </div>
                   </div>
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Date Of Birth <span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not add_client_form.date_of_birth.value is None %}
-                        <input type="text" tabindex="5" id="birthday" data-readonly required class="date-picker form-control col-md-7 col-xs-12" required="required" name={{add_client_form.date_of_birth.html_name}} value={{add_client_form.date_of_birth.value}}>
+                      
+                        <input type="text" tabindex="5" id="birthdayatfr" required class="date-picker form-control col-md-7 col-xs-12" required="required" name={{add_client_form.date_of_birth.html_name}} value={{add_client_form.date_of_birth.value}}>
                       {% else %}
+                      
                         <input type="text" tabindex="5" id="birthday" data-readonly required class="date-picker form-control col-md-7 col-xs-12" required="required" name={{add_client_form.date_of_birth.html_name}}>
                       {% endif %}
                     </div>
@@ -170,9 +197,10 @@
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">State<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12" onchange="update_state()">
-                      {% if not add_client_form.state_value is None %}
+                      {% if not add_client_form.state.value is None %}
                       <select required class="select2_single form-control"  tabindex="11" id="dropDownId" name={{add_client_form.state.html_name}} value={{add_client_form.state.value}}>
-                            <option value="" disabled selected>Select State</option>
+                            
+                            <option   selected=selected>{{add_client_form.state.value}}</option>
                             <option value="Other">Other</option>
                             <option value="AL">Alabama</option>
                           	<option value="AK">Alaska</option>
@@ -257,7 +285,7 @@
                       </select>
                       {% else %}
                       
-                      <select class="select2_single form-control" tabindex="11" id="dropDownId" name={{add_client_form.state.html_name}}>
+                      <select required class="select2_single form-control" tabindex="11" id="dropDownId" name={{add_client_form.state.html_name}}>
                             <option value="" disabled selected>Select State</option>
                             <option value="Other">Other</option>
                             <option value="AL">Alabama</option>
@@ -345,13 +373,23 @@
                     </div>
                   </div>
 
+                  {% if  add_client_form.state.value == "Other" %}
+                  <div class="form-group" id="selectlead" style="display:block">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">Other State name<span class="required">*</span> </label>
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                  <input type="text"  class="form-control col-md-7 col-xs-12"  name={{add_client_form.other_state_name.html_name}} value={{add_client_form.other_state_name.value}}>
+                  </div>
+                  </div>
+                  {% endif %}
+
                   <div class="form-group">
                    <div  id="selectlead" style="display:none"> 
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Other State name<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                      {% if not add_client_form.othr_state_name is None %}
+                      {% if not add_client_form.other_state_name.value is None %}
                       <input type="text"  class="form-control col-md-7 col-xs-12"  name={{add_client_form.other_state_name.html_name}} value={{add_client_form.other_state_name.value}}>
                       {% else %}
+                     
                       <input type="text"  class="form-control col-md-7 col-xs-12"  name={{add_client_form.other_state_name.html_name}}>
                       {% endif %}
                     </div>
@@ -370,12 +408,23 @@
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Time Zone<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
+
+                      {% if not add_client_form.time_zone.value is None %}
+                      <select required class="select2_time_zone form-control" tabindex="13" name={{add_client_form.time_zone.html_name}}>
+                        <option>{{add_client_form.time_zone.value}}</option>
+                        {% for timezone in all_timezones %}
+                          <option value='{{timezone}}'>{{timezone}}</option>
+                        {% endfor %}
+                      </select>
+                    
+                    {% else %}
                       <select required class="select2_time_zone form-control" tabindex="13" name={{add_client_form.time_zone.html_name}}>
                         <option></option>
                         {% for timezone in all_timezones %}
                           <option value='{{timezone}}'>{{timezone}}</option>
                         {% endfor %}
                       </select>
+                      {% endif %}
                     </div>
                   </div>
                   <div class="form-group">
@@ -489,6 +538,21 @@
         $('#birthday').val("");
       });
     </script>
+
+
+<script>
+  $(document).ready(function() {
+    $('#birthdayatfr').daterangepicker({
+      singleDatePicker: true,
+      showDropdowns: true,
+      maxDate: new Date,
+      calender_style: "picker_4"
+    }, function(start, end, label) {
+      console.log(start.toISOString(), end.toISOString(), label);
+    });
+    // $('#birthday').val("");
+  });
+</script>
 <!-- /bootstrap-daterangepicker -->
 <!-- jquery.inputmask -->
   <script>
@@ -509,12 +573,13 @@
       // Get the output text
       var selectlead = document.getElementById("selectlead");
       
+      var selectleadss = document.getElementById("selectleads");
+      
       if (values === "Other") {
           selectlead.style.display = "block";
-    
-        console.log("clsaclsa",clsa)
       
-      } else {
+      } 
+      else {
           selectlead.style.display = "none";
       
       }

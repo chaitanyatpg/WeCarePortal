@@ -101,6 +101,7 @@ class AddClient(LoginRequiredMixin, View):
         context = {}
         context['add_client_form'] = ClientRegistrationForm()
         context['all_timezones'] = pytz.all_timezones
+       
         return render(request,'production/care_portal.html', context)
 
     def post(self, request):
@@ -221,10 +222,12 @@ class AddClient(LoginRequiredMixin, View):
                 return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client_email)
             except IntegrityError as e:
                 messages.error(request, "Client already exists. Please enter a new client.")
+        
         else:
             form_errors = add_client_form.errors.as_data()
             context['all_timezones'] = pytz.all_timezones
             error_messaging.render_error_messages(request, form_errors)
+        
         return render(request, 'production/care_portal.html', context)
         # return redirect('add_client')
 
@@ -274,6 +277,7 @@ class EditClient(LoginRequiredMixin, View):
         if find_client_form.is_valid():
             client_email = find_client_form.cleaned_data['client_email']
             client = Client.objects.get(company=current_company, email_address=client_email)
+            context['clients']= client
             #initialize client form
             edit_client_form = EditClientDetailsForm(initial=
             {
@@ -2392,3 +2396,26 @@ def send_legal_email_incident(request):
     else:
         messages.error(request, "Error sending email: Please contact customer support")
     return HttpResponse("Sent legal email")
+
+
+
+
+@login_required
+def delete_attachment(request):
+    
+    if request.method == "GET":
+        data = {
+            "ratetype" : "sucess"
+        }
+        company = request.user.company
+        attachment_id = request.GET['attachment_id']
+        client_id = request.GET['client_id']
+        client = Client.objects.get(id = client_id)
+        attachment = ClientAttachment.objects.get(id = attachment_id,client = client)
+        attachment.delete()
+
+    # return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client.email_address)
+    return HttpResponse(json.dumps(data), content_type="application/json")
+        
+
+

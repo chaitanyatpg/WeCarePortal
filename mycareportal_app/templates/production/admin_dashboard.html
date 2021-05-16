@@ -91,12 +91,12 @@
             </div>
             <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i>Total Family Members</span>
-              <div class="count"><i class="green" style="font-style: normal">{{total_family_users}}</i></div>
+              <div class="count"><a href="{% url 'view_all_family_contacts' %}" class="green" style="font-style: normal">{{total_family_users}}</a></div>
               <span class="count_bottom">{{total_family_users}} registered family members</span>
             </div>
             <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i>Total Providers</span>
-              <div class="count"><i class="green" style="font-style: normal">{{total_providers}}</i></div>
+              <div class="count"><a href="{% url 'view_all_providers' %}" class="green" style="font-style: normal">{{total_providers}}</a></div>
               <span class="count_bottom">{{total_providers}} registered providers</span>
             </div>
             <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">

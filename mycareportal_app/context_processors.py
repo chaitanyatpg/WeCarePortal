@@ -90,7 +90,11 @@ def add_roles_to_context(request):
 
             module_dict['REPORTING']['VIEWALLCLIENTS']=True
             module_dict['REPORTING']['VIEWALLCAREGIVERS']=True
+            module_dict['REPORTING']['VIEWALLPROVIDER']=True
+            module_dict['REPORTING']['VIEWALLFAMILYMEMBER']=True
+            # module_dict['REPORTING']['VIEWDAILYACTIVITYREPORT']=True
             module_dict['REPORTING']['VIEWALLCLIENTSWITHOUTCAREGIVERS']=True
+            module_dict['REPORTING']['VIEWDAILYACTIVITYREPORT']=True
             module_dict['REPORTING']['VIEWDAILYACTIVITYREPORT']=True
             module_dict['PROVIDERPORTAL']['VITALSREPORT']=True
             

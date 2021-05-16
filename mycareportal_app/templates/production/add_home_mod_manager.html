@@ -75,12 +75,36 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Gender<span class="required">*</span></label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       <div>
+
+                        {% if not home_mod_manager_form.gender.value is None %}
+
+                        {% if home_mod_manager_form.gender.value == "M" %}
+                        <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                          <input type="radio" checked name="{{home_mod_manager_form.gender.html_name}}" value="M" required="required">
+                          &nbsp; Male &nbsp; </label>
+                        <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                          <input type="radio" name="{{home_mod_manager_form.gender.html_name}}" value="F">
+                          Female </label>
+
+                        {% endif %}
+                        {% if home_mod_manager_form.gender.value == "F" %}
+                        <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                          <input type="radio"  name="{{home_mod_manager_form.gender.html_name}}" value="M" required="required">
+                          &nbsp; Male &nbsp; </label>
+                        <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                          <input type="radio" checked name="{{home_mod_manager_form.gender.html_name}}" value="F">
+                          Female </label>
+
+                          {% endif %}
+                          {% else %}
                         <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
                           <input type="radio" name="{{home_mod_manager_form.gender.html_name}}" value="M" required="required">
                           &nbsp; Male &nbsp; </label>
                         <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
                           <input type="radio" name="{{home_mod_manager_form.gender.html_name}}" value="F">
                           Female </label>
+
+                          {% endif %}
                       </div>
                     </div>
                   </div>
@@ -285,7 +309,7 @@
                     <div  id="selectlead" style="display:none"> 
                      <label class="control-label col-md-3 col-sm-3 col-xs-12">Other State name<span class="required">*</span> </label>
                      <div class="col-md-6 col-sm-6 col-xs-12">
-                       {% if not add_client_form.otr_state_name is None %}
+                       {% if not add_client_form.other_state_name.value is None %}
                        <input type="text"  class="form-control col-md-7 col-xs-12"  name={{home_mod_manager_form.other_state_name.html_name}} value={{home_mod_manager_form.other_state_name.value}}>
                        {% else %}
                        <input type="text"  class="form-control col-md-7 col-xs-12"  name={{home_mod_manager_form.other_state_name.html_name}}>
@@ -307,7 +331,7 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Date Of Birth <span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not home_mod_manager_form.date_of_birth.value is None %}
-                        <input type="text" id="birthday" class="date-picker form-control col-md-7 col-xs-12" required="required" name={{home_mod_manager_form.date_of_birth.html_name}} value={{home_mod_manager_form.date_of_birth.value}}>
+                        <input type="text" id="birthdayatfr" class="date-picker form-control col-md-7 col-xs-12" required="required" name={{home_mod_manager_form.date_of_birth.html_name}} value={{home_mod_manager_form.date_of_birth.value}}>
                       {% else %}
                         <input type="text" id="birthday" class="date-picker form-control col-md-7 col-xs-12" required="required" name={{home_mod_manager_form.date_of_birth.html_name}}>
                       {% endif %}
@@ -430,4 +454,20 @@
       }
   }
 </script>
+
+<script>
+  $(document).ready(function() {
+    $('#birthdayatfr').daterangepicker({
+      singleDatePicker: true,
+      showDropdowns: true,
+      maxDate: new Date,
+      calender_style: "picker_4"
+    }, function(start, end, label) {
+      console.log(start.toISOString(), end.toISOString(), label);
+    });
+    // $('#birthday').val("");
+  });
+</script>
+
+
 {% endblock %}
