@@ -4,6 +4,8 @@ from django.utils.translation import ugettext as _
 import re
 import datetime
 
+
+
 class ClientRegistrationForm(forms.Form):
 
     # Limit uploads to 5MB
@@ -14,7 +16,7 @@ class ClientRegistrationForm(forms.Form):
     middle_name = forms.CharField(max_length=100, required=False)
     gender = forms.CharField(max_length=1)
     date_of_birth = forms.DateTimeField()
-    phone_number = forms.CharField(max_length=20)
+    phone_number = forms.CharField(max_length=20, required=True)
     secondary_phone_number = forms.CharField(max_length=20, required=False)
     email = forms.CharField(max_length=200)
     address = forms.CharField(max_length=400)
@@ -129,6 +131,7 @@ class FamilyDetailsForm(forms.Form):
     address = forms.CharField(max_length=400)
     city = forms.CharField(max_length=100)
     state = forms.CharField(max_length=100)
+    other_state_name = forms.CharField(max_length=100,required=False)
     zip_code = forms.CharField(max_length=10)
     power_of_attorney = forms.BooleanField(required=False)
     profile_picture = forms.ImageField(label='Select file', required=False)
@@ -197,6 +200,7 @@ class PharmacyDetailsForm(forms.Form):
     address = forms.CharField(max_length=400, required=False)
     city = forms.CharField(max_length=100, required=False)
     state = forms.CharField(max_length=100, required=False)
+    other_state_name = forms.CharField(max_length=100,required=False)
     zip_code = forms.CharField(max_length=10, required=False)
     pharmacy_id = forms.IntegerField(required=False)
     client_email = forms.CharField(max_length=200)
@@ -224,6 +228,7 @@ class PayerDetailsForm(forms.Form):
     address = forms.CharField(max_length=400, required=False)
     city = forms.CharField(max_length=100, required=False)
     state = forms.CharField(max_length=100, required=False)
+    other_state_name = forms.CharField(max_length=100,required=False)
     zip_code = forms.CharField(max_length=10, required=False)
     policy_start_date = forms.DateField()
     policy_end_date = forms.DateField()
