@@ -338,7 +338,7 @@
                     <div  id="selectlead" style="display:none"> 
                      <label class="control-label col-md-3 col-sm-3 col-xs-12">Other State name<span class="required">*</span> </label>
                      <div class="col-md-6 col-sm-6 col-xs-12">
-                       {% if not edit_client_form.othr_state_name is None %}
+                       {% if not edit_client_form.other_state_name.value is None %}
                        <input type="text" id="otherstatevalue"  class="form-control col-md-7 col-xs-12"  name={{edit_client_form.other_state_name.html_name}} value={{edit_client_form.other_state_name.value}}>
                        {% else %}
                        <input type="text" id="otherstatevalue" class="form-control col-md-7 col-xs-12"  name={{edit_client_form.other_state_name.html_name}}>
@@ -1449,7 +1449,7 @@
 
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback" onchange="update_pharmacy_state()">
                     <select class="select2_single form-control" id = "pharmacy_state"  tabindex="-1" name = "{{pharmacy_details_form.state.html_name}}">
-                          <option value="" disabled selected >Select State</option>
+                          <option selected ></option>
                           <option value="Other">Other</option>
                           <option value="AL">Alabama</option>
                           <option value="AK">Alaska</option>
@@ -1621,7 +1621,7 @@
                     <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span> </div>
 
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                    <select class="select2_single form-control" id = "payer_state" tabindex="-1" onchange="update_payor_state()" name = "{{payer_details_form.state.html_name}}">
+                    <select class="select2_single_value form-control" id = "payer_state" tabindex="-1" onchange="update_payor_state()" name = "{{payer_details_form.state.html_name}}">
                           <option value="" disabled selected>Select State</option>
                           <option value="Other">Other</option>
                           <option value="AL">Alabama</option>
@@ -2014,12 +2014,16 @@
       success: function(family_data){
         $('#family_first_name').val(family_data.first_name);
         $('#family_last_name').val(family_data.last_name);
-        $('#family_relationship').val(family_data.relationship);
+        // $('#family_relationship').val(family_data.relationship);
+        var newOption = new Option(family_data.state, 0, true, true);
+       $('#family_relationship').append(newOption).trigger('change');
         $('#family_phone_number').val(family_data.phone_number);
         $('#family_email_address').val(family_data.email_address);
         $('#family_address').val(family_data.address);
         $('#family_city').val(family_data.city);
-        $('#family_state').val(family_data.state);
+        // $('#family_state').val(family_data.state);
+        var newOption = new Option(family_data.state, 0, true, true);
+       $('#family_state').append(newOption).trigger('change');
         $('#family_zip_code').val(family_data.zip_code);
         if(family_data.power_of_attorney)
         {
@@ -2122,7 +2126,11 @@
         $('#pharmacy_email').val(pharmacy_data.email);
         $('#pharmacy_address').val(pharmacy_data.address);
         $('#pharmacy_city').val(pharmacy_data.city);
-        $('pharmacy_state :selected').val(pharmacy_data.state);
+       // document.getElementById('pharmacy_state').value = 'AR';
+
+       
+       var newOption = new Option(pharmacy_data.state, 0, true, true);
+       $('#pharmacy_state').append(newOption).trigger('change');
         $('#pharmacy_zip_code').val(pharmacy_data.zip_code);
         $('#pharmacy_details_id').val(pharmacy_data.pharmacy_id);
         $('#delete_pharmacy_details_id').val(pharmacy_data.pharmacy_id);
@@ -2175,7 +2183,10 @@
         $('#payer_policy_number').val(payer_data.policy_number);
         $('#payer_address').val(payer_data.address);
         $('#payer_city').val(payer_data.city);
-        $('#payer_state').val(payer_data.state);
+        // $('#payer_state').val(payer_data.state);
+
+        var newOption = new Option(payer_data.state, 0, true, true);
+       $('#payer_state').append(newOption).trigger('change');
         $('#payer_zip_code').val(payer_data.zip_code);
         $('#payer_details_id').val(payer_data.payer_id);
         $('#delete_payer_details_id').val(payer_data.payer_id);
@@ -2392,7 +2403,26 @@
       });
     </script>
 
+
 <script>
+  $(document).ready(function() {
+    $(".select2_single_value").select2({
+      placeholder: "Select a state",
+      allowClear: true
+    });
+    $(".select2_group").select2({});
+    $(".select2_multiple").select2({
+      maximumSelectionLength: 4,
+      placeholder: "With Max Selection limit 4",
+      allowClear: true
+    });
+  });
+</script>
+
+<script>
+
+
+
   function update_state() {
       // Get the checkbox
       values = $('#dropDownId :selected').val()

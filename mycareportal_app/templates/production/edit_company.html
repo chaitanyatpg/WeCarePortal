@@ -464,4 +464,24 @@
       }
 }
 </script>
+
+<script>
+  $(document).ready(function() {
+
+   values = $('#dropDownId :selected').val()
+     console.log("ssss ---",values)
+     // Get the output text
+     var selectlead = document.getElementById("selectlead");
+     
+     if (values === "Other") {
+       selectlead.style.display = "block";
+
+     }
+     else
+     {
+       selectlead.style.display = "none";
+
+     }
+  })
+</script>
 {% endblock %}

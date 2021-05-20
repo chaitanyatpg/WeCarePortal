@@ -136,8 +136,7 @@ class AddClient(LoginRequiredMixin, View):
 
             is_caregiver = add_client_form.cleaned_data['is_caregiver']
             try:
-               
-                if state == "Other" and other_state_name:
+                if state == "Other":
                     state = other_state_name
                 new_client = Client(company = company,
                                     email_address = email,
