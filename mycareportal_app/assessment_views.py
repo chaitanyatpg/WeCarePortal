@@ -40,7 +40,6 @@ class AssessmentTool(LoginRequiredMixin, View):
         context = {}
         current_company = request.user.company
         find_client_form = FindClientForm(request.GET,request.FILES)
-        context['assessment_tool_form']= AssessmentToolForm()
         if find_client_form.is_valid():
             client_email = find_client_form.cleaned_data['client_email']
             context['client_email'] = client_email
