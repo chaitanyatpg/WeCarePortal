@@ -62,7 +62,7 @@
                   {% endfor %}
                
                 {% endif %}
-                <form enctype="multipart/form-data" method='post' action="{% url 'add_client' %}" class="form-horizontal form-label-left">
+                <form enctype="multipart/form-data" method='post' onsubmit="return validateForm()" action="{% url 'add_client' %}" class="form-horizontal form-label-left">
                   {% csrf_token %}
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">First Name <span class="required">*</span> </label>
@@ -285,7 +285,7 @@
                       </select>
                       {% else %}
                       
-                      <select required class="select2_single form-control" tabindex="11" id="dropDownId" name={{add_client_form.state.html_name}}>
+                      <select class="select2_single form-control" tabindex="11" id="dropDownId" name={{add_client_form.state.html_name}}>
                             <option value="" disabled selected>Select State</option>
                             <option value="Other">Other</option>
                             <option value="AL">Alabama</option>
@@ -373,24 +373,16 @@
                     </div>
                   </div>
 
-                  {% if  add_client_form.state.value == "Other" %}
-                  <div class="form-group" id="selectlead" style="display:block">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">Other State name<span class="required">*</span> </label>
-                  <div class="col-md-6 col-sm-6 col-xs-12">
-                  <input type="text"  class="form-control col-md-7 col-xs-12"  name={{add_client_form.other_state_name.html_name}} value={{add_client_form.other_state_name.value}}>
-                  </div>
-                  </div>
-                  {% endif %}
+ 
 
                   <div class="form-group">
                    <div  id="selectlead" style="display:none"> 
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Other State name<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not add_client_form.other_state_name.value is None %}
-                      <input type="text"  class="form-control col-md-7 col-xs-12"  name={{add_client_form.other_state_name.html_name}} value={{add_client_form.other_state_name.value}}>
+                      <input type="text"  id="otherstatevalue" class="form-control col-md-7 col-xs-12"  name={{add_client_form.other_state_name.html_name}} value={{add_client_form.other_state_name.value}}>
                       {% else %}
-                     
-                      <input type="text"  class="form-control col-md-7 col-xs-12"  name={{add_client_form.other_state_name.html_name}}>
+                      <input type="text" id="otherstatevalue"  class="form-control col-md-7 col-xs-12"  name={{add_client_form.other_state_name.html_name}} >
                       {% endif %}
                     </div>
                   </div>
@@ -578,11 +570,48 @@
       if (values === "Other") {
           selectlead.style.display = "block";
       
-      } 
-      else {
+      } else {
           selectlead.style.display = "none";
       
       }
   }
+</script>
+
+<script>
+  function validateForm() {
+
+    values = $('#dropDownId :selected').val()
+      var selectlead = document.getElementById("selectlead");
+      if (values === "Other") {
+        var x = $('#otherstatevalue').val()
+      if (x == "") {
+       alert("Other State Name must be filled out");
+       return false;
+      }
+      }
+      else {
+        return true;
+      }
+}
+</script>
+
+
+
+<script>
+  $(document).ready(function() {
+
+   values = $('#dropDownId :selected').val()
+     console.log("ssss ---",values)
+     // Get the output text
+     var selectlead = document.getElementById("selectlead");
+     
+     if (values === "Other") {
+       selectlead.style.display = "block";
+     }
+     else
+     {
+       selectlead.style.display = "none";
+     }
+  })
 </script>
 {% endblock %}

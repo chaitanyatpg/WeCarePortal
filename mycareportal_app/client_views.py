@@ -138,9 +138,6 @@ class AddClient(LoginRequiredMixin, View):
             try:
                 if state == "Other":
                     state = other_state_name
-               
-                    
-
                 new_client = Client(company = company,
                                     email_address = email,
                                     first_name = first_name,
@@ -1672,9 +1669,15 @@ def post_family_details(request):
                 power_of_attorney = family_details_form.cleaned_data['power_of_attorney']
                 profile_picture = family_details_form.cleaned_data['profile_picture']
                 family_id = family_details_form.cleaned_data['family_id']
+                other_state_name = family_details_form.cleaned_data['other_state_name']
+                
                 #print(power_of_attorney)
                 #Create family user auth model and save
+                if state == "Other":
+                    state = other_state_name
                 if(family_id==None):
+                   
+
                     #check if there is an existing soft-deleted user
                     existing_user = User.objects.filter(company=company,username=email,email=email)
                     if(existing_user):
@@ -1958,8 +1961,13 @@ def post_pharmacy_details(request):
                 city = pharmacy_details_form.cleaned_data['city']
                 state = pharmacy_details_form.cleaned_data['state']
                 zip_code = pharmacy_details_form.cleaned_data['zip_code']
+                other_state_name = pharmacy_details_form.cleaned_data['other_state_name']
+                if state == "Other":
+                    state = other_state_name
+
                 if(pharmacy_id is None):
                     #Create family object and save
+
                     pharmacy = Pharmacy(company=company,
                                           email_address = email,
                                           name = pharmacy_name,
@@ -2029,6 +2037,9 @@ def post_payer_details(request):
                 city = payer_details_form.cleaned_data['city']
                 state = payer_details_form.cleaned_data['state']
                 zip_code = payer_details_form.cleaned_data['zip_code']
+                other_state_name = payer_details_form.cleaned_data['other_state_name']
+                if state == "Other":
+                    state = other_state_name
                 if(payer_id is None):
                     #Create family object and save
                     payer = Payer(company=company,

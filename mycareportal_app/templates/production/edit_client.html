@@ -4,6 +4,7 @@
 {% block headlibs %}
 {% load static %}
 <!-- iCheck -->
+<script src="{% static 'sample.py' %}"></script> 
 <link href="{% static 'vendors/iCheck/skins/flat/green.css' %}" rel="stylesheet">
 <!-- bootstrap-wysiwyg -->
 <link href="{% static 'vendors/google-code-prettify/bin/prettify.min.css' %}" rel="stylesheet">
@@ -45,7 +46,7 @@
                     {{ client_success_msg }}
                   </div>
                 {% endif %}
-                <form enctype="multipart/form-data" method='post' action="{% url 'edit_client' %}" class="form-horizontal form-label-left">
+                <form enctype="multipart/form-data" method='post' onsubmit="return validateForm()" action="{% url 'edit_client' %}" class="form-horizontal form-label-left">
                   {% csrf_token %}
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">First Name <span class="required">*</span> </label>
@@ -337,16 +338,14 @@
                     <div  id="selectlead" style="display:none"> 
                      <label class="control-label col-md-3 col-sm-3 col-xs-12">Other State name<span class="required">*</span> </label>
                      <div class="col-md-6 col-sm-6 col-xs-12">
-                       {% if not edit_client_form.othr_state_name is None %}
-                       <input type="text"  class="form-control col-md-7 col-xs-12"  name={{edit_client_form.other_state_name.html_name}} value={{edit_client_form.other_state_name.value}}>
+                       {% if not edit_client_form.other_state_name.value is None %}
+                       <input type="text" id="otherstatevalue"  class="form-control col-md-7 col-xs-12"  name={{edit_client_form.other_state_name.html_name}} value={{edit_client_form.other_state_name.value}}>
                        {% else %}
-                       <input type="text"  class="form-control col-md-7 col-xs-12"  name={{edit_client_form.other_state_name.html_name}}>
+                       <input type="text" id="otherstatevalue" class="form-control col-md-7 col-xs-12"  name={{edit_client_form.other_state_name.html_name}}>
                        {% endif %}
                      </div>
                    </div>
                    </div>
-
-
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">ZIP code<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
@@ -956,7 +955,7 @@
                 <div class="clearfix"></div>
               </div>
               <div class="x_content"> <br />
-                <form enctype="multipart/form-data" method='post' action="{% url 'post_family_details' %}" class="form-horizontal form-label-left">
+                <form enctype="multipart/form-data" method='post' onsubmit="return validateFamilyForm()" action="{% url 'post_family_details' %}" class="form-horizontal form-label-left">
                   {% csrf_token %}
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">First Name <span class="required">*</span> </label>
@@ -1052,7 +1051,7 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">State<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not family_details_form.state.value is None %}
-                      <select required class="select2_single form-control" id="family_state" tabindex="-1" name={{family_details_form.state.html_name}} value={{family_details_form.state.value}}>
+                      <select required class="select2_single form-control" id="family_state" onchange="update_family_state()" tabindex="-1" name={{family_details_form.state.html_name}} value={{family_details_form.state.value}}>
                             <option selected=selected>{{family_details_form.state.value}}</option>
                             <option value="Other">Other</option>
                             <option value="AL">Alabama</option>
@@ -1137,7 +1136,7 @@
                             <option value="West Bengal">West Bengal</option>
                       </select>
                       {% else %}
-                      <select required class="select2_single form-control" id="family_state" tabindex="-1" name={{family_details_form.state.html_name}}>
+                      <select required class="select2_single form-control" id="family_state" onchange="update_family_state()" tabindex="-1" name={{family_details_form.state.html_name}}>
                             <option></option>
                             <option value="Other">Other</option>
                             <option value="AL">Alabama</option>
@@ -1224,6 +1223,20 @@
                       {% endif %}
                     </div>
                   </div>
+
+
+                  <div class="form-group">
+                    <div  id="selectleadfamily" style="display:none"> 
+                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Other State name<span class="required">*</span> </label>
+                     <div class="col-md-6 col-sm-6 col-xs-12">
+                       {% if not family_details_form.othey_state_name is None %}
+                       <input type="text" id="other_family_state"  class="form-control col-md-7 col-xs-12"  name={{family_details_form.other_state_name.html_name}} value={{family_details_form.other_state_name.value}}>
+                       {% else %}
+                       <input type="text" id="other_family_state"  class="form-control col-md-7 col-xs-12"  name={{family_details_form.other_state_name.html_name}}>
+                       {% endif %}
+                     </div>
+                   </div>
+                   </div>
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">ZIP code<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
@@ -1409,7 +1422,7 @@
                 <div class="clearfix"></div>
               </div>
               <div class="x_content"> <br />
-                <form enctype="multipart/form-data" method='post' action="{% url 'post_pharmacy_details' %}" class="form-horizontal form-label-left input_mask">
+                <form enctype="multipart/form-data" method='post' onsubmit="return validatePharmacyForm()" action="{% url 'post_pharmacy_details' %}" class="form-horizontal form-label-left input_mask">
                   {% csrf_token %}
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                     <input type="text" id="pharmacy_name" class="form-control has-feedback-left" placeholder="Name" name={{pharmacy_details_form.pharmacy_name.html_name}}>
@@ -1434,9 +1447,9 @@
                     <input type="text" id="pharmacy_city" class="form-control has-feedback-left" placeholder="City" name={{pharmacy_details_form.city.html_name}}>
                     <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span> </div>
 
-                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                    <select class="select2_single form-control" id = "pharmacy_state" tabindex="-1" name = "{{pharmacy_details_form.state.html_name}}">
-                          <option value="" disabled selected>Select State</option>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback" onchange="update_pharmacy_state()">
+                    <select class="select2_single form-control" id = "pharmacy_state"  tabindex="-1" name = "{{pharmacy_details_form.state.html_name}}">
+                          <option selected ></option>
                           <option value="Other">Other</option>
                           <option value="AL">Alabama</option>
                           <option value="AK">Alaska</option>
@@ -1520,6 +1533,12 @@
                           <option value="West Bengal">West Bengal</option>
                     </select>
                     <span class="fa fa-fax form-control-feedback right" aria-hidden="true"></span> </div>
+                    <div  id="selectleadpharmacy" style="display:none"> 
+                    
+                    <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                      <input type="text" id="other_state" class="form-control" placeholder="Other State Name" name={{pharmacy_details_form.other_state_name.html_name}}>
+                      <span class="fa fa-fax form-control-feedback right" aria-hidden="true"></span> </div>
+                    </div>
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                     <input type="text" id="pharmacy_zip_code" class="form-control has-feedback-left" placeholder="Zip Code" name={{pharmacy_details_form.zip_code.html_name}}>
                     <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span> </div>
@@ -1576,7 +1595,7 @@
                 <div class="clearfix"></div>
               </div>
               <div class="x_content"> <br />
-                <form enctype="multipart/form-data" method='post' action="{% url 'post_payer_details' %}" class="form-horizontal form-label-left input_mask">
+                <form enctype="multipart/form-data" method='post'  onsubmit="return validatePayorForm()" action="{% url 'post_payer_details' %}" class="form-horizontal form-label-left input_mask">
                   {% csrf_token %}
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                     <input type="text" class="form-control has-feedback-left" id="payer_name" name={{payer_details_form.payer_name.html_name}} placeholder="Name">
@@ -1602,7 +1621,7 @@
                     <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span> </div>
 
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                    <select class="select2_single form-control" id = "payer_state" tabindex="-1" name = "{{payer_details_form.state.html_name}}">
+                    <select class="select2_single_value form-control" id = "payer_state" tabindex="-1" onchange="update_payor_state()" name = "{{payer_details_form.state.html_name}}">
                           <option value="" disabled selected>Select State</option>
                           <option value="Other">Other</option>
                           <option value="AL">Alabama</option>
@@ -1687,6 +1706,11 @@
                           <option value="West Bengal">West Bengal</option>
                     </select>
                     <span class="fa fa-fax form-control-feedback right" aria-hidden="true"></span> </div>
+                    <div  id="selectleadpayor" style="display:none"> 
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                        <input type="text" id="other_payor_state" class="form-control" placeholder="Other State Name" name={{payer_details_form.other_state_name.html_name}}>
+                        <span class="fa fa-fax form-control-feedback right" aria-hidden="true"></span> </div>
+                      </div>
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                     <input type="text" id="payer_zip_code" class="form-control has-feedback-left" placeholder="Zip Code" name={{payer_details_form.zip_code.html_name}}>
                     <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span> </div>
@@ -1990,12 +2014,16 @@
       success: function(family_data){
         $('#family_first_name').val(family_data.first_name);
         $('#family_last_name').val(family_data.last_name);
-        $('#family_relationship').val(family_data.relationship);
+        // $('#family_relationship').val(family_data.relationship);
+        var newOption = new Option(family_data.state, 0, true, true);
+       $('#family_relationship').append(newOption).trigger('change');
         $('#family_phone_number').val(family_data.phone_number);
         $('#family_email_address').val(family_data.email_address);
         $('#family_address').val(family_data.address);
         $('#family_city').val(family_data.city);
-        $('#family_state').val(family_data.state);
+        // $('#family_state').val(family_data.state);
+        var newOption = new Option(family_data.state, 0, true, true);
+       $('#family_state').append(newOption).trigger('change');
         $('#family_zip_code').val(family_data.zip_code);
         if(family_data.power_of_attorney)
         {
@@ -2098,7 +2126,11 @@
         $('#pharmacy_email').val(pharmacy_data.email);
         $('#pharmacy_address').val(pharmacy_data.address);
         $('#pharmacy_city').val(pharmacy_data.city);
-        $('#pharmacy_state').val(pharmacy_data.state);
+       // document.getElementById('pharmacy_state').value = 'AR';
+
+       
+       var newOption = new Option(pharmacy_data.state, 0, true, true);
+       $('#pharmacy_state').append(newOption).trigger('change');
         $('#pharmacy_zip_code').val(pharmacy_data.zip_code);
         $('#pharmacy_details_id').val(pharmacy_data.pharmacy_id);
         $('#delete_pharmacy_details_id').val(pharmacy_data.pharmacy_id);
@@ -2109,6 +2141,7 @@
     });
   });
 </script>
+
 <!-- end -->
 <!-- post pharmacy details ajax -->
 <script type="text/javascript">
@@ -2150,7 +2183,10 @@
         $('#payer_policy_number').val(payer_data.policy_number);
         $('#payer_address').val(payer_data.address);
         $('#payer_city').val(payer_data.city);
-        $('#payer_state').val(payer_data.state);
+        // $('#payer_state').val(payer_data.state);
+
+        var newOption = new Option(payer_data.state, 0, true, true);
+       $('#payer_state').append(newOption).trigger('change');
         $('#payer_zip_code').val(payer_data.zip_code);
         $('#payer_details_id').val(payer_data.payer_id);
         $('#delete_payer_details_id').val(payer_data.payer_id);
@@ -2242,113 +2278,114 @@
     });
   </script>
 <!-- /jquery.inputmask -->
-
-<script>
-function myFunction(val){
-  percent_Weekend_hourly_rate= $("input[name=percent_Weekend_hourly_rate]").val();
-  regular_hourly_rates = $("input[name=regular_hourly_rate]").val();
-  values =   regular_hourly_rates * percent_Weekend_hourly_rate /100
-  regular_hourly_rates = ((regular_hourly_rates * 1) + (values * 1)).toFixed(2)
-  console.log("weekend_hourly_rate" + regular_hourly_rates )
-  $("input[name=weekend_hourly_rate]").val(regular_hourly_rates)
-  
-}
-</script>
-
-
-<script>
-
-function myFunctions(val){
-  percent_holiday_hourly_rate= $("input[name=percent_holiday_hourly_rate]").val();
-  // weekend_hourly_rate = $("input[name=weekend_hourly_rate]").val();
-  regular_hourly_rates = $("input[name=regular_hourly_rate]").val();
-  values =   regular_hourly_rates * percent_holiday_hourly_rate 
-  regular_hourly_rates =  (values * 1).toFixed(2)
-  console.log("regular_hourly_rates" + regular_hourly_rates )
-  $("input[name=holiday_hourly_rate]").val(regular_hourly_rates) 
-  
-}
-</script>
-
-
-<script>
-
-  function myweekend_holiday_rate(val){
-    percent_weekend_holiday_rate= $("input[name=percent_weekend_holiday_rate]").val();
-    // holiday_hourly_rate = $("input[name=holiday_hourly_rate]").val();
-    weekend_hourly_rate = $("input[name=weekend_hourly_rate]").val();
-  
-    values = weekend_hourly_rate   * percent_weekend_holiday_rate 
-    holiday_hourly_rate =  (values * 1).toFixed(2)
-    console.log("weekend_holiday_rate" + holiday_hourly_rate )
-    console.log("ihuhuhu" +values)
-    $("input[name=weekend_holiday_rate]").val(holiday_hourly_rate) 
-    
-  }
-</script>
-
-
-<script>
-
-  function myLiveinrate(val){
-    percent_live_in_rate= $("input[name=percent_live_in_rate]").val();
+-<script>
+  function myFunction(val){
+    percent_Weekend_hourly_rate= $("input[name=percent_Weekend_hourly_rate]").val();
     regular_hourly_rates = $("input[name=regular_hourly_rate]").val();
-    // weekend_holiday_rate = $("input[name=weekend_holiday_rate]").val();
-    values =   regular_hourly_rates * percent_live_in_rate /100
-    live_rate = ((regular_hourly_rates * 1) + (values * 1)).toFixed(2)
-    console.log("regular_hourly_rates " + live_rate )
-    $("input[name=live_in_rate]").val(live_rate) 
+    values =   regular_hourly_rates * percent_Weekend_hourly_rate /100
+    regular_hourly_rates = ((regular_hourly_rates * 1) + (values * 1)).toFixed(2)
+    console.log("weekend_hourly_rate" + regular_hourly_rates )
+    $("input[name=weekend_hourly_rate]").val(regular_hourly_rates)
     
   }
-</script>
-
-<script>
-
-  function myWeekendliveinrate(val){ 
-    percent_weekend_live_in_rate= $("input[name=percent_weekend_live_in_rate]").val();
-    // live_in_rate = $("input[name=live_in_rate]").val();
-    live_in_rate = $("input[name=live_in_rate]").val();
-    values =   live_in_rate * percent_weekend_live_in_rate /100
-    live_in_rate = ((live_in_rate * 1) + (values * 1)).toFixed(2)
-    console.log("values" + values )
-    $("input[name=weekend_live_in_rate]").val(live_in_rate) 
+  </script>
+  
+  
+  <script>
+  
+  function myFunctions(val){
+    percent_holiday_hourly_rate= $("input[name=percent_holiday_hourly_rate]").val();
+    // weekend_hourly_rate = $("input[name=weekend_hourly_rate]").val();
+    regular_hourly_rates = $("input[name=regular_hourly_rate]").val();
+    values =   regular_hourly_rates * percent_holiday_hourly_rate 
+    regular_hourly_rates =  (values * 1).toFixed(2)
+    console.log("regular_hourly_rates" + regular_hourly_rates )
+    $("input[name=holiday_hourly_rate]").val(regular_hourly_rates) 
     
   }
-</script>
-
-
-<script>
-
-  function myHolidayliveinrate(val){
-    percent_hoilday_live_in_rate = $("input[name=percent_hoilday_live_in_rate]").val();
-    live_in_rate = $("input[name=live_in_rate]").val();
-    values =  live_in_rate *  percent_hoilday_live_in_rate 
-    weekend_live_in_rate = (values * 1).toFixed(2)
-    console.log("weekend_live_in_rate" + weekend_live_in_rate )
-    $("input[name=holiday_live_in_rate]").val(weekend_live_in_rate) 
+  </script>
+  
+  
+  <script>
+  
+    function myweekend_holiday_rate(val){
+      percent_weekend_holiday_rate= $("input[name=percent_weekend_holiday_rate]").val();
+      // holiday_hourly_rate = $("input[name=holiday_hourly_rate]").val();
+      weekend_hourly_rate = $("input[name=weekend_hourly_rate]").val();
     
-  }
-</script>
+      values = weekend_hourly_rate   * percent_weekend_holiday_rate 
+      holiday_hourly_rate =  (values * 1).toFixed(2)
+      console.log("weekend_holiday_rate" + holiday_hourly_rate )
+      console.log("ihuhuhu" +values)
+      $("input[name=weekend_holiday_rate]").val(holiday_hourly_rate) 
+      
+    }
+  </script>
+  
+  
+  <script>
+  
+    function myLiveinrate(val){
+      percent_live_in_rate= $("input[name=percent_live_in_rate]").val();
+      regular_hourly_rates = $("input[name=regular_hourly_rate]").val();
+      // weekend_holiday_rate = $("input[name=weekend_holiday_rate]").val();
+      values =   regular_hourly_rates * percent_live_in_rate /100
+      live_rate = ((regular_hourly_rates * 1) + (values * 1)).toFixed(2)
+      console.log("regular_hourly_rates " + live_rate )
+      $("input[name=live_in_rate]").val(live_rate) 
+      
+    }
+  </script>
+  
+  <script>
+  
+    function myWeekendliveinrate(val){ 
+      percent_weekend_live_in_rate= $("input[name=percent_weekend_live_in_rate]").val();
+      // live_in_rate = $("input[name=live_in_rate]").val();
+      live_in_rate = $("input[name=live_in_rate]").val();
+      values =   live_in_rate * percent_weekend_live_in_rate /100
+      live_in_rate = ((live_in_rate * 1) + (values * 1)).toFixed(2)
+      console.log("values" + values )
+      $("input[name=weekend_live_in_rate]").val(live_in_rate) 
+      
+    }
+  </script>
+  
+  
+  <script>
+  
+    function myHolidayliveinrate(val){
+      percent_hoilday_live_in_rate = $("input[name=percent_hoilday_live_in_rate]").val();
+      live_in_rate = $("input[name=live_in_rate]").val();
+      values =  live_in_rate *  percent_hoilday_live_in_rate 
+      weekend_live_in_rate = (values * 1).toFixed(2)
+      console.log("weekend_live_in_rate" + weekend_live_in_rate )
+      $("input[name=holiday_live_in_rate]").val(weekend_live_in_rate) 
+      
+    }
+  </script>
+  
+  
+  
+  
+  
+  <script>
+  
+    function myWeekendholidayliveinrate(val){
+      percent_weekend_holiday_live_in_rate= $("input[name=percent_weekend_holiday_live_in_rate]").val();
+      // holiday_live_in_rate = $("input[name=holiday_live_in_rate]").val();
+      // console.log("weekend_holiday_live_in_rate" + holiday_live_in_rate )
+      weekend_live_in_rate = $("input[name=weekend_live_in_rate]").val();
+      console.log("percent_weekend_holiday_live_in_rate" + percent_weekend_holiday_live_in_rate )
+      values =   weekend_live_in_rate * percent_weekend_holiday_live_in_rate 
+      holiday_live_in_rate =  (values * 1).toFixed(2)
+      
+      $("input[name=weekend_holiday_live_in_rate]").val(holiday_live_in_rate) 
+      
+    }
+  </script>
+  
 
-
-
-
-
-<script>
-
-  function myWeekendholidayliveinrate(val){
-    percent_weekend_holiday_live_in_rate= $("input[name=percent_weekend_holiday_live_in_rate]").val();
-    // holiday_live_in_rate = $("input[name=holiday_live_in_rate]").val();
-    // console.log("weekend_holiday_live_in_rate" + holiday_live_in_rate )
-    weekend_live_in_rate = $("input[name=weekend_live_in_rate]").val();
-    console.log("percent_weekend_holiday_live_in_rate" + percent_weekend_holiday_live_in_rate )
-    values =   weekend_live_in_rate * percent_weekend_holiday_live_in_rate 
-    holiday_live_in_rate =  (values * 1).toFixed(2)
-    
-    $("input[name=weekend_holiday_live_in_rate]").val(holiday_live_in_rate) 
-    
-  }
-</script>
 
 
 <script>
@@ -2366,7 +2403,26 @@ function myFunctions(val){
       });
     </script>
 
+
 <script>
+  $(document).ready(function() {
+    $(".select2_single_value").select2({
+      placeholder: "Select a state",
+      allowClear: true
+    });
+    $(".select2_group").select2({});
+    $(".select2_multiple").select2({
+      maximumSelectionLength: 4,
+      placeholder: "With Max Selection limit 4",
+      allowClear: true
+    });
+  });
+</script>
+
+<script>
+
+
+
   function update_state() {
       // Get the checkbox
       values = $('#dropDownId :selected').val()
@@ -2414,5 +2470,139 @@ success: function (data) {
 
   }
 </script>
+
+
+<script>
+  function update_family_state() {
+      // Get the checkbox
+      values = $('#family_state :selected').val()
+      console.log("valuesvalues",values)
+      // Get the output text
+      var selectlead = document.getElementById("selectleadfamily");
+      
+      if (values === "Other") {
+          selectlead.style.display = "block";
+
+      } else {
+          selectlead.style.display = "none";
+      }
+  }
+</script>
+
+
+<script>
+  function update_pharmacy_state() {
+      // Get the checkbox
+      values = $('#pharmacy_state :selected').val()
+      console.log("valuesvalues",values)
+      // Get the output text
+      var selectlead = document.getElementById("selectleadpharmacy");
+      
+      if (values === "Other") {
+          selectlead.style.display = "block";
+      
+      } else {
+          selectlead.style.display = "none";
+      
+      }
+  }
+</script>
+
+<script>
+  function update_payor_state() {
+      // Get the checkbox
+      values = $('#payer_state :selected').val()
+      console.log("valuesvalues",values)
+      // Get the output text
+      var selectlead = document.getElementById("selectleadpayor");
+      
+      if (values === "Other") {
+          selectlead.style.display = "block";
+      
+      } else {
+          selectlead.style.display = "none";
+      
+      }
+  }
+</script>
+
+
+<script>
+  function validateForm() {
+
+    values = $('#dropDownId :selected').val()
+      var selectlead = document.getElementById("selectlead");
+      if (values === "Other") {
+        var x = $('#otherstatevalue').val()
+      if (x == "") {
+       alert("Other State Name must be filled out");
+       return false;
+      }
+      }
+      else {
+        return true;
+      }
+}
+</script>
+
+
+
+<script>
+  function validatePharmacyForm() {
+
+    values = $('#pharmacy_state :selected').val()
+      var selectlead = document.getElementById("selectlead");
+      if (values === "Other") {
+        var x = $('#other_state').val()
+      if (x == "") {
+       alert("Other State Name must be filled out");
+       return false;
+      }
+      }
+      else {
+        return true;
+      }
+}
+</script>
+
+
+<script>
+  function validateFamilyForm() {
+
+    values = $('#family_state :selected').val()
+      var selectlead = document.getElementById("selectlead");
+      if (values === "Other") {
+        var x = $('#other_family_state').val()
+      if (x == "") {
+       alert("Other State Name must be filled out");
+       return false;
+      }
+      }
+      else {
+        return true;
+      }
+}
+</script>
+
+
+<script>
+  function validatePayorForm() {
+
+    values = $('#payer_state :selected').val()
+      var selectlead = document.getElementById("selectlead");
+      if (values === "Other") {
+        var x = $('#other_payor_state').val()
+      if (x == "") {
+       alert("Other State Name must be filled out");
+       return false;
+      }
+      }
+     
+      else {
+        return true;
+      }
+}
+</script>
+
 
 {% endblock %}

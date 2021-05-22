@@ -39,7 +39,7 @@
                 <div class="clearfix"></div>
               </div>
               <div class="x_content"> <br />
-                <form enctype="multipart/form-data" method='post' action="{% url 'add_move_manager' %}" class="form-horizontal form-label-left">
+                <form enctype="multipart/form-data" method='post' onsubmit="return validateForm()" action="{% url 'add_move_manager' %}" class="form-horizontal form-label-left">
                   {% csrf_token %}
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">First Name <span class="required">*</span> </label>
@@ -136,7 +136,7 @@
                     <div class="col-md-6 col-sm-6 col-xs-12" onchange="update_state()">
                       {% if not move_manager_form.state_value is None %}
                       <select required class="select2_single form-control" tabindex="-1" id="dropDownId" name={{move_manager_form.state.html_name}} value={{move_manager_form.state.value}}>
-                            <option value="" disabled selected>Select State</option>
+                        <option   selected=selected>{{move_manager_form.state.value}}</option>
                             <option value="Other">Other</option>
                             <option value="AL">Alabama</option>
                           	<option value="AK">Alaska</option>
@@ -311,10 +311,10 @@
                     <div  id="selectlead" style="display:none"> 
                      <label class="control-label col-md-3 col-sm-3 col-xs-12">Other State name<span class="required">*</span> </label>
                      <div class="col-md-6 col-sm-6 col-xs-12">
-                       {% if not add_client_form.other_state_name.value is None %}
-                       <input type="text"  class="form-control col-md-7 col-xs-12"  name={{move_manager_form.other_state_name.html_name}} value={{move_manager_form.other_state_name.value}}>
+                       {% if not home_mod_manager_form.other_state_name.value is None %}
+                       <input type="text" id="otherstatevalue"  class="form-control col-md-7 col-xs-12"  name={{move_manager_form.other_state_name.html_name}} value={{move_manager_form.other_state_name.value}}>
                        {% else %}
-                       <input type="text"  class="form-control col-md-7 col-xs-12"  name={{move_manager_form.other_state_name.html_name}}>
+                       <input type="text" id="otherstatevalue"  class="form-control col-md-7 col-xs-12"  name={{move_manager_form.other_state_name.html_name}}>
                        {% endif %}
                      </div>
                    </div>
@@ -465,6 +465,47 @@
       
       }
   }
+</script>
+
+
+<script>
+  function validateForm() {
+
+    values = $('#dropDownId :selected').val()
+      var selectlead = document.getElementById("selectlead");
+      if (values === "Other") {
+        var x = $('#otherstatevalue').val()
+      if (x == "") {
+       alert("Other State Name must be filled out");
+       return false;
+      }
+      }
+      else {
+        return true;
+      }
+}
+</script>
+
+<script>
+  $(document).ready(function() {
+
+   values = $('#dropDownId :selected').val()
+     console.log("ssss ---",values)
+     // Get the output text
+     var selectlead = document.getElementById("selectlead");
+     
+     if (values === "Other") {
+       selectlead.style.display = "block";
+
+     }
+     else
+     {
+       selectlead.style.display = "none";
+
+     }
+
+
+  })
 </script>
 
 {% endblock %}

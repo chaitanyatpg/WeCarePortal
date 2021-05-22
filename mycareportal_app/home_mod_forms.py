@@ -28,7 +28,8 @@ class HomeModManagerRegistrationForm(forms.Form):
                 if picture._size > self.MAX_UPLOAD_SIZE:
                     raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
         except KeyError:
-            raise forms.ValidationError('Formats supported JPEG, PNG, JPG')
+            val = ""
+            # raise forms.ValidationError('Formats supported JPEG, PNG, JPG')
         #picture = self.cleaned_data['profile_picture']
         #if not picture:
         #    return None
@@ -68,7 +69,8 @@ class HomeModUserEditForm(forms.Form):
                 if picture._size > self.MAX_UPLOAD_SIZE:
                     raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
         except KeyError:
-            raise forms.ValidationError('Formats supported JPEG, PNG, JPG')
+            val = ""
+            # raise forms.ValidationError('Formats supported JPEG, PNG, JPG')
         #picture = self.cleaned_data['profile_picture']
         #if not picture:
         #    return None

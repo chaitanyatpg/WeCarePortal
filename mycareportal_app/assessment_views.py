@@ -11,6 +11,8 @@ from collections import defaultdict
 from django.contrib import messages
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 
 @login_required
 def assessment_tool(request):
@@ -38,8 +40,10 @@ class AssessmentTool(LoginRequiredMixin, View):
         context = {}
         current_company = request.user.company
         find_client_form = FindClientForm(request.GET,request.FILES)
+        context['assessment_tool_form']= AssessmentToolForm()
         if find_client_form.is_valid():
             client_email = find_client_form.cleaned_data['client_email']
+            context['client_email'] = client_email
             client = Client.objects.get(company=current_company, email_address=client_email)
             default_assessment_categories = AssessmentCategories.objects.all()
             assessment_tasks = AssessmentTask.objects.filter(is_default=True) | AssessmentTask.objects.filter(company=current_company)
@@ -65,10 +69,12 @@ class AssessmentTool(LoginRequiredMixin, View):
 def post_assessment_status(request):
 
     if request.method == "POST":
-        company = request.user.company;
-        status_id = request.POST['status_id']
-        status = request.POST['status']
-        assessment_map = ClientAssessmentMap.objects.get(company=company,id=status_id)
-        assessment_map.status = status
-        assessment_map.save()
-    return HttpResponse("Changed Status")
+        company = request.user.company
+        for  n, (key, value) in enumerate(request.POST.items()):
+            if n > 0:
+                assessment_map = ClientAssessmentMap.objects.get(company=company,id=key)
+                assessment_map.status = value
+                client_email = assessment_map.client.email_address
+                assessment_map.save()
+              
+    return HttpResponseRedirect(reverse('assessment_tool') + "?client_email=" + client_email)
