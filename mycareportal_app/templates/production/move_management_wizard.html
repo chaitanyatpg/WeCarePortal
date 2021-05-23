@@ -4,6 +4,18 @@
 {% load static %}
 {% block headlibs %}
 {% load static %}
+<!-- iCheck -->
+<link href="{% static 'vendors/iCheck/skins/flat/green.css' %}" rel="stylesheet">
+<!-- bootstrap-wysiwyg -->
+<link href="{% static 'vendors/google-code-prettify/bin/prettify.min.css' %}" rel="stylesheet">
+<!-- Switchery -->
+<link href="{% static 'vendors/switchery/dist/switchery.min.css' %}" rel="stylesheet">
+<!-- starrr -->
+<link href="{% static 'vendors/starrr/dist/starrr.css' %}" rel="stylesheet">
+<!-- bootstrap-daterangepicker -->
+<link href="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+<!-- Select2 -->
+<link href="{% static 'vendors/select2/dist/css/select2.min.css' %}" rel="stylesheet">
   <!-- SmartWizard -->
   <link href="{% static 'vendors/jQuery-Smart-Wizard/styles/smart_wizard.css' %}" rel="stylesheet">
 {% endblock %}
@@ -95,7 +107,7 @@
                               <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Maximum Distance of New Address<span class="required">*</span>
                               </label>
                               <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input type="number" name={{create_move_task_form.new_address_max_distance.html_name}} required="required" class="form-control col-md-7 col-xs-12">
+                                <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"  required="required"  class="form-control col-md-7 col-xs-12"  pattern="[-+]?[0-9]*[.,]?[0-9]+" min="0" max="1000"  name={{create_move_task_form.new_address_max_distance.html_name}}>
                                  <span class="required"  style="color: red;" id="fname_error_message"></span>
                               </div>
                             </div>
@@ -121,10 +133,10 @@
                               <div class="col-md-6 col-sm-6 col-xs-12">
                                 <div id="gender" class="btn-group" data-toggle="buttons">
                                   <label class="btn btn-default" data-toggle-class="btn-default" data-toggle-passive-class="btn-primary">
-                                    <input type="radio" class="btn-primary" name="{{create_move_task_form.provides_assistance.html_name}}" value="Y"> &nbsp; Yes &nbsp;
+                                    <input required type="radio" class="btn-primary" name="{{create_move_task_form.provides_assistance.html_name}}" value="Y"> &nbsp; Yes &nbsp;
                                   </label>
                                   <label class="btn btn-default" data-toggle-class="btn-default" data-toggle-passive-class="btn-primary">
-                                    <input type="radio" class="btn-primary" name="{{create_move_task_form.provides_assistance.html_name}}" value="N"> No
+                                    <input required type="radio" class="btn-primary" name="{{create_move_task_form.provides_assistance.html_name}}" value="N"> No
                                   </label>
                                 </div>
                               </div>
@@ -138,7 +150,7 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Minimum Cost<span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                              <input type="number" id="first-name" name="{{create_move_task_form.minimum_cost.html_name}}" required="required" class="form-control col-md-7 col-xs-12">
+                              <input type="number"  id="first-name" name="{{create_move_task_form.minimum_cost.html_name}}" required="required" class="form-control col-md-7 col-xs-12">
                               <span class="required"  style="color: red;" id="mincosterror"></span>
                             </div>
                           </div>
@@ -332,7 +344,10 @@
 
 
         function onFinishCallback(objs, context){
+
+
           // value = false
+          console.log("finish clicked")
           var step_num = objs.attr('rel'); 
           // validateSteps(step_num,context)
         // if(validateAllSteps()){
@@ -346,15 +361,14 @@
           var getSelectedValue =  document.querySelector( 'input[name="handicap_friendly"]:checked'); 
           
           var getValue =  document.querySelector( 'input[name="furnished"]:checked'); 
-          var assistance =  document.querySelector( 'input[name="provides_assistance"]:checked'); 
-          if (  $('#typearea :selected').val() && getSelectedValue && getValue){
-                           console.log("finis me")
+          var assistance =  document.querySelector( 'input[name="provides_assistance"]:checked');  
+          if (  $('#typearea :selected').val() && getSelectedValue && getValue && $("input[name=new_address_max_distance]").val() && $("input[name=minimum_cost]").val() && $("input[name=maximum_cost]").val() ){
                         
                            $('#target').submit();
                           }
         else {
         console.log("eeeeeeee",context.toStep)
-        alert("please select all the field")
+        alert("Please fill all the fields")
         if(context.toStep == 2 ){
       value = true
                       }
@@ -406,7 +420,7 @@
                            
                           }
                           else{
-                            alert("please select all the field")
+                            alert("Please fill all the fields")
                           }
                         }
                         $("#mincosterror").html("field required").hide();
@@ -462,10 +476,21 @@
         $('.buttonNext').addClass('btn btn-success'); 
         $('.buttonFinish').addClass('btn btn-default');
         $('.buttonFinish').attr("type", "submit");
+        $("#vale").inputmask("(999)-999-9999", { "clearIncomplete": true });
+      });
+
+      $(document).ready(function(){
+        // Inputmask("(999)-999-9999").mask("input");
+      
       });
     </script>
       
      </script>
+
+
+     <script>
+    
+    </script>
     <!-- /jQuery Smart Wizard -->
 
     <!--<script>

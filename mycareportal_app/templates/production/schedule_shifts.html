@@ -238,43 +238,43 @@
                                     <div class="radio">
                                         <label>
                                             <input type="checkbox"
-                                                name="{{schedule_shift_form.monday.html_name}}">Monday</input>
+                                                name="{{schedule_shift_form.monday.html_name}}">&nbsp;Monday</input>
                                         </label>
                                     </div>
                                     <div class="radio">
                                         <label>
                                             <input type="checkbox"
-                                                name="{{schedule_shift_form.tuesday.html_name}}">Tuesday</input>
+                                                name="{{schedule_shift_form.tuesday.html_name}}">&nbsp;Tuesday</input>
                                         </label>
                                     </div>
                                     <div class="radio">
                                         <label>
                                             <input type="checkbox"
-                                                name="{{schedule_shift_form.wednesday.html_name}}">Wednesday</input>
+                                                name="{{schedule_shift_form.wednesday.html_name}}">&nbsp;Wednesday</input>
                                         </label>
                                     </div>
                                     <div class="radio">
                                         <label>
                                             <input type="checkbox"
-                                                name="{{schedule_shift_form.thursday.html_name}}">Thursday</input>
+                                                name="{{schedule_shift_form.thursday.html_name}}">&nbsp;Thursday</input>
                                         </label>
                                     </div>
                                     <div class="radio">
                                         <label>
                                             <input type="checkbox"
-                                                name="{{schedule_shift_form.friday.html_name}}">Friday</input>
+                                                name="{{schedule_shift_form.friday.html_name}}">&nbsp;Friday</input>
                                         </label>
                                     </div>
                                     <div class="radio">
                                         <label>
                                             <input type="checkbox"
-                                                name="{{schedule_shift_form.saturday.html_name}}">Saturday</input>
+                                                name="{{schedule_shift_form.saturday.html_name}}">&nbsp;Saturday</input>
                                         </label>
                                     </div>
                                     <div class="radio">
                                         <label>
                                             <input type="checkbox"
-                                                name="{{schedule_shift_form.sunday.html_name}}">Sunday</input>
+                                                name="{{schedule_shift_form.sunday.html_name}}">&nbsp;Sunday</input>
                                         </label>
                                     </div>
                                 </div>
@@ -672,7 +672,8 @@
       $(document).ready(function() {
         $('#start_date').daterangepicker({
           singleDatePicker: true,
-          calender_style: "picker_2"
+          calender_style: "picker_2",
+          minDate: new Date,
         }, function(start, end, label) {
           console.log(start.toISOString(), end.toISOString(), label);
         });
@@ -683,7 +684,8 @@
       $(document).ready(function() {
         $('#end_date').daterangepicker({
           singleDatePicker: true,
-          calender_style: "picker_2"
+          calender_style: "picker_2",
+          minDate: new Date((new Date()).valueOf() + 1000*3600*24),
         }, function(start, end, label) {
           console.log(start.toISOString(), end.toISOString(), label);
         });

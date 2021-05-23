@@ -155,3 +155,55 @@ class ViewDailyActivityReport(LoginRequiredMixin, View):
             new_task["latest_comment"] = latest_comment
             new_tasks.append(new_task)
         return new_tasks
+
+
+
+class ViewAllFamilyMember(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        company = request.user.company
+        caregivers = Caregiver.objects.filter(company=company).order_by('last_name')
+        context['caregivers'] = caregivers
+        return render(request, "production/view_all_caregivers.html", context)
+
+
+class ViewAllProvider(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        company = request.user.company
+        clients = Client.objects.filter(company=company).order_by('last_name')
+
+        all_provider = Provider.objects.filter(company=company)
+        context['clients'] = clients
+        context['all_provider'] = all_provider
+      
+    
+        return render(request, "production/view_all_providers.html", context)
+    
+class ViewAllFamilymember(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        company = request.user.company
+        clients = Client.objects.filter(company=company).order_by('last_name')
+        all_family_contacts = FamilyContact.objects.filter(company=company)
+        context['clients'] = clients
+        context['all_family_contacts'] = all_family_contacts
+      
+    
+        return render(request, "production/view_all_family_member.html", context)
+    
+    
+   
+   
+        
+  
+        
+
+
+
+
+
+            

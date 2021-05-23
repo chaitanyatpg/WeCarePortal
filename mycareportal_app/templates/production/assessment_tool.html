@@ -18,7 +18,7 @@
 {% endblock %}
 {% block pagecontent %}
         <!-- page content -->
-        <div class="right_col" role="main">
+        <div class="right_col" role="main" style="">
           <div class="">
             <div class="page-title">
               <div class="title_left">
@@ -31,10 +31,15 @@
               </div>
             </div>
             <div class="clearfix"></div>
+            <form action=""></form>
             {% for category, tasks in task_map.items %}
+            <form id="tragetme"  enctype="multipart/form-data"  method='post' action="{% url 'post_assessment_status' %}">
+              {% csrf_token %}
               <div class="row">
                 <div class="x_panel">
+                  
                   <div class="x_title">
+                    
                     <h2>{{category.category}}<small></small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -57,27 +62,28 @@
                             <label>
 
                               {% if status.status == 'Y' %}
-                                <input type="radio" name="{{status.id}}" checked="checked" value='Y'>Y
+                              
+                                <input type="radio" name="{{status.id}}" id="value" checked="checked" value='Y' >Y
                               {% else %}
-                                <input type="radio" name="{{status.id}}" value='Y'>Y
+                                <input type="radio" onfocus="focusevent(true)"  name="{{status.id}}" value='Y' >Y
                               {% endif %}
                             </label>
                           </div>
                           <div class="radio-inline">
                             <label>
                               {% if status.status == 'N' %}
-                                <input type="radio" name="{{status.id}}" checked="checked" value='N'>N
+                                <input type="radio" name="{{status.id}}"  id="value" checked="checked" value='N'>N
                               {% else %}
-                                <input type="radio" name="{{status.id}}" value='N'>N
+                                <input type="radio" onfocus="focusevent(true)"  name="{{status.id}}"  value='N'>N
                               {% endif %}
                             </label>
                           </div>
                           <div class="radio-inline">
                             <label>
                               {% if status.status == 'NA' %}
-                                <input type="radio" name="{{status.id}}" checked="checked" value='NA'>N/A
+                                <input type="radio"  name="{{status.id}}" id="value" na checked="checked" value='NA'>N/A
                               {% else %}
-                                <input type="radio" name="{{status.id}}" value='NA'>N/A
+                                <input type="radio" onfocus="focusevent(true)" name="{{status.id}}"  value='NA'>N/A
                               {% endif %}
                             </label>
                           </div>
@@ -86,17 +92,26 @@
 
                       {% endfor %}
                       <div class="ln_solid"></div>
-                      <!--<div class="form-group">
-                        <div class="col-md-9 col-sm-9 col-xs-12">
-                          <button type="submit" class="btn btn-success">Submit</button>
-                        </div>
-                      </div>-->
+                     
+                  
                   </div>
+                
                 </div>
+
               </div>
             {% endfor %}
+            <div class="row">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-4 col-xs-12 col-md-offset-7">
+                  <button type="button" onclick="feell()"  class="btn btn-success">Submit</button>
+                </div>
+              </div>
+            </div>
+          </form>
           </div>
         </div>
+
+     
         <!-- /page content -->
 {% endblock %}
 {% block footlibs %}
@@ -147,6 +162,8 @@
   </script>
   <!-- end -->
 
+ 
+
   <!-- Delete Task details -->
     <script type="text/javascript">
       var delete_task_form = $('#delete_task_details');
@@ -168,8 +185,9 @@
       });
     </script>
 <!-- end -->
+
 <!-- Post assessment radio -->
-  <script type="text/javascript">
+  <!-- <script type="text/javascript">
       var csrftoken = getCookie('csrftoken');
       $(':radio').change(function(){
         $.ajax({
@@ -182,7 +200,7 @@
         })
         console.log('entered');
       });
-  </script>
+  </script> -->
 <!-- end -->
     <!-- bootstrap-daterangepicker -->
     <script>
@@ -395,4 +413,29 @@
       });
     </script>
     <!-- /Starrr -->
+
+    
+<script>
+  var val = false ;  
+
+  function   focusevent(val) 
+    {  
+      if(val){
+        this.val =  true
+
+      }
+      else{
+        alert("Please select atleast one checkbox")
+      }
+     }
+      function feell(){
+        
+        focusevent(val)
+        if(this.val){
+          document.getElementById('tragetme').submit();
+        }  
+      }
+   
+    </script>
+   
 {% endblock %}

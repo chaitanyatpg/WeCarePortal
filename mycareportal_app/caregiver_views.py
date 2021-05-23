@@ -70,9 +70,12 @@ class AddCaregiver(LoginRequiredMixin, View):
             profile_picture = add_caregiver_form.cleaned_data['profile_picture']
             notes = add_caregiver_form.cleaned_data['notes']
             company = request.user.company
+            other_state_name = add_caregiver_form.cleaned_data['other_state_name']
             #Create caregiver user auth model and save
             try:
                 with transaction.atomic():
+                    if state == "Other":
+                        state = other_state_name
                     existing_user_flag = False
                     if User.objects.filter(username=email, email=email).exists():
                         new_user = User.objects.get(username=email)
@@ -216,6 +219,7 @@ class EditCaregiver(LoginRequiredMixin, View):
         if find_caregiver_form.is_valid():
             caregiver_email = find_caregiver_form.cleaned_data['caregiver_email']
             caregiver = Caregiver.objects.get(company=current_company,email_address=caregiver_email)
+            context['caregivers'] = caregiver
             caregiver_birthday = self.parse_date(caregiver.date_of_birth)
             edit_caregiver_form = CaregiverEditForm(initial=
             {
@@ -292,6 +296,10 @@ class EditCaregiver(LoginRequiredMixin, View):
                 rating = edit_caregiver_form.cleaned_data['rating']
                 hourly_rate = edit_caregiver_form.cleaned_data['hourly_rate']
                 notes = edit_caregiver_form.cleaned_data['notes']
+                other_state_name = edit_caregiver_form.cleaned_data['other_state_name']
+                if state == "Other":
+                    state = other_state_name
+                
                 #Get current caregiver
                 caregiver = Caregiver.objects.get(company=current_company,email_address=email)
                 if self.arg_diff(caregiver.first_name, first_name):
@@ -1467,3 +1475,26 @@ def send_notification_to_admin(request):
     if response.status_code == 200:
         status = True
     return redirect('caregiver_dashboard')
+
+
+
+
+@login_required
+def delete_caregiver_attachment(request):
+    
+    if request.method == "GET":
+        data = {
+            "ratet" : "sucess"
+        }
+        company = request.user.company
+        attachment_id = request.GET['attachment_id']
+        caregiver_id = request.GET['caregiver_id']
+        caregiver = Caregiver.objects.get(id = caregiver_id)
+        print("clientclient",caregiver)
+        attachment = CaregiverAttachment.objects.get(id = attachment_id,caregiver = caregiver)
+        attachment.delete()
+        print("attachmentattachment",attachment)
+
+    # return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client.email_address)
+    return HttpResponse(json.dumps(data), content_type="application/json")
+        

@@ -148,6 +148,7 @@
                             </label>
                           </div>
                           <div class="radio">
+                       
                             <label>
                               <input type="radio" value="Yearly" name="{{assign_task_form.task_type.html_name}}"> Yearly Task</input>
                             </label>
@@ -156,37 +157,38 @@
                         <div class="col-md-3 col-sm-3 col-xs-12">
                           <div class="radio">
                             <label>
-                              <input type="checkbox" name="{{assign_task_form.monday.html_name}}">Monday</input>
+                              
+                              <input type="checkbox" name="{{assign_task_form.monday.html_name}}">&nbsp;Monday</input>
                             </label>
                           </div>
                           <div class="radio">
                             <label>
-                              <input type="checkbox" name="{{assign_task_form.tuesday.html_name}}">Tuesday</input>
+                              <input type="checkbox" name="{{assign_task_form.tuesday.html_name}}">&nbsp;Tuesday</input>
                             </label>
                           </div>
                           <div class="radio">
                             <label>
-                              <input type="checkbox" name="{{assign_task_form.wednesday.html_name}}">Wednesday</input>
+                              <input type="checkbox" name="{{assign_task_form.wednesday.html_name}}">&nbsp;Wednesday</input>
                             </label>
                           </div>
                           <div class="radio">
                             <label>
-                              <input type="checkbox" name="{{assign_task_form.thursday.html_name}}">Thursday</input>
+                              <input type="checkbox" name="{{assign_task_form.thursday.html_name}}">&nbsp;Thursday</input>
                             </label>
                           </div>
                           <div class="radio">
                             <label>
-                              <input type="checkbox" name="{{assign_task_form.friday.html_name}}">Friday</input>
+                              <input type="checkbox" name="{{assign_task_form.friday.html_name}}">&nbsp;Friday</input>
                             </label>
                           </div>
                           <div class="radio">
                             <label>
-                              <input type="checkbox" name="{{assign_task_form.saturday.html_name}}">Saturday</input>
+                              <input type="checkbox" name="{{assign_task_form.saturday.html_name}}">&nbsp;Saturday</input>
                             </label>
                           </div>
                           <div class="radio">
                             <label>
-                              <input type="checkbox" name="{{assign_task_form.sunday.html_name}}">Sunday</input>
+                              <input type="checkbox" name="{{assign_task_form.sunday.html_name}}">&nbsp;Sunday</input>
                             </label>
                           </div>
                         </div>
@@ -775,9 +777,10 @@
         $('#start_date').daterangepicker({
           singleDatePicker: true,
           calender_style: "picker_2",
+          minDate: new Date,
         }, function(start, end, label) {
           console.log(start.toISOString(), end.toISOString(), label);
-        });
+      });
       });
     </script>
 
@@ -786,6 +789,7 @@
         $('#end_date').daterangepicker({
           singleDatePicker: true,
           calender_style: "picker_2",
+          minDate: new Date((new Date()).valueOf() + 1000*3600*24),
           
         }, function(start, end, label) {
           console.log(start.toISOString(), end.toISOString(), label);

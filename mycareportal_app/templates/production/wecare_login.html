@@ -40,7 +40,7 @@
                 <ul class="messages">
                   {% for message in messages %}
                     {% if message.tags == 'error' %}
-                      <div class="alert alert-danger">
+                      <div class=" alert-danger">
                         <strong style="font-weight: 400;" class="{{message.tags}}">{{message}}</strong>
                       </div>
                     {% elif message.tags == 'success' %}
@@ -49,7 +49,7 @@
                       </div>
                     {% else %}
                       <div class="alert alert-info">
-                        <strong style="font-family: -webkit-pictograph; font-size: 17px;" class="{{message.tags}}">{{message}}</strong>
+                        <strong style="font-family: sans-serif; font-size: 17px;" class="{{message.tags}}">{{message}}</strong>
                       </div>
                     {% endif %}
                   {% endfor %}
@@ -59,22 +59,22 @@
                 {% for field in form %}
                   {% for error in field.errors %}
                     <div class="alert alert-danger">
-                      <span style="font-family: -webkit-pictograph; font-size: 17px;">{{error}}</span>
+                      <span style="font-family: sans-serif; font-size: 17px;">{{error}}</span>
                     </div>
                   {% endfor %}
                 {% endfor %}
                 {% for error in form.non_field_errors %}
-                  <div class="alert alert-danger">
-                    <span style="font-family: -webkit-pictograph; font-size: 17px;">{{error}}</span>
+                  <div class=" errorlogin">
+                    <span style="font-family:Segoe UI; font-weight: 300px; font-size: 16px;">{{error}}</span>
                   </div>
                 {% endfor %}
               {% endif %}
               <div>
-                <input type="text" class="form-control" placeholder="Username"  name="{{form.username.html_name}}">
+                <input type="text" class="form-control" placeholder="Username"  name="{{form.username.html_name}}" required>
               </input>
               </div>
               <div>
-                <input type="password" class="form-control" placeholder="Password" name="{{form.password.html_name}}">
+                <input type="password" class="form-control" placeholder="Password" name="{{form.password.html_name}}" required>
               </input>
               </div>
               <div>

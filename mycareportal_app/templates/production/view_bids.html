@@ -48,6 +48,7 @@
 
 
           {% for bid in bids %}
+          {% if bid.bid_live %}
           <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
               <div class="x_panel">
@@ -125,7 +126,7 @@
                       </ul>-->
                       <!-- end of skills -->
                     </div>
-
+                      
                       <div class="col-md-6 col-sm-6 col-xs-12">
                         <form method="post" action="{% url 'modify_bid' %}" class="form-horizontal form-label-left input_mask" style="float: left;">
                           {% csrf_token %}
@@ -164,14 +165,17 @@
                         {% csrf_token %}
                         <td><button  class="btn btn-danger" >Reject</button></td>
                       </form>
-                      </div>
 
+
+                      </div>
+               
                   </div>
                 </div>
               </div>
             </div>
+            
           </div>
-
+          {% endif %}
           {% endfor %}
             <!--<div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">

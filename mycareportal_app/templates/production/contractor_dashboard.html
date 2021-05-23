@@ -8,6 +8,30 @@
     <link href="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
 {% endblock %}
 {% block pagecontent %}
+
+
+<style>
+   main-table{
+      border-collapse:collapse;
+  
+  }
+  .main-table td{
+      
+      height:50px;
+      position:relative;
+      width:75px;
+      text-align:center
+     
+  }
+  .main-table th{
+      
+      
+      position:relative;
+      width:65px;
+      text-align:center
+     
+  }
+</style>
         <!-- page content -->
         <div class="right_col" role="main">
           <div class="">
@@ -136,8 +160,43 @@
                                   </div>
                                   <input type="hidden" name={{bid_form.task_uid.html_name}} value={{task.uid}}>
                                   <button type="submit" class="btn btn-success">Place Bid</button>
-                                  <button type="button" class="btn btn-danger">Not Bidding</button>
+                                  <button type="button" class="btn btn-danger">Reject Bid</button>
                                 </form>
+
+                              
+
+                                {% if home_mod_task_bids %}
+                                <h5>The Bid Status For Above task</h5>
+                                <table   id="lineitemid" style="width: 100%;" class="main-table">
+                              <thead>
+                              <tr>
+                              <th>Cost</th>
+                              <th>Contractor</th>
+                              <th>Home Modification Task</th>
+                              <th>Status</th>
+
+                              </tr>
+                            </thead>
+
+                            {% endif %}
+                              {% for bids in home_mod_task_bids %}
+
+                              {% if bids.home_mod_task.uid == task.uid %}
+                              <tr>
+                              <td>{{bids.cost}}</td>
+                              <td>{{bids.contractor.first_name|addstr_space:bids.contractor.last_name}}</td>
+                              <td>{{bids.home_mod_task.task_name}}</td>
+                              {% if bids.bid_live %}
+                              <td>Pending</td>
+                              {% else %}
+                              <td>Rejected</td>
+                              {% endif %}
+
+                              </tr>
+                              {% endif %}
+                             {% endfor %}
+                            </table>
+                            
                               </div>
 
                               <div class="clearfix"></div>

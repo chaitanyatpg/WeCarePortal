@@ -58,10 +58,13 @@ class AddHomeModManager(LoginRequiredMixin, View):
             phone_number = add_home_mod_manager_form.cleaned_data['phone_number']
             email = add_home_mod_manager_form.cleaned_data['email']
             profile_picture = add_home_mod_manager_form.cleaned_data['profile_picture']
+            other_state_name = add_home_mod_manager_form.cleaned_data['other_state_name']
             company = request.user.company
             #Create home mod user auth model and save
             try:
                 with transaction.atomic():
+                    if state == "Other":
+                        state = other_state_name
                     new_user = User.objects.create_user(username=email,
                                                         email=email,
                                                         first_name=first_name,
@@ -105,7 +108,7 @@ class AddHomeModManager(LoginRequiredMixin, View):
             except IntegrityError as e:
                 messages.error(request, "Home Modification user has already been registered. Please enter with a new email address.")
         else:
-            form_errors = add_caregiver_form.errors.as_data()
+            form_errors = add_home_mod_manager_form.errors.as_data()
             error_messaging.render_error_messages(request, form_errors)
         return render(request, 'production/add_home_mod_manager.html', context)
 
@@ -175,6 +178,7 @@ class EditHomeModUser(LoginRequiredMixin, View):
                 phone_number = edit_home_mod_user_form.cleaned_data['phone_number']
                 email = edit_home_mod_user_form.cleaned_data['email']
                 profile_picture = edit_home_mod_user_form.cleaned_data['profile_picture']
+                other_state_name = edit_home_mod_user_form.cleaned_data['other_state_name']
                 #Get current caregiver
                 home_mod_user = HomeModificationUser.objects.get(company=current_company,email_address=email)
                 home_mod_user.first_name = first_name
@@ -187,6 +191,9 @@ class EditHomeModUser(LoginRequiredMixin, View):
                 home_mod_user.zip_code = zip_code
                 home_mod_user.date_of_birth = date_of_birth
                 home_mod_user.phone_number = phone_number
+                if home_mod_user.state == "Other":
+                    home_mod_user.state = other_state_name
+
                 if profile_picture != None and home_mod_user.profile_picture != profile_picture:
                     home_mod_user.profile_picture = profile_picture
                 if home_mod_user.email_address != None and home_mod_user.email_address != email:
@@ -217,8 +224,10 @@ class Dashboard(LoginRequiredMixin, View):
         current_company = request.user.company
         home_mod_user = HomeModificationUser.objects.get(company=current_company,
                                                         user=request.user)
-        contractor_tasks = HomeModificationTask.objects.filter(company=current_company,
-                                                            chosen_contractors=home_mod_user).order_by('-created')
+        contractor_tasks = HomeModificationTask.objects.filter(company=current_company,chosen_contractors=home_mod_user).order_by('-created')
+        home_mod_task_bids = HomeModTaskBid.objects.filter(company=current_company,contractor=home_mod_user)
+
+        context['home_mod_task_bids'] = home_mod_task_bids
         context['home_mod_user'] = home_mod_user
         context['contractor_tasks'] = contractor_tasks
         context['bid_form'] = BidForm()
@@ -539,19 +548,25 @@ class RejectBid(LoginRequiredMixin, View):
         context={}
         current_company = request.user.company
         bid_id = self.kwargs['bid_id']
-        bid = HomeModTaskBid.objects.get(company=current_company, uid=bid_id)
-        task_id = bid.home_mod_task.uid
-        task = bid.home_mod_task
+        taskbid = HomeModTaskBid.objects.get(company=current_company, uid=bid_id)
+        task_id = taskbid.home_mod_task.uid
+        if HomeModTaskBid.objects.filter(company=current_company, uid=bid_id,bid_live= True).exists():
+            bid = HomeModTaskBid.objects.get(company=current_company, uid=bid_id,bid_live = True)
+            
+            task = bid.home_mod_task
         # Set chosen bid of the task
-        if task.chosen_bid:
-            messages.success(request, "Bid is already Accpected".format(bid.contractor.first_name, bid.contractor.last_name))
+            if task.chosen_bid:
+                messages.success(request, "Bid is already Accpected".format(bid.contractor.first_name, bid.contractor.last_name))
+            else:
+                bid.bid_live = False
+                bid.save()
+                messages.success(request, "Reject Bid from {0} {1} for task ".format(bid.contractor.first_name, bid.contractor.last_name))
+        
         else:
-            bid.delete()
-            messages.success(request, "Reject Bid from {0} {1} for task ".format(bid.contractor.first_name, bid.contractor.last_name))
+            messages.success(request, "Bid not exist")
 
         # task.save()
-        
         # Create new Home Mod project
-  
-        
+        # return redirect('home_dashboard')
         return redirect('view_bids', task_id=task_id)
+        # return HttpResponseRedirect(reverse('view_bids', "/"+ task_id))

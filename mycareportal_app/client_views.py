@@ -101,6 +101,7 @@ class AddClient(LoginRequiredMixin, View):
         context = {}
         context['add_client_form'] = ClientRegistrationForm()
         context['all_timezones'] = pytz.all_timezones
+       
         return render(request,'production/care_portal.html', context)
 
     def post(self, request):
@@ -129,10 +130,14 @@ class AddClient(LoginRequiredMixin, View):
             profile_picture = add_client_form.cleaned_data['profile_picture']
             referrer = add_client_form.cleaned_data['referrer']
             notes = add_client_form.cleaned_data['notes']
+            other_state_name = add_client_form.cleaned_data['other_state_name']
             company = request.user.company
             #Create Client object and save
+
             is_caregiver = add_client_form.cleaned_data['is_caregiver']
             try:
+                if state == "Other":
+                    state = other_state_name
                 new_client = Client(company = company,
                                     email_address = email,
                                     first_name = first_name,
@@ -214,10 +219,12 @@ class AddClient(LoginRequiredMixin, View):
                 return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client_email)
             except IntegrityError as e:
                 messages.error(request, "Client already exists. Please enter a new client.")
+        
         else:
             form_errors = add_client_form.errors.as_data()
             context['all_timezones'] = pytz.all_timezones
             error_messaging.render_error_messages(request, form_errors)
+        
         return render(request, 'production/care_portal.html', context)
         # return redirect('add_client')
 
@@ -267,6 +274,7 @@ class EditClient(LoginRequiredMixin, View):
         if find_client_form.is_valid():
             client_email = find_client_form.cleaned_data['client_email']
             client = Client.objects.get(company=current_company, email_address=client_email)
+            context['clients']= client
             #initialize client form
             edit_client_form = EditClientDetailsForm(initial=
             {
@@ -353,6 +361,10 @@ class EditClient(LoginRequiredMixin, View):
                 client.time_zone = edit_client_form.cleaned_data['time_zone']
                 client.referrer = edit_client_form.cleaned_data['referrer']
                 client.notes = edit_client_form.cleaned_data['notes']
+                other_state_name = edit_client_form.cleaned_data['other_state_name']
+                if client.state == "Other":
+                    client.state = other_state_name
+                
                 if edit_client_form.cleaned_data['profile_picture'] != None and client.profile_picture != edit_client_form.cleaned_data['profile_picture']:
                     client.profile_picture = edit_client_form.cleaned_data['profile_picture']
                 client.save()
@@ -1657,9 +1669,15 @@ def post_family_details(request):
                 power_of_attorney = family_details_form.cleaned_data['power_of_attorney']
                 profile_picture = family_details_form.cleaned_data['profile_picture']
                 family_id = family_details_form.cleaned_data['family_id']
+                other_state_name = family_details_form.cleaned_data['other_state_name']
+                
                 #print(power_of_attorney)
                 #Create family user auth model and save
+                if state == "Other":
+                    state = other_state_name
                 if(family_id==None):
+                   
+
                     #check if there is an existing soft-deleted user
                     existing_user = User.objects.filter(company=company,username=email,email=email)
                     if(existing_user):
@@ -1943,8 +1961,13 @@ def post_pharmacy_details(request):
                 city = pharmacy_details_form.cleaned_data['city']
                 state = pharmacy_details_form.cleaned_data['state']
                 zip_code = pharmacy_details_form.cleaned_data['zip_code']
+                other_state_name = pharmacy_details_form.cleaned_data['other_state_name']
+                if state == "Other":
+                    state = other_state_name
+
                 if(pharmacy_id is None):
                     #Create family object and save
+
                     pharmacy = Pharmacy(company=company,
                                           email_address = email,
                                           name = pharmacy_name,
@@ -2014,6 +2037,9 @@ def post_payer_details(request):
                 city = payer_details_form.cleaned_data['city']
                 state = payer_details_form.cleaned_data['state']
                 zip_code = payer_details_form.cleaned_data['zip_code']
+                other_state_name = payer_details_form.cleaned_data['other_state_name']
+                if state == "Other":
+                    state = other_state_name
                 if(payer_id is None):
                     #Create family object and save
                     payer = Payer(company=company,
@@ -2381,3 +2407,26 @@ def send_legal_email_incident(request):
     else:
         messages.error(request, "Error sending email: Please contact customer support")
     return HttpResponse("Sent legal email")
+
+
+
+
+@login_required
+def delete_attachment(request):
+    
+    if request.method == "GET":
+        data = {
+            "ratetype" : "sucess"
+        }
+        company = request.user.company
+        attachment_id = request.GET['attachment_id']
+        client_id = request.GET['client_id']
+        client = Client.objects.get(id = client_id)
+        attachment = ClientAttachment.objects.get(id = attachment_id,client = client)
+        attachment.delete()
+
+    # return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client.email_address)
+    return HttpResponse(json.dumps(data), content_type="application/json")
+        
+
+

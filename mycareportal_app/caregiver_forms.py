@@ -16,6 +16,7 @@ class CaregiverRegistrationForm(forms.Form):
     address = forms.CharField(max_length=400)
     city = forms.CharField(max_length=100)
     state = forms.CharField(max_length=100)
+    other_state_name = forms.CharField(max_length=100,required=False)
     zip_code = forms.CharField(max_length=10)
     date_of_birth = forms.DateTimeField()
     phone_number = forms.CharField(max_length=20)
@@ -34,7 +35,8 @@ class CaregiverRegistrationForm(forms.Form):
                 if picture._size > self.MAX_UPLOAD_SIZE:
                     raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
         except KeyError:
-            raise forms.ValidationError('Upload Valid Image Example PNG and JPEG are allowed')
+            val = ""
+            # raise forms.ValidationError('Formats supported JPEG, PNG, JPG')
         #picture = self.cleaned_data['profile_picture']
         #if not picture:
         #    return None
@@ -59,6 +61,7 @@ class CaregiverEditForm(forms.Form):
     address = forms.CharField(max_length=400, required=False)
     city = forms.CharField(max_length=100, required=False)
     state = forms.CharField(max_length=100, required=False)
+    other_state_name = forms.CharField(max_length=100,required=False)
     zip_code = forms.CharField(max_length=10, required=False)
     date_of_birth = forms.DateTimeField(required=False)
     phone_number = forms.CharField(max_length=20, required=False)
@@ -80,7 +83,8 @@ class CaregiverEditForm(forms.Form):
                 if picture._size > self.MAX_UPLOAD_SIZE:
                     raise forms.ValidationError('Image is too large. Please upload an image that is less than 5mb')
         except KeyError:
-            raise forms.ValidationError('Upload Valid Image Example PNG and JPEG are allowed')
+            val = ""
+            # raise forms.ValidationError('Formats supported JPEG, PNG, JPG')
         #picture = self.cleaned_data['profile_picture']
         #if not picture:
         #    return None
