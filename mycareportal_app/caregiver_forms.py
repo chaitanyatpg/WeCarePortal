@@ -194,6 +194,7 @@ class DeleteScheduleForm(forms.Form):
 class CaregiverPayrollForm(forms.Form):
 
 
+    regular_hourly_rate = forms.DecimalField(required=False)
     weekend_hourly_rate = forms.DecimalField(required=False)
     holiday_hourly_rate = forms.DecimalField(required=False)
     weekend_holiday_rate =forms.DecimalField(required=False)

@@ -203,9 +203,9 @@ urlpatterns = [
     url(r'^get_client_tasks_with_uids', views.get_client_tasks_with_uids, name='get_client_tasks_with_uids'),
     url(r'^generate_pdf',views.generate_pdf,name='generate_pdf'),
 
-    url(r'^send_email_invoice',views.send_email_invoice, name='send_email_invoice'),
+    url(r'^generate_payroll_excel',views.generate_payroll_excel,name='generate_payroll_excel'),
 
-    
+    url(r'^send_email_invoice',views.send_email_invoice, name='send_email_invoice'),
     url(r'^submit_invoice',views.submit_invoice,name='submit_invoice'),
 
     url(r'^update_invoice',views.update_invoice_detail,name='update_invoice'),
@@ -213,8 +213,16 @@ urlpatterns = [
     url(r'^billing/invoice', views.Invoice.as_view(), name='invoice'),
 
     url(r'^cancel_invoice',views.cancel_invoice,name='cancel_invoice'),
-
+   
     url(r'^billing/choose_client_for_invoice', views.ChooseClientForInvoice.as_view(), name='choose_client_for_invoice'),
+    url(r'^payroll/getpayroll_excel',views.getpayroll_excel,name='getpayroll_excel'),
+    url(r'^payroll', views.Payroll.as_view(), name='payroll'),
+    
+    url(r'^submit_payroll',views.submit_payroll,name='submit_payroll'),
+
+    
+    url(r'^cancel_payroll',views.cancel_payroll,name='cancel_payroll'),
+    url(r'^update_payroll',views.update_payroll_detail,name='update_payroll'),
     url(r'^manager_choose_client', views.ManagerChooseClient.as_view(), name='manager_choose_client'),
     url(r'^manager_client_dashboard/(?P<client_email>\w+|[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/(?P<start_date>\d{4}-\d{2}-\d{2})/(?P<end_date>\d{4}-\d{2}-\d{2})/$', views.ManagerClientDashboard.as_view(), name='manager_client_dashboard'),
     url(r'^manager_client_dashboard', views.ManagerClientDashboard.as_view(), name='manager_client_dashboard'),
@@ -248,8 +256,8 @@ urlpatterns = [
     
     
     
-    
     url(r'^schedule_free_caregiver',caregiver_views.ScheduleFreeCaregiver.as_view(),name='schedule_free_caregiver'),
+    url(r'^caregiverpayroll',views.ChooseCaregiverPayroll.as_view(),name='caregiverpayroll'),
     url(r'^view_client_high_risk', views.ClientHighRisk.as_view(),name='view_client_high_risk'),
     url(r'^company_holiday', views.CompanyHoliday.as_view(),name='company_holiday'),
     url(r'^company_crm', views.CompanyCrm.as_view(),name='company_crm'),

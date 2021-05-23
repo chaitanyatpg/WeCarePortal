@@ -217,6 +217,7 @@ class Caregiver(models.Model):
     hourly_rate = models.IntegerField(default=0)
     created = models.DateTimeField(auto_now_add=True)
     notes = models.CharField(max_length=1000, blank=True)
+    regular_hourly_rate =models.DecimalField(max_length = 200,max_digits=10,decimal_places=2,null=True)
     weekend_hourly_rate = models.DecimalField(max_length = 200,max_digits=10,decimal_places=2,null=True)
     holiday_hourly_rate = models.DecimalField(max_length = 200,max_digits=10,decimal_places=2,null=True)
     weekend_holiday_rate =models.DecimalField(max_length = 200,max_digits=10,decimal_places=2,null=True)
@@ -227,6 +228,19 @@ class Caregiver(models.Model):
 
     #add location
     #add tags
+
+    RATE_TYPE_TO_FIELD = {
+
+        RateType.NORMAL: regular_hourly_rate,
+        RateType.WEEKEND: weekend_hourly_rate,
+        RateType.HOLIDAY: holiday_hourly_rate,
+        RateType.LIVE_IN: live_in_rate,
+        RateType.WEEKEND_HOLIDAY: weekend_holiday_rate,
+        RateType.WEEKEND_LIVE_IN: weekend_live_in_rate,
+        RateType.HOLIDAY_LIVE_IN: holiday_live_in_rate,
+        RateType.WEEKEND_HOLIDAY_LIVE_IN: weekend_holiday_live_in_rate
+    }
+
 
     def __unicode__(self):
         return self.user.username
@@ -500,6 +514,7 @@ class TaskSchedule(models.Model):
     link = models.CharField(max_length=500, blank=True)
     attachment = models.FileField(upload_to="files/tasks", blank=True)
     completed_by = models.ForeignKey(User, null=True)
+    completed_by_caregiver = models.ForeignKey(Caregiver,null=True)
     completed_timestamp = models.DateTimeField(null=True)
     created = models.DateTimeField(auto_now_add=True)
     alert_active = models.BooleanField(default=False)
@@ -786,6 +801,7 @@ class CaregiverSchedule(models.Model):
         day_end_time = datetime.datetime.now().replace(hour=23, minute=59, second=59)
 
         company_timezone = pytz.timezone(company.time_zone)
+        print("company_timezone",company_timezone)
 
         open_schedule_objects = []
 
@@ -795,6 +811,7 @@ class CaregiverSchedule(models.Model):
                 "uid" : "",
                 "caregiver_name" : "{0} {1}".format(caregiver.email_address,
                                                     caregiver.last_name),
+                
                 "client_name" : "",
                 'date': '{0}-{1}-{2}'.format(date.year, date.month, date.day),
                 'start_time': day_start_time.strftime("%I:%M %p"),
@@ -822,6 +839,7 @@ class CaregiverSchedule(models.Model):
                 "uid" : "",
                 "caregiver_name" : "{0} {1}".format(caregiver.email_address,
                                                     caregiver.last_name),
+                
                 "client_name" : "",
                 'date': '{0}-{1}-{2}'.format(date.year, date.month, date.day),
                 'start_time': schedule_start_time, #current_start.replace(minute=(current_start.minute+1)%60).strftime("%I:%M %p"),
@@ -849,6 +867,7 @@ class CaregiverSchedule(models.Model):
             "uid" : "",
             "caregiver_name" : "{0} {1}".format(caregiver.email_address,
                                                 caregiver.last_name),
+            
             "client_name" : "",
             'date': '{0}-{1}-{2}'.format(date.year, date.month, date.day),
             'start_time': schedule_start_time, #current_start.replace(minute=(current_start.minute+1)%60).strftime("%I:%M %p"),
@@ -871,6 +890,7 @@ class CaregiverSchedule(models.Model):
             'end_time': schedule_end_datetime.time().strftime("%I:%M %p"),
             "created" : str(self.created)
         }'''
+        print("open_schedule_objects",open_schedule_objects)
         return open_schedule_objects
 
     def get_current_client_timestamp(self):
@@ -1773,3 +1793,165 @@ class CrmNotes(models.Model):
 
 
     
+class PayrollHeader(models.Model):
+
+    INVOICE_NUM_END_LENGTH = 10
+
+    company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    created = models.DateTimeField(auto_now_add=True)
+    caregiver = models.ForeignKey(Caregiver)
+    total_cost = models.DecimalField(max_length=200, max_digits=10, decimal_places=2, default=0.0)
+    total_hours = models.DecimalField(max_length=200, max_digits=10, decimal_places=2, default=0.0)
+    payroll_number_string = models.CharField(max_length=200, unique=True, blank=True, null=True)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    submitted = models.BooleanField(default=False)
+    cancelled = models.BooleanField(default = False)
+    
+
+
+    @staticmethod
+    @transaction.atomic
+    def create_payroll(company, caregiver, start_date, end_date):
+        payroll_header = PayrollHeader(company=company,
+                                       caregiver=caregiver,
+                                       start_date = start_date,
+                                       end_date = end_date
+                                       )
+        payroll_header.save()
+        schedules = payroll_header.get_caregiver_schedules()
+        caregiver_to_rate_type_to_schedules = payroll_header.group_schedules_by_rate_type(schedules)
+        caregiver_to_rate_type_to_total_cost, caregiver_to_rate_type_to_total_hours = payroll_header.get_totals(caregiver_to_rate_type_to_schedules, caregiver)
+        (total_hours, total_cost) = payroll_header.create_payroll_lines(caregiver_to_rate_type_to_total_cost,
+                                                                        caregiver_to_rate_type_to_total_hours,
+                                                                        caregiver)
+        payroll_header.total_hours = total_hours
+        payroll_header.total_cost = total_cost
+       
+        payroll_header.payroll_number_string = payroll_header.create_invoice_number_string()
+        if payroll_header.total_cost:
+            payroll_header.submitted = True
+        payroll_header.save()
+        return payroll_header
+
+    def get_caregiver_schedules(self):
+        schedules = CaregiverSchedule.objects.filter(company=self.company,
+                                      caregiver=self.caregiver,
+                                      date__range=(self.start_date, self.end_date)
+                                      )
+        return schedules
+    
+
+
+    def group_schedules_by_rate_type(self, schedules):
+        # Returns caregiver -> rate_type -> schedule list dict
+        caregiver_to_rate_type_to_schedules = defaultdict(lambda: defaultdict(list))
+        for schedule in schedules:
+            rate_type = schedule.get_rate_type()
+            
+            caregiver_to_rate_type_to_schedules[schedule.caregiver][rate_type].append(schedule)
+            
+        return caregiver_to_rate_type_to_schedules
+    
+
+    def create_invoice_number_string(self):
+        # Might change later
+        # Must run after the invoice header is initially created
+        # so that auto added ID's are available
+
+        str_cid = str(self.company.company_id)
+        str_month = str(self.created.date().month)
+        str_day = str(self.created.date().day)
+        str_year = str(self.created.date().year)
+        full_invoice_number = ""
+        zero_num = self.INVOICE_NUM_END_LENGTH - len(str(self.id))
+        for i in range(zero_num):
+            full_invoice_number += "0"
+        full_invoice_number += str(self.id)
+        full_invoice_number_string = "{0}-{1}-{2}-{3}".format(
+            str_cid,
+            str_month+str_day,
+            str_year,
+            full_invoice_number
+        )
+        return full_invoice_number_string
+
+
+    def get_totals(self, caregiver_to_rate_type_to_schedules, caregiver):
+        # caregiver -> rate_type -> (total_cost, total_hours) tuple
+        caregiver_to_rate_type_to_total_cost = defaultdict(lambda: defaultdict(float))
+        caregiver_to_rate_type_to_total_hours = defaultdict(lambda: defaultdict(float))
+        for caregiver in caregiver_to_rate_type_to_schedules:
+            for rate_type in caregiver_to_rate_type_to_schedules[caregiver]:
+                for schedule in caregiver_to_rate_type_to_schedules[caregiver][rate_type]:
+                    if CaregiverSchedule.objects.filter(caregiver = caregiver.id, date = schedule.date).exists():
+                        task_schedules = TaskSchedule.objects.filter(date = schedule.date, start_time = schedule.start_time.strftime("%H:%M"),end_time=schedule.end_time.strftime("%H:%M"),completed_by_caregiver= caregiver.id) 
+                        
+                        if task_schedules:
+                            if rate_type == RateType.LIVE_IN or rate_type == RateType.WEEKEND_LIVE_IN  or rate_type == RateType.HOLIDAY_LIVE_IN or rate_type == RateType.WEEKEND_HOLIDAY_LIVE_IN:
+                                total_hours = 24.0
+                                rate = float(getattr(caregiver, caregiver.RATE_TYPE_TO_FIELD[rate_type].attname))
+                                if rate < 1.0:
+                                    rate_type = RateType.LIVE_IN
+                                    rate = float(getattr(caregiver, caregiver.RATE_TYPE_TO_FIELD[RateType.LIVE_IN].attname))
+                                    total_cost = rate * total_hours
+                                else:
+                                    total_cost = rate * total_hours
+                                    
+                                caregiver_to_rate_type_to_total_cost[caregiver][rate_type] += total_cost
+                                caregiver_to_rate_type_to_total_hours[caregiver][rate_type] += total_hours
+                            else:
+                                total_hours = schedule.get_hours_diff()
+                                rate = float(getattr(caregiver, caregiver.RATE_TYPE_TO_FIELD[rate_type].attname))
+
+                                if rate < 1.0:
+                                    rate_type = RateType.NORMAL
+                                    rate = float(getattr(client, client.RATE_TYPE_TO_FIELD[RateType.NORMAL].attname))
+                                    total_cost = rate * total_hours
+                                    caregiver_to_rate_type_to_total_cost[caregiver][rate_type] += total_cost
+                                    caregiver_to_rate_type_to_total_hours[caregiver][rate_type] += total_hours    
+                                else:
+                                    total_cost = rate * total_hours
+                                    caregiver_to_rate_type_to_total_cost[caregiver][rate_type] += total_cost
+                                    caregiver_to_rate_type_to_total_hours[caregiver][rate_type] += total_hours
+                              
+        return (caregiver_to_rate_type_to_total_cost, caregiver_to_rate_type_to_total_hours)
+    
+    def create_payroll_lines(self, caregiver_to_rate_type_to_total_hours,
+                             caregiver_to_rate_type_to_total_cost,
+                             caregiver):
+        # Also returns totals hours, cost
+        total_hours = 0.0
+        total_cost = 0.0
+        for caregiver in caregiver_to_rate_type_to_total_hours:
+            for rate_type in caregiver_to_rate_type_to_total_hours[caregiver]:
+                cost = caregiver_to_rate_type_to_total_hours[caregiver][rate_type]
+                hours = caregiver_to_rate_type_to_total_cost[caregiver][rate_type]
+                line_item = PayrollLineItem(
+                    company = self.company,
+                    payroll_header = self,
+                    caregiver = caregiver,
+                    hours = hours,
+                    rate_type = RATE_TYPE_TO_DISPLAY_STRING[rate_type],
+                    rate = float(getattr(caregiver, caregiver.RATE_TYPE_TO_FIELD[rate_type].attname)),
+                    total = cost
+                )
+                line_item.save()
+                total_hours += hours
+                total_cost += cost
+        return (total_hours, total_cost)
+
+
+class PayrollLineItem(models.Model):
+
+    company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    payroll_header = models.ForeignKey(PayrollHeader)
+    caregiver = models.ForeignKey(Caregiver)
+    hours = models.DecimalField(max_length=200, max_digits=10, decimal_places=2)
+    rate_type = models.CharField(max_length=100, choices=RateType.choices())
+    rate = models.DecimalField(max_length=200, max_digits=10, decimal_places=2)
+    custom_service_charge = models.DecimalField(max_length=200, max_digits=10, decimal_places=2, default=0.00)
+    total = models.DecimalField(max_length=200, max_digits=10, decimal_places=2)
+

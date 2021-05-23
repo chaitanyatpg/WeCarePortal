@@ -582,10 +582,10 @@
                     
                                     <div class="row">
                                       <div class="form-group">
-                                        <label class="col-md-3 col-sm-3 col-xs-3">Weekend holiday rate
+                                        <label class="col-md-3 col-sm-6 col-xs-3">Weekend holiday rate
                                           <br>
                                         </label>
-                                        <div class="col-md-3 col-sm-3 col-xs-3">
+                                        <div class="col-md-3 col-sm-2  col-xs-3">
                                           <label>
                                             {% if not client.weekend_holiday_rate is None %}
                                             <input type="number" name="{{ client_invoice_form.weekend_holiday_rate.html_name}}" min="0" step="any" value="{{client.weekend_holiday_rate}}"> {% else %}
@@ -594,11 +594,11 @@
                                           </label>
                                         </div>
                                       </div>
-                                      <div class="col-md-3 col-sm-3 col-xs-3">
+                                      <div class="col-md-3 col-sm-6 col-xs-3">
                                         <label>What percent of Live in rate </label>
                                       </div>
 
-                                      <div class="col-md-3 col-sm-3 col-xs-3"> 
+                                      <div class="col-md-3 col-sm-2 col-xs-3"> 
                                         <input type="number"  step="any"
                                             placeholder="enter percent" onchange="myLiveinrate(this.value)" name="percent_live_in_rate">
 
