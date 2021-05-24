@@ -801,7 +801,7 @@ class CaregiverSchedule(models.Model):
         day_end_time = datetime.datetime.now().replace(hour=23, minute=59, second=59)
 
         company_timezone = pytz.timezone(company.time_zone)
-        print("company_timezone",company_timezone)
+        
 
         open_schedule_objects = []
 
@@ -890,7 +890,7 @@ class CaregiverSchedule(models.Model):
             'end_time': schedule_end_datetime.time().strftime("%I:%M %p"),
             "created" : str(self.created)
         }'''
-        print("open_schedule_objects",open_schedule_objects)
+        
         return open_schedule_objects
 
     def get_current_client_timestamp(self):
