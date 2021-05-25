@@ -127,12 +127,12 @@
                     {% endif %}
 
                     {% if module_dict.REPORTING.VIEWALLPROVIDER %}
-                    <li><a href={% url 'view_all_providers' %}>View All Provider </a></li>
+                    <li><a href={% url 'view_all_providers' %}>View All Providers </a></li>
                     {% endif %}
 
 
                     {% if module_dict.REPORTING.VIEWALLFAMILYMEMBER %}
-                    <li><a href={% url 'view_all_family_contacts' %}>View All Family Member </a></li>
+                    <li><a href={% url 'view_all_family_contacts' %}>View All Family Members </a></li>
                     {% endif %}
 
 
@@ -311,7 +311,7 @@
               {% else %}
                 <li class=""> <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> <img src="{% static 'pictures/img.png' %}"/> {{ user.first_name }} <span class=" fa fa-angle-down"></span> </a>
               {% endif %}
-                <ul  class="dropdown-menu dropdown-usermenu">
+                <ul  class="dropdown-menu dropdown-usermenu" style="min-width: -webkit-fill-available; width: auto;">
                   <!--<li> <a href="javascript:;"> <span class="badge bg-red pull-right">50%</span> <span>Settings</span> </a> </li>
                   <li><a href="javascript:;">Help</a></li>-->
                   {% block logout %}
@@ -340,7 +340,9 @@
       <!-- /top navigation -->
 
     <!-- page content -->
-    {% block pagecontent %}
+    <span id="pagecontent" onclick="valeu()"> {% block pagecontent %}</span>
+    
+    
       {% block message_content %}
 
         {% if messages %}
@@ -861,6 +863,29 @@ resetUI();
 {% block scripts %}{% endblock %}
 
 
+<script>
+ function valeu(evt){
+    
+      console.log("ddd -- ",document.getElementsByClassName("nav-sm"))
 
+         small = document.getElementsByClassName("nav-sm")
+    if(small.length > 0){
+
+      
+      var elems = document.querySelectorAll("li.active");
+      
+      console.log("elemselems",elems)
+         elems.forEach.call(elems, function(el) {
+         // el.classList.remove("active");
+        //  console.log("elelelelel",el.getElementsByTagName('li.active'))
+         
+        //  elems[0].hidden = true;
+         console.log("pppppppppp ------++++",elems[0].hidden) 
+         el.getElementsByTagName('ul')[0].style.display = "none";
+         // console.log("elelelelel ----",el.getElementsByTagName('ul')[0].style.display = "none")
+         });
+        }
+}
+</script>
 </body>
 </html>
