@@ -471,10 +471,15 @@
                      
                       }
         
-     
+                      
+                     
         $('.buttonPrevious').addClass('btn btn-primary');
-        $('.buttonNext').addClass('btn btn-success'); 
-        $('.buttonFinish').addClass('btn btn-default');
+        // $('.buttonPrevious').css('display','block')
+        $('.buttonNext').addClass('btn btn-primary ');
+        $('.buttonNext').css({'float':'right','line-height': '18px','margin-top':'-6px'});
+        $('.buttonFinish').addClass('btn btn-primary ');
+        $('.buttonFinish').css('float:right')
+        $('.buttonFinish').css({'float':'right','line-height': '18px','margin-top':'-6px'});
         $('.buttonFinish').attr("type", "submit");
         $("#vale").inputmask("(999)-999-9999", { "clearIncomplete": true });
       });
@@ -483,6 +488,8 @@
         // Inputmask("(999)-999-9999").mask("input");
       
       });
+
+      
     </script>
       
      </script>
