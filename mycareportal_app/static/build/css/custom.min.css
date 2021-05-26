@@ -1848,7 +1848,7 @@ ul.msg_list li a .message {
     -webkit-box-shadow: none;
     right: 0;
     left: auto;
-    min-width: 128px;
+    min-width: auto;
     width: 128px
 }
 
@@ -4970,4 +4970,36 @@ ul.notifications {
     background-color: #CE5454;
     color: white;
     border-color: rgba(231, 76, 60, 0.88)
+}
+
+.nav-dropdown .top_nav .navbar-right li
+{
+    display: inline-block;
+    float: right;
+    position: relative !important;
+   
+}
+.nav-dropdown .navbar-nav .open .dropdown-menu {
+    position: initial !important;
+}
+
+.second-dropdown
+    {
+    min-width: auto !important;
+    width: -webkit-fill-available!important; 
+    }
+    .second-dropdown li
+    {
+        background: #fffe !important;
+    }
+@media (max-width: 767px)
+{
+    
+    .second-dropdown
+    {
+        position: initial !important;
+    min-width: auto !important;
+    width: auto !important; 
+    }   
+
 }

@@ -96,19 +96,22 @@ class AcceptMoveBid(LoginRequiredMixin, View):
         context={}
         current_company = request.user.company
         bid_id = self.kwargs['bid_id']
-        bid = MoveManageTaskBid.objects.get(company=current_company, uid=bid_id,bid_live = True)
-        task = bid.move_manage_task
-        # Set chosen bid of the task
-        task.chosen_bid = bid
-        task.save()
-        # Create new Move Management project
-        move_manage_project = MoveManagementProject(company=current_company,
+        if MoveManageTaskBid.objects.filter(company=current_company, uid=bid_id,bid_live = True).exists():
+            bid = MoveManageTaskBid.objects.get(company=current_company, uid=bid_id,bid_live = True)
+            task = bid.move_manage_task
+            # Set chosen bid of the task
+            task.chosen_bid = bid
+            task.save()
+            # Create new Move Management project
+            move_manage_project = MoveManagementProject(company=current_company,
                                             move_manage_task = task,
                                             estimated_budget = bid.cost,
                                             move_manager = bid.move_manager,
                                             client = task.client)
-        move_manage_project.save()
-        messages.success(request, "Accepted Bid from {0} {1} and created Move Management project".format(bid.move_manager.first_name, bid.move_manager.last_name))
+            move_manage_project.save()
+            messages.success(request, "Accepted Bid from {0} {1} and created Move Management project".format(bid.move_manager.first_name, bid.move_manager.last_name))
+        else:
+            messages.success(request, "Bid doesn't exist")
         return redirect('home_dashboard')
 
 class AddMoveManager(LoginRequiredMixin, View):
@@ -738,7 +741,7 @@ class RejectMoveBid(LoginRequiredMixin, View):
                 bid.save()
          
         else:
-            messages.success(request, "Bid not exist")
+            messages.success(request, "Bid doesn't exist")
         return redirect('view_move_bids', task_id=task_id)    
                 # delete()
             # messages.success(request, "Reject Bid from {0} {1}".format(bid.move_manager.first_name, bid.move_manager.last_name))

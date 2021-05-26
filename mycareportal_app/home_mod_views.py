@@ -285,19 +285,22 @@ class AcceptBid(LoginRequiredMixin, View):
         context={}
         current_company = request.user.company
         bid_id = self.kwargs['bid_id']
-        bid = HomeModTaskBid.objects.get(company=current_company, uid=bid_id)
-        task = bid.home_mod_task
-        # Set chosen bid of the task
-        task.chosen_bid = bid
-        task.save()
-        # Create new Home Mod project
-        home_mod_project = HomeModProject(company=current_company,
+        if HomeModTaskBid.objects.filter(company=current_company, uid=bid_id,bid_live= True).exists():
+            bid = HomeModTaskBid.objects.get(company=current_company, uid=bid_id)
+            task = bid.home_mod_task
+            # Set chosen bid of the task
+            task.chosen_bid = bid
+            task.save()
+            # Create new Home Mod project
+            home_mod_project = HomeModProject(company=current_company,
                                             home_mod_task = task,
                                             estimated_budget = bid.cost,
                                             contractor = bid.contractor,
                                             client = task.client)
-        home_mod_project.save()
-        messages.success(request, "Accepted Bid from {0} {1} for task {2} and created project".format(bid.contractor.first_name, bid.contractor.last_name, task.task_name))
+            home_mod_project.save()
+            messages.success(request, "Accepted Bid from {0} {1} for task {2} and created project".format(bid.contractor.first_name, bid.contractor.last_name, task.task_name))
+        else:
+            messages.success(request, "Bid doesn't exist") 
         return redirect('home_dashboard')
 
 class UpdateProjects(LoginRequiredMixin, View):
@@ -563,7 +566,7 @@ class RejectBid(LoginRequiredMixin, View):
                 messages.success(request, "Reject Bid from {0} {1} for task ".format(bid.contractor.first_name, bid.contractor.last_name))
         
         else:
-            messages.success(request, "Bid not exist")
+            messages.success(request, "Bid doesn't exist")
 
         # task.save()
         # Create new Home Mod project
