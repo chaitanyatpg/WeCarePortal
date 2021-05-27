@@ -347,9 +347,9 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Phone Number <span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not add_caregiver_form.phone_number.value is None %}
-                        <input type="text" tabindex="10"  required="required" class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '(999)-999-9999'" name={{add_caregiver_form.phone_number.html_name}} value={{add_caregiver_form.phone_number.value}}>
+                        <input type="text" tabindex="10"  required="required" class="form-control col-md-7 col-xs-12"  id="phone-number" name={{add_caregiver_form.phone_number.html_name}} value={{add_caregiver_form.phone_number.value}}>
                       {% else %}
-                        <input type="text" tabindex="10"  required="required" class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '(999)-999-9999'"  name={{add_caregiver_form.phone_number.html_name}}>
+                        <input type="text" tabindex="10"  required="required" class="form-control col-md-7 col-xs-12"  id="phone-number"  name={{add_caregiver_form.phone_number.html_name}}>
                       {% endif %}
                     </div>
                   </div>
@@ -612,5 +612,14 @@
 
 
    })
+</script>
+
+
+<script>
+    $(document).ready(function(){
+      // Inputmask("(999)-999-9999").mask("input");
+     
+      $("#phone-number").inputmask("(999)-999-9999",  {showMaskOnFocus: false, showMaskOnHover: true});
+    });
 </script>
 {% endblock %}

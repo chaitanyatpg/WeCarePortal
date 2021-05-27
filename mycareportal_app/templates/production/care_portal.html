@@ -550,7 +550,8 @@
   <script>
     $(document).ready(function(){
       // Inputmask("(999)-999-9999").mask("input");
-      $("#phone-number").inputmask("(999)-999-9999", { "clearIncomplete": true });
+     
+      $("#phone-number").inputmask("(999)-999-9999",  {showMaskOnFocus: false, showMaskOnHover: true});
     });
   </script>
 <!-- /jquery.inputmask -->
