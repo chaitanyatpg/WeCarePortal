@@ -168,6 +168,7 @@ def register(request):
         email = form.cleaned_data['email']
         password = form.cleaned_data['password']
         activation_code = form.cleaned_data['activation_code']
+        other_state_name = form.cleaned_data['other_state_name']
         exception_flag = False
         #Check Activation code
         if ActivationCode.objects.filter(activation_code = activation_code, activated=False).exists():
@@ -186,6 +187,9 @@ def register(request):
                 activation_code_data.activated = True
                 activation_code_data.save()
             try:
+                if state == "Other":
+                    state = other_state_name
+
                 new_company = Company(company_name=company_name,
                                             contact_number=contact_number,
                                             address=address,

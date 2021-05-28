@@ -45,7 +45,7 @@
                 <div class="clearfix"></div>
               </div>
               <div class="x_content"> <br />
-                <form enctype="multipart/form-data" method='post' onsubmit="return validateForm()" action="{% url 'add_caregiver' %}" class="form-horizontal form-label-left">
+                <form enctype="multipart/form-data" method='post' action="{% url 'add_caregiver' %}" class="form-horizontal form-label-left">
                   {% csrf_token %}
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">First Name <span class="required">*</span> </label>
@@ -564,32 +564,18 @@
       
       if (values === "Other") {
           selectlead.style.display = "block";
+          $('#otherstatevalue').attr('required', 'required');
     
       } else {
           selectlead.style.display = "none";
+          $('#otherstatevalue').removeAttr('required');
       
       }
   }
 </script>
 
 
-<script>
-  function validateForm() {
 
-    values = $('#dropDownId :selected').val()
-      var selectlead = document.getElementById("selectlead");
-      if (values === "Other") {
-        var x = $('#otherstatevalue').val()
-      if (x == "") {
-       alert("Other State Name must be filled out");
-       return false;
-      }
-      }
-      else {
-        return true;
-      }
-}
-</script>
 
 
 <script>
@@ -602,11 +588,13 @@
       
       if (values === "Other") {
         selectlead.style.display = "block";
+        $('#otherstatevalue').attr('required', 'required');
 
       }
       else
       {
         selectlead.style.display = "none";
+        $('#otherstatevalue').removeAttr('required');
 
       }
 

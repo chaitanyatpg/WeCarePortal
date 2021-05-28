@@ -340,7 +340,7 @@
       <!-- /top navigation -->
 
     <!-- page content -->
-    <span id="pagecontent" onclick="valeu()"> {% block pagecontent %}</span>
+    <span onclick="hideSideBar()"> {% block pagecontent %}</span>
     
     
       {% block message_content %}
@@ -864,7 +864,7 @@ resetUI();
 
 
 <script>
- function valeu(evt){
+ function hideSideBar(evt){
   
          small = document.getElementsByClassName("nav-sm")
     if(small.length > 0){

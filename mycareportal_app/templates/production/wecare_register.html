@@ -85,9 +85,9 @@
                   <input type="text" class="form-control" placeholder="City" name = "{{form.city.html_name}}" required="" />
                 {% endif %}
               </div>
-              <div>
+              <div onchange="update_state()">
                 {% if not form.state.value is None %}
-                <select required class="select2_single form-control" tabindex="-1" name = "{{form.state.html_name}}" value = "{{form.state.value}}">
+                <select required class="select2_single form-control" tabindex="-1" name = "{{form.state.html_name}}" id="dropDownId" value = "{{form.state.value}}">
                       <option selected=selected>{{edit_caregiver_form.state.value}}</option>
                       <option value="Other">Other</option>
                       <option value="AL">Alabama</option>
@@ -172,7 +172,7 @@
                       <option value="West Bengal">West Bengal</option>
                 </select>
                 {% else %}
-                <select required class="select2_single form-control" tabindex="-1" name = "{{form.state.html_name}}" value = "{{form.state.value}}">
+                <select required class="select2_single form-control" tabindex="-1" name = "{{form.state.html_name}}" id="dropDownId" value = "{{form.state.value}}">
                       <option value="" disabled selected>Select State</option>
                       <option value="Other">Other</option>
                       <option value="AL">Alabama</option>
@@ -259,6 +259,17 @@
                 {% endif %}
               </div>
               </br>
+
+              <div>
+                <div  id="selectlead" style="display:none"> 
+                 <div>
+                   {% if not form.other_state_name.value is None %}
+                   <input type="text"  id="otherstatevalue" placeholder="Other State Name" class="form-control"  name={{form.other_state_name.html_name}} value={{form.other_state_name.value}}>
+                   {% else %}
+                   <input type="text" id="otherstatevalue" placeholder="Other State Name" class="form-control"  name={{form.other_state_name.html_name}} >
+                   {% endif %}
+                 </div>
+               </div>
               <div>
                 {% if not form.zip_code.value is None %}
                   <input type="text" class="form-control" placeholder="Zip Code" name = "{{form.zip_code.html_name}}" value = "{{form.zip_code.value}}" required="" />
@@ -354,5 +365,69 @@
         });
   </script>
   <!-- /Select2 -->
+
+
+
+  <script>
+    function update_state() {
+        // Get the checkbox
+        values = $('#dropDownId :selected').val()
+        console.log("ssss ---",values)
+        // Get the output text
+        var selectlead = document.getElementById("selectlead");
+        
+        if (values === "Other") {
+            selectlead.style.display = "block";
+            $('#otherstatevalue').attr('required', 'required');
+        
+        } else {
+            selectlead.style.display = "none";
+
+            $('#otherstatevalue').removeAttr('required');
+        
+        }
+    }
+  </script>
+
+
+
+<script>
+  function validateForm() {
+
+    values = $('#dropDownId :selected').val()
+      var selectlead = document.getElementById("selectlead");
+      if (values === "Other") {
+        var x = $('#otherstatevalue').val()
+      if (x == "") {
+       alert("Other State Name must be filled out");
+       return false;
+      }
+      }
+      else {
+        return true;
+      }
+}
+</script>
+
+
+
+<script>
+  $(document).ready(function() {
+
+   values = $('#dropDownId :selected').val()
+     console.log("ssss ---",values)
+     // Get the output text
+     var selectlead = document.getElementById("selectlead");
+     
+     if (values === "Other") {
+       selectlead.style.display = "block";
+       
+     }
+     else
+     {
+       selectlead.style.display = "none";
+     }
+  })
+</script>
 
 </html>

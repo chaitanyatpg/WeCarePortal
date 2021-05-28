@@ -309,10 +309,10 @@
                     <div  id="selectlead" style="display:none"> 
                      <label class="control-label col-md-3 col-sm-3 col-xs-12">Other State name<span class="required">*</span> </label>
                      <div class="col-md-6 col-sm-6 col-xs-12">
-                       {% if not edit_home_mod_user_form.other_state_name is None %}
-                       <input type="text"  class="form-control col-md-7 col-xs-12"  name={{edit_home_mod_user_form.other_state_name.html_name}} value={{edit_home_mod_user_form.other_state_name.value}}>
+                       {% if not edit_home_mod_user_form.other_state_name.value is None %}
+                       <input type="text" id="otherstatevalue" class="form-control col-md-7 col-xs-12"  name={{edit_home_mod_user_form.other_state_name.html_name}} value={{edit_home_mod_user_form.other_state_name.value}}>
                        {% else %}
-                       <input type="text"  class="form-control col-md-7 col-xs-12"  name={{edit_home_mod_user_form.other_state_name.html_name}}>
+                       <input type="text" id="otherstatevalue"  class="form-control col-md-7 col-xs-12"  name={{edit_home_mod_user_form.other_state_name.html_name}}>
                        {% endif %}
                      </div>
                    </div>
@@ -493,12 +493,35 @@
       
       if (values === "Other") {
           selectlead.style.display = "block";
+          $('#otherstatevalue').attr('required', 'required');
     
       } else {
           selectlead.style.display = "none";
+          $('#otherstatevalue').removeAttr('required');
       
       }
   }
 </script>
 
+
+<script>
+  $(document).ready(function() {
+
+   values = $('#dropDownId :selected').val()
+     console.log("ssss ---",values)
+     // Get the output text
+     var selectlead = document.getElementById("selectlead");
+     
+     if (values === "Other") {
+       selectlead.style.display = "block";
+       $('#otherstatevalue').attr('required', 'required');
+       
+     }
+     else
+     {
+       selectlead.style.display = "none";
+       $('#otherstatevalue').removeAttr('required');
+     }
+  })
+</script>
 {% endblock %}
