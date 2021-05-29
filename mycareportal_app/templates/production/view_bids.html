@@ -322,8 +322,7 @@
     <!-- bootstrap-daterangepicker -->
     <script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
     <script src="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
-    <link href="https://cdn.jsdelivr.net/gh/xxjapp/xdialog@3/xdialog.min.css" rel="stylesheet"/>
-   <script src="https://cdn.jsdelivr.net/gh/xxjapp/xdialog@3/xdialog.min.js"></script>
+    
 {% endblock %}
 {% block scripts %}
     <!-- bootstrap-daterangepicker -->
@@ -338,36 +337,6 @@
       });
     </script>
 
-
-<script>
-  
-
-function tesst() {
- 
-  xdialog.confirm('Are you sure?', function() {
-    modal: true
-    console.log("ssssss")
-    document.myform.submit();
-    // do work here if ok/yes selected...
-    console.info('Done!');
-  },
-  {
-    ok: {
-         name: 'Ok',
-         style: 'background:red;'
-       },
-    style: 'width:320px;font-size:1.0rem;',
-    
-    buttons: {
-      ok: 'Yes',
-      cancel: 'No'
-    },
-    oncancel: function() {
-      console.warn('Cancelled!');
-    }
-  });
-}
- </script>
 
 <script type="text/javascript">
   function rejecthomebid(bid){
