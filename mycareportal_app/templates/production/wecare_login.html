@@ -45,11 +45,11 @@
                       </div>
                     {% elif message.tags == 'success' %}
                       <div class="alert alert-success">
-                        <strong style="font-weight: 400;" class="{{message.tags}}">{{message}}</strong>
+                        <strong style="font-family:Segoe UI; font-weight: 300px; font-size: 16px;" class="{{message.tags}}">{{message}}</strong>
                       </div>
                     {% else %}
-                      <div class="alert alert-info">
-                        <strong style="font-family: sans-serif; font-size: 17px;" class="{{message.tags}}">{{message}}</strong>
+                      <div class="sucesslogin">
+                        <strong style="font-family:Segoe UI; font-weight: 300px; font-size: 16px;" class="{{message.tags}}">{{message}}</strong>
                       </div>
                     {% endif %}
                   {% endfor %}
@@ -59,12 +59,12 @@
                 {% for field in form %}
                   {% for error in field.errors %}
                     <div class="alert alert-danger">
-                      <span style="font-family: sans-serif; font-size: 17px;">{{error}}</span>
+                      <span style="font-family:Segoe UI; font-weight: 300px; font-size: 16px;">{{error}}</span>
                     </div>
                   {% endfor %}
                 {% endfor %}
                 {% for error in form.non_field_errors %}
-                  <div class=" errorlogin">
+                  <div class="errorlogin">
                     <span style="font-family:Segoe UI; font-weight: 300px; font-size: 16px;">{{error}}</span>
                   </div>
                 {% endfor %}

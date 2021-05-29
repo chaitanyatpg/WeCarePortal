@@ -340,7 +340,7 @@
       <!-- /top navigation -->
 
     <!-- page content -->
-    <span id="pagecontent" onclick="valeu()"> {% block pagecontent %}</span>
+    <span onclick="hideSideBar()"> {% block pagecontent %}</span>
     
     
       {% block message_content %}
@@ -864,23 +864,18 @@ resetUI();
 
 
 <script>
- function valeu(evt){
-    
-      console.log("ddd -- ",document.getElementsByClassName("nav-sm"))
-
+ function hideSideBar(evt){
+  
          small = document.getElementsByClassName("nav-sm")
     if(small.length > 0){
 
-      
       var elems = document.querySelectorAll("li.active");
-      
-      console.log("elemselems",elems)
+
          elems.forEach.call(elems, function(el) {
          // el.classList.remove("active");
         //  console.log("elelelelel",el.getElementsByTagName('li.active'))
          
         //  elems[0].hidden = true;
-         console.log("pppppppppp ------++++",elems[0].hidden) 
          el.getElementsByTagName('ul')[0].style.display = "none";
          // console.log("elelelelel ----",el.getElementsByTagName('ul')[0].style.display = "none")
          });

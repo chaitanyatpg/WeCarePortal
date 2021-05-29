@@ -725,7 +725,7 @@ class RejectMoveBid(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         context={}
         current_company = request.user.company
-        bid_id = self.kwargs['bid_id']
+        bid_id =  request.POST['bid_id']
         taskbid = MoveManageTaskBid.objects.get(company=current_company, uid=bid_id)
         task_id =taskbid.move_manage_task.uid
         if MoveManageTaskBid.objects.filter(company=current_company, uid=bid_id,bid_live = True).exists():

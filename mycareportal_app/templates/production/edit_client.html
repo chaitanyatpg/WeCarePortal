@@ -46,7 +46,7 @@
                     {{ client_success_msg }}
                   </div>
                 {% endif %}
-                <form enctype="multipart/form-data" method='post' onsubmit="return validateForm()" action="{% url 'edit_client' %}" class="form-horizontal form-label-left">
+                <form enctype="multipart/form-data" method='post'  action="{% url 'edit_client' %}" class="form-horizontal form-label-left">
                   {% csrf_token %}
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">First Name <span class="required">*</span> </label>
@@ -955,7 +955,7 @@
                 <div class="clearfix"></div>
               </div>
               <div class="x_content"> <br />
-                <form enctype="multipart/form-data" method='post' onsubmit="return validateFamilyForm()" action="{% url 'post_family_details' %}" class="form-horizontal form-label-left">
+                <form enctype="multipart/form-data" method='post'  action="{% url 'post_family_details' %}" class="form-horizontal form-label-left">
                   {% csrf_token %}
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">First Name <span class="required">*</span> </label>
@@ -1422,7 +1422,7 @@
                 <div class="clearfix"></div>
               </div>
               <div class="x_content"> <br />
-                <form enctype="multipart/form-data" method='post' onsubmit="return validatePharmacyForm()" action="{% url 'post_pharmacy_details' %}" class="form-horizontal form-label-left input_mask">
+                <form enctype="multipart/form-data" method='post'  action="{% url 'post_pharmacy_details' %}" class="form-horizontal form-label-left input_mask">
                   {% csrf_token %}
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                     <input type="text" id="pharmacy_name" class="form-control has-feedback-left" placeholder="Name" name={{pharmacy_details_form.pharmacy_name.html_name}}>
@@ -1536,7 +1536,7 @@
                     <div  id="selectleadpharmacy" style="display:none"> 
                     
                     <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                      <input type="text" id="other_state" class="form-control" placeholder="Other State Name" name={{pharmacy_details_form.other_state_name.html_name}}>
+                      <input type="text" id="other_pharmacy_state" class="form-control" placeholder="Other State Name" name={{pharmacy_details_form.other_state_name.html_name}}>
                       <span class="fa fa-fax form-control-feedback right" aria-hidden="true"></span> </div>
                     </div>
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
@@ -1595,7 +1595,7 @@
                 <div class="clearfix"></div>
               </div>
               <div class="x_content"> <br />
-                <form enctype="multipart/form-data" method='post'  onsubmit="return validatePayorForm()" action="{% url 'post_payer_details' %}" class="form-horizontal form-label-left input_mask">
+                <form enctype="multipart/form-data" method='post'   action="{% url 'post_payer_details' %}" class="form-horizontal form-label-left input_mask">
                   {% csrf_token %}
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                     <input type="text" class="form-control has-feedback-left" id="payer_name" name={{payer_details_form.payer_name.html_name}} placeholder="Name">
@@ -2432,9 +2432,11 @@
       
       if (values === "Other") {
           selectlead.style.display = "block";
+          $('#otherstatevalue').attr('required', 'required');
 
       } else {
           selectlead.style.display = "none";
+          $('#otherstatevalue').removeAttr('required');
       }
   }
 </script>
@@ -2447,21 +2449,21 @@
 
       $.ajax({
 
-url: "{% url 'delete_attachment' %}",
-type: "GET",
+     url: "{% url 'delete_attachment' %}",
+     type: "GET",
 
-data: {
+     data: {
+       
+      "attachment_id": attachmentid,
+      "client_id" :$("input[name=client_id]").val(),
 
-  "attachment_id": attachmentid,
-  "client_id" :$("input[name=client_id]").val(),
-
-},
-dataType: "json",
-contentType: "application/json",
-success: function (data) {
+  },
+   dataType: "json",
+   contentType: "application/json",
+   success: function (data) {
   location.reload();
 
-}
+   }
 
 });
 
@@ -2482,9 +2484,11 @@ success: function (data) {
       
       if (values === "Other") {
           selectlead.style.display = "block";
+          $('#other_family_state').attr('required', 'required');
 
       } else {
           selectlead.style.display = "none";
+          $('#other_family_state').removeAttr('required');
       }
   }
 </script>
@@ -2500,9 +2504,11 @@ success: function (data) {
       
       if (values === "Other") {
           selectlead.style.display = "block";
+          $('#other_pharmacy_state').attr('required', 'required');
       
       } else {
           selectlead.style.display = "none";
+          $('#other_pharmacy_state').removeAttr('required');
       
       }
   }
@@ -2518,91 +2524,35 @@ success: function (data) {
       
       if (values === "Other") {
           selectlead.style.display = "block";
+          $('#other_payor_state').attr('required', 'required');
+          
       
       } else {
           selectlead.style.display = "none";
+          $('#other_payor_state').removeAttr('required');
       
       }
   }
 </script>
 
-
 <script>
-  function validateForm() {
+  $(document).ready(function() {
 
-    values = $('#dropDownId :selected').val()
-      var selectlead = document.getElementById("selectlead");
-      if (values === "Other") {
-        var x = $('#otherstatevalue').val()
-      if (x == "") {
-       alert("Other State Name must be filled out");
-       return false;
-      }
-      }
-      else {
-        return true;
-      }
-}
-</script>
-
-
-
-<script>
-  function validatePharmacyForm() {
-
-    values = $('#pharmacy_state :selected').val()
-      var selectlead = document.getElementById("selectlead");
-      if (values === "Other") {
-        var x = $('#other_state').val()
-      if (x == "") {
-       alert("Other State Name must be filled out");
-       return false;
-      }
-      }
-      else {
-        return true;
-      }
-}
-</script>
-
-
-<script>
-  function validateFamilyForm() {
-
-    values = $('#family_state :selected').val()
-      var selectlead = document.getElementById("selectlead");
-      if (values === "Other") {
-        var x = $('#other_family_state').val()
-      if (x == "") {
-       alert("Other State Name must be filled out");
-       return false;
-      }
-      }
-      else {
-        return true;
-      }
-}
-</script>
-
-
-<script>
-  function validatePayorForm() {
-
-    values = $('#payer_state :selected').val()
-      var selectlead = document.getElementById("selectlead");
-      if (values === "Other") {
-        var x = $('#other_payor_state').val()
-      if (x == "") {
-       alert("Other State Name must be filled out");
-       return false;
-      }
-      }
+   values = $('#dropDownId :selected').val()
+     console.log("ssss ---",values)
+     // Get the output text
+     var selectlead = document.getElementById("selectlead");
      
-      else {
-        return true;
-      }
-}
+     if (values === "Other") {
+       selectlead.style.display = "block";
+       $('#otherstatevalue').attr('required', 'required');
+       
+     }
+     else
+     {
+       selectlead.style.display = "none";
+       $('#otherstatevalue').removeAttr('required');
+     }
+  })
 </script>
-
-
 {% endblock %}

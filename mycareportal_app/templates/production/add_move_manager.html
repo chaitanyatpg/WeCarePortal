@@ -39,7 +39,7 @@
                 <div class="clearfix"></div>
               </div>
               <div class="x_content"> <br />
-                <form enctype="multipart/form-data" method='post' onsubmit="return validateForm()" action="{% url 'add_move_manager' %}" class="form-horizontal form-label-left">
+                <form enctype="multipart/form-data" method='post'  action="{% url 'add_move_manager' %}" class="form-horizontal form-label-left">
                   {% csrf_token %}
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">First Name <span class="required">*</span> </label>
@@ -343,9 +343,9 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Phone Number <span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not move_manager_form.phone_number.value is None %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '(999)-999-9999'" required="required" name={{move_manager_form.phone_number.html_name}} value={{move_manager_form.phone_number.value}}>
+                        <input type="text" class="form-control col-md-7 col-xs-12"  required="required" id="phone-number" name={{move_manager_form.phone_number.html_name}} value={{move_manager_form.phone_number.value}}>
                       {% else %}
-                        <input type="text" class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '(999)-999-9999'" required="required" name={{move_manager_form.phone_number.html_name}}>
+                        <input type="text" class="form-control col-md-7 col-xs-12"  required="required" id="phone-number" name={{move_manager_form.phone_number.html_name}}>
                       {% endif %}
                     </div>
                   </div>
@@ -459,32 +459,18 @@
       
       if (values === "Other") {
           selectlead.style.display = "block";
+          $('#otherstatevalue').attr('required', 'required');
     
       } else {
           selectlead.style.display = "none";
+          $('#otherstatevalue').removeAttr('required');
       
       }
   }
 </script>
 
 
-<script>
-  function validateForm() {
 
-    values = $('#dropDownId :selected').val()
-      var selectlead = document.getElementById("selectlead");
-      if (values === "Other") {
-        var x = $('#otherstatevalue').val()
-      if (x == "") {
-       alert("Other State Name must be filled out");
-       return false;
-      }
-      }
-      else {
-        return true;
-      }
-}
-</script>
 
 <script>
   $(document).ready(function() {
@@ -496,16 +482,31 @@
      
      if (values === "Other") {
        selectlead.style.display = "block";
+       $('#otherstatevalue').attr('required', 'required');
 
      }
      else
      {
        selectlead.style.display = "none";
+       $('#otherstatevalue').removeAttr('required');
 
      }
 
 
   })
 </script>
+
+
+   <script>
+    $(document).ready(function(){
+      // Inputmask("(999)-999-9999").mask("input");
+     
+      $("#phone-number").inputmask("(999)-999-9999",  {showMaskOnFocus: false, showMaskOnHover: true});
+    });
+  </script>
+
+
+
+
 
 {% endblock %}

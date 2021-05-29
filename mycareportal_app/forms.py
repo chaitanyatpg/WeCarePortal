@@ -20,6 +20,7 @@ class ManagerRegistrationForm(forms.Form):
     confirm_password = forms.CharField(max_length=30)
     time_zone = forms.CharField(max_length=50)
     activation_code = forms.CharField(max_length=22, required=False)
+    other_state_name = forms.CharField(max_length=100,required=False)
 
     def clean(self):
 

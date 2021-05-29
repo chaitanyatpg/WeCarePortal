@@ -14,6 +14,7 @@
                 <h3>View Bids</h3>
               </div>
             </div>
+           
 
             <div class="clearfix"></div>
 
@@ -161,10 +162,10 @@
                         </form>
                        
 
-                       <form onSubmit="return confirm('Do you want to Reject Bid?') " method="POST" action="{%url 'reject_bid' bid_id=bid.uid %}">
-                        {% csrf_token %}
-                        <td><button  class="btn btn-danger" >Reject</button></td>
-                      </form>
+                       
+                       
+                        <td><button type="button" onclick="rejecthomebid('{{bid.uid}}');"  class="btn btn-danger" >Reject</button></td>
+                      
 
 
                       </div>
@@ -283,6 +284,33 @@
 
           </div>
         </div>
+        <div id="RejectHomebidModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+              <div class="modal-header">
+                <!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> -->
+              
+             
+                <div class="modal-body modal-sm"style="margin-left: 34px;">
+                  Do you want to Reject Bid ?
+
+                </div>
+                <div style="margin-left: 75px;">      
+                  <form  method="POST" action="{%url 'reject_bid'  %}"  class="form-horizontal form-label-left input_mask" style="float: left;">
+                    {% csrf_token %}
+                  <input type="hidden" name="bid_id" id="bid_id" >            
+                  <button type="submit" class="btn btn-success antoclose2" >Yes</button>&nbsp;&nbsp;&nbsp;
+                </form>
+     
+                  <!--<button class="btn btn-success">Add new shifts</a>-->
+                  <button type="button" data-dismiss="modal" class="btn btn-danger">No</a>
+                  
+                </div>
+             
+            </div>
+            </div>
+          </div>
+        </div>
         <!-- /page content -->
 {% endblock %}
 {% block footlibs %}
@@ -294,6 +322,8 @@
     <!-- bootstrap-daterangepicker -->
     <script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
     <script src="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+    <link href="https://cdn.jsdelivr.net/gh/xxjapp/xdialog@3/xdialog.min.css" rel="stylesheet"/>
+   <script src="https://cdn.jsdelivr.net/gh/xxjapp/xdialog@3/xdialog.min.js"></script>
 {% endblock %}
 {% block scripts %}
     <!-- bootstrap-daterangepicker -->
@@ -307,5 +337,66 @@
         });
       });
     </script>
+
+
+<script>
+  
+
+function tesst() {
+ 
+  xdialog.confirm('Are you sure?', function() {
+    modal: true
+    console.log("ssssss")
+    document.myform.submit();
+    // do work here if ok/yes selected...
+    console.info('Done!');
+  },
+  {
+    ok: {
+         name: 'Ok',
+         style: 'background:red;'
+       },
+    style: 'width:320px;font-size:1.0rem;',
+    
+    buttons: {
+      ok: 'Yes',
+      cancel: 'No'
+    },
+    oncancel: function() {
+      console.warn('Cancelled!');
+    }
+  });
+}
+ </script>
+
+<script type="text/javascript">
+  function rejecthomebid(bid){
+    
+    $('#bid_id').val(bid);
+    $('#RejectHomebidModal').modal()
+  };
+</script>
+
+<script>
+  document.getElementById('test').addEventListener('click', test);
+  function test(){
+
+    
+      var csrftoken = getCookie('csrftoken');
+
+
+      val =  $("input[name=bidvalue]").val(),
+      console.log("val",val)
+        $.ajax({
+          url: 'reject_bid',
+          type: 'GET',
+          data: {bid_id:val}
+        })
+        console.log('entered');
+      
+  
+    // document.myform.submit();
+  }
+</script>
     <!-- /bootstrap-daterangepicker -->
 {% endblock %}
