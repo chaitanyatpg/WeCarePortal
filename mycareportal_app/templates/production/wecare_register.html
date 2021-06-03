@@ -88,7 +88,7 @@
               <div onchange="update_state()">
                 {% if not form.state.value is None %}
                 <select required class="select2_single form-control" tabindex="-1" name = "{{form.state.html_name}}" id="dropDownId" value = "{{form.state.value}}">
-                      <option selected=selected>{{edit_caregiver_form.state.value}}</option>
+                      <option selected=selected>{{form.state.value}}</option>
                       <option value="Other">Other</option>
                       <option value="AL">Alabama</option>
                       <option value="AK">Alaska</option>
@@ -391,23 +391,6 @@
 
 
 
-<script>
-  function validateForm() {
-
-    values = $('#dropDownId :selected').val()
-      var selectlead = document.getElementById("selectlead");
-      if (values === "Other") {
-        var x = $('#otherstatevalue').val()
-      if (x == "") {
-       alert("Other State Name must be filled out");
-       return false;
-      }
-      }
-      else {
-        return true;
-      }
-}
-</script>
 
 
 
@@ -421,11 +404,13 @@
      
      if (values === "Other") {
        selectlead.style.display = "block";
+       $('#otherstatevalue').attr('required', 'required');
        
      }
      else
      {
        selectlead.style.display = "none";
+       $('#otherstatevalue').removeAttr('required');
      }
   })
 </script>

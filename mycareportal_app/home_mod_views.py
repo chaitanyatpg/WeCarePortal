@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, request
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -559,7 +559,7 @@ class RejectBid(LoginRequiredMixin, View):
             task = bid.home_mod_task
         # Set chosen bid of the task
             if task.chosen_bid:
-                messages.success(request, "Bid is already Accpected".format(bid.contractor.first_name, bid.contractor.last_name))
+                messages.success(request, "Bid already Accpected".format(bid.contractor.first_name, bid.contractor.last_name))
             else:
                 bid.bid_live = False
                 bid.save()
@@ -573,3 +573,25 @@ class RejectBid(LoginRequiredMixin, View):
         # return redirect('home_dashboard')
         return redirect('view_bids', task_id=task_id)
         # return HttpResponseRedirect(reverse('view_bids', "/"+ task_id))
+
+@login_required
+def reject_contractor_bid_task(request):
+    if request.method == "POST":
+        context = {}
+        current_company = request.user.company
+        bid_id =  request.POST['bid_id']
+        
+        if HomeModificationTask.objects.filter(company=current_company, uid=bid_id).exists():
+            home_mod_task = HomeModificationTask.objects.get(company=current_company, uid=bid_id)
+            # contractor = HomeModificationUser.objects.get(company=current_company,user=request.user)
+            
+            for contractor in home_mod_task.chosen_contractors.all():
+                if contractor.email_address == request.user.email:
+                    if ContractorRejectTask.objects.filter(company=current_company,contractor=contractor,home_mod_task= home_mod_task,status = True).exists():
+                        messages.success(request, "Reject Bid Request Already sent")
+                    else:
+                        contractor_reject_task = ContractorRejectTask(company = current_company,contractor=contractor,home_mod_task =home_mod_task,status = True)
+                        contractor_reject_task.save()
+                        messages.success(request, "Reject Bid Request send sucessfully")
+                
+    return redirect('contractor_dashboard')    

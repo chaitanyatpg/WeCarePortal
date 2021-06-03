@@ -908,6 +908,11 @@ class ChooseContractorForTask(LoginRequiredMixin, View):
                 task.chosen_contractors.remove(contractor)
                 bids = HomeModTaskBid.objects.filter(company=current_company, home_mod_task=task,contractor =contractor)
                 bids.delete()
+                if ContractorRejectTask.objects.filter(company=current_company,contractor=contractor,home_mod_task= task,status = True).exists():
+                    contractor_task = ContractorRejectTask.objects.get(company=current_company, home_mod_task=task,contractor =contractor,status = True)
+                    contractor_task.status = False
+                    contractor_task.save()
+
             else:
                 task.chosen_contractors.add(contractor)
                 
@@ -931,6 +936,8 @@ class HomeDashboard(LoginRequiredMixin, View):
         home_mod_categories = AssessmentCategories.objects.all()
         existing_home_mod_tasks = HomeModificationTask.get_unarchived_tasks(current_company)
         existing_move_manage_tasks = MoveManageTask.get_unarchived_tasks(current_company)
+        contractor_reject_bidding = ContractorRejectTask.objects.filter(company=current_company,status = True)
+        movemanager_reject_bidding = MoveManagerRejectTask.objects.filter(company = current_company, status = True )
         tzname = current_company.time_zone
         timezone.activate(pytz.timezone(tzname))
 
@@ -939,6 +946,10 @@ class HomeDashboard(LoginRequiredMixin, View):
         context['create_task_form'] = CreateHomeModTaskForm()
         context['existing_home_mod_tasks'] = existing_home_mod_tasks
         context['existing_move_manage_tasks'] = existing_move_manage_tasks
+        context['contractor_reject_bidding'] = contractor_reject_bidding
+        context['movemanager_reject_bidding'] = movemanager_reject_bidding
+
+        
         return render(request, "production/view_alerts.html", context)
 
     @transaction.atomic

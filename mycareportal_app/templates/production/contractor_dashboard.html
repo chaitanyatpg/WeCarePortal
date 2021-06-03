@@ -74,8 +74,9 @@
 
                         <li><i class="fa fa-map-marker user-profile-icon"></i> {{home_mod_user.address}}
                         </li>
+                        
 
-                        <li><i class="fa fa-map-marker user-profile-icon"></i> {{home_mod_user.email_address}}
+                        <li><i class="fa fa-envelope user-profile-icon"></i> {{home_mod_user.email_address}}
                         </li>
 
                         <!--<li class="m-top-xs">
@@ -160,7 +161,10 @@
                                   </div>
                                   <input type="hidden" name={{bid_form.task_uid.html_name}} value={{task.uid}}>
                                   <button type="submit" class="btn btn-success">Place Bid</button>
-                                  <button type="button" class="btn btn-danger">Reject Bid</button>
+                                  
+                                  
+                                  <button type="button" onclick="rejectContBidTask('{{task.uid}}')" class="btn btn-danger">Reject Bid</button>
+                                  
                                 </form>
 
                               
@@ -268,6 +272,32 @@
             </div>
           </div>
         </div>
+
+
+        <div id="RejectContbidModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+              <div class="modal-header">
+                <!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> -->
+              
+             
+                <div class="modal-body modal-sm">
+                  Do you want to Reject Bidding Process ?
+                  
+                </div>
+                <div style="margin-left: 75px;">      
+                  <form  method="POST" action="{%url 'reject_contractor_bid_task'  %}"  class="form-horizontal form-label-left input_mask" style="float: left;">
+                    {% csrf_token %}
+                  <input type="hidden" name="bid_id" id="bid_id" >            
+                  <button type="submit" class="btn btn-success antoclose2" >Yes</button>&nbsp;&nbsp;
+                </form>
+                  <!--<button class="btn btn-success">Add new shifts</a>-->
+                  <button type="button" data-dismiss="modal" class="btn btn-danger">No</a>
+                </div>
+            </div>
+            </div>
+          </div>
+        </div>
         <!-- /page content -->
 {% endblock %}
 {% block footlibs %}
@@ -292,5 +322,15 @@
         });
       });
     </script>
+
+    
+<script type="text/javascript">
+  function rejectContBidTask(bid){
+    console.log("ssssss")
+    
+    $('#bid_id').val(bid);
+    $('#RejectContbidModal').modal()
+  };
+</script>
     <!-- /bootstrap-daterangepicker -->
 {% endblock %}

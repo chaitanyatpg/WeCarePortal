@@ -142,6 +142,9 @@ urlpatterns = [
     url(r'^home_modification/get_home_mod_with_email', home_mod_views.get_home_mod_with_email,name='get_home_mod_with_email'),
     url(r'^home_modification/edit_home_mod_user', home_mod_views.EditHomeModUser.as_view(),name='edit_home_mod_user'),
     url(r'^home_modification/dashboard', home_mod_views.Dashboard.as_view(), name='contractor_dashboard'),
+    
+    url(r'^home_modification/reject_contractor_bid_task', home_mod_views.reject_contractor_bid_task, name='reject_contractor_bid_task'),
+
     url(r'^home_dashboard', views.HomeDashboard.as_view(), name='home_dashboard'),
     url(r'^choose_contractor/(?P<task_id>[0-9a-f-]+)/$', views.ChooseContractorForTask.as_view(), name='choose_contractor'),
     url(r'^choose_contractor/(?P<task_id>[0-9a-f-]+)/(?P<contractor_id>[0-9a-f-]+)/$', views.ChooseContractorForTask.as_view(), name='choose_contractor'),
@@ -177,6 +180,7 @@ urlpatterns = [
     url(r'^move_management/view_move_bids/(?P<task_id>[0-9a-f-]+)/$', move_manage_views.ViewMoveBids.as_view(), name='view_move_bids'),
     url(r'^move_management/view_move_bids', move_manage_views.ViewMoveBids.as_view(), name='view_move_bids'),
     
+    url(r'^move_management/reject_mov_manager_bid_task', move_manage_views.reject_mov_manager_bid_task, name="reject_mov_manager_bid_task"),
     url(r'^move_management/accept_move_bid/(?P<bid_id>[0-9a-f-]+)/$', move_manage_views.AcceptMoveBid.as_view(), name="accept_move_bid"),
     url(r'^move_management/reject_move_bid', move_manage_views.RejectMoveBid.as_view(), name="reject_move_bid"),
     url(r'^move_management/update_move_projects', move_manage_views.UpdateMoveProjects.as_view(), name="update_move_projects"),

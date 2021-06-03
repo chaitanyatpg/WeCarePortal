@@ -1955,3 +1955,29 @@ class PayrollLineItem(models.Model):
     custom_service_charge = models.DecimalField(max_length=200, max_digits=10, decimal_places=2, default=0.00)
     total = models.DecimalField(max_length=200, max_digits=10, decimal_places=2)
 
+
+class ContractorRejectTask(models.Model):
+
+    company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    contractor = models.ForeignKey(HomeModificationUser, null=True)
+    home_mod_task = models.ForeignKey(HomeModificationTask)
+    status = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
+
+
+class MoveManagerRejectTask(models.Model):
+
+    company = models.ForeignKey(Company)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    move_manager = models.ForeignKey(MoveManager, null=True)
+    move_manage_task = models.ForeignKey(MoveManageTask)
+    status = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
+
+
+
+
+
+
+

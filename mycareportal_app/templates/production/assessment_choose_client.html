@@ -47,7 +47,7 @@
                           	<label class="control-label col-md-2 col-sm-2 col-xs-12">Client</label>
   	                        <div class="col-md-10 col-sm-10 col-xs-12">
   	                          <select id='client_dropdown' class="select2_single form-control" tabindex="-1">
-  	                            <option value="nonon"></option>
+  	                            <option value=""></option>
                                 {% for client in all_clients %}
                                   <option value= {{client.email_address}}>{{client.first_name|addstr_space:client.last_name}}</option>
                                 {% endfor %}
