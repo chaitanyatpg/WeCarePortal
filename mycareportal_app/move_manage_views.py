@@ -379,6 +379,10 @@ class ChooseMoveContractorForTask(LoginRequiredMixin, View):
                 task.chosen_manager.remove(move_manager)
                 bids = MoveManageTaskBid.objects.filter(company = current_company,move_manage_task =task,move_manager =move_manager)
                 bids.delete()
+                if MoveManagerRejectTask.objects.filter(company=current_company,move_manager=move_manager,move_manage_task= task,status = True).exists():
+                    manager_reject_task = MoveManagerRejectTask.objects.filter(company = current_company,move_manager =move_manager, move_manage_task = task,status = True)
+                    manager_reject_task.status = False
+                    manager_reject_task.save()
             else:
                 task.chosen_manager.add(move_manager)
                 task.save()
@@ -735,7 +739,7 @@ class RejectMoveBid(LoginRequiredMixin, View):
             
         # Set chosen bid of the task
             if task.chosen_bid:
-                messages.success(request, "Bid is already Accpected".format(bid.move_manager.first_name, bid.move_manager.last_name))
+                messages.success(request, "Bid already Accpected".format(bid.move_manager.first_name, bid.move_manager.last_name))
             else:
                 bid.bid_live = False
                 bid.save()
@@ -755,3 +759,26 @@ class RejectMoveBid(LoginRequiredMixin, View):
         # move_manage_project.save()
         # return redirect('home_dashboard')
         
+
+@login_required
+def reject_mov_manager_bid_task(request):
+    print("zzzzzzzz", request.POST)
+    if request.method == "POST":
+        context = {}
+        current_company = request.user.company
+        bid_id =  request.POST['bid_id']
+        print("ssssss------")
+        
+        if MoveManageTask.objects.filter(company=current_company, uid=bid_id).exists():
+            move_manage_task = MoveManageTask.objects.get(company=current_company, uid=bid_id)
+            print("ssssss")
+            for move_manager in move_manage_task.chosen_manager.all():
+                if move_manager.email_address == request.user.email:
+                    if MoveManagerRejectTask.objects.filter(company=current_company,move_manager=move_manager,move_manage_task= move_manage_task,status = True).exists():
+                        messages.success(request, "Reject Bid Request Already sent")
+                    else:
+                        contractor_reject_task = MoveManagerRejectTask(company = current_company,move_manager=move_manager,move_manage_task =move_manage_task,status = True)
+                        contractor_reject_task.save()
+                        messages.success(request, "Reject Bid Request send sucessfully")
+                
+    return redirect('move_manager_dashboard')  

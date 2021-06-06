@@ -65,7 +65,7 @@
                               
                                 <input type="radio" name="{{status.id}}" id="value" checked="checked" value='Y' >Y
                               {% else %}
-                                <input type="radio" onfocus="focusevent(true)"  name="{{status.id}}" value='Y' >Y
+                                <input type="radio" onClick ="focusevent(true)"  name="{{status.id}}" value='Y' >Y
                               {% endif %}
                             </label>
                           </div>
@@ -74,7 +74,7 @@
                               {% if status.status == 'N' %}
                                 <input type="radio" name="{{status.id}}"  id="value" checked="checked" value='N'>N
                               {% else %}
-                                <input type="radio" onfocus="focusevent(true)"  name="{{status.id}}"  value='N'>N
+                                <input type="radio" onClick ="focusevent(true)"  name="{{status.id}}"  value='N'>N
                               {% endif %}
                             </label>
                           </div>
@@ -83,7 +83,7 @@
                               {% if status.status == 'NA' %}
                                 <input type="radio"  name="{{status.id}}" id="value" na checked="checked" value='NA'>N/A
                               {% else %}
-                                <input type="radio" onfocus="focusevent(true)" name="{{status.id}}"  value='NA'>N/A
+                                <input type="radio" onClick ="focusevent(true)" name="{{status.id}}"  value='NA'>N/A
                               {% endif %}
                             </label>
                           </div>

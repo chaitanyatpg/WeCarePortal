@@ -166,7 +166,7 @@
                                   </div>
                                   <input type="hidden" name={{bid_form.task_uid.html_name}} value={{task.uid}}>
                                   <button type="submit" class="btn btn-success">Place Bid</button>
-                                  <button type="button" class="btn btn-danger">Reject Bid</button>
+                                  <button type="button" onclick="rejectMovBidTask('{{task.uid}}')" class="btn btn-danger">Reject Bid</button>
                                 </form>
                                 
                             {% if move_manage_task_bids %}
@@ -277,6 +277,32 @@
           </div>
         </div>
         <!-- /page content -->
+        <div id="RejectMovbidModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+              <div class="modal-header">
+                <!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> -->
+              
+             
+                <div class="modal-body modal-sm">
+                  Do you want to Reject Bidding Process ?
+                  
+                </div>
+                <div style="margin-left: 75px;">      
+                  <form  method="POST" action="{%url 'reject_mov_manager_bid_task'  %}"  class="form-horizontal form-label-left input_mask" style="float: left;">
+                    {% csrf_token %}
+                  <input type="hidden" name="bid_id" id="bid_id" >            
+                  <button type="submit" class="btn btn-success antoclose2" >Yes</button>&nbsp;&nbsp;
+                </form>
+                  <!--<button class="btn btn-success">Add new shifts</a>-->
+                  <button type="button" data-dismiss="modal" class="btn btn-danger">No</a>
+                </div>
+            </div>
+            </div>
+          </div>
+        </div>
+
+      
 {% endblock %}
 {% block footlibs %}
     <!-- morris.js -->
@@ -301,4 +327,14 @@
       });
     </script>
     <!-- /bootstrap-daterangepicker -->
+
+
+    <script type="text/javascript">
+      function rejectMovBidTask(bid){
+        console.log("ssssss")
+        
+        $('#bid_id').val(bid);
+        $('#RejectMovbidModal').modal()
+      };
+    </script>
 {% endblock %}
