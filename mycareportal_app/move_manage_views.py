@@ -762,16 +762,15 @@ class RejectMoveBid(LoginRequiredMixin, View):
 
 @login_required
 def reject_mov_manager_bid_task(request):
-    print("zzzzzzzz", request.POST)
     if request.method == "POST":
         context = {}
         current_company = request.user.company
         bid_id =  request.POST['bid_id']
-        print("ssssss------")
+        
         
         if MoveManageTask.objects.filter(company=current_company, uid=bid_id).exists():
             move_manage_task = MoveManageTask.objects.get(company=current_company, uid=bid_id)
-            print("ssssss")
+            
             for move_manager in move_manage_task.chosen_manager.all():
                 if move_manager.email_address == request.user.email:
                     if MoveManagerRejectTask.objects.filter(company=current_company,move_manager=move_manager,move_manage_task= move_manage_task,status = True).exists():
