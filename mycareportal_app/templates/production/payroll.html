@@ -64,6 +64,21 @@
     </div>
 
     <div class="clearfix"></div>
+    {{block.super}}
+    
+
+
+    {% if messageslist %}
+    <ul class="messages">
+       {% for message in messageslist %}
+          <div class="alert alert-danger">
+            <strong class="error" style="font-weight: 400; margin-left: 10px;"> {{message}}
+            
+              </strong>
+          </div>
+      {% endfor %}
+    </ul>
+  {% endif %}
 
     <div class="row">
       <div class="col-md-12">
@@ -169,7 +184,7 @@
                       
                       {% if not submit %}
                       <td> <button type="submit" name="invoicelines" onclick="editlinitem(this.value)"
-                          value="{{payroll.id}}"><i class="glyphicon glyphicon-pencil"></i> </button></td>
+                          value="{{payroll.id}}" style="z-index: 1000;  position: relative" class="btn btn-success">Update </button></td>
 
                       {% endif %}
                     </tr>
@@ -219,7 +234,7 @@
   
                             <option value="" selected> Caregiver Name</option>
                             {% for invoice in  caregiver %}
-                            <option value="{{invoice.id}} {{invoice.first_name}} {{invoice.last_name}}">
+                            <option value="{{invoice.id}}={{invoice.first_name}} {{invoice.last_name}}">
                               {{invoice.first_name}}
                               {{invoice.last_name}}
                             </option>
@@ -263,7 +278,7 @@
   
                         <td class="col-sm-2">
   
-                          <input type="button" class="btn  btn-block " id="addFields" value="Add Row" />
+                          <input type="button" class="btn  btn-success" id="addFields" value="Add Row" />
                         </td>
                       </tr>
                     </table>
@@ -324,7 +339,7 @@
                 <!-- this row will not appear when printing -->
                 <div class="row no-print">
                   <div class="col-xs-12">
-                    <button class="btn btn-default" onclick="window.print()"><i class="fa fa-print"></i> Print</button>
+                    <!-- <button class="btn btn-default" onclick="window.print()"><i class="fa fa-print"></i> Print</button> -->
                     {% if submit %}
                     <!-- <button id="" disabled class="btn btn-success pull-right"><i class="fa fa-credit-card"></i>
                       Submit
@@ -469,9 +484,7 @@
 
           invoicedata.push(person)
         }
-      } else {
-
-      }
+      
 
       $.ajax({
         url: "{% url 'submit_payroll' %}",
@@ -491,6 +504,10 @@
           location.reload();
         }
       })
+    }
+    else {
+      alert("Please fill all the fields")
+    }
     });
 
   });
@@ -515,9 +532,9 @@
             // invoice_field_rate_type = $("input[name=invoice_field_rate_type]").val(),
             invoice_field_hours_perday = $("input[name=invoice_field_hours_perday]").val(),
             invoice_header_id = $("input[name=invoice_header_id]").val(),
-            caregiverId = invoice_field_caregiver_id.split(" ", 1),
-            
-            caregiverName = invoice_field_caregiver_id.slice(2, 100)
+            payroll_caregiver_detail = invoice_field_caregiver_id.split("="),
+            caregiverId = payroll_caregiver_detail[0]
+            caregiverName = payroll_caregiver_detail[1]
             invoice_field_rate_type_id =$('#dropDownratetype :selected').val(),
             ratetypeid = invoice_field_rate_type_id.split(" ", 1),
             invoice_field_rate_type = invoice_field_rate_type_id.slice(2, 100),

@@ -1907,7 +1907,7 @@ class PayrollHeader(models.Model):
 
                                 if rate < 1.0:
                                     rate_type = RateType.NORMAL
-                                    rate = float(getattr(client, client.RATE_TYPE_TO_FIELD[RateType.NORMAL].attname))
+                                    rate = float(getattr(caregiver, caregiver.RATE_TYPE_TO_FIELD[RateType.NORMAL].attname))
                                     total_cost = rate * total_hours
                                     caregiver_to_rate_type_to_total_cost[caregiver][rate_type] += total_cost
                                     caregiver_to_rate_type_to_total_hours[caregiver][rate_type] += total_hours    

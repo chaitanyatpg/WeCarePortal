@@ -504,14 +504,15 @@
                                       <div class="col-md-3 col-sm-3 col-xs-3">
                                         <label>
                                           {% if not client.regular_hourly_rate is None %}
-                                          <input type="number" name="{{ client_invoice_form.regular_hourly_rate.html_name}}"  min="0" step="any" value="{{client.regular_hourly_rate}}"> 
+                                          <input type="number" required="required" name="{{ client_invoice_form.regular_hourly_rate.html_name}}"  min="0" step="any" value="{{client.regular_hourly_rate}}" > 
                                           {% else %}
-                                          {{ client_invoice_form.regular_hourly_rate}}
+                                          <input type="number" required="required" name="{{ client_invoice_form.regular_hourly_rate.html_name}}"  min="0" step="any"> 
+                                          
                                           {% endif %}
                                         </label>
                                       </div>
                                       <div class="col-md-3 col-sm-3 col-xs-3">
-                                        <label >What percent of Weekend hourly rate &nbsp;
+                                        <label >What % of Hourly Rate to be used for Weekend hourly Rate
                                           
                                       </div>
                                       <div class="col-md-3 col-sm-3 col-xs-3">
@@ -532,21 +533,23 @@
                                       <div>
                                         <label class="col-md-3 col-sm-3 col-xs-3">
                                           {% if not client.weekend_hourly_rate is None %}
-                                          <input type="number" name="{{ client_invoice_form.weekend_hourly_rate.html_name}}" min="0" step="any" value="{{client.weekend_hourly_rate}}"> 
+                                          <input type="number" name="{{ client_invoice_form.weekend_hourly_rate.html_name}}" min="0" step="any" value="{{client.weekend_hourly_rate}}" required> 
                                           {% else %}
-                                          {{ client_invoice_form.weekend_hourly_rate}}
+                                          <input type="number" name="{{ client_invoice_form.weekend_hourly_rate.html_name}}" min="0" step="any"  required> 
+                                          
                                           {% endif %}
                                         </label>
                                       </div>
-                                    </div>
+                                   
 
-                                    <div class="col-md-3 col-sm-3 col-xs-3"> 
-                                      <label>What of Holiday hourly rate </label>
-                                    </div>
-                                    <div class="col-md-3 col-sm-3 col-xs-3">
+                                     <div class="col-md-3 col-sm-3 col-xs-3"> 
+                                      <label>What times of Regular Hourly Rate should be used for Holiday hourly rate </label>
+                                     </div>
+                                     <div class="col-md-3 col-sm-3 col-xs-3">
                                        <input type="number" step="any"
-                                        onchange="myFunctions(this.value)"  name="percent_holiday_hourly_rate" placeholder="enter percent">
+                                        onchange="myFunctions(this.value)"  name="percent_holiday_hourly_rate" placeholder="enter no of times">
                                     </div>
+                                  </div>
                                   </div>
                   
                   
@@ -559,22 +562,23 @@
                                         <div class="col-md-3 col-sm-3 col-xs-3">
                                           <label>
                                               {% if not client.holiday_hourly_rate is None %}
-                                            <input type="number" name="{{ client_invoice_form.holiday_hourly_rate.html_name}}" min="0" step="any" value="{{client.holiday_hourly_rate}}"> {% else %}
-                                            {{ client_invoice_form.holiday_hourly_rate}}
+                                            <input type="number" name="{{ client_invoice_form.holiday_hourly_rate.html_name}}" min="0" step="any" value="{{client.holiday_hourly_rate}}" required> {% else %}
+                                            <input type="number" name="{{ client_invoice_form.holiday_hourly_rate.html_name}}" min="0" step="any" required>
                                              {% endif %}
                                           </label>
                                         </div>
-                                      </div>
+                                      
                                       <div class="col-md-3 col-sm-3 col-xs-3">
-                                        <label>What  of Weekend holiday rate  </label>
+                                        <label>What times of Weekend Hourly Rate should be used for Weekend Holiday hourly rate  </label>
                                       </div>
 
                                       <div class="col-md-3 col-sm-3 col-xs-3">
                                         <input type="number"  step="any"
-                                            placeholder="enter percent" onchange="myweekend_holiday_rate(this.value)" name="percent_weekend_holiday_rate">
+                                            placeholder="enter no of times" onchange="myweekend_holiday_rate(this.value)" name="percent_weekend_holiday_rate">
 
 
                                       </div>
+                                    </div>
  
 
                                     </div>
@@ -588,13 +592,13 @@
                                         <div class="col-md-3 col-sm-2  col-xs-3">
                                           <label>
                                             {% if not client.weekend_holiday_rate is None %}
-                                            <input type="number" name="{{ client_invoice_form.weekend_holiday_rate.html_name}}" min="0" step="any" value="{{client.weekend_holiday_rate}}"> {% else %}
-                                            {{ client_invoice_form.weekend_holiday_rate}}
+                                            <input type="number" name="{{ client_invoice_form.weekend_holiday_rate.html_name}}" min="0" step="any" value="{{client.weekend_holiday_rate}}" required> {% else %}
+                                            <input type="number" name="{{ client_invoice_form.weekend_holiday_rate.html_name}}" min="0" step="any"  required>
                                             {% endif %}
                                           </label>
                                         </div>
                                       </div>
-                                      <div class="col-md-3 col-sm-6 col-xs-3">
+                                      <!-- <div class="col-md-3 col-sm-6 col-xs-3">
                                         <label>What percent of Live in rate </label>
                                       </div>
 
@@ -602,8 +606,12 @@
                                         <input type="number"  step="any"
                                             placeholder="enter percent" onchange="myLiveinrate(this.value)" name="percent_live_in_rate">
 
-                                      </div>
+                                      </div> -->
                                     </div>
+
+                                    <br>
+                                    <br>
+                                    <br>
                     
                     
                                     <div class="row">
@@ -614,21 +622,22 @@
                                         <div class="col-md-3 col-sm-3 col-xs-3">
                                           <label>
                                             {% if not client.live_in_rate is None %}
-                                            <input type="number" name="{{ client_invoice_form.live_in_rate.html_name}}" min="0" step="any" value="{{client.live_in_rate}}">
+                                            <input type="number" name="{{ client_invoice_form.live_in_rate.html_name}}" min="0" step="any" value="{{client.live_in_rate}}" required>
                                              {% else %}
-                                            {{ client_invoice_form.live_in_rate}}
+                                             <input type="number" name="{{ client_invoice_form.live_in_rate.html_name}}" min="0" step="any" required>
                                             {% endif %}
                                           </label>
                                         </div>
-                                      </div>
+                                     
                                       <div class="col-md-3 col-sm-3 col-xs-3">
-                                        <label>What percent of Weekend live in rate </label>
+                                        <label>What % of Live in Rate to be used for Weekend Live in Rate </label>
                                       </div>
 
                                       <div class="col-md-3 col-sm-3 col-xs-3">
                                         <input type="number"  step="any"
                                             placeholder="enter percent" onchange="myWeekendliveinrate(this.value)" name="percent_weekend_live_in_rate">
                                       </div>
+                                    </div>
                                     </div>
                     
                                     <div class="row">
@@ -639,24 +648,25 @@
                                         <div class="col-md-3 col-sm-3 col-xs-3">
                                           <label>
                                             {% if not client.weekend_live_in_rate is None %}
-                                            <input type="number" name="{{ client_invoice_form.weekend_live_in_rate.html_name}}" min="0" step="any" value="{{client.weekend_live_in_rate}}">
+                                            <input type="number" name="{{ client_invoice_form.weekend_live_in_rate.html_name}}" min="0" step="any" value="{{client.weekend_live_in_rate}}" required>
                                              {% else %}
-                                            {{ client_invoice_form.weekend_live_in_rate}}
+                                             <input type="number" name="{{ client_invoice_form.weekend_live_in_rate.html_name}}" min="0" step="any"  required>
                                             {% endif %}
                                           </label>
                                         </div>
-                                      </div>
+                                     
                                       <div class="col-md-3 col-sm-3 col-xs-3">
-                                        <label>What  of Holiday live in rate 
+                                        <label>What times of Regular Live in Rate should be used for Holiday Live in rate
                                           </label>
                                       </div>
 
                                       <div class="col-md-3 col-sm-3 col-xs-3">
 
                                         <input type="number"  step="any"
-                                            placeholder="enter percent" onchange="myHolidayliveinrate(this.value)" name="percent_hoilday_live_in_rate">
+                                            placeholder="enter no of times" onchange="myHolidayliveinrate(this.value)" name="percent_hoilday_live_in_rate">
 
                                       </div>
+                                    </div>
                                     </div>
                     
                                     <div class="row">
@@ -667,22 +677,23 @@
                                         <div class="col-md-3 col-sm-3 col-xs-3"> 
                                           <label>
                                             {% if not client.holiday_live_in_rate is None %}
-                                            <input type="number" name="{{ client_invoice_form.holiday_live_in_rate.html_name}}" min="0" step="any" value="{{client.holiday_live_in_rate}}"> {% else %}
-                                            {{ client_invoice_form.holiday_live_in_rate}}
+                                            <input type="number" name="{{ client_invoice_form.holiday_live_in_rate.html_name}}" min="0" step="any" value="{{client.holiday_live_in_rate}}" required> {% else %}
+                                            <input type="number" name="{{ client_invoice_form.holiday_live_in_rate.html_name}}" min="0" step="any"  required>
                                             {% endif %}
                                           </label>
                                         </div>
-                                      </div>
+                                      
                                       <div class="col-md-3 col-sm-3 col-xs-3">
-                                        <label>What  of Weekend holiday live in rate </label>
+                                        <label>What times of Weekend Live in Rate should be used for Weekend Holiday Live in rate</label>
                                       </div>
 
                                       <div class="col-md-3 col-sm-3 col-xs-3">
 
                                         <input type="number"  step="any"
-                                            placeholder="enter percent" onchange="myWeekendholidayliveinrate(this.value)" name="percent_weekend_holiday_live_in_rate">
+                                            placeholder="enter no of times" onchange="myWeekendholidayliveinrate(this.value)" name="percent_weekend_holiday_live_in_rate">
 
                                       </div>
+                                    </div>
                                     </div>
                     
                                     <div class="row">
@@ -693,8 +704,8 @@
                                         <div class="col-md-3 col-sm-3 col-xs-3">
                                           <label>
                                             {% if not client.weekend_holiday_live_in_rate is None %}
-                                            <input type="number" name="{{ client_invoice_form.weekend_holiday_live_in_rate.html_name}}" min="0" step="any" value="{{client.weekend_holiday_live_in_rate}}"> {% else %}
-                                            {{ client_invoice_form.weekend_holiday_live_in_rate}}
+                                            <input type="number" name="{{ client_invoice_form.weekend_holiday_live_in_rate.html_name}}" min="0" step="any" value="{{client.weekend_holiday_live_in_rate}}" required> {% else %}
+                                            <input type="number" name="{{ client_invoice_form.weekend_holiday_live_in_rate.html_name}}" min="0" step="any" required>
                                             {% endif %}
                                           </label>
                                         </div>
@@ -1021,9 +1032,9 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Email Address<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not family_details_form.email.value is None %}
-                        <input type="text" id="family_email_address" class="form-control col-md-7 col-xs-12" required="required" name={{family_details_form.email.html_name}} value={{family_details_form.email.value}}>
+                        <input type="email" id="family_email_address" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" class="form-control col-md-7 col-xs-12" required="required" name={{family_details_form.email.html_name}} value={{family_details_form.email.value}}>
                       {% else %}
-                        <input type="text" id="family_email_address" class="form-control col-md-7 col-xs-12" required="required" name={{family_details_form.email.html_name}}>
+                        <input type="email" id="family_email_address" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" class="form-control col-md-7 col-xs-12" required="required" name={{family_details_form.email.html_name}}>
                       {% endif %}
                     </div>
                   </div>
@@ -1363,7 +1374,7 @@
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Email Address<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                      <input type="text" id="provider_email_address" class="form-control col-md-7 col-xs-12" required="required" name={{provider_details_form.email.html_name}}>
+                      <input type="email" id="provider_email_address" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" class="form-control col-md-7 col-xs-12" required="required" name={{provider_details_form.email.html_name}}>
                     </div>
                   </div>
                   <div class="ln_solid"></div>
@@ -1425,30 +1436,30 @@
                 <form enctype="multipart/form-data" method='post'  action="{% url 'post_pharmacy_details' %}" class="form-horizontal form-label-left input_mask">
                   {% csrf_token %}
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                    <input type="text" id="pharmacy_name" class="form-control has-feedback-left" placeholder="Name" name={{pharmacy_details_form.pharmacy_name.html_name}}>
+                    <input type="text" id="pharmacy_name" required class="form-control has-feedback-left" placeholder="Name" name={{pharmacy_details_form.pharmacy_name.html_name}}>
                     <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span> </div>
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                    <input type="text" id="pharmacy_contact_name" class="form-control" placeholder="Contact Name" name={{pharmacy_details_form.contact_name.html_name}}>
+                    <input type="text" id="pharmacy_contact_name" required class="form-control" placeholder="Contact Name" name={{pharmacy_details_form.contact_name.html_name}}>
                     <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span> </div>
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                    <input type="text" id="pharmacy_phone_number" class="form-control has-feedback-left" data-inputmask="'mask': '(999)-999-9999'" placeholder="Phone Number" name={{pharmacy_details_form.phone_number.html_name}}>
+                    <input type="text" id="pharmacy_phone_number" required class="form-control has-feedback-left" data-inputmask="'mask': '(999)-999-9999'" placeholder="Phone Number" name={{pharmacy_details_form.phone_number.html_name}}>
                     <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span> </div>
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                     <input type="text" id="pharmacy_fax_number" class="form-control" placeholder="Fax Number" name={{pharmacy_details_form.fax_number.html_name}}>
                     <span class="fa fa-fax form-control-feedback right" aria-hidden="true"></span> </div>
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                    <input type="text" id="pharmacy_email" class="form-control has-feedback-left" placeholder="Email Address" name={{pharmacy_details_form.email.html_name}}>
+                    <input type="email" id="pharmacy_email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" class="form-control has-feedback-left" placeholder="Email Address" name={{pharmacy_details_form.email.html_name}}>
                     <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span> </div>
 
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                    <input type="text" id="pharmacy_address" class="form-control" placeholder="Address" name={{pharmacy_details_form.address.html_name}}>
+                    <input type="text" id="pharmacy_address" required class="form-control" placeholder="Address" name={{pharmacy_details_form.address.html_name}}>
                     <span class="fa fa-fax form-control-feedback right" aria-hidden="true"></span> </div>
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                    <input type="text" id="pharmacy_city" class="form-control has-feedback-left" placeholder="City" name={{pharmacy_details_form.city.html_name}}>
+                    <input type="text" id="pharmacy_city" required class="form-control has-feedback-left" placeholder="City" name={{pharmacy_details_form.city.html_name}}>
                     <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span> </div>
 
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback" onchange="update_pharmacy_state()">
-                    <select class="select2_single form-control" id = "pharmacy_state"  tabindex="-1" name = "{{pharmacy_details_form.state.html_name}}">
+                    <select required class="select2_single form-control" id = "pharmacy_state"  tabindex="-1" name = "{{pharmacy_details_form.state.html_name}}">
                           <option selected ></option>
                           <option value="Other">Other</option>
                           <option value="AL">Alabama</option>
@@ -1540,7 +1551,7 @@
                       <span class="fa fa-fax form-control-feedback right" aria-hidden="true"></span> </div>
                     </div>
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                    <input type="text" id="pharmacy_zip_code" class="form-control has-feedback-left" placeholder="Zip Code" name={{pharmacy_details_form.zip_code.html_name}}>
+                    <input type="text" required id="pharmacy_zip_code" class="form-control has-feedback-left" placeholder="Zip Code" name={{pharmacy_details_form.zip_code.html_name}}>
                     <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span> </div>
                   <div class="ln_solid"></div>
                   <div class="form-group">
@@ -1598,30 +1609,30 @@
                 <form enctype="multipart/form-data" method='post'   action="{% url 'post_payer_details' %}" class="form-horizontal form-label-left input_mask">
                   {% csrf_token %}
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                    <input type="text" class="form-control has-feedback-left" id="payer_name" name={{payer_details_form.payer_name.html_name}} placeholder="Name">
+                    <input type="text" class="form-control has-feedback-left" id="payer_name" required name={{payer_details_form.payer_name.html_name}} placeholder="Name">
                     <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span> </div>
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                    <input type="text" class="form-control" id="payer_contact_name" name={{payer_details_form.contact_name.html_name}} placeholder="Contact Name">
+                    <input type="text" class="form-control" id="payer_contact_name" required name={{payer_details_form.contact_name.html_name}} placeholder="Contact Name">
                     <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span> </div>
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                    <input type="text" class="form-control has-feedback-left" id="payer_phone_number" data-inputmask="'mask': '(999)-999-9999'" name={{payer_details_form.phone_number.html_name}} placeholder="Phone Number">
+                    <input type="text" class="form-control has-feedback-left" id="payer_phone_number" required  name={{payer_details_form.phone_number.html_name}} placeholder="Phone Number">
                     <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span> </div>
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                    <input type="text" class="form-control" id="payer_fax_number" name={{payer_details_form.fax_number.html_name}} placeholder="Fax Number">
+                    <input type="text" class="form-control" id="payer_fax_number"  name={{payer_details_form.fax_number.html_name}} placeholder="Fax Number">
                     <span class="fa fa-fax form-control-feedback right" aria-hidden="true"></span> </div>
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                    <input type="text" class="form-control has-feedback-left" id="payer_email" name={{payer_details_form.email.html_name}} placeholder="Email Address">
+                    <input type="email" class="form-control has-feedback-left" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required id="payer_email" name={{payer_details_form.email.html_name}} placeholder="Email Address">
                     <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span> </div>
 
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                    <input type="text" id="payer_address" class="form-control" placeholder="Address" name={{payer_details_form.address.html_name}}>
+                    <input type="text" id="payer_address" class="form-control" required placeholder="Address" name={{payer_details_form.address.html_name}}>
                     <span class="fa fa-fax form-control-feedback right" aria-hidden="true"></span> </div>
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                    <input type="text" id="payer_city" class="form-control has-feedback-left" placeholder="City" name={{payer_details_form.city.html_name}}>
+                    <input type="text" id="payer_city" class="form-control has-feedback-left" required placeholder="City" name={{payer_details_form.city.html_name}}>
                     <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span> </div>
 
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                    <select class="select2_single_value form-control" id = "payer_state" tabindex="-1" onchange="update_payor_state()" name = "{{payer_details_form.state.html_name}}">
+                    <select required class="select2_single_value form-control" id = "payer_state" required tabindex="-1" onchange="update_payor_state()" name = "{{payer_details_form.state.html_name}}">
                           <option value="" disabled selected>Select State</option>
                           <option value="Other">Other</option>
                           <option value="AL">Alabama</option>
@@ -1712,16 +1723,16 @@
                         <span class="fa fa-fax form-control-feedback right" aria-hidden="true"></span> </div>
                       </div>
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                    <input type="text" id="payer_zip_code" class="form-control has-feedback-left" placeholder="Zip Code" name={{payer_details_form.zip_code.html_name}}>
+                    <input type="text" id="payer_zip_code" required class="form-control has-feedback-left" placeholder="Zip Code" name={{payer_details_form.zip_code.html_name}}>
                     <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span> </div>
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                    <input type="text" class="form-control" id="payer_start_date" name={{payer_details_form.policy_start_date.html_name}} placeholder="Policy Start Date">
+                    <input type="text" class="form-control" required id="payer_start_date" name={{payer_details_form.policy_start_date.html_name}} placeholder="Policy Start Date">
                     <span class="fa fa-calendar form-control-feedback right" aria-hidden="true"></span> </div>
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                    <input type="text" class="form-control has-feedback-left" id="payer_end_date" name={{payer_details_form.policy_end_date.html_name}} placeholder="Policy End Date">
+                    <input type="text" class="form-control has-feedback-left" required id="payer_end_date" name={{payer_details_form.policy_end_date.html_name}} placeholder="Policy End Date">
                     <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span> </div>
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                    <input type="text" class="form-control" id="payer_policy_number" name={{payer_details_form.policy_number.html_name}} placeholder="Policy Number">
+                    <input type="text" class="form-control" required id="payer_policy_number" name={{payer_details_form.policy_number.html_name}} placeholder="Policy Number">
                     <span class="fa fa-key form-control-feedback right" aria-hidden="true"></span> </div>
                   <div class="ln_solid"></div>
                   <div class="form-group">
@@ -2554,5 +2565,38 @@
        $('#otherstatevalue').removeAttr('required');
      }
   })
+</script>
+
+<script>
+  $(document).ready(function(){
+    // Inputmask("(999)-999-9999").mask("input");
+   
+    $("#payer_phone_number").inputmask("(999)-999-9999",  {showMaskOnFocus: false, showMaskOnHover: true});
+  });
+</script>
+
+<script>
+  $(document).ready(function(){
+    // Inputmask("(999)-999-9999").mask("input");
+   
+    $("#pharmacy_phone_number").inputmask("(999)-999-9999",  {showMaskOnFocus: false, showMaskOnHover: true});
+  });
+</script>
+
+
+<script>
+  $(document).ready(function(){
+    // Inputmask("(999)-999-9999").mask("input");
+   
+    $("#provider_phone_number").inputmask("(999)-999-9999",  {showMaskOnFocus: false, showMaskOnHover: true});
+  });
+</script>
+
+<script>
+  $(document).ready(function(){
+    // Inputmask("(999)-999-9999").mask("input");
+   
+    $("#family_phone_number").inputmask("(999)-999-9999",  {showMaskOnFocus: false, showMaskOnHover: true});
+  });
 </script>
 {% endblock %}
