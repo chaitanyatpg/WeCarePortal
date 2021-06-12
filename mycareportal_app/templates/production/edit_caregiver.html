@@ -565,14 +565,14 @@
                       <div class="col-md-3 col-sm-3 col-xs-3">
                         <label>
                           {% if not caregiver.regular_hourly_rate is None %}
-                          <input type="number" name="{{ caregiver_payroll_form.regular_hourly_rate.html_name}}"  min="0" step="any" value="{{caregiver.regular_hourly_rate}}"> 
+                          <input type="number" name="{{ caregiver_payroll_form.regular_hourly_rate.html_name}}"  min="0" step="any" value="{{caregiver.regular_hourly_rate}}" required> 
                           {% else %}
-                          {{ caregiver_payroll_form.regular_hourly_rate}}
+                          <input type="number" name="{{ caregiver_payroll_form.regular_hourly_rate.html_name}}"  min="0" step="any"  required> 
                           {% endif %}
                         </label>
                       </div>
                       <div class="col-md-3 col-sm-3 col-xs-3">
-                        <label >What percent of Weekend hourly rate &nbsp;
+                        <label >What % of Hourly Rate to be used for Weekend hourly Rate &nbsp;
                           
                       </div>
                       <div class="col-md-3 col-sm-3 col-xs-3">
@@ -592,24 +592,24 @@
                         <div class="col-md-3 col-sm-3 col-xs-3">
                           <label>
                             {% if not caregiver.weekend_hourly_rate is None %}
-                            <input type="number" name="{{ caregiver_payroll_form.weekend_hourly_rate.html_name}}" min="0" step="any" value="{{caregiver.weekend_hourly_rate}}"> 
+                            <input type="number" name="{{ caregiver_payroll_form.weekend_hourly_rate.html_name}}" min="0" step="any" value="{{caregiver.weekend_hourly_rate}}" required> 
                             {% else %}
-                            {{ caregiver_payroll_form.weekend_hourly_rate}}
+                            <input type="number" name="{{ caregiver_payroll_form.weekend_hourly_rate.html_name}}" min="0" step="any" required> 
                             {% endif %}
                           </label>
                         </div>
-                      </div>
+                      
 
                       <div class="col-md-3 col-sm-3 col-xs-3"> 
-                        <label>What of Holiday hourly rate </label>
+                        <label>What times of Regular Hourly Rate should be used for Holiday hourly rate </label>
                       </div>
                       <div class="col-md-3 col-sm-3 col-xs-3">
                          <input type="number" step="any"
-                          onchange="myFunctions(this.value)"  name="percent_holiday_hourly_rate" placeholder="enter percent">
+                          onchange="myFunctions(this.value)"  name="percent_holiday_hourly_rate" placeholder="enter no of times">
                       </div>
 
 
-
+                    </div>
                     </div>
     
     
@@ -622,23 +622,22 @@
                         <div class="col-md-3 col-sm-3 col-xs-3">
                           <label>
                               {% if not caregiver.holiday_hourly_rate is None %}
-                            <input type="number" name="{{ caregiver_payroll_form.holiday_hourly_rate.html_name}}" min="0" step="any" value="{{caregiver.holiday_hourly_rate}}"> {% else %}
-                            {{ caregiver_payroll_form.holiday_hourly_rate}}
+                            <input type="number" name="{{ caregiver_payroll_form.holiday_hourly_rate.html_name}}" min="0" step="any" value="{{caregiver.holiday_hourly_rate}}" required> {% else %}
+                            <input type="number" name="{{ caregiver_payroll_form.holiday_hourly_rate.html_name}}" min="0" step="any"  required>
                              {% endif %}
                           </label>
                         </div>
-                      </div>
+                      
 
                       <div class="col-md-3 col-sm-3 col-xs-3">
-                        <label>What  of Weekend holiday rate  </label>
+                        <label>What times of Weekend Hourly Rate should be used for Weekend Holiday hourly rate </label>
                       </div>
 
                       <div class="col-md-3 col-sm-3 col-xs-3">
                         <input type="number"  step="any"
-                            placeholder="enter percent" onchange="myweekend_holiday_rate(this.value)" name="percent_weekend_holiday_rate">
-
-
+                            placeholder="enter no of times" onchange="myweekend_holiday_rate(this.value)" name="percent_weekend_holiday_rate">
                       </div>
+                    </div>
                     </div>
     
     
@@ -650,13 +649,13 @@
                         <div class="col-md-3 col-sm-3 col-xs-3">
                           <label>
                             {% if not caregiver.weekend_holiday_rate is None %}
-                            <input type="number" name="{{ caregiver_payroll_form.weekend_holiday_rate.html_name}}" min="0" step="any" value="{{caregiver.weekend_holiday_rate}}"> {% else %}
-                            {{ caregiver_payroll_form.weekend_holiday_rate}}
+                            <input type="number" name="{{ caregiver_payroll_form.weekend_holiday_rate.html_name}}" min="0" step="any" value="{{caregiver.weekend_holiday_rate}}" required> {% else %}
+                            <input type="number" name="{{ caregiver_payroll_form.weekend_holiday_rate.html_name}}" min="0" step="any" required>
                             {% endif %}
                           </label>
                         </div>
                       </div>
-                      <div class="col-md-3 col-sm-3 col-xs-3">
+                      <!-- <div class="col-md-3 col-sm-3 col-xs-3">
                         <label>What percent of Live in rate </label>
                       </div>
 
@@ -664,11 +663,12 @@
                         <input type="number"  step="any"
                             placeholder="enter percent" onchange="myLiveinrate(this.value)" name="percent_live_in_rate">
 
-                      </div>
-
-
-
+                      </div> -->
                     </div>
+
+                    <br>
+                    <br>
+
     
     
                     <div class="row">
@@ -679,21 +679,22 @@
                         <div class="col-md-3 col-sm-3 col-xs-3">
                           <label>
                             {% if not caregiver.live_in_rate is None %}
-                            <input type="number" name="{{ caregiver_payroll_form.live_in_rate.html_name}}" min="0" step="any" value="{{caregiver.live_in_rate}}"> {% else %}
-                            {{ caregiver_payroll_form.live_in_rate}}
+                            <input type="number" name="{{ caregiver_payroll_form.live_in_rate.html_name}}" min="0" step="any" value="{{caregiver.live_in_rate}}" required> {% else %}
+                            <input type="number" name="{{ caregiver_payroll_form.live_in_rate.html_name}}" min="0" step="any"  required>
                             {% endif %}
                           </label>
                         </div>
-                      </div>
+                      
 
                       <div class="col-md-3 col-sm-3 col-xs-3">
-                        <label>What percent of Weekend live in rate </label>
+                        <label>What % of Live in Rate to be used for Weekend Live in Rate </label>
                       </div>
 
                       <div class="col-md-3 col-sm-3 col-xs-3">
                         <input type="number"  step="any"
                             placeholder="enter percent" onchange="myWeekendliveinrate(this.value)" name="percent_weekend_live_in_rate">
                       </div>
+                    </div>
                     </div>
     
                     <div class="row">
@@ -704,25 +705,26 @@
                         <div class="col-md-3 col-sm-3 col-xs-3">
                           <label>
                             {% if not caregiver.weekend_live_in_rate is None %}
-                            <input type="number" name="{{ caregiver_payroll_form.weekend_live_in_rate.html_name}}" min="0" step="any" value="{{caregiver.weekend_live_in_rate}}"> {% else %}
-                            {{ caregiver_payroll_form.weekend_live_in_rate}}
+                            <input type="number" name="{{ caregiver_payroll_form.weekend_live_in_rate.html_name}}" min="0" step="any" value="{{caregiver.weekend_live_in_rate}}" required> {% else %}
+                            <input type="number" name="{{ caregiver_payroll_form.weekend_live_in_rate.html_name}}" min="0" step="any"  required>
                             {% endif %}
                           </label>
                         </div>
-                      </div>
+                      
 
 
                       <div class="col-md-3 col-sm-3 col-xs-3">
-                        <label>What  of Holiday live in rate 
+                        <label>What times of Regular Live in Rate should be used for Holiday Live in rate
                           </label>
                       </div>
 
                       <div class="col-md-3 col-sm-3 col-xs-3">
 
                         <input type="number"  step="any"
-                            placeholder="enter percent" onchange="myHolidayliveinrate(this.value)" name="percent_hoilday_live_in_rate">
+                            placeholder="enter no of times" onchange="myHolidayliveinrate(this.value)" name="percent_hoilday_live_in_rate">
 
                       </div>
+                    </div>
 
 
 
@@ -738,23 +740,24 @@
                         <div class="col-md-3 col-sm-3 col-xs-3">
                           <label>
                             {% if not caregiver.holiday_live_in_rate is None %}
-                            <input type="number" name="{{ caregiver_payroll_form.holiday_live_in_rate.html_name}}" min="0" step="any" value="{{caregiver.holiday_live_in_rate}}"> {% else %}
-                            {{ caregiver_payroll_form.holiday_live_in_rate}}
+                            <input type="number" name="{{ caregiver_payroll_form.holiday_live_in_rate.html_name}}" min="0" step="any" value="{{caregiver.holiday_live_in_rate}}" required> {% else %}
+                            <input type="number" name="{{ caregiver_payroll_form.holiday_live_in_rate.html_name}}" min="0" step="any" required>
                             {% endif %}
                           </label>
                         </div>
-                      </div>
+                      
 
                       <div class="col-md-3 col-sm-3 col-xs-3">
-                        <label>What  of Weekend holiday live in rate </label>
+                        <label>What times of Weekend Live in Rate should be used for Weekend Holiday Live in rate</label>
                       </div>
 
                       <div class="col-md-3 col-sm-3 col-xs-3">
 
                         <input type="number"  step="any"
-                            placeholder="enter percent" onchange="myWeekendholidayliveinrate(this.value)" name="percent_weekend_holiday_live_in_rate">
+                            placeholder="enter no of times" onchange="myWeekendholidayliveinrate(this.value)" name="percent_weekend_holiday_live_in_rate">
 
                       </div>
+                    </div>
                     </div>
     
                     <div class="row">
@@ -765,8 +768,8 @@
                         <div class="col-md-3 col-sm-3 col-xs-3">
                           <label>
                             {% if not caregiver.weekend_holiday_live_in_rate is None %}
-                            <input type="number" name="{{ caregiver_payroll_form.weekend_holiday_live_in_rate.html_name}}" min="0" step="any" value="{{caregiver.weekend_holiday_live_in_rate}}"> {% else %}
-                            {{ caregiver_payroll_form.weekend_holiday_live_in_rate}}
+                            <input type="number" name="{{ caregiver_payroll_form.weekend_holiday_live_in_rate.html_name}}" min="0" step="any" value="{{caregiver.weekend_holiday_live_in_rate}}" required> {% else %}
+                            <input type="number" name="{{ caregiver_payroll_form.weekend_holiday_live_in_rate.html_name}}" min="0" step="any"  required>
                             {% endif %}
                           </label>
                         </div>
@@ -785,9 +788,6 @@
                 </div>
     
               </form>
-    
-    
-    
             </div>
           </div>
         </div>
@@ -1230,7 +1230,7 @@
   </script>
   
   
-  <script>
+  <!-- <script>
   
     function myLiveinrate(val){
       percent_live_in_rate= $("input[name=percent_live_in_rate]").val();
@@ -1242,7 +1242,7 @@
       $("input[name=live_in_rate]").val(live_rate) 
       
     }
-  </script>
+  </script> -->
   
   <script>
   

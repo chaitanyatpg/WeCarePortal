@@ -1192,6 +1192,7 @@ class Invoice(LoginRequiredMixin, View):
         context['current_company'] = current_company
         current_date = datetime.date.today()
         context['current_date'] =current_date
+        messageslist = []
         if invoice_id:
             submit = True
             context['submit'] = submit
@@ -1235,25 +1236,28 @@ class Invoice(LoginRequiredMixin, View):
                     
                     
                 else:
-                    invoice_header = InvoiceHeader.create_invoice(current_company,client,start_date,end_date)
-                    invoice_header_data = InvoiceHeader.objects.get(id =invoice_header.id)
-                    context['invoice_header_data'] = invoice_header_data
-                    invoice_line_items = list(InvoiceLineItem.objects.filter(invoice_header = invoice_header_data,company = current_company))
-                    context['invoice_line_items'] = invoice_line_items
-                    task_objects = self.get_line_items(tasks, current_company)
-                    total_amt = self.get_total(task_objects)
-                    context['task_objects'] = task_objects
-                    context['total_amt'] = total_amt
+                    if getattr(client, "regular_hourly_rate") != None and getattr(client, "weekend_hourly_rate") != None:
+                        invoice_header = InvoiceHeader.create_invoice(current_company,client,start_date,end_date)
+                        invoice_header_data = InvoiceHeader.objects.get(id =invoice_header.id)
+                        context['invoice_header_data'] = invoice_header_data
+                        invoice_line_items = list(InvoiceLineItem.objects.filter(invoice_header = invoice_header_data,company = current_company))
+                        context['invoice_line_items'] = invoice_line_items
+                        task_objects = self.get_line_items(tasks, current_company)
+                        total_amt = self.get_total(task_objects)
+                        context['task_objects'] = task_objects
+                        context['total_amt'] = total_amt
+                        caregiver = client.caregiver.all()
+                        context['caregiver'] = caregiver
+                        invoice_rate_types = InvoiceRateType.objects.all()
+                        context['invoice_rate_types'] = invoice_rate_types
+                        if current_company.tax_rate:
+                            tax_amt= round((invoice_header.total_cost * float(current_company.tax_rate / 100)),2)
+                            invoice_header_data.taxes = tax_amt
+                            invoice_header_data.total_cost =  invoice_header_data.total_cost +  Decimal.from_float(invoice_header_data.taxes)
+                            invoice_header_data.save()
+                    else:
+                        messages.error(request,"No active invoice for client {0} {1}".format(client.first_name,client.last_name) )
                     
-                    caregiver = client.caregiver.all()
-                    context['caregiver'] = caregiver
-                    invoice_rate_types = InvoiceRateType.objects.all()
-                    context['invoice_rate_types'] = invoice_rate_types
-                    if current_company.tax_rate:
-                        tax_amt= round((invoice_header.total_cost * float(current_company.tax_rate / 100)),2)
-                        invoice_header_data.taxes = tax_amt
-                        invoice_header_data.total_cost =  invoice_header_data.total_cost +  Decimal.from_float(invoice_header_data.taxes)
-                        invoice_header_data.save()
                        
        
         return render(request, "production/invoice.html", context)
@@ -2073,6 +2077,7 @@ def submit_invoice(request):
                     
                     invoice_header.total_cost = invoice_header.total_cost + Decimal.from_float(inline_total)
                     invoice_header.save()
+                    
             else:
                 invoice_line = InvoiceLineItem(invoice_header = invoice_header,  company = current_company,
                                                        rate_type = ratetypes.rate_types,
@@ -2083,6 +2088,7 @@ def submit_invoice(request):
                 invoice_line.save()
                 invoice_header.total_cost = invoice_header.total_cost + Decimal.from_float(invoice_fieldrate)
                 invoice_header.save()
+        messages.success(request,"Invoice created successfully")
    
     return HttpResponse(json.dumps(invoiceadd), content_type="application/json")
 
@@ -2142,6 +2148,7 @@ def update_invoice_detail(request):
                 invoice_header.total_cost =  (invoice_header.total_cost * 1) +  float(tax_amt)
             invoice_header.save()
             invoice_line_item.save()
+            messages.success(request,"Invoice updated sucessfully")
           
 
         return HttpResponse(json.dumps(data), content_type="application/json")
@@ -2456,6 +2463,7 @@ def send_email_invoice(request):
         }
         
         
+        
     return HttpResponse(json.dumps(invoiceadd), content_type="application/json")
             
      
@@ -2513,6 +2521,7 @@ class Payroll(LoginRequiredMixin, View):
             invoice_rate_types = InvoiceRateType.objects.all()
             context['invoice_rate_types'] = invoice_rate_types
             choose_caregiver_payroll_form = ChooseCaregiverPayrollForm(request.GET)
+            messageslist = []
             if choose_caregiver_payroll_form.is_valid():
                 # caregiver_email = choose_caregiver_payroll_form.cleaned_data['caregiver_email']
                 # caregiver = Caregiver.objects.get(company=current_company, email_address=caregiver_email)
@@ -2534,20 +2543,24 @@ class Payroll(LoginRequiredMixin, View):
                         payroll_header = PayrollHeader.objects.get(id = i.id)
                         context['payroll_header'] = payroll_header
                         context['payroll_line_item'] = payroll_line_item
+                    
                 else:
                     
                     for caregiver in caregivers:
-                        payroll_header = PayrollHeader.create_payroll(current_company,caregiver,start_date,end_date)
-                        payroll_header = list(PayrollHeader.objects.filter(start_date = start_date,end_date = end_date ,  submitted = True,cancelled= False))
-                        context['payroll_header'] = payroll_header
-                        payroll_line_item = []
-                        for i in payroll_header: 
-                            payroll_item = PayrollLineItem.objects.filter(payroll_header = i.id)
-                            payroll_line_item.append(payroll_item)
-                            payroll_header = PayrollHeader.objects.get(id = i.id)
+                        if getattr(caregiver, "regular_hourly_rate") != None and getattr(caregiver, "weekend_hourly_rate") != None and getattr(caregiver, "holiday_hourly_rate") != None and getattr(caregiver, "weekend_holiday_rate") != None and getattr(caregiver, "live_in_rate") != None and getattr(caregiver, "weekend_live_in_rate") != None and getattr(caregiver, "holiday_live_in_rate") != None and getattr(caregiver, "weekend_holiday_live_in_rate") != None:
+                            payroll_header = PayrollHeader.create_payroll(current_company,caregiver,start_date,end_date)
+                            payroll_header = list(PayrollHeader.objects.filter(start_date = start_date,end_date = end_date ,  submitted = True,cancelled= False))
                             context['payroll_header'] = payroll_header
-                            context['payroll_line_item'] = payroll_line_item
-
+                            payroll_line_item = []
+                            for i in payroll_header:
+                                payroll_item = PayrollLineItem.objects.filter(payroll_header = i.id)
+                                payroll_line_item.append(payroll_item)
+                                payroll_header = PayrollHeader.objects.get(id = i.id)
+                                context['payroll_header'] = payroll_header
+                                context['payroll_line_item'] = payroll_line_item
+                        else:
+                            messageslist.append("No active payroll for caregiver {0} {1}".format(caregiver.first_name,caregiver.last_name) )
+                            context['messageslist'] = messageslist
         return render(request, 'production/payroll.html', context)
 
 
@@ -2592,6 +2605,7 @@ def update_payroll_detail(request):
             #     invoice_header.total_cost =  (invoice_header.total_cost * 1) +  float(tax_amt)
             payroll_header.save()
             payroll_line_item.save()
+            messages.success(request,"Payroll Updated successfully")
           
 
         return HttpResponse(json.dumps(data), content_type="application/json")
@@ -2624,7 +2638,6 @@ def submit_payroll(request):
             "client_email" :client_email
         }
         for k in payroll_headerlist:
-            
             caregiverid = k['caregiverid']
             invoice_fieldrate_type = k['invoice_fieldrate_typeid']
             caregiver = Caregiver.objects.get(id = caregiverid, company = current_company)
@@ -2658,7 +2671,7 @@ def submit_payroll(request):
                         payroll_line.save()
                         i.total_cost = i.total_cost + Decimal.from_float(invoice_fieldrate)
                         i.save()
-   
+        messages.success(request,"Payroll created successfully")
     return HttpResponse(json.dumps(invoiceadd), content_type="application/json")
 
 
