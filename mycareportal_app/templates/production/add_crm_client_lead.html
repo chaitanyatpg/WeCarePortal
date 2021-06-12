@@ -7,27 +7,28 @@
 <link href="{% static 'vendors/iCheck/skins/flat/green.css' %}" rel="stylesheet">
 <!-- bootstrap-wysiwyg -->
 <link href="{% static 'vendors/google-code-prettify/bin/prettify.min.css' %}" rel="stylesheet">
-<!-- Select2 -->
-<link href="{% static 'vendors/select2/dist/css/select2.min.css' %}" rel="stylesheet">
 <!-- Switchery -->
 <link href="{% static 'vendors/switchery/dist/switchery.min.css' %}" rel="stylesheet">
 <!-- starrr -->
 <link href="{% static 'vendors/starrr/dist/starrr.css' %}" rel="stylesheet">
 <!-- bootstrap-daterangepicker -->
 <link href="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
-<!-- FullCalendar -->
-<link href="{% static 'vendors/fullcalendar/dist/fullcalendar.min.css' %}" rel="stylesheet">
-<link href="{% static 'vendors/fullcalendar/dist/fullcalendar.print.css' %}" rel="stylesheet" media="print">
-<!-- Dropzone.js -->
-<link href="{% static 'vendors/dropzone/dist/min/dropzone.min.css' %}" rel="stylesheet">
-
+<!-- Select2 -->
+<link href="{% static 'vendors/select2/dist/css/select2.min.css' %}" rel="stylesheet">
 {% endblock %}
+
 {% block pagecontent %}
 <style>
     .fc-time {
         display: none;
     }
 </style>
+
+<style>
+    input[data-readonly] {
+      pointer-events: none;
+    }
+  </style>
 <!-- page content -->
 <div class="right_col" role="main">
     <div class="">
@@ -139,9 +140,9 @@
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12">Date Of Birth <span class="required">*</span> </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                   {% if not crm_lead_form.date_of_birth.value is None %}
-                                    <input type="text" id="birthday" readonly="true" class="date-picker form-control col-md-7 col-xs-12" required="required" name={{crm_lead_form.date_of_birth.html_name}} value={{crm_lead_form.date_of_birth.value}}>
+                                    <input type="text" id="birthdayatfr"  class="date-picker form-control col-md-7 col-xs-12" required="required" name={{crm_lead_form.date_of_birth.html_name}} value={{crm_lead_form.date_of_birth.value}}>
                                   {% else %}
-                                    <input type="text" id="birthday" readonly="true" class="date-picker form-control col-md-7 col-xs-12" required="required" name={{crm_lead_form.date_of_birth.html_name}}>
+                                    <input type="text" id="birthday" class="date-picker form-control col-md-7 col-xs-12" required="required" name={{crm_lead_form.date_of_birth.html_name}}>
                                   {% endif %}
                                 </div>
                               </div>
@@ -151,21 +152,15 @@
                                         class="required">*</span> </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     {% if not crm_lead_form.phone_number.value is None %}
-                                    <input type="text" class="form-control col-md-7 col-xs-12"
-                                        data-inputmask="'mask': '(999)-999-9999'" required="required"
-                                        name={{crm_lead_form.phone_number.html_name}}
-                                        value={{crm_lead_form.phone_number.value}}>
+                                    <input type="text" required="required" class="form-control col-md-7 col-xs-12" id="phone-number"  name={{crm_lead_form.phone_number.html_name}} value={{crm_lead_form.phone_number.value}}>
                                     {% else %}
-                                    <input type="text" class="form-control col-md-7 col-xs-12"
-                                        data-inputmask="'mask': '(999)-999-9999'" required="required"
-                                        name={{crm_lead_form.phone_number.html_name}}>
+                                    <input type="text" required="required" class="form-control col-md-7 col-xs-12" id="phone-number"  name={{crm_lead_form.phone_number.html_name}}>
                                     {% endif %}
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12"> Secondary Phone Number <span
-                                        class="required">*</span> </label>
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12"> Secondary Phone Number </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     {% if not crm_lead_form.secondary_phone_number.value is None %}
                                     <input type="text" class="form-control col-md-7 col-xs-12"
@@ -185,10 +180,10 @@
                                         class="required">*</span> </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     {% if not crm_lead_form.lead_email.value is None %}
-                                    <input type="text" class="form-control col-md-7 col-xs-12" required="required"
+                                    <input type="text" class="form-control col-md-7 col-xs-12" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required="required"
                                         name={{crm_lead_form.lead_email.html_name}} value={{crm_lead_form.lead_email.value}}>
                                     {% else %}
-                                    <input type="text" class="form-control col-md-7 col-xs-12" required="required"
+                                    <input type="text" class="form-control col-md-7 col-xs-12" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required="required"
                                         name={{crm_lead_form.lead_email.html_name}}>
                                     {% endif %}
                                 </div>
@@ -200,10 +195,10 @@
                                     {% if not crm_lead_form.lead_address.value is None %}
                                     <input type="text" class="form-control col-md-7 col-xs-12" 
                                         name="{{crm_lead_form.lead_address.html_name}}"
-                                        value="{{crm_lead_form.lead_address.value}}"></textarea>
+                                        value="{{crm_lead_form.lead_address.value}}" required></textarea>
                                     {% else %}
                                     <input type="text" class="form-control col-md-7 col-xs-12" 
-                                        name="{{crm_lead_form.lead_address.html_name}}"></textarea>
+                                        name="{{crm_lead_form.lead_address.html_name}}" required></textarea>
                                     {% endif %}
                                 </div>
                             </div>
@@ -214,21 +209,21 @@
                                     {% if not crm_lead_form.city.value is None %}
                                     <input type="text" class="form-control col-md-7 col-xs-12" 
                                         name="{{crm_lead_form.city.html_name}}"
-                                        value="{{crm_lead_form.city.value}}">
+                                        value="{{crm_lead_form.city.value}}" required>
                                     {% else %}
                                     <input type="text" class="form-control col-md-7 col-xs-12" 
-                                        name="{{crm_lead_form.city.html_name}}">
+                                        name="{{crm_lead_form.city.html_name}}" required>
                                     {% endif %}
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12">State<span
                                         class="required">*</span> </label>
-                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                    {% if not crm_lead_form.state_value is None %}
-                                    <select required class="select2_single form-control" tabindex="-1"
+                                <div class="col-md-6 col-sm-6 col-xs-12" onchange="update_state()">
+                                    {% if not crm_lead_form.state.value is None %}
+                                    <select required class="select2_singlestate form-control" id="dropDownId" tabindex="-1"
                                         name={{crm_lead_form.state.html_name}} value={{crm_lead_form.state.value}}>
-                                        <option value="" disabled selected>Select State</option>
+                                        <option  selected>{{crm_lead_form.state.value}}</option>
                                         <option value="Other">Other</option>
                                         <option value="AL">Alabama</option>
                                         <option value="AK">Alaska</option>
@@ -312,7 +307,7 @@
                                         <option value="West Bengal">West Bengal</option>
                                     </select>
                                     {% else %}
-                                    <select class="select2_single form-control" tabindex="-1"
+                                    <select class="select2_singlestate form-control" id="dropDownId" tabindex="-1"
                                         name={{crm_lead_form.state.html_name}}>
                                         <option value="" disabled selected>Select State</option>
                                         <option value="Other">Other</option>
@@ -400,17 +395,30 @@
                                     {% endif %}
                                 </div>
                             </div>
+
                             <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12">ZIP code<span
-                                        class="required">*</span> </label>
+                                <div  id="selectlead" style="display:none"> 
+                                 <label class="control-label col-md-3 col-sm-3 col-xs-12">Other State name<span class="required">*</span> </label>
+                                 <div class="col-md-6 col-sm-6 col-xs-12">
+                                   {% if not crm_lead_form.other_state_name.value is None %}
+                                   <input type="text"  id="otherstatevalue" class="form-control col-md-7 col-xs-12"  name={{crm_lead_form.other_state_name.html_name}} value={{crm_lead_form.other_state_name.value}}>
+                                   {% else %}
+                                   <input type="text" id="otherstatevalue"  class="form-control col-md-7 col-xs-12"  name={{crm_lead_form.other_state_name.html_name}} >
+                                   {% endif %}
+                                 </div>
+                               </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">ZIP code<span class="required">*</span> </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     {% if not crm_lead_form.zip_code.value is None %}
                                     <input type="text" class="form-control col-md-7 col-xs-12" 
-                                        name={{crm_lead_form.zip_code.html_name}}
-                                        value={{crm_lead_form.zip_code.value}}>
+                                        name={{crm_lead_form.zip_code.html_name}} 
+                                        value={{crm_lead_form.zip_code.value}} required>
                                     {% else %}
                                     <input type="text" class="form-control col-md-7 col-xs-12" 
-                                        name={{crm_lead_form.zip_code.html_name}}>
+                                        name={{crm_lead_form.zip_code.html_name}} required>
                                     {% endif %}
                                 </div>
                             </div>
@@ -422,11 +430,11 @@
                                 </div>
                             </div> -->
                             <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Lead Source</label>
+                                <label  class="control-label col-md-3 col-sm-3 col-xs-12">Lead Source <span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     {% if not crm_lead_form.lead_source.value is None %}
-                                    <select required class="select2_single form-control" tabindex="-1"  name={{crm_lead_form.lead_source.html_name}} value={{crm_lead_form.state.value}}>
-                                        <option value="" disabled selected>Select Status</option>
+                                    <select required required class="select2_singleSource form-control" tabindex="-1"  name={{crm_lead_form.lead_source.html_name}} value={{crm_lead_form.lead_source.value}}>
+                                        <option value="" disabled selected>{{crm_lead_form.lead_source.value}}</option>
                                        <option value="Advertisement">Advertisement</option>
                                        <option value="Cold Call">Cold Call</option>
                                        <option value="Employee Referral">Employee Referral</option>
@@ -442,9 +450,9 @@
 
                                     </select>
                                     {% else %}
-                                    <select class="select2_single form-control" tabindex="-1"
+                                    <select required class="select2_singleSource form-control" tabindex="-1"
                                     name={{crm_lead_form.lead_source.html_name}}>
-                                    <option value="" disabled selected>Select Status</option>
+                                    <option value="" disabled selected>Select Source <span class="required">*</span></option>
                                     <option value="Advertisement">Advertisement</option>
                                     <option value="Cold Call">Cold Call</option>
                                     <option value="Employee Referral">Employee Referral</option>
@@ -466,11 +474,11 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Lead Status</label>
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Lead Status <span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     {% if not crm_lead_form.lead_status.value is None %}
-                                    <select required class="select2_single form-control" tabindex="-1"  name={{crm_lead_form.lead_status.html_name}} value={{crm_lead_form.lead_status.value}}>
-                                        <option value="" disabled selected>Select Status</option>
+                                    <select required class="select2_singlestatus form-control" tabindex="-1"  name={{crm_lead_form.lead_status.html_name}} value={{crm_lead_form.lead_status.value}}>
+                                        <option value="" disabled selected>{{crm_lead_form.lead_status.value}}</option>
                                         <option value="Attempted To Contact">Attempted To Contact</option>
                                         <option value="Contact In Future">Contact In Future</option>
                                         <option value="Contacted">Contacted</option>
@@ -482,7 +490,7 @@
 
                                     </select>
                                     {% else %}
-                                    <select class="select2_single form-control" tabindex="-1"
+                                    <select required class="select2_singlestatus form-control" tabindex="-1"
                                     name={{crm_lead_form.lead_status.html_name}}>
                                     <option value="" disabled selected>Select Status</option>
                                     <option value="Attempted To Contact">Attempted To Contact</option>
@@ -525,7 +533,7 @@
                      
                             <div class="ln_solid"></div>
                             <div class="form-group">
-                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-8">
+                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-6">
                                     <button type="submit" class="btn btn-success">Submit</button>
                                 </div>
                             </div>
@@ -540,73 +548,147 @@
 
 </div>
 
-    {% endblock %}
-    {% block footlibs %}
-    <!-- bootstrap-progressbar -->
-    <script src="{% static 'vendors/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
-    <!-- iCheck -->
-    <script src="{% static 'vendors/iCheck/icheck.min.js' %}"></script>
-    <!-- bootstrap-daterangepicker -->
-    <script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
-    <script src="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
-    <!-- bootstrap-wysiwyg -->
-    <script src="{% static 'vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js' %}"></script>
-    <script src="{% static 'vendors/jquery.hotkeys/jquery.hotkeys.js' %}"></script>
-    <script src="{% static 'vendors/google-code-prettify/src/prettify.js' %}"></script>
-    <!-- jQuery Tags Input -->
-    <script src="{% static 'vendors/jquery.tagsinput/src/jquery.tagsinput.js' %}"></script>
-    <!-- Switchery -->
-    <script src="{% static 'vendors/switchery/dist/switchery.min.js' %}"></script>
-    <!-- Select2 -->
-    <script src="{% static 'vendors/select2/dist/js/select2.full.min.js' %}"></script>
-    <!-- Parsley -->
-    <script src="{% static 'vendors/parsleyjs/dist/parsley.min.js' %}"></script>
-    <!-- Autosize -->
-    <script src="{% static 'vendors/autosize/dist/autosize.min.js' %}"></script>
-    <!-- jQuery autocomplete -->
-    <script src="{% static 'vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js' %}"></script>
-    <!-- starrr -->
-    <script src="{% static 'vendors/starrr/dist/starrr.js' %}"></script>
-    <!-- FullCalendar -->
-    <script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
-    <script src="{% static 'vendors/fullcalendar/dist/fullcalendar.min.js' %}"></script>
-    <!-- Fine Uploader -->
-    <script src="{% static 'vendors/fine-uploader/jquery.fine-uploader.min.js' %}"></script>
-    <!-- Datatables -->
+{% endblock %}
+{% block footlibs %}
+<!-- bootstrap-daterangepicker -->
+<script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
+<script src="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+<!-- Dropzone.js -->
+<script src="{% static 'vendors/dropzone/dist/min/dropzone.min.js' %}"></script>
+<!-- Select2 -->
+<script src="{% static 'vendors/select2/dist/js/select2.full.min.js' %}"></script>
+<!-- jquery.inputmask -->
+<script src="{% static 'vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js' %}"></script>
+{% endblock %}
 
-    {% endblock %}
-    {% block scripts %}
+{% block scripts %}
 
 
 
+    <!-- jquery.inputmask -->
+  <script>
+    $(document).ready(function(){
+    //   Inputmask("(999)-999-9999").mask("input");
+     
+      $("#phone-number").inputmask("(999)-999-9999",{showMaskOnFocus: false, showMaskOnHover: true});
+    });
+  </script>
+<!-- /jquery.inputmask -->
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-   
 
 <script>
-    $(document).ready(function () {
-        $('#birthday').daterangepicker({
-            singleDatePicker: true,
-            showDropdowns: true,
-            calender_style: "picker_4"
-        }, function (start, end, label) {
-            console.log(start.toISOString(), end.toISOString(), label);
-        });
-        
-        $('#birthday').val("");
+    $(document).ready(function() {
+      $('#birthday').daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: true,
+        maxDate: new Date,
+        calender_style: "picker_4"
+      }, function(start, end, label) {
+        console.log(start.toISOString(), end.toISOString(), label);
+      });
+      $('#birthday').val("");
     });
-</script>
+  </script>
 
+<script>
+    $(document).ready(function() {
+      $('#birthdayatfr').daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: true,
+        maxDate: new Date,
+        calender_style: "picker_4"
+      }, function(start, end, label) {
+        console.log(start.toISOString(), end.toISOString(), label);
+      });
+      // $('#birthday').val("");
+    });
+  </script>
+
+<script>
+    $(document).ready(function() {
+      $(".select2_singlestate").select2({
+        placeholder: "Select a state",
+        allowClear: true
+      });
+      $(".select2_group").select2({});
+      $(".select2_multiple").select2({
+        maximumSelectionLength: 4,
+        placeholder: "With Max Selection limit 4",
+        allowClear: true
+      });
+    });
+  </script>
+
+
+<script>
+    $(document).ready(function() {
+      $(".select2_singlestatus").select2({
+        placeholder: "Select a Status",
+        allowClear: true
+      });
+      $(".select2_group").select2({});
+      $(".select2_multiple").select2({
+        maximumSelectionLength: 4,
+        placeholder: "With Max Selection limit 4",
+        allowClear: true
+      });
+    });
+  </script>
+
+<script>
+    $(document).ready(function() {
+      $(".select2_singleSource").select2({
+        placeholder: "Select a Source",
+        allowClear: true
+      });
+      $(".select2_group").select2({});
+      $(".select2_multiple").select2({
+        maximumSelectionLength: 4,
+        placeholder: "With Max Selection limit 4",
+        allowClear: true
+      });
+    });
+  </script>
+
+<script>
+    function update_state() {
+        // Get the checkbox
+        values = $('#dropDownId :selected').val()
+        console.log("ssss ---",values)
+        // Get the output text
+        var selectlead = document.getElementById("selectlead");
+        
+        var selectleadss = document.getElementById("selectleads");
+        
+        if (values === "Other") {
+            selectlead.style.display = "block";
+            $('#otherstatevalue').attr('required', 'required');
+        
+        } else {
+            selectlead.style.display = "none";
+            $('#otherstatevalue').removeAttr('required');
+        }
+    }
+  </script>
+
+
+<script>
+    $(document).ready(function() {
+  
+     values = $('#dropDownId :selected').val()
+       var selectlead = document.getElementById("selectlead");
+       
+       if (values === "Other") {
+         selectlead.style.display = "block";
+         $('#otherstatevalue').attr('required', 'required');
+         
+       }
+       else
+       {
+         selectlead.style.display = "none";
+         $('#otherstatevalue').removeAttr('required');
+       }
+    })
+  </script>
     {% endblock %}

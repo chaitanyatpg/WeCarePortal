@@ -209,6 +209,8 @@ class CrmLeadForm(forms.Form):
     lead_status = forms.CharField(max_length=100, required=False)
     lead_source = forms.CharField(max_length=100, required=False)
     lead_discription = forms.CharField(max_length= 1000, required=False)
+    other_state_name = forms.CharField(max_length=100,required=False)
+    
 
 
 

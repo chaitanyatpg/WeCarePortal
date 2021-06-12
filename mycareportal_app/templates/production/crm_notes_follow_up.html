@@ -1,22 +1,21 @@
-{% extends "production/base.html" %} {% block title %} Lead Follow Up{% endblock %} {% load mycareportal_app_extras%}
-{% block headlibs %} {% load static %}
+{% extends "production/base.html" %}
+{% block title %} Lead Follow Up {% endblock %} 
+{% load mycareportal_app_extras%}
+{% block headlibs %} 
+{% load static %}
 <!-- iCheck -->
 <link href="{% static 'vendors/iCheck/skins/flat/green.css' %}" rel="stylesheet">
 <!-- bootstrap-wysiwyg -->
 <link href="{% static 'vendors/google-code-prettify/bin/prettify.min.css' %}" rel="stylesheet">
-<!-- Select2 -->
-<link href="{% static 'vendors/select2/dist/css/select2.min.css' %}" rel="stylesheet">
 <!-- Switchery -->
 <link href="{% static 'vendors/switchery/dist/switchery.min.css' %}" rel="stylesheet">
 <!-- starrr -->
 <link href="{% static 'vendors/starrr/dist/starrr.css' %}" rel="stylesheet">
 <!-- bootstrap-daterangepicker -->
 <link href="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
-<!-- FullCalendar -->
-<link href="{% static 'vendors/fullcalendar/dist/fullcalendar.min.css' %}" rel="stylesheet">
-<link href="{% static 'vendors/fullcalendar/dist/fullcalendar.print.css' %}" rel="stylesheet" media="print">
-<!-- Dropzone.js -->
-<link href="{% static 'vendors/dropzone/dist/min/dropzone.min.css' %}" rel="stylesheet"> {% endblock %}
+<!-- Select2 -->
+<link href="{% static 'vendors/select2/dist/css/select2.min.css' %}" rel="stylesheet">
+{% endblock %}
 {% block pagecontent %}
 <style>
     .fc-time {
@@ -49,7 +48,7 @@
                     <div style="padding-left:10px">
                         <form  onSubmit="return confirm('Do you want to Convert?') "  action="{% url 'convert_lead_client' %}" >
                             <input type="hidden" name="lead_id" value="{{lead_details.id}}">
-                            <button  class="btn btn-success edit_calendar_submit"  >Convert</button>
+                            <button  class="btn btn-success edit_calendar_submit"  >Convert to Client</button>
                         </form>
                     </div>
                 </div>
@@ -203,12 +202,9 @@
 
                             <div class="form-group">
                                 <div class="row">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Add Notes <span
-                                            class="required">*</span> </label>
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Add Notes <span class="required">*</span> </label>
                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <textarea type="text" id="lead_details_notes" rows="4" cols="50"
-                                            class="form-control col-md-7 col-xs-12"
-                                            name="lead_details_notes"></textarea>
+                                        <textarea type="text" id="lead_details_notes" rows="4" cols="50" class="form-control col-md-7 col-xs-12" name="lead_details_notes" required></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -234,7 +230,7 @@
                             <div class="clearfix"></div>
                             <div class="ln_solid"></div>
                             <div class="form-group">
-                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-8">
+                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-6">
                                     <input type="hidden" name='{{client_invoice_form.client_email.html_name}}'
                                         value='{{client_email}}'>
                                     <button type="submit" value="{{lead_details.id}}" class="btn btn-success"
@@ -577,37 +573,15 @@
 
 </div>
 {% endblock %} {% block footlibs %}
-<!-- bootstrap-progressbar -->
-<script src="{% static 'vendors/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
-<!-- iCheck -->
-<script src="{% static 'vendors/iCheck/icheck.min.js' %}"></script>
 <!-- bootstrap-daterangepicker -->
 <script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
 <script src="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
-<!-- bootstrap-wysiwyg -->
-<script src="{% static 'vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js' %}"></script>
-<script src="{% static 'vendors/jquery.hotkeys/jquery.hotkeys.js' %}"></script>
-<script src="{% static 'vendors/google-code-prettify/src/prettify.js' %}"></script>
-<!-- jQuery Tags Input -->
-<script src="{% static 'vendors/jquery.tagsinput/src/jquery.tagsinput.js' %}"></script>
-<!-- Switchery -->
-<script src="{% static 'vendors/switchery/dist/switchery.min.js' %}"></script>
+<!-- Dropzone.js -->
+<script src="{% static 'vendors/dropzone/dist/min/dropzone.min.js' %}"></script>
 <!-- Select2 -->
 <script src="{% static 'vendors/select2/dist/js/select2.full.min.js' %}"></script>
-<!-- Parsley -->
-<script src="{% static 'vendors/parsleyjs/dist/parsley.min.js' %}"></script>
-<!-- Autosize -->
-<script src="{% static 'vendors/autosize/dist/autosize.min.js' %}"></script>
-<!-- jQuery autocomplete -->
-<script src="{% static 'vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js' %}"></script>
-<!-- starrr -->
-<script src="{% static 'vendors/starrr/dist/starrr.js' %}"></script>
-<!-- FullCalendar -->
-<script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
-<script src="{% static 'vendors/fullcalendar/dist/fullcalendar.min.js' %}"></script>
-<!-- Fine Uploader -->
-<script src="{% static 'vendors/fine-uploader/jquery.fine-uploader.min.js' %}"></script>
-
+<!-- jquery.inputmask -->
+<script src="{% static 'vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js' %}"></script>
 
 {% endblock %} {% block scripts %}
 
@@ -660,6 +634,7 @@
     function saveNotes(x) {
         console.log("vvvvvv", x)
 
+        if( $("#lead_details_notes").val()){
         $.ajax({
 
             url: "{% url 'save_crm_notes' %}",
@@ -677,6 +652,11 @@
                 location.reload();
             }
         });
+    }
+    else{
+       
+       $('#lead_details_notes').attr('required', 'required');
+    }
     }
 </script>
 
@@ -711,13 +691,14 @@
             data: {
                 "lead_details_id": $("input[name=lead_detailsid]").val(),
                 "lead_status": $('#dropDownId :selected').val()
-                // $("input[name=lead_details_notes]").val()
+              
             },
             dataType: "json",
             contentType: "application/json",
             success: function (data) {
-                location.reload();
-            }
+                    location.reload(); 
+            },
+ 
         });
     }
 }
