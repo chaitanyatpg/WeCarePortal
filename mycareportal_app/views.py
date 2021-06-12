@@ -1237,7 +1237,6 @@ class Invoice(LoginRequiredMixin, View):
                     
                 else:
                     if getattr(client, "regular_hourly_rate") != None and getattr(client, "weekend_hourly_rate") != None:
-                        print("ss 0000000000000000")
                         invoice_header = InvoiceHeader.create_invoice(current_company,client,start_date,end_date)
                         invoice_header_data = InvoiceHeader.objects.get(id =invoice_header.id)
                         context['invoice_header_data'] = invoice_header_data
