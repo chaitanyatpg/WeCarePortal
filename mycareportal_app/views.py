@@ -2291,7 +2291,7 @@ def update_lead_status(request):
             data = {
                 "data" : "sucess"
             }
-            print("ori iii")
+            
             messages.success(request, "Lead status updated")
         else:
             data = {
