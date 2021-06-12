@@ -2386,7 +2386,6 @@ class EditCrmLead(LoginRequiredMixin, View):
                 context['crm_lead_form'] = crm_lead_form
                 context['lead_email'] = lead_details.lead_email_address
         else:
-            print("idhar aya")
             messages.success(request, "Lead doesn't exist")
             return HttpResponseRedirect(reverse('company_crm'))
 
