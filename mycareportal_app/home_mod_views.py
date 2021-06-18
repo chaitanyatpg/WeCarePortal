@@ -292,13 +292,12 @@ class AcceptBid(LoginRequiredMixin, View):
             task.chosen_bid = bid
             task.save()
             # Create new Home Mod project
-            home_mod_project = HomeModProject(company=current_company,
-                                            home_mod_task = task,
-                                            estimated_budget = bid.cost,
-                                            contractor = bid.contractor,
-                                            client = task.client)
-            home_mod_project.save()
-            messages.success(request, "Accepted Bid from {0} {1} for task {2} and created project".format(bid.contractor.first_name, bid.contractor.last_name, task.task_name))
+            if not HomeModProject.objects.filter(company=current_company,home_mod_task = task).exists():
+                home_mod_project = HomeModProject(company=current_company,home_mod_task = task,estimated_budget = bid.cost,contractor = bid.contractor,client = task.client)
+                home_mod_project.save()
+                messages.success(request, "Accepted Bid from {0} {1} for task {2} and created project".format(bid.contractor.first_name, bid.contractor.last_name, task.task_name))
+            else:
+                messages.success(request,"Bid already accepted")
         else:
             messages.success(request, "Bid doesn't exist") 
         return redirect('home_dashboard')
@@ -559,7 +558,7 @@ class RejectBid(LoginRequiredMixin, View):
             task = bid.home_mod_task
         # Set chosen bid of the task
             if task.chosen_bid:
-                messages.success(request, "Bid already Accpected".format(bid.contractor.first_name, bid.contractor.last_name))
+                messages.success(request, "Bid already accepted".format(bid.contractor.first_name, bid.contractor.last_name))
             else:
                 bid.bid_live = False
                 bid.save()
