@@ -1256,7 +1256,8 @@ class Invoice(LoginRequiredMixin, View):
                             invoice_header_data.total_cost =  invoice_header_data.total_cost +  Decimal.from_float(invoice_header_data.taxes)
                             invoice_header_data.save()
                     else:
-                        messages.error(request,"No active invoice for client {0} {1}".format(client.first_name,client.last_name) )
+                        messageslist.append("No active invoice for client {0} {1}".format(client.first_name,client.last_name) )
+                        context['messageslist'] = messageslist
                     
                        
        
@@ -2526,6 +2527,7 @@ class Payroll(LoginRequiredMixin, View):
             context['payroll_header'] = exits_invoice_header
             payroll_header = PayrollHeader.objects.filter(id = exits_invoice_header)
             context['payroll_header'] = payroll_header
+         
             payroll_line_item = []
             for i in payroll_header:
                 payroll_item = PayrollLineItem.objects.filter(payroll_header = i.id)
@@ -2533,6 +2535,8 @@ class Payroll(LoginRequiredMixin, View):
                 payroll_header = PayrollHeader.objects.get(id = i.id)
                 context['payroll_header'] = payroll_header
                 context['payroll_line_item'] = payroll_line_item
+                context['start_date'] = payroll_header.start_date
+                context['end_date'] = payroll_header.end_date
             # payroll_line_item = PayrollLineItem.objects.filter(payroll_header = payroll_header,company = current_company).order_by("id")
             # context['payroll_line_item'] = payroll_line_item
             # caregiver_schedule_notes = CaregiverSchedule.objects.filter(company = current_company, client= invoice_header_data.client, date__range = (invoice_header_data.start_date, invoice_header_data.end_date))
@@ -2784,3 +2788,60 @@ def cancel_payroll(request):
         payroll_header.save()
 
     return HttpResponseRedirect(reverse('caregiverpayroll'))
+
+
+
+
+
+@login_required
+def delete_invoice_line_detail(request):
+    if request.method == "GET":
+        
+        current_company = request.user.company
+        
+        context = request.GET.copy()
+        invoice_linelist  =  json.loads(request.GET.get('invoice_line_delete_array'))
+            
+        data = {
+            "ratetype" : "sucess"
+         }
+        for i in invoice_linelist:
+            invoice_line_id = int(i['invoic_line_id'])
+            change_hours = float(i['change_hours'])
+            change_ratetype = i['change_ratetype']
+            change_rate = float(i['change_rate'])
+            invoice_line_item = InvoiceLineItem.objects.get(id = invoice_line_id)
+            invoice_header = InvoiceHeader.objects.get(id = invoice_line_item.invoice_header.id)
+            invoice_header.total_cost = float(invoice_header.total_cost)- float(invoice_line_item.total)
+            
+            invoice_header.save()
+            invoice_line_item.delete()
+        
+        return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+
+@login_required
+def payroll_line_delete(request):
+    if request.method == "GET":
+        
+        current_company = request.user.company
+        
+        context = request.GET.copy()
+        payroll_linelist  =  json.loads(request.GET.get('payroll_line_array'))     
+        data = {
+            "ratetype" : "sucess"
+        }
+        for i in payroll_linelist:
+            invoice_line_id = int(i['payroll_line_id'])
+            change_hours = float(i['change_hours'])
+            change_ratetype = i['change_ratetype']
+            change_rate = float(i['change_rate'])
+            payroll_line_item = PayrollLineItem.objects.get(id = invoice_line_id)
+            payroll_header = PayrollHeader.objects.get(id = payroll_line_item.payroll_header.id)
+            payroll_header.total_cost = float(payroll_header.total_cost)- float(payroll_line_item.total)
+            payroll_header.save()
+            payroll_line_item.delete()
+            
+    
+    return HttpResponse(json.dumps(data), content_type="application/json")

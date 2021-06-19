@@ -103,13 +103,14 @@ class AcceptMoveBid(LoginRequiredMixin, View):
             task.chosen_bid = bid
             task.save()
             # Create new Move Management project
-            move_manage_project = MoveManagementProject(company=current_company,
-                                            move_manage_task = task,
-                                            estimated_budget = bid.cost,
-                                            move_manager = bid.move_manager,
-                                            client = task.client)
-            move_manage_project.save()
-            messages.success(request, "Accepted Bid from {0} {1} and created Move Management project".format(bid.move_manager.first_name, bid.move_manager.last_name))
+            if not MoveManagementProject.objects.filter(company=current_company,move_manage_task = task).exists():
+                move_manage_project = MoveManagementProject(company=current_company,move_manage_task = task,estimated_budget = bid.cost,move_manager = bid.move_manager,client = task.client)
+                move_manage_project.save()
+                messages.success(request, "Accepted Bid from {0} {1} and created Move Management project".format(bid.move_manager.first_name, bid.move_manager.last_name))
+            else:
+                messages.success(request,"Bid already accepted")
+
+            
         else:
             messages.success(request, "Bid doesn't exist")
         return redirect('home_dashboard')
@@ -380,7 +381,7 @@ class ChooseMoveContractorForTask(LoginRequiredMixin, View):
                 bids = MoveManageTaskBid.objects.filter(company = current_company,move_manage_task =task,move_manager =move_manager)
                 bids.delete()
                 if MoveManagerRejectTask.objects.filter(company=current_company,move_manager=move_manager,move_manage_task= task,status = True).exists():
-                    manager_reject_task = MoveManagerRejectTask.objects.filter(company = current_company,move_manager =move_manager, move_manage_task = task,status = True)
+                    manager_reject_task = MoveManagerRejectTask.objects.get(company = current_company,move_manager =move_manager, move_manage_task = task,status = True)
                     manager_reject_task.status = False
                     manager_reject_task.save()
             else:
@@ -739,7 +740,7 @@ class RejectMoveBid(LoginRequiredMixin, View):
             
         # Set chosen bid of the task
             if task.chosen_bid:
-                messages.success(request, "Bid already Accpected".format(bid.move_manager.first_name, bid.move_manager.last_name))
+                messages.success(request, "Bid already accepted".format(bid.move_manager.first_name, bid.move_manager.last_name))
             else:
                 bid.bid_live = False
                 bid.save()

@@ -198,7 +198,7 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">State<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12" onchange="update_state()">
                       {% if not add_client_form.state.value is None %}
-                      <select required class="select2_single form-control"  tabindex="11" id="dropDownId" name={{add_client_form.state.html_name}} value={{add_client_form.state.value}}>
+                      <select required class="select2_single form-control"  tabindex="11" id="dropDownId" style="width: 100%;" name={{add_client_form.state.html_name}} value={{add_client_form.state.value}}>
                             
                             <option   selected=selected>{{add_client_form.state.value}}</option>
                             <option value="Other">Other</option>
@@ -285,7 +285,7 @@
                       </select>
                       {% else %}
                       
-                      <select required class="select2_single form-control" tabindex="11" id="dropDownId" name={{add_client_form.state.html_name}}>
+                      <select required class="select2_single form-control" tabindex="11" id="dropDownId" style="width: 100%;" name={{add_client_form.state.html_name}}>
                             <option value="" disabled selected>Select State</option>
                             <option value="Other">Other</option>
                             <option value="AL">Alabama</option>
@@ -402,7 +402,7 @@
                     <div class="col-md-6 col-sm-6 col-xs-12">
 
                       {% if not add_client_form.time_zone.value is None %}
-                      <select required class="select2_time_zone form-control" tabindex="13" name={{add_client_form.time_zone.html_name}}>
+                      <select required class="select2_time_zone form-control" tabindex="13" style="width: 100%;" name={{add_client_form.time_zone.html_name}}>
                         <option>{{add_client_form.time_zone.value}}</option>
                         {% for timezone in all_timezones %}
                           <option value='{{timezone}}'>{{timezone}}</option>
@@ -410,7 +410,7 @@
                       </select>
                     
                     {% else %}
-                      <select required class="select2_time_zone form-control" tabindex="13" name={{add_client_form.time_zone.html_name}}>
+                      <select required class="select2_time_zone form-control" tabindex="13" style="width: 100%;" name={{add_client_form.time_zone.html_name}}>
                         <option></option>
                         {% for timezone in all_timezones %}
                           <option value='{{timezone}}'>{{timezone}}</option>

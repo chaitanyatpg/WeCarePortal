@@ -46,7 +46,7 @@
                         	<div class="form-group">
                             	<label class="control-label col-md-2 col-sm-2 col-xs-12">Select Caregiver</label>
     	                        <div class="col-md-10 col-sm-10 col-xs-12">
-    	                          <select id='caregiver_dropdown' class="select2_single form-control" tabindex="-1">
+    	                          <select id='caregiver_dropdown' class="select2_single form-control" style="width: 100%; tabindex="-1">
     	                            <option value=""></option>
                                   {% for caregiver in all_caregivers %}
                                     <option value= {{caregiver.email_address}}>{{caregiver.first_name|addstr_space:caregiver.last_name}}</option>

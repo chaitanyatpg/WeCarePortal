@@ -586,13 +586,14 @@
                     
                                     <div class="row">
                                       <div class="form-group">
-                                        <label class="col-md-3 col-sm-6 col-xs-3">Weekend holiday rate
+                                        <label class="col-md-3 col-sm-3 col-xs-3">Weekend holiday rate
                                           <br>
                                         </label>
-                                        <div class="col-md-3 col-sm-2  col-xs-3">
+                                        <div class="col-md-3 col-sm-3 col-xs-3">
                                           <label>
                                             {% if not client.weekend_holiday_rate is None %}
-                                            <input type="number" name="{{ client_invoice_form.weekend_holiday_rate.html_name}}" min="0" step="any" value="{{client.weekend_holiday_rate}}" required> {% else %}
+                                            <input type="number" name="{{ client_invoice_form.weekend_holiday_rate.html_name}}" min="0" step="any" value="{{client.weekend_holiday_rate}}" required> 
+                                            {% else %}
                                             <input type="number" name="{{ client_invoice_form.weekend_holiday_rate.html_name}}" min="0" step="any"  required>
                                             {% endif %}
                                           </label>

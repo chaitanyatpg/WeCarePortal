@@ -64,8 +64,20 @@
     </div>
 
     <div class="clearfix"></div>
+    
     {{block.super}}
-
+  
+    {% if messageslist %}
+    <ul class="messages">
+       {% for message in messageslist %}
+          <div class="noactiveinvoice"  >
+            <strong class="textnoactive" style="font-weight: 400; margin-left: 10px;"> {{message}}
+            
+              </strong>
+          </div>
+      {% endfor %}
+    </ul>
+    {% endif %}
     <div class="row">
       <div class="col-md-12">
         <div class="x_panel">
@@ -94,14 +106,14 @@
               <!-- info row -->
               <div class="row invoice-info">
 
-                <div class="col-sm-4 invoice-col">
+                <div class="col-sm-5 col-md-5 invoice-col">
                   {% if current_company.logo %}
                   <img src="{{current_company.logo.url}}" style="width: 270px; height:200px;">
                   {% endif %}
 
                 </div>
 
-                <div class="col-sm-4 invoice-col">
+                <div class="col-sm-4 col-md-3 invoice-col">
                   <address>
                     <strong>{{current_company.company_name}}</strong>
                     <br>{{current_company.address}}
@@ -110,7 +122,7 @@
                   </address>
                 </div>
                 <!-- /.col -->
-                <div class="col-sm-4 invoice-col">
+                <div class="col-sm-5 col-md-3 invoice-col">
 
                   Date: <small>{{current_date}}</small><br>
                   Invoice :  {{invoice_header_data.invoice_number_string}}
@@ -163,11 +175,16 @@
                       {% endif %}
                       
                       <td>{{invoice.total  }}</td>
-                      {% if not submit %}
+                    {% if not submit %}
+                      {% if invoice.rate_type == "Supplies" or invoice.rate_type == "Mileage"  or invoice.rate_type == "Miscellaneous"  %}
+                      <td ><button type="submit" style="z-index: 1000;  position: relative"  name="invoicelines" onclick="deletLine(this.value)"
+                        value="{{invoice.id}}" class="btn btn-success">Delete</button></td>
+
+                      {% else %}
                       <td ><button type="submit" style="z-index: 1000;  position: relative"  name="invoicelines" onclick="editlinitem(this.value)"
                           value="{{invoice.id}}" class="btn btn-success">Update</button></td>
-
                       {% endif %}
+                    {% endif %}
                     </tr>
 
                     {% endfor %}
@@ -311,7 +328,7 @@
 
                     <div class="form-group">
                       <label for="invoice_notes" class="control-label col-md-3 col-sm-3 col-xs-12">Invoice for the <br>
-                        week of</label> {{start_date}} {{end_date}}
+                        week of</label> {{start_date}} - {{end_date}}
 
                     </div>
                   </div>
@@ -340,7 +357,7 @@
                 <!-- this row will not appear when printing -->
                 <div class="row no-print">
                   <div class="col-xs-12">
-                    <button class="btn btn-default" onclick="window.print()"><i class="fa fa-print"></i> Print</button>
+                    <!-- <button class="btn btn-default" onclick="window.print()"><i class="fa fa-print"></i> Print</button> -->
                     {% if submit %}
                     <button id="" disabled class="btn btn-success pull-right"><i class="fa fa-credit-card"></i>
                       Submit
@@ -742,6 +759,61 @@ $(document).ready(function (){
   }
 </script>
 
+<script>
+  //  $(document).ready(function () {
+  //   var counter = 0;
+  //   $("#editline").on("click", function () {
+  function deletLine(x) {
 
+    if(confirm('Do you want to delete?')){
+    
+    var myTab = document.getElementById('lineitemid');
+    console.log("myTabmyTab --",myTab)
+
+    lineitem = []
+    for (row = 1; row < myTab.rows.length; row++) {
+
+      if (myTab.rows[row].childNodes[1].value == x) {
+        var person = new Object();
+        console.log("elementelementelement", myTab.rows[row].childNodes[1].value)
+        var element = myTab.rows.item(row).cells[0].innerText;
+        console.log("elementddddddddd344444", element)
+        person["invoic_line_id"] = myTab.rows[row].childNodes[1].value;
+
+        person["change_hours"] = myTab.rows.item(row).cells[3].innerText;
+        person["change_ratetype"] = myTab.rows.item(row).cells[4].innerText;
+        person["change_rate"] = myTab.rows.item(row).cells[5].innerText;
+
+        lineitem.push(person)
+
+
+      }
+
+
+    }
+    $.ajax({
+
+      url: "{% url 'delete_invoice_line_detail' %}",
+      type: "GET",
+
+      data: {
+
+        "invoice_line_delete_array": JSON.stringify(lineitem),
+
+      },
+      dataType: "json",
+      contentType: "application/json",
+      success: function (data) {
+        location.reload();
+
+      }
+
+    });
+
+  }
+
+
+  }
+</script>
 
 {% endblock %}

@@ -5005,5 +5005,17 @@ ul.notifications {
 .sucesslogin{padding:15px;margin-bottom:20px;border:1px solid transparent;border-radius:4px;color:#fff;background-color:#4260ae;border-color:rgb(33 25 227 / 88%)}
 
 
+.noactiveinvoice {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 4px; color: white; 
+  border-color: white; 
+  background-color: white;
+}
 
+.textnoactive {
+color:#96999b;
+font-size: 14px;
+}
 

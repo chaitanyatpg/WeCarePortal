@@ -254,7 +254,8 @@
     $(document).ready(function () {
         $('#start_date').daterangepicker({
             singleDatePicker: true,
-            calender_style: "picker_2"
+            calender_style: "picker_2",
+            minDate: new Date,
         }, function (start, end, label) {
             console.log(start.toISOString(), end.toISOString(), label);
         });
@@ -265,7 +266,8 @@
     $(document).ready(function () {
         $('#end_date').daterangepicker({
             singleDatePicker: true,
-            calender_style: "picker_2"
+            calender_style: "picker_2",
+            minDate: new Date((new Date()).valueOf() + 1000*3600*24),
         }, function (start, end, label) {
             console.log(start.toISOString(), end.toISOString(), label);
         });

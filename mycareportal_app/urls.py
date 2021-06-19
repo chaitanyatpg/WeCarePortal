@@ -213,6 +213,9 @@ urlpatterns = [
     url(r'^submit_invoice',views.submit_invoice,name='submit_invoice'),
 
     url(r'^update_invoice',views.update_invoice_detail,name='update_invoice'),
+
+    url(r'^delete_invoice_line_detail',views.delete_invoice_line_detail,name='delete_invoice_line_detail'),
+
     url(r'^billing/invoice/get_pdf',views.get_pdf,name='get_pdf'),
     url(r'^billing/invoice', views.Invoice.as_view(), name='invoice'),
 
@@ -227,6 +230,9 @@ urlpatterns = [
     
     url(r'^cancel_payroll',views.cancel_payroll,name='cancel_payroll'),
     url(r'^update_payroll',views.update_payroll_detail,name='update_payroll'),
+
+    url(r'^delete_payroll_line',views.payroll_line_delete,name='delete_payroll_line'),
+
     url(r'^manager_choose_client', views.ManagerChooseClient.as_view(), name='manager_choose_client'),
     url(r'^manager_client_dashboard/(?P<client_email>\w+|[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/(?P<start_date>\d{4}-\d{2}-\d{2})/(?P<end_date>\d{4}-\d{2}-\d{2})/$', views.ManagerClientDashboard.as_view(), name='manager_client_dashboard'),
     url(r'^manager_client_dashboard', views.ManagerClientDashboard.as_view(), name='manager_client_dashboard'),
