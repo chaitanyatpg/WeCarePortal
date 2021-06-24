@@ -51,12 +51,12 @@
                     <br />
                     <div class="row">
                       <div class="col-md-10 col-sm-10 col-xs-12">
-                        <form method="get" action="{% url 'invoice' %}" id="demo-form2" data-parsley-validate >
+                        <form id="choose_client_form" method="get" action="{% url 'invoice' %}" id="demo-form2" data-parsley-validate >
                         	
                           <div class="form-group">
                             	<label class="control-label col-md-2 col-sm-2 col-xs-12">Select Client <span class="required">*</span></label>
     	                        <div class="col-md-10 col-sm-10 col-xs-12">
-    	                          <select id='client_dropdown' class="select2_single form-control" style="width: 100%;"  tabindex="-1">
+    	                          <select required id="client_dropdown" class="select2_single form-control" style="width: 100%;"  tabindex="-1">
     	                            <option value=""></option>
                                   {% for client in all_clients %}
                                     <option value= {{client.email_address}}>{{client.first_name|addstr_space:client.last_name}}</option>
@@ -95,7 +95,7 @@
                                   </ul>
                                 </div>
                                 <div id="client_detail_img" class="right col-xs-5 text-center">
-                                  <img src="" alt="" class="img-circle img-responsive">
+                                  <!-- <img src="" alt="" class="img-circle img-responsive"> -->
                                 </div>
                               </div>
                               <div class="col-xs-12 bottom text-center">
@@ -132,7 +132,7 @@
                       <div class="col-md-2 col-sm-2 col-md-offset-8">
             	              <div class="form-group">
                                 <input type="hidden" id="client_email_hidden" name="{{client_invoice_form.client_email.html_name}}">
-            	                  <button type="submit" class="btn btn-success">Create Invoice</button>
+            	                  <button  type="button" onclick="ValidateForm()" class="btn btn-success">Create Invoice</button>
             	              </div>
                       </div>
                     </div>
@@ -280,7 +280,8 @@
             $('#client_detail_email').html('Email: ' + client_data.email_address);
             $('#client_detail_gender').html('Gender: ' + client_data.gender);
             $('#client_email_hidden').val(client_data.email_address);
-            $('#client_detail_img').html('<img src=' + client_data.profile_picture + ' class="img-circle img-responsive">');
+            // $('#client_detail_img').html('<img src=' + client_data.profile_picture + ' class="img-circle img-responsive">');
+            $('#client_detail_img').html(client_data.profile_picture ? '<img src=' + client_data.profile_picture + ' class="img-circle img-responsive"> ': '');
           },
           failure: function(client_data){
             alert('error fetching client data');
@@ -719,5 +720,24 @@
     });
   });
 </script>
+
+
+<script>
+ function ValidateForm(){
+  values = $('#client_dropdown :selected').val()
+console.log("client_dropdownclient_dropdown",values)
+
+   if(values){
+     document.getElementById("choose_client_form").submit()
+   }
+   else{
+    $('#client_dropdown').attr('required', 'required');
+    alert("Please select client.")
+   }
+   
+  }
+</script>
+
+
 
 {% endblock %}

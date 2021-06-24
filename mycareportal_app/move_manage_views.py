@@ -379,14 +379,25 @@ class ChooseMoveContractorForTask(LoginRequiredMixin, View):
             if is_unassign == "True":
                 task.chosen_manager.remove(move_manager)
                 bids = MoveManageTaskBid.objects.filter(company = current_company,move_manage_task =task,move_manager =move_manager)
-                bids.delete()
+                for i in bids:
+                    bids = MoveManageTaskBid.objects.get(id = i.id)
+                    bids.archived =  True
+                    bids.save()
                 if MoveManagerRejectTask.objects.filter(company=current_company,move_manager=move_manager,move_manage_task= task,status = True).exists():
                     manager_reject_task = MoveManagerRejectTask.objects.get(company = current_company,move_manager =move_manager, move_manage_task = task,status = True)
                     manager_reject_task.status = False
                     manager_reject_task.save()
             else:
                 task.chosen_manager.add(move_manager)
-                task.save()
+                if MoveManageTaskBid.objects.filter(company = current_company,move_manage_task =task,move_manager =move_manager).exists():
+                    bids = MoveManageTaskBid.objects.filter(company = current_company,move_manage_task =task,move_manager =move_manager)
+                    for i in bids:
+                        bids = MoveManageTaskBid.objects.get(id = i.id)
+                        bids.archived =  False
+                        bids.save()
+
+
+            task.save()
 
             # task = MoveManageTask.objects.get(company=current_company, uid=task_id)
             # move_manager = MoveManager.objects.get(company=current_company, uid=move_manager_id)

@@ -907,7 +907,11 @@ class ChooseContractorForTask(LoginRequiredMixin, View):
             if is_unassign == "True":
                 task.chosen_contractors.remove(contractor)
                 bids = HomeModTaskBid.objects.filter(company=current_company, home_mod_task=task,contractor =contractor)
-                bids.delete()
+                for i in bids:
+                    bids = HomeModTaskBid.objects.get(id = i.id)
+                    bids.archived = True
+                    bids.save()
+
                 if ContractorRejectTask.objects.filter(company=current_company,contractor=contractor,home_mod_task= task,status = True).exists():
                     contractor_task = ContractorRejectTask.objects.get(company=current_company, home_mod_task=task,contractor =contractor,status = True)
                     contractor_task.status = False
@@ -915,6 +919,13 @@ class ChooseContractorForTask(LoginRequiredMixin, View):
 
             else:
                 task.chosen_contractors.add(contractor)
+                if HomeModTaskBid.objects.filter(company=current_company, home_mod_task=task,contractor =contractor).exists():
+                    bids = HomeModTaskBid.objects.filter(company=current_company, home_mod_task=task,contractor =contractor)
+                    for i in bids:
+                        bids = HomeModTaskBid.objects.get(id = i.id)
+                        bids.archived = False
+                        bids.save()
+
                 
             task.save()
             

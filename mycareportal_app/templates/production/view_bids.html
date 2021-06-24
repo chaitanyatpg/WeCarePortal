@@ -49,6 +49,7 @@
 
 
           {% for bid in bids %}
+          {% if not bid.archived %}
           {% if bid.bid_live %}
           <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
@@ -69,9 +70,9 @@
                         <div id="crop-avatar">
                           <!-- Current avatar -->
                           {% if bid.contractor.profile_picture %}
-                            <div class="img-responsive avatar-view"> <img src="{{bid.contractor.profile_picture.url}}"> </div>
+                             <img class="img-responsive avatar-view" src="{{bid.contractor.profile_picture.url}}"> 
                           {% else %}
-                            <div class="img-responsive avatar-view"> <img src="{% static 'pictures/img.png' %}"> </div>
+                             <img class="img-responsive avatar-view" src="{% static 'pictures/img.png' %}"> 
                           {% endif %}
                         </div>
                       </div>
@@ -176,6 +177,7 @@
             </div>
             
           </div>
+          {% endif %}
           {% endif %}
           {% endfor %}
             <!--<div class="row">
