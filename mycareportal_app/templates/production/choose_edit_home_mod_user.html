@@ -84,7 +84,7 @@
                                   </ul>
                                 </div>
                                 <div id="caregiver_detail_img" class="right col-xs-5 text-center">
-                                  <img src="" alt="" class="img-circle img-responsive">
+                                  <!-- <img src="" alt="" class="img-circle img-responsive"> -->
                                 </div>
                               </div>
                               <div class="col-xs-12 bottom text-center">
@@ -158,7 +158,8 @@
             $('#caregiver_detail_email').html('Email: ' + home_mod_user_data.email_address);
             $('#caregiver_detail_gender').html('Gender: ' + home_mod_user_data.gender);
             $('#caregiver_email_hidden').val(home_mod_user_data.email_address);
-            $('#caregiver_detail_img').html('<img src=' + home_mod_user_data.profile_picture + ' class="img-circle img-responsive">');
+            // $('#caregiver_detail_img').html('<img src=' + home_mod_user_data.profile_picture + ' class="img-circle img-responsive">');
+            $('#caregiver_detail_img').html(home_mod_user_data.profile_picture ? '<img src=' + home_mod_user_data.profile_picture + ' class="img-circle img-responsive"> ': '');
           },
           failure: function(home_mod_user_data){
             alert('error fetching home mod user data');

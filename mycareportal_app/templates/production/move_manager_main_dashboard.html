@@ -188,6 +188,8 @@
 
                               {% for bids in move_manage_task_bids %}
 
+                              {% if not bids.archived %}
+
                               {% if bids.move_manage_task.uid == task.uid %}
                               <tr>
                               <td>{{bids.cost}}</td>
@@ -200,6 +202,7 @@
                               {% endif %}
 
                               </tr>
+                              {% endif %}
                               {% endif %}
                              {% endfor %}
                             </table>

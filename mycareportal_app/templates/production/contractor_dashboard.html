@@ -184,6 +184,7 @@
 
                             {% endif %}
                               {% for bids in home_mod_task_bids %}
+                              {% if not bids.archived %}
 
                               {% if bids.home_mod_task.uid == task.uid %}
                               <tr>
@@ -197,6 +198,7 @@
                               {% endif %}
 
                               </tr>
+                              {% endif %}
                               {% endif %}
                              {% endfor %}
                             </table>

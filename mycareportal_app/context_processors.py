@@ -138,6 +138,15 @@ def add_current_user_context(request):
         if 'CAREMANAGER' in user_roles:
             auth_info = CareManager.objects.get(user=request.user)
             context['current_user_info'] = auth_info
+        if 'HOMEMODUSER' in user_roles:
+            auth_info = HomeModificationUser.objects.get(user=request.user)
+            context['current_user_info'] = auth_info
+        if 'MOVEMANAGER' in user_roles:
+            auth_info = MoveManager.objects.get(user=request.user)
+            context['current_user_info'] = auth_info
+    
+            
+            
     return context
 
 def add_tablet_id_context(request):
