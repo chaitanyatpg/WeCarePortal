@@ -490,6 +490,7 @@
           invoicedata.push(person)
         }
       
+        console.log("invoicedatainvoicedata",invoicedata)
 
       $.ajax({
         url: "{% url 'submit_payroll' %}",
@@ -759,8 +760,9 @@
     //   $("#editline").on("click", function () {
     function payroll_line_delete(x) {
       console.log("vvvvvv", x)
+      if(confirm('Do you want to delete?')){
       var myTab = document.getElementById('lineitemid');
-          
+
       lineitem = []
       for (row = 1; row < myTab.rows.length; row++) {
         if (myTab.rows[row].childNodes[1].value == x) {
@@ -795,14 +797,15 @@
         dataType: "json",
         contentType: "application/json",
         success: function (data) {
-          // location.reload();
+          location.reload();
   
         }
   
       });
   
   
-  
+    }
+
   
     }
   </script>
