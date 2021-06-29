@@ -2309,49 +2309,33 @@ def find_caregiver(request):
 def post_criteria(request):
 
     if request.method == "POST":
-        company = request.user.company;
-        status_id = request.POST['status_id']
-        status_id = status_id.split('_')[0]
-        status = request.POST['status']
-        #client_id = request.POST['client_id']
-        #client = Client.objects.get(company=company,id=client_id)
-        criteria_map = ClientCriteriaMap.objects.get(company=company,id=status_id)
-        criteria_map.status = status
-        criteria_map.save()
-    return HttpResponse("Changed Status")
-
-@login_required
-def post_certification(request):
-
-    if request.method == "POST":
-        company = request.user.company;
-        status_id = request.POST['status_id']
-        status_id = status_id.split('_')[0]
-        status = request.POST['status']
-        #client_id = request.POST['client_id']
-        #client = Client.objects.get(company=company,id=client_id)
-        certification_map = ClientCertificationMap.objects.get(company=company,id=status_id)
-        certification_map.status = status
-        certification_map.save()
-    return HttpResponse("Changed Status")
-
-@login_required
-def post_transfer(request):
-
-    if request.method == "POST":
-        company = request.user.company;
-        experience_id = request.POST['experience_id']
-        experience_id = experience_id.split('_')[0]
-        experience = request.POST['experience']
-        #client_id = request.POST['client_id']
-        #client = Client.objects.get(company=company,id=client_id)
-        transfer_map = ClientTransferMap.objects.get(company=company,id=experience_id)
-        transfer_map.experience = experience
-        transfer_map.save()
-    return HttpResponse("Changed Status")
-
-
-
+        company = request.user.company
+        print(" request requestrequest",request.POST)
+        for  n, (key, value) in enumerate(request.POST.items()):
+            
+            if n >  0:
+                status_id = key.split('_')[0]
+                status_name = key.split('_')[1]
+                if status_name == "criteria":
+                    criteria_map = ClientCriteriaMap.objects.get(company=company,id=status_id)
+                    criteria_map.status = value
+                    client_email = criteria_map.client.email_address
+                    criteria_map.save()
+                elif status_name == "certification":
+                    certification_map = ClientCertificationMap.objects.get(company=company,id=status_id)
+                    certification_map.status = value
+                    client_email = certification_map.client.email_address
+                    certification_map.save()
+                    
+                elif status_name == "transfer":
+                    transfer_map = ClientTransferMap.objects.get(company=company,id=status_id)
+                    transfer_map.experience = value
+                    client_email = transfer_map.client.email_address
+                    transfer_map.save()
+             
+        return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client_email)
+                
+        
 @login_required
 def client_post_invoice(request):
     

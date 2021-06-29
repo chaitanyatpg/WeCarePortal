@@ -811,8 +811,10 @@
               </ul>
               <div class="clearfix"></div>
             </div>
+            <form id="criteriaradio"  enctype="multipart/form-data"  method='post' action="{% url 'caregiver_post_criteria' %}"> 
+              {% csrf_token %}
             <div class="x_content">
-              {% for category, criterias in criteria_map.items %}
+                {% for category, criterias in criteria_map.items %}
                 <div class="row">
                   <div class="x_panel">
                     <div class="x_title">
@@ -840,7 +842,7 @@
                                 {% if status.status == 'Y' %}
                                   <input type="radio" class="criteria_radio" name="{{status.id|addstr:'_'|addstr:'criteria'}}" checked="checked" value='Y'>Y
                                 {% else %}
-                                  <input type="radio" class="criteria_radio" name="{{status.id|addstr:'_'|addstr:'criteria'}}" value='Y'>Y
+                                  <input type="radio" onClick ="focusevent(true)" class="criteria_radio" name="{{status.id|addstr:'_'|addstr:'criteria'}}" value='Y'>Y
                                 {% endif %}
                               </label>
                             </div>
@@ -849,7 +851,7 @@
                                 {% if status.status == 'N' %}
                                   <input type="radio" class="criteria_radio" name="{{status.id|addstr:'_'|addstr:'criteria'}}" checked="checked" value='N'>N
                                 {% else %}
-                                  <input type="radio" class="criteria_radio" name="{{status.id|addstr:'_'|addstr:'criteria'}}" value='N'>N
+                                  <input type="radio" onClick ="focusevent(true)" class="criteria_radio" name="{{status.id|addstr:'_'|addstr:'criteria'}}" value='N'>N
                                 {% endif %}
                               </label>
                             </div>
@@ -858,7 +860,7 @@
                                 {% if status.status == 'NA' %}
                                   <input type="radio" class="criteria_radio" name="{{status.id|addstr:'_'|addstr:'criteria'}}" checked="checked" value='NA'>N/A
                                 {% else %}
-                                  <input type="radio" class="criteria_radio" name="{{status.id|addstr:'_'|addstr:'criteria'}}" value='NA'>N/A
+                                  <input type="radio" onClick ="focusevent(true)" class="criteria_radio" name="{{status.id|addstr:'_'|addstr:'criteria'}}" value='NA'>N/A
                                 {% endif %}
                               </label>
                             </div>
@@ -866,18 +868,19 @@
                         </div>
 
                         {% endfor %}
-                        <div class="ln_solid"></div>
-                        <!--<div class="form-group">
-                          <div class="col-md-9 col-sm-9 col-xs-12">
-                            <button type="submit" class="btn btn-success">Submit</button>
-                          </div>
-                        </div>-->
+                     
                     </div>
                   </div>
                 </div>
+           
+            
               {% endfor %}
+        
+            
 
               {% for category, criterias in certification_map.items %}
+             
+                
                 <div class="row">
                   <div class="x_panel">
                     <div class="x_title">
@@ -905,7 +908,7 @@
                                 {% if status.status == 'Y' %}
                                   <input type="radio" class="certification_radio" name="{{status.id|addstr:'_'|addstr:'certification'}}" checked="checked" value='Y'>Y
                                 {% else %}
-                                  <input type="radio" class="certification_radio" name="{{status.id|addstr:'_'|addstr:'certification'}}" value='Y'>Y
+                                  <input type="radio" onClick ="focusevent(true)" name="{{status.id|addstr:'_'|addstr:'certification'}}" value='Y'>Y
                                 {% endif %}
                               </label>
                             </div>
@@ -914,7 +917,7 @@
                                 {% if status.status == 'N' %}
                                   <input type="radio" class="certification_radio" name="{{status.id|addstr:'_'|addstr:'certification'}}" checked="checked" value='N'>N
                                 {% else %}
-                                  <input type="radio" class="certification_radio" name="{{status.id|addstr:'_'|addstr:'certification'}}" value='N'>N
+                                  <input type="radio" onClick ="focusevent(true)" name="{{status.id|addstr:'_'|addstr:'certification'}}" value='N'>N
                                 {% endif %}
                               </label>
                             </div>
@@ -923,7 +926,7 @@
                                 {% if status.status == 'NA' %}
                                   <input type="radio" class="certification_radio" name="{{status.id|addstr:'_'|addstr:'certification'}}" checked="checked" value='NA'>N/A
                                 {% else %}
-                                  <input type="radio" class="certification_radio" name="{{status.id|addstr:'_'|addstr:'certification'}}" value='NA'>N/A
+                                  <input type="radio" onClick ="focusevent(true)" name="{{status.id|addstr:'_'|addstr:'certification'}}" value='NA'>N/A
                                 {% endif %}
                               </label>
                             </div>
@@ -931,18 +934,18 @@
                         </div>
 
                         {% endfor %}
-                        <div class="ln_solid"></div>
-                        <!--<div class="form-group">
-                          <div class="col-md-9 col-sm-9 col-xs-12">
-                            <button type="submit" class="btn btn-success">Submit</button>
-                          </div>
-                        </div>-->
+                      
+                     
+                    
                     </div>
                   </div>
                 </div>
+              
               {% endfor %}
 
               {% for category, criterias in transfer_map.items %}
+            
+                
                 <div class="row">
                   <div class="x_panel">
                     <div class="x_title">
@@ -970,7 +973,7 @@
                                 {% if status.experience == 1 %}
                                   <input type="radio" class="transfer_radio" name="{{status.id|addstr:'_'|addstr:'transfer'}}" checked="checked" value=1>Minimal or no Experience
                                 {% else %}
-                                  <input type="radio" class="transfer_radio" name="{{status.id|addstr:'_'|addstr:'transfer'}}" value='1'>Minimal or no Experience
+                                  <input type="radio" onClick ="focusevent(true)" class="transfer_radio" name="{{status.id|addstr:'_'|addstr:'transfer'}}" value='1'>Minimal or no Experience
                                 {% endif %}
                               </label>
                             </div>
@@ -979,7 +982,7 @@
                                 {% if status.experience == 2 %}
                                   <input type="radio" class="transfer_radio" name="{{status.id|addstr:'_'|addstr:'transfer'}}" checked="checked" value=2>Some Experience
                                 {% else %}
-                                  <input type="radio" class="transfer_radio" name="{{status.id|addstr:'_'|addstr:'transfer'}}" value='2'>Some Experience
+                                  <input type="radio" onClick ="focusevent(true)" class="transfer_radio" name="{{status.id|addstr:'_'|addstr:'transfer'}}" value='2'>Some Experience
                                 {% endif %}
                               </label>
                             </div>
@@ -988,7 +991,7 @@
                                 {% if status.experience == 3 %}
                                   <input type="radio" class="transfer_radio" name="{{status.id|addstr:'_'|addstr:'transfer'}}" checked="checked" value=3>Proficient
                                 {% else %}
-                                  <input type="radio" class="transfer_radio" name="{{status.id|addstr:'_'|addstr:'transfer'}}" value='3'>Proficient
+                                  <input type="radio" onClick ="focusevent(true)" class="transfer_radio" name="{{status.id|addstr:'_'|addstr:'transfer'}}" value='3'>Proficient
                                 {% endif %}
                               </label>
                             </div>
@@ -996,17 +999,20 @@
                         </div>
 
                         {% endfor %}
-                        <div class="ln_solid"></div>
-                        <!--<div class="form-group">
-                          <div class="col-md-9 col-sm-9 col-xs-12">
-                            <button type="submit" class="btn btn-success">Submit</button>
-                          </div>
-                        </div>-->
+                    
                     </div>
                   </div>
                 </div>
+            
               {% endfor %}
             </div>
+            <div class="ln_solid"></div>
+            <div class="form-group">
+              <div class="col-md-5 col-sm-9 col-xs-12 col-md-offset-6">
+                <button type="button" onclick="transferradiosubmit()" class="btn btn-success">Submit</button>
+              </div>
+            </div>
+          </form>
           </div>
         </div>
         <!--
@@ -1074,7 +1080,7 @@
 <!-- end -->
 
 <!-- Post criteria radio -->
-  <script type="text/javascript">
+  <!-- <script type="text/javascript">
       $(document).ready(function(){
         var csrftoken = getCookie('csrftoken');
         $('input[class=criteria_radio]:radio').change(function(){
@@ -1090,11 +1096,11 @@
         });
       });
 
-  </script>
+  </script> -->
 <!-- end -->
 
 <!-- Post Certification radio -->
-  <script type="text/javascript">
+  <!-- <script type="text/javascript">
       $(document).ready(function(){
         var csrftoken = getCookie('csrftoken');
         $('input[class=certification_radio]:radio').change(function(){
@@ -1110,11 +1116,11 @@
         });
       });
 
-  </script>
+  </script> -->
 <!-- end -->
 
 <!-- Post Transfer radio -->
-  <script type="text/javascript">
+  <!-- <script type="text/javascript">
       $(document).ready(function(){
         var csrftoken = getCookie('csrftoken');
         $('input[class=transfer_radio]:radio').change(function(){
@@ -1129,7 +1135,7 @@
           console.log('entered');
         });
       });
-  </script>
+  </script> -->
 <!-- end -->
 
 <!-- Select2 -->
@@ -1370,4 +1376,28 @@ success: function (data) {
      }
   })
 </script>
+
+
+<script>
+  var transfervalue = false ;  
+
+   function   focusevent(transfervalue) {  
+     if(transfervalue)
+     {
+       this.transfervalue =  true
+     }
+   else{
+     alert("Please select atleast one checkbox")
+   }
+  }
+
+   function transferradiosubmit(){
+
+    focusevent(transfervalue)
+       if(this.transfervalue){
+         document.getElementById('criteriaradio').submit();
+       }  
+   }
+   </script>
+
 {% endblock %}
