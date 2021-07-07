@@ -2151,6 +2151,7 @@ def update_invoice_detail(request):
             invoice_line_item.rate = change_rate
             invoice_line_item.rate_type = change_ratetype
             invoice_line_item.total = float(change_hours) * float(change_rate)
+            invoice_line_item.total = "{:.2f}".format(invoice_line_item.total)
             invoice_header.total_cost =  float(invoice_header.total_cost) + float(invoice_line_item.total)
             invoice_header.total_hours =  float(invoice_header.total_hours) + float(invoice_line_item.hours)
             if invoice_header.taxes:
@@ -2635,6 +2636,7 @@ def update_payroll_detail(request):
             payroll_line_item.rate = change_rate
             payroll_line_item.rate_type = change_ratetype
             payroll_line_item.total = float(change_hours) * float(change_rate)
+            payroll_line_item.total = "{:.2f}".format(payroll_line_item.total)
             payroll_header.total_cost =  float(payroll_header.total_cost) + float(payroll_line_item.total)
             payroll_header.total_hours = float(payroll_header.total_hours) +  float(payroll_line_item.hours)
             # if invoice_header.taxes:
