@@ -208,11 +208,9 @@
                         <form action="{% url 'delete_move_task' task_id=task.uid %}" style="float: left;">
                           <button type="submit" class="btn btn-danger">Delete</button>
                         </form>
-                        <br>
-                        <br>
-                        <br>
+                        <div class="row"></div>
                         {% if movemanager_reject_bidding %}
-                        <table  style="width: 50%;" class="main-table">
+                        <table  style="width: 70%;" class="main-table">
                           <thead>
                             Contractor rejected the bid
                             <tr>
@@ -223,7 +221,7 @@
                           {% for rejectbid in movemanager_reject_bidding %}
                           {% if rejectbid.move_manage_task.uid == task.uid and rejectbid.status %}
                           <tr>
-                            <td>{{rejectbid.move_manager.first_name}} &nbsp;{{rejectbid.move_manager.last_name}}</td>
+                            <td>{{rejectbid.move_manager.first_name|addstr_space:rejectbid.move_manager.last_name}}</td>
                             <td><a href='{% url 'choose_move_contractor' task_id=task.uid %}'><span class="glyphicon glyphicon-eye-open"></span></a></td>
                           </tr>
                           {% endif %}
@@ -293,10 +291,9 @@
                           <form action="{% url 'delete_home_mod_task' task_id=task.uid %}">
                             <button type="submit" class="btn btn-danger">Delete</button>
                           </form>
+                          <div class="row"></div>
                          {% if contractor_reject_bidding %}
-
-                         
-                          <table   style="width: 50%;" class="main-table">
+                          <table   style="width: 70%;" class="main-table">
                             Contractor rejected the bid
                             <thead>
                               <tr>
@@ -307,7 +304,7 @@
                             {% for rejectbid in contractor_reject_bidding %}
                             {% if rejectbid.home_mod_task.uid == task.uid and rejectbid.status %}
                             <tr>
-                              <td>{{rejectbid.contractor.first_name}} &nbsp;{{rejectbid.contractor.last_name}}</td>
+                              <td>{{rejectbid.contractor.first_name|addstr_space:rejectbid.contractor.last_name}}</td>
                               <td><a href='{% url 'choose_contractor' task_id=task.uid %}'><span class="glyphicon glyphicon-eye-open"></span></a></td>
                             </tr>
                             {% endif %}
