@@ -132,15 +132,14 @@
               </div>
 
               <!-- Table row -->
-
               <div class="row">
                 <div class="col-xs-12 table">
                   <table   id="lineitemid" style="width: 100%;" class="main-table">
                     <thead>
                       <tr>
-                        <th>Patient Name</th>
-                        <th style="width: 25%">Service Address</th>
-                        <th>Assigned Caregiver</th>
+                        <th style="width:13%">Patient Name</th>
+                        <th style="width: 20%">Service Address</th>
+                        <th style="width: 14%;">Assigned Caregiver</th>
                         <th>Hours/Per Day</th>
                         <th>Rate Type</th>
                         <th>Rate</th>
@@ -211,7 +210,7 @@
                         {{invoice_header_data.client.contact_number}}
 
                       </td> -->
-                      <td class="col-sm-2">
+                      <td class="col-sm-3">
                         <select required class="select2_single form-control" placeholder="Caregive Name"
                           id="dropDownId">
                           <option value="" selected> Caregiver Name</option>
@@ -552,7 +551,9 @@ $(document).ready(function (){
 
           invoicedata.push(person)
         }
-      
+        map = new  Map(JSON.parse(sessionStorage.getItem("inrowfield")))
+        map.clear()
+        sessionStorage.removeItem('inrowfield')
 
       $.ajax({
         url: "{% url 'submit_invoice' %}",
@@ -587,6 +588,71 @@ $(document).ready(function (){
 <script>
   $(document).ready(function () {
     var counter = 0;
+    let val = []
+    start_date = '{{start_date}}'
+    end_date = '{{end_date}}'
+    tempfieldclientid = '{{invoice_header_data.client.id}}'
+    date = { start_date ,end_date}
+    console.log("end_dateend_date",end_date)
+    maplist = new Map(JSON.parse(sessionStorage.getItem("inrowfield")))
+    console.log("maplist 0000",maplist)
+    console.log("maplist ---",maplist.get())
+    value =  JSON.parse(sessionStorage.getItem("inrowfield"))
+    console.log("sss",value)
+    if(value){
+  
+  for (let index = 0; index < value.length; index++) {
+    const ele = value[index];
+    
+    if(ele[0].start_date == start_date && ele[0].end_date == end_date){
+      
+    if(ele[1].length > 0)
+    
+   for (let index = 0; index < ele[1].length; index++) {
+    
+    const element = ele[1][index];
+    
+    if( ele[1][index].tempclientid == tempfieldclientid) {  
+      
+    var objAbc = {"caregiverName" :element.caregiverName,"caregiverId":element.caregiverId,"ratetypeid":element.ratetypeid,"invoice_field_rate_type":element.invoice_field_rate_type,"invoice_field_rate":element.invoice_field_rate,"tempclientid":element.tempclientid}
+    val.push(objAbc)
+    
+    var newRow = $("<tr>");
+    console.log("refresh insife")
+    var counter = 0;
+    var cols = "";
+    cols +=
+      '<td><input type="text" style="font-size: 13px;"   class="form-control" readonly name="invoice_field_caregiver"  value="'+element.caregiverName+'"/></td>';
+    cols +=
+      '<td><input type="text" style="font-size: 13px;"  class="form-control" readonly name="invoice_fieldrate_type"  value="'+element.invoice_field_rate_type+'"/></td>';
+
+    // cols +=
+    //   '<td><input type="text" style="font-size: 13px;"  class="form-control" readonly name="invoice_fieldhours_perday"  value=" ' +
+    //   invoice_field_hours_perday + '"/></td>';
+
+
+    cols += '<td><input type="text"  class="form-control" readonly name="invoice_fieldrate"  value="'+element.invoice_field_rate+'"/></td>';
+
+    cols += '<td><input type="button" class="ibtnDel btn btn-md btn-danger "  value="Delete"></td>';
+    cols +=
+      '<td><input type="hidden" style="width:30%;"  class="form-control" readonly name="caregiverid"  value="'+element.caregiverId+'"/></td>';
+      cols +=
+      '<td><input type="hidden" style="width:30%;"  class="form-control" readonly name="invoice_fieldrate_typeid"  value="'+element.ratetypeid+'"/></td>';
+      cols +=
+            '<td><input type="hidden" style="width:30%;"  class="form-control" readonly name="tempclientid"  value="'+element.tempclientid+'"/></td>';
+
+      newRow.append(cols);
+      $("table.order-list").append(newRow);
+    
+    }
+  }  
+  
+}
+
+}
+}
+
+  
     $("#addFields").on("click", function () {
         var newRow = $("<tr>");
         var cols = "";
@@ -615,29 +681,34 @@ $(document).ready(function (){
           //   '<td><input type="text" style="font-size: 13px;" class="form-control" readonly name="invoice_fieldclient"  value="{{invoice_header_data.client.first_name}} {{invoice_header_data.client.last_name}} "/></td>';
           // cols += '<td><input type="text"  style="font-size: 13px;" class="form-control" readonly name="invoice_fieldaddress" value="{{invoice_header_data.client.address}} {{invoice_header_data.client.city}} {{invoice_header_data.client.state}} {{invoice_header_data.client.zip_code}} {{invoice_header_data.client.contact_number}}" /></td>';
           cols +=
-            '<td><input type="text" style="font-size: 13px;"   class="form-control" readonly name="invoice_field_caregiver"  value=" ' +
-            caregiverName + '"/></td>';
+            '<td><input type="text" style="font-size: 13px;"   class="form-control" readonly name="invoice_field_caregiver"  value="'+caregiverName+'"/></td>';
           cols +=
-            '<td><input type="text" style="font-size: 13px;"  class="form-control" readonly name="invoice_fieldrate_type"  value=" ' +
-            invoice_field_rate_type + '"/></td>';
+            '<td><input type="text" style="font-size: 13px;"  class="form-control" readonly name="invoice_fieldrate_type"  value="'+invoice_field_rate_type+'"/></td>';
 
           // cols +=
           //   '<td><input type="text" style="font-size: 13px;"  class="form-control" readonly name="invoice_fieldhours_perday"  value=" ' +
           //   invoice_field_hours_perday + '"/></td>';
 
 
-          cols += '<td><input type="text"  class="form-control" readonly name="invoice_fieldrate"  value=" ' +
-            invoice_field_rate + '"/></td>';
+          cols += '<td><input type="text"  class="form-control" readonly name="invoice_fieldrate"  value="'+invoice_field_rate+'"/></td>';
 
           cols += '<td><input type="button" class="ibtnDel btn btn-md btn-danger "  value="Delete"></td>';
           cols +=
-            '<td><input type="hidden" style="width:30%;"  class="form-control" readonly name="caregiverid"  value="' +
-            caregiverId + '"/></td>';
+            '<td><input type="hidden" style="width:30%;"  class="form-control" readonly name="caregiverid"  value="'+caregiverId+'"/></td>';
             cols +=
-            '<td><input type="hidden" style="width:30%;"  class="form-control" readonly name="invoice_fieldrate_typeid"  value="' +
-              ratetypeid + '"/></td>';
+            '<td><input type="hidden" style="width:30%;"  class="form-control" readonly name="invoice_fieldrate_typeid"  value="'+ratetypeid+'"/></td>';
+            cols +=
+            '<td><input type="hidden" style="width:30%;"  class="form-control" readonly name="tempclientid"  value="'+tempfieldclientid+'"/></td>';
 
           newRow.append(cols);
+          console.log("newRownewRowv",newRow)
+          var objAbc = {"caregiverName" :caregiverName,"caregiverId":caregiverId,"ratetypeid":ratetypeid,"invoice_field_rate_type":invoice_field_rate_type,"invoice_field_rate":invoice_field_rate,"tempclientid":tempfieldclientid}
+          val.push(objAbc)
+          map = new  Map();
+          map.set(date, val)
+          console.log("map set",map)
+          sessionStorage.setItem("inrowfield",JSON.stringify(Array.from(map.entries())))
+         
           $("table.order-list").append(newRow);
 
           $("input[name=invoice_field_hours_perday]").val(null),
@@ -659,6 +730,44 @@ $(document).ready(function (){
       $("table.order-list").on("click", ".ibtnDel", function (event) {
         $(this).closest("tr").remove();
         counter -= 1
+        var delettablerow = new Object();
+        for (let index = 0; index < $(this).closest("tr")[0].cells.length; index++) {
+          const element = $(this).closest("tr")[0].cells[index];
+          console.log("$(this).clo",$(this).closest("tr")[0].cells[index].firstChild)
+        
+          delettablerow[element.firstChild.name]=element.firstChild.value
+          
+          }
+  
+              value =  JSON.parse(sessionStorage.getItem("inrowfield"))
+    
+  
+              if(value){        
+              map = new  Map(JSON.parse(sessionStorage.getItem("inrowfield")))
+              map.forEach(function (key) {
+              for (let index = 0; index < key.length; index++) {
+                const element = key[index];
+                console.log("elementelementelement",delettablerow)
+
+              if(key[index].invoice_field_rate == delettablerow.invoice_fieldrate  ){
+                key.splice(index,1)
+                for (let index = 0; index < val.length; index++) {
+                  const element = val[index];
+                  if( val[index].invoice_field_rate == delettablerow.invoice_fieldrate && val[index].caregiverId == delettablerow.caregiverid && val[index].ratetypeid[0] == delettablerow.invoice_fieldrate_typeid){
+                    val.splice(index,1)
+
+                  }
+                  
+                }
+              }
+              console.log("inside men jjs",val)
+              if(key.length < 1){
+                map.clear()
+              }
+            }
+          });
+          sessionStorage.setItem("inrowfield",JSON.stringify(Array.from(map.entries())))  
+      }
       })
   });
 </script>

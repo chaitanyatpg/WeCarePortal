@@ -489,7 +489,9 @@
 
           invoicedata.push(person)
         }
-      
+        map = new  Map(JSON.parse(sessionStorage.getItem("prowfield")))
+        map.clear()
+        sessionStorage.removeItem('prowfield')
 
       $.ajax({
         url: "{% url 'submit_payroll' %}",
@@ -523,12 +525,63 @@
 
 <script>
   $(document).ready(function () {
-    var counter = 0;
+    let val = []
+    start_date = '{{start_date}}'
+    end_date = '{{end_date}}'
+    date = { start_date ,end_date}
+    maplist = new Map(JSON.parse(sessionStorage.getItem("prowfield")))
+    value =  JSON.parse(sessionStorage.getItem("prowfield"))
+    if(value){
+  
+        for (let index = 0; index < value.length; index++) {
+          const ele = value[index];
+        
+          if(ele[0].start_date == start_date && ele[0].end_date == end_date){
+          if(ele[1].length > 0)
+         for (let index = 0; index < ele[1].length; index++) {
+           const element = ele[1][index];
+          var objAbc = {"caregiverName" :element.caregiverName,"caregiverId":element.caregiverId,"ratetypeid":element.ratetypeid,"invoice_field_rate_type":element.invoice_field_rate_type,"invoice_field_rate":element.invoice_field_rate}
+          val.push(objAbc)
+          
+          var newRow = $("<tr>");
+          var counter = 0;
+          var cols = "";
+          cols +=
+            '<td><input type="text" style="font-size: 13px;"   class="form-control" readonly name="invoice_field_caregiver"  value="'+element.caregiverName+'"/></td>';
+          cols +=
+            '<td><input type="text" style="font-size: 13px;"  class="form-control" readonly name="invoice_fieldrate_type"  value="'+element.invoice_field_rate_type+'"/></td>';
+
+          // cols +=
+          //   '<td><input type="text" style="font-size: 13px;"  class="form-control" readonly name="invoice_fieldhours_perday"  value=" ' +
+          //   invoice_field_hours_perday + '"/></td>';
+
+
+          cols += '<td><input type="text"  class="form-control" readonly name="invoice_fieldrate"  value="'+element.invoice_field_rate+'"/></td>';
+
+          cols += '<td><input type="button" class="ibtnDel btn btn-md btn-danger "  value="Delete"></td>';
+          cols +=
+            '<td><input type="hidden" style="width:30%;"  class="form-control" readonly name="caregiverid"  value="'+element.caregiverId+'"/></td>';
+            cols +=
+            '<td><input type="hidden" style="width:30%;"  class="form-control" readonly name="invoice_fieldrate_typeid"  value="'+element.ratetypeid+'"/></td>';
+
+          newRow.append(cols);
+        $("table.order-list").append(newRow);
+          
+      }
+        
+      }
+
+      }
+    }
+    
+    
     $("#addFields").on("click", function () {
+   
         var newRow = $("<tr>");
+        var counter = 0;
         var cols = "";
 
-        if (  $("input[name=invoice_field_rate]").val() && $('#dropDownId :selected').val() && $('#dropDownratetype :selected').val() ) {
+        if ($("input[name=invoice_field_rate]").val() && $('#dropDownId :selected').val() && $('#dropDownratetype :selected').val() ) {
 
           invoice_field_rate = $("input[name=invoice_field_rate]").val(),
             // invoice_field_rate_type = $('#dropDownIdratetype :selected').val(),
@@ -550,29 +603,29 @@
           //   '<td><input type="text" style="font-size: 13px;" class="form-control" readonly name="invoice_fieldclient"  value="{{invoice_header_data.client.first_name}} {{invoice_header_data.client.last_name}} "/></td>';
           // cols += '<td><input type="text"  style="font-size: 13px;" class="form-control" readonly name="invoice_fieldaddress" value="{{invoice_header_data.client.address}} {{invoice_header_data.client.city}} {{invoice_header_data.client.state}} {{invoice_header_data.client.zip_code}} {{invoice_header_data.client.contact_number}}" /></td>';
           cols +=
-            '<td><input type="text" style="font-size: 13px;"   class="form-control" readonly name="invoice_field_caregiver"  value=" ' +
-            caregiverName + '"/></td>';
+            '<td><input type="text" style="font-size: 13px;"   class="form-control" readonly name="invoice_field_caregiver"  value="'+caregiverName+'"/></td>';
           cols +=
-            '<td><input type="text" style="font-size: 13px;"  class="form-control" readonly name="invoice_fieldrate_type"  value=" ' +
-            invoice_field_rate_type + '"/></td>';
+            '<td><input type="text" style="font-size: 13px;"  class="form-control" readonly name="invoice_fieldrate_type"  value="'+invoice_field_rate_type+'"/></td>';
 
           // cols +=
           //   '<td><input type="text" style="font-size: 13px;"  class="form-control" readonly name="invoice_fieldhours_perday"  value=" ' +
           //   invoice_field_hours_perday + '"/></td>';
 
 
-          cols += '<td><input type="text"  class="form-control" readonly name="invoice_fieldrate"  value=" ' +
-            invoice_field_rate + '"/></td>';
+          cols += '<td><input type="text"  class="form-control" readonly name="invoice_fieldrate"  value="'+invoice_field_rate+'"/></td>';
 
           cols += '<td><input type="button" class="ibtnDel btn btn-md btn-danger "  value="Delete"></td>';
           cols +=
-            '<td><input type="hidden" style="width:30%;"  class="form-control" readonly name="caregiverid"  value="' +
-            caregiverId + '"/></td>';
+            '<td><input type="hidden" style="width:30%;"  class="form-control" readonly name="caregiverid"  value="'+caregiverId+'"/></td>';
             cols +=
-            '<td><input type="hidden" style="width:30%;"  class="form-control" readonly name="invoice_fieldrate_typeid"  value="' +
-              ratetypeid + '"/></td>';
+            '<td><input type="hidden" style="width:30%;"  class="form-control" readonly name="invoice_fieldrate_typeid"  value="'+ratetypeid+'"/></td>';
 
           newRow.append(cols);
+          var objAbc = {"caregiverName" :caregiverName,"caregiverId":caregiverId,"ratetypeid":ratetypeid,"invoice_field_rate_type":invoice_field_rate_type,"invoice_field_rate":invoice_field_rate}
+          val.push(objAbc)
+          map = new  Map();
+          map.set(date, val)
+          sessionStorage.setItem("prowfield",JSON.stringify(Array.from(map.entries())))
           $("table.order-list").append(newRow);
 
           $("input[name=invoice_field_hours_perday]").val(null),
@@ -582,19 +635,47 @@
             // $('#dropDownIdratetype').val(null),
             $("input[name=caregiverId]").val(null),
             $('#dropDownratetype').val(null),
-            
             counter++;
         } else {
           alert("Please fill all the fields")
         }
-
       }),
-
 
       $("table.order-list").on("click", ".ibtnDel", function (event) {
         $(this).closest("tr").remove();
         counter -= 1
-      })
+           var delettablerow = new Object();
+        for (let index = 0; index < $(this).closest("tr")[0].cells.length; index++) {
+          const element = $(this).closest("tr")[0].cells[index];
+          delettablerow[element.firstChild.name]=element.firstChild.value
+          }
+          value =  JSON.parse(sessionStorage.getItem("prowfield"))
+    
+  
+        if(value){        
+              map = new  Map(JSON.parse(sessionStorage.getItem("prowfield")))
+              map.forEach(function (key) {
+              for (let index = 0; index < key.length; index++) {
+                const element = key[index];
+              if(key[index].invoice_field_rate == delettablerow.invoice_fieldrate  ){
+                key.splice(index,1)
+                for (let index = 0; index < val.length; index++) {
+                  const element = val[index];
+                  if( val[index].invoice_field_rate == delettablerow.invoice_fieldrate && val[index].caregiverId == delettablerow.caregiverid && val[index].ratetypeid[0] == delettablerow.invoice_fieldrate_typeid){
+                    val.splice(index,1)
+
+                  }
+                  
+                }
+              }
+              if(key.length < 1){
+                map.clear()
+              }
+            }
+          });
+          sessionStorage.setItem("prowfield",JSON.stringify(Array.from(map.entries())))  
+      }
+    })
   });
 </script>
 
@@ -645,7 +726,8 @@
   //   var counter = 0;
   //   $("#editline").on("click", function () {
   function editlinitem(x) {
-    console.log("vvvvvv", x)
+    
+    
     var myTab = document.getElementById('lineitemid');
         
     lineitem = []
@@ -662,12 +744,11 @@
         // myTab.rows.item(row).cells[5].innerText;
 
         lineitem.push(person)
-        console.log("lineitemlineitemlineitem",lineitem)
-
 
       }
 
-
+     
+      
     }
     $.ajax({
 
@@ -758,9 +839,10 @@
     //   var counter = 0;
     //   $("#editline").on("click", function () {
     function payroll_line_delete(x) {
-      console.log("vvvvvv", x)
+
+      if(confirm('Do you want to delete?')){
       var myTab = document.getElementById('lineitemid');
-          
+
       lineitem = []
       for (row = 1; row < myTab.rows.length; row++) {
         if (myTab.rows[row].childNodes[1].value == x) {
@@ -775,12 +857,7 @@
           // myTab.rows.item(row).cells[5].innerText;
   
           lineitem.push(person)
-          console.log("lineitemlineitemlineitem",lineitem)
-  
-  
         }
-  
-  
       }
       $.ajax({
   
@@ -795,14 +872,15 @@
         dataType: "json",
         contentType: "application/json",
         success: function (data) {
-          // location.reload();
+          location.reload();
   
         }
   
       });
   
   
-  
+    }
+
   
     }
   </script>
