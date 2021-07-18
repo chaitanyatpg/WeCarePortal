@@ -70,7 +70,7 @@ class CompanyEditForm(forms.Form):
     time_zone = forms.CharField(max_length=50, required=False)
     default_dashboard = forms.CharField(max_length=100, required=False)
     tax_rate = forms.DecimalField(required=False)
-    logo = forms.ImageField(label='Select file', required=False)
+    logo = forms.ImageField(label='Selected file', required=False)
     attorney_email = forms.EmailField(required=False)
     is_parent = forms.BooleanField(required=False)
     mileage_rate= forms.DecimalField( required=False )

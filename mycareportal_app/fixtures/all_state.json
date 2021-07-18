@@ -1,0 +1,569 @@
+[
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 1,
+        "fields": {
+            "state_name": "Other"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 2,
+        "fields": {
+            "state_name": "Alabama"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 3,
+        "fields": {
+            "state_name": "Alaska"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 4,
+        "fields": {
+            "state_name": "Arizona"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 5,
+        "fields": {
+            "state_name": "Arkansas"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 6,
+        "fields": {
+            "state_name": "California"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 7,
+        "fields": {
+            "state_name": "Colorado"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 8,
+        "fields": {
+            "state_name": "Connecticut"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 9,
+        "fields": {
+            "state_name": "Delaware"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 10,
+        "fields": {
+            "state_name": "District Of Columbia"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 11,
+        "fields": {
+            "state_name": "Florida"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 12,
+        "fields": {
+            "state_name": "Georgia"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 13,
+        "fields": {
+            "state_name": "Hawaii"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 14,
+        "fields": {
+            "state_name": "Idaho"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 15,
+        "fields": {
+            "state_name": "Illinois"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 16,
+        "fields": {
+            "state_name": "Indiana"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 17,
+        "fields": {
+            "state_name": "Iowa"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 18,
+        "fields": {
+            "state_name": "Kansas"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 19,
+        "fields": {
+            "state_name": "Kentucky"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 20,
+        "fields": {
+            "state_name": "Louisiana"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 21,
+        "fields": {
+            "state_name": "Maine"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 22,
+        "fields": {
+            "state_name": "Maryland"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 23,
+        "fields": {
+            "state_name": "Massachusetts"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 24,
+        "fields": {
+            "state_name": "Michigan"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 25,
+        "fields": {
+            "state_name": "Minnesota"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 26,
+        "fields": {
+            "state_name": "Mississippi"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 27,
+        "fields": {
+            "state_name": "Missouri"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 28,
+        "fields": {
+            "state_name": "Montana"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 29,
+        "fields": {
+            "state_name": "Nebraska"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 30,
+        "fields": {
+            "state_name": "Nevada"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 31,
+        "fields": {
+            "state_name": "New Hampshire"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 32,
+        "fields": {
+            "state_name": "New Jersey"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 33,
+        "fields": {
+            "state_name": "New Mexico"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 34,
+        "fields": {
+            "state_name": "New York"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 35,
+        "fields": {
+            "state_name": "North Carolina"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 36,
+        "fields": {
+            "state_name": "North Dakota"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 37,
+        "fields": {
+            "state_name": "Ohio"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 38,
+        "fields": {
+            "state_name": "Oklahoma"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 39,
+        "fields": {
+            "state_name": "Oregon"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 40,
+        "fields": {
+            "state_name": "Pennsylvania"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 41,
+        "fields": {
+            "state_name": "Rhode Island"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 42,
+        "fields": {
+            "state_name": "South Carolina"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 43,
+        "fields": {
+            "state_name": "South Dakota"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 44,
+        "fields": {
+            "state_name": "Tennessee"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 45,
+        "fields": {
+            "state_name": "Texas"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 46,
+        "fields": {
+            "state_name": "Utah"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 47,
+        "fields": {
+            "state_name": "Vermont"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 48,
+        "fields": {
+            "state_name": "Virginia"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 49,
+        "fields": {
+            "state_name": "Washington"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 50,
+        "fields": {
+            "state_name": "West Virginia"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 51,
+        "fields": {
+            "state_name": "Wisconsin"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 52,
+        "fields": {
+            "state_name": "Wyoming"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 53,
+        "fields": {
+            "state_name": "Andra Pradesh"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 54,
+        "fields": {
+            "state_name": "Arunachal Pradesh"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 55,
+        "fields": {
+            "state_name": "Asssam"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 56,
+        "fields": {
+            "state_name": "Bihar"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 57,
+        "fields": {
+            "state_name": "Chhattisgarh"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 58,
+        "fields": {
+            "state_name": "Goa"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 59,
+        "fields": {
+            "state_name": "Gujarat"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 60,
+        "fields": {
+            "state_name": "Haryana"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 61,
+        "fields": {
+            "state_name": "Himachal Pradesh"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 62,
+        "fields": {
+            "state_name": "Jammu and Kashmir"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 63,
+        "fields": {
+            "state_name": "Jharkhand"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 64,
+        "fields": {
+            "state_name": "Karnataka"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 65,
+        "fields": {
+            "state_name": "Kerala"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 66,
+        "fields": {
+            "state_name": "Madya Pradesh"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 67,
+        "fields": {
+            "state_name": "Maharashtra"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 68,
+        "fields": {
+            "state_name": "Manipur"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 69,
+        "fields": {
+            "state_name": "Meghalaya"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 70,
+        "fields": {
+            "state_name": "Mizoram"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 71,
+        "fields": {
+            "state_name": "Nagaland"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 72,
+        "fields": {
+            "state_name": "Orissa"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 73,
+        "fields": {
+            "state_name": "Punjab"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 74,
+        "fields": {
+            "state_name": "Rajasthan"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 75,
+        "fields": {
+            "state_name": "Sikkim"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 76,
+        "fields": {
+            "state_name": "Tamil Nadu"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 77,
+        "fields": {
+            "state_name": "Telagana"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 78,
+        "fields": {
+            "state_name": "Tripura"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 79,
+        "fields": {
+            "state_name": "Uttaranchal"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 80,
+        "fields": {
+            "state_name": "Uttar Pradesh"
+        }
+    },
+    {
+        "model": "mycareportal_app.statefield",
+        "pk": 81,
+        "fields": {
+            "state_name": "West Bengal"
+        }
+    }
+]
