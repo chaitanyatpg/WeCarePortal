@@ -62,7 +62,7 @@
                   </div>
                   <div class="x_content">
                     <br />
-                    <form method="post" action="{% url 'schedule_shifts' %}">
+                    <form method="post" onsubmit="validateForm()" action="{% url 'schedule_shifts' %}">
                       {% csrf_token %}
                       <div class="container">
                         <div class="container">
@@ -83,7 +83,7 @@
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12">Start Date<span class="required">*</span>
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                  <input type="text" id="start_date" readonly="true" class="date-picker form-control col-md-7 col-xs-12" required="required" name="{{schedule_shift_form.start_date.html_name}}">
+                                  <input type="text" onchange="clickStartDate(this.value)" id="start_date" readonly="true" class="date-picker form-control col-md-7 col-xs-12" required="required" name="{{schedule_shift_form.start_date.html_name}}">
                                 </div>
                               </div>
                           </div>
@@ -102,7 +102,7 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Start Time<span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <select name="{{schedule_shift_form.start_hour.html_name}}" required="required">
+                                <select id="start_time_hour" name="{{schedule_shift_form.start_hour.html_name}}" onchange="onEdit()" required="required">
                                   <option selected disabled value="">Hour</option>
                                   <option value="00">12 AM</option>
                                   <option value="01">1 AM</option>
@@ -129,7 +129,7 @@
                                   <option value="22">10 PM</option>
                                   <option value="23">11 PM</option>
                                 </select>
-                                <select name="{{schedule_shift_form.start_minute.html_name}}" required="required">
+                                <select id="start_time_min" name="{{schedule_shift_form.start_minute.html_name}}" onchange="onEditMin()" required="required">
                                   <option selected disabled value="">Minute</option>
                                   <option value="00">00</option>
                                   <option value="10">10</option>
@@ -146,7 +146,7 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">End Time<span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <select name="{{schedule_shift_form.end_hour.html_name}}" required="required">
+                                <select id="end_time_hour" name="{{schedule_shift_form.end_hour.html_name}}" onchange="onEdit()" required="required">
                                   <option selected disabled value="">Hour</option>
                                   <option value="00">12 AM</option>
                                   <option value="01">1 AM</option>
@@ -173,7 +173,7 @@
                                   <option value="22">10 PM</option>
                                   <option value="23">11 PM</option>
                                 </select>
-                                <select name="{{schedule_shift_form.end_minute.html_name}}" required="required">
+                                <select id="end_time_min" name="{{schedule_shift_form.end_minute.html_name}}" onchange="onEditMin()" required="required">
                                   <option selected disabled value="">Minute</option>
                                   <option value="00">00</option>
                                   <option value="10">10</option>
@@ -183,8 +183,12 @@
                                   <option value="50">50</option>
                                 </select>
                             </div>
+
+
+
                           </div>
                         </div>
+                        
                         <div class="form-group">
                             <div class="row">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12">Shift Frequency<span
@@ -673,7 +677,7 @@
         $('#start_date').daterangepicker({
           singleDatePicker: true,
           calender_style: "picker_2",
-          
+          minDate : new Date,
         }, function(start, end, label) {
           console.log(start.toISOString(), end.toISOString(), label);
         });
@@ -685,11 +689,26 @@
         $('#end_date').daterangepicker({
           singleDatePicker: true,
           calender_style: "picker_2",
-          
+          minDate : new Date
         }, function(start, end, label) {
           console.log(start.toISOString(), end.toISOString(), label);
         });
       });
+    </script>
+
+    <script>
+     function clickStartDate(value){
+       console.log("valeue",value)
+       $('#end_date').daterangepicker({
+          singleDatePicker: true,
+          calender_style: "picker_2",
+          minDate :  new Date((value))
+        }, function(start, end, label) {
+          console.log(start.toISOString(), end.toISOString(), label);
+          
+        });
+        // $('#end_date').val(value);
+     }
     </script>
     <!-- /bootstrap-daterangepicker -->
 
@@ -757,6 +776,7 @@
                   dataType: "json",
                   contentType: "application/json",
                   success: function(schedule_data){
+                    console.log("schedule_dataschedule_data",schedule_data)
                     $('#client_id').val(schedule_data.client_id);
                     $('#client_id_edit').val(schedule_data.client_id);
                     $('#client_id_delete').val(schedule_data.client_id);
@@ -766,6 +786,7 @@
                     $('#schedule_id_delete_recurring').val(schedule_data.schedule_id);
                     $('#client_name').val(schedule_data.client_name);
                     $('#start_hour').val(schedule_data.start_hour);
+                    console.log("h hdddddddd",schedule_data.start_minute)
                     $('#start_minute').val(schedule_data.start_minute);
                     $('#end_hour').val(schedule_data.end_hour);
                     $('#end_minute').val(schedule_data.end_minute);
@@ -1251,6 +1272,51 @@
       });
     </script>
 
- 
+
+<script>
+  function onEdit(){
+
+    console.log("start time hour",$('#start_time_hour :selected').val())
+  
+    var start_time_hour = $('#start_time_hour :selected').val()
+    console.log("start_time_min ",$('#start_time_min :selected').val())
+    var  start_time_min =  $('#start_time_min :selected').val()
+    console.log("end_time_hour ",$('#end_time_hour :selected').val())
+    var end_time_hour = $('#end_time_hour :selected').val()
+    console.log("end_time_min ",$('#end_time_min :selected').val())
+    var end_time_min = $('#end_time_min :selected').val()
+    if($('#end_time_hour :selected').val())
+    if(end_time_hour < start_time_hour){
+      $('#end_time_hour').val('')
+      alert("Please Select correct time")
+      
+    }
+
+    if(end_time_hour == start_time_hour  && end_time_min && start_time_min && end_time_min <= start_time_min){
+      // $('#start_time_min').val('')
+      $('#end_time_min').val('')
+      alert("Please Select correct time")
+      
+    }
+    
+  }
+</script>
+
+<script>
+  
+  function onEditMin(){ 
+    console.log("ssssssssss",start_time_hour)
+    if( $('#end_time_hour :selected').val() ==  $('#start_time_hour :selected').val() && $('#end_time_hour :selected').val() > 1 && $('#start_time_hour :selected').val() > 1)
+    {
+      if($('#end_time_min :selected').val() <=  $('#start_time_min :selected').val() && $('#end_time_min :selected').val()   && $('#start_time_min :selected').val()){
+        $('#end_time_min').val('')
+      alert("Please Select correct time")
+      }
+      
+    }
+
+  }
+</script>
+
     <!-- /bootstrap-daterangepicker -->
 {% endblock %}

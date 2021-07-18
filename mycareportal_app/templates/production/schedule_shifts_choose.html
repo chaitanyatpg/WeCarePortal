@@ -84,7 +84,6 @@
                                   </ul>
                                 </div>
                                 <div id="caregiver_detail_img" class="right col-xs-5 text-center">
-                                  <img src="" alt="" class="img-circle img-responsive">
                                 </div>
                               </div>
                               <div class="col-xs-12 bottom text-center">
@@ -160,7 +159,8 @@
             $('#caregiver_detail_email').html('Email: ' + caregiver_data.email_address);
             $('#caregiver_detail_gender').html('Gender: ' + caregiver_data.gender);
             $('#caregiver_email_hidden').val(caregiver_data.email_address);
-            $('#caregiver_detail_img').html('<img src=' + caregiver_data.profile_picture + ' class="img-circle img-responsive">');
+            // $('#caregiver_detail_img').html('<img src=' + caregiver_data.profile_picture + ' class="img-circle img-responsive">');
+            $('#caregiver_detail_img').html(caregiver_data.profile_picture ? '<img src=' + caregiver_data.profile_picture + ' class="img-circle img-responsive"> ': '');
           },
           failure: function(caregiver_data){
             alert('error fetching caregiver data');

@@ -3,6 +3,8 @@ from collections import defaultdict
 
 def add_roles_to_context(request):
     context = {}
+    all_state = StateField.objects.all()
+    context['all_state'] = all_state
     if request.user.id != None:
         user_roles = UserRoles.objects.filter(user=request.user)
         user_roles = [x.role for x in user_roles]

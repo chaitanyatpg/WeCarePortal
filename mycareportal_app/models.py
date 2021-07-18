@@ -1980,7 +1980,8 @@ class MoveManagerRejectTask(models.Model):
 
 
 
-
+class StateField(models.Model):
+    state_name = models.CharField(max_length=300)
 
 
 

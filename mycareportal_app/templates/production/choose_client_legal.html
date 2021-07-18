@@ -84,7 +84,6 @@
                                   </ul>
                                 </div>
                                 <div id="client_detail_img" class="right col-xs-5 text-center">
-                                  <img src="" alt="" class="img-circle img-responsive">
                                 </div>
                               </div>
                               <div class="col-xs-12 bottom text-center">
@@ -158,7 +157,8 @@
             $('#client_detail_email').html('Email: ' + client_data.email_address);
             $('#client_detail_gender').html('Gender: ' + client_data.gender);
             $('#client_email_hidden').val(client_data.email_address);
-            $('#client_detail_img').html('<img src=' + client_data.profile_picture + ' class="img-circle img-responsive">');
+            // $('#client_detail_img').html('<img src=' + client_data.profile_picture + ' class="img-circle img-responsive">');
+            $('#client_detail_img').html(client_data.profile_picture ? '<img src=' + client_data.profile_picture + ' class="img-circle img-responsive"> ': '');
           },
           failure: function(client_data){
             alert('error fetching client data');
