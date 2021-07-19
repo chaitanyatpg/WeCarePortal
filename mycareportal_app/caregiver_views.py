@@ -1245,7 +1245,7 @@ def get_schedule_with_id(request):
                                                 id=schedule_id)
     client = schedule_entry.client
     start_hour = str(schedule_entry.start_time.hour).zfill(2)
-    start_minute = str(schedule_entry.end_time.minute).zfill(2)
+    start_minute = str(schedule_entry.start_time.minute).zfill(2)
     end_hour = str(schedule_entry.end_time.hour).zfill(2)
     end_minute = str(schedule_entry.end_time.minute).zfill(2)
     schedule_data = {

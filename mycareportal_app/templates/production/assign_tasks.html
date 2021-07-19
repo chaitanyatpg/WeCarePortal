@@ -199,7 +199,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Start Time
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <select name="{{assign_task_form.start_hour.html_name}}">
+                            <select id="start_time_hour" name="{{assign_task_form.start_hour.html_name}}" onchange="onEdit()" required="required">
                               <option selected disabled>Hour</option>
                               <option value="00">12 AM</option>
                               <option value="01">1 AM</option>
@@ -226,7 +226,7 @@
                               <option value="22">10 PM</option>
                               <option value="23">11 PM</option>
                             </select>
-                            <select name="{{assign_task_form.start_minute.html_name}}">
+                            <select id="start_time_min" name="{{assign_task_form.start_minute.html_name}}" onchange="onEditMin()" required="required">
                               <option selected disabled>Minute</option>
                               <option value="00">00</option>
                               <option value="10">10</option>
@@ -243,7 +243,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">End Time
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <select name="{{assign_task_form.end_hour.html_name}}">
+                            <select id="end_time_hour" name="{{assign_task_form.end_hour.html_name}}" onchange="onEdit()" required="required">
                               <option selected disabled>Hour</option>
                               <option value="00">12 AM</option>
                               <option value="01">1 AM</option>
@@ -270,7 +270,7 @@
                               <option value="22">10 PM</option>
                               <option value="23">11 PM</option>
                             </select>
-                            <select name="{{assign_task_form.end_minute.html_name}}">
+                            <select id="end_time_min" name="{{assign_task_form.end_minute.html_name}}" onchange="onEditMin()" required="required">
                               <option selected disabled>Minute</option>
                               <option value="00">00</option>
                               <option value="10">10</option>
@@ -1455,5 +1455,50 @@
         });
       });
     </script>
+  
+  <script>
+    function onEdit(){
+  
+      console.log("start time hour",$('#start_time_hour :selected').val())
+    
+      var start_time_hour = $('#start_time_hour :selected').val()
+      console.log("start_time_min ",$('#start_time_min :selected').val())
+      var  start_time_min =  $('#start_time_min :selected').val()
+      console.log("end_time_hour ",$('#end_time_hour :selected').val())
+      var end_time_hour = $('#end_time_hour :selected').val()
+      console.log("end_time_min ",$('#end_time_min :selected').val())
+      var end_time_min = $('#end_time_min :selected').val()
+      if($('#end_time_hour :selected').val())
+      if(end_time_hour < start_time_hour){
+        $('#end_time_hour').val('')
+        alert("Please Select correct time")
+        
+      }
+  
+      if(end_time_hour == start_time_hour  && end_time_min && start_time_min && end_time_min <= start_time_min){
+        // $('#start_time_min').val('')
+        $('#end_time_min').val('')
+        alert("Please Select correct time")
+        
+      }
+      
+    }
+  </script>
+  
+  <script>
+    
+    function onEditMin(){ 
+      console.log("ssssssssss",start_time_hour)
+      if( $('#end_time_hour :selected').val() ==  $('#start_time_hour :selected').val() && $('#end_time_hour :selected').val() > 1 && $('#start_time_hour :selected').val() > 1)
+      {
+        if($('#end_time_min :selected').val() <=  $('#start_time_min :selected').val() && $('#end_time_min :selected').val()   && $('#start_time_min :selected').val()){
+          $('#end_time_min').val('')
+        alert("Please Select correct time")
+        }
+        
+      }
+  
+    }
+  </script>
     <!-- /bootstrap-daterangepicker -->
 {% endblock %}
