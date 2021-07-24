@@ -58,7 +58,7 @@
 		"pk": 7,
 		"fields": {
 			"client_match_category": "1",
-			"criteria": "Male Caregiver",
+			"criteria": "Ok with Male Caregiver",
 			"is_default": "True"
 		}
 	},
@@ -67,7 +67,7 @@
 		"pk": 8,
 		"fields": {
 			"client_match_category": "1",
-			"criteria": "Female Caregiver",
+			"criteria": "Ok with Female Caregiver",
 			"is_default": "True"
 		}
 	},
@@ -76,7 +76,7 @@
 		"pk": 9,
 		"fields": {
 			"client_match_category": "1",
-			"criteria": "Client Language Spoken",
+			"criteria": "Ok with Multilingual client",
 			"is_default": "True"
 		}
 	},

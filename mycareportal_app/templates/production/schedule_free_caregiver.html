@@ -59,7 +59,7 @@
                                             <span class="required">*</span>
                                         </label>
                                         <div class="col-md-6 col-sm-6 col-xs-12">
-                                            <input type="text" id="start_date" class="date-picker form-control col-md-7 col-xs-12" required="required" name="{{shedule_shifts_free_caregiver_form.start_date.html_name}}">
+                                            <input type="text" onchange="clickStartDate(this.value)" id="start_date" class="date-picker form-control col-md-7 col-xs-12" required="required" name="{{shedule_shifts_free_caregiver_form.start_date.html_name}}">
                                         </div>
                                     </div>
                                 </div>
@@ -79,7 +79,7 @@
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Start Time<span class="required">*</span>
                                     </label>
                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <select name="{{shedule_shifts_free_caregiver_form.start_hour.html_name}}" required="required">
+                                        <select  id="start_time_hour" name="{{shedule_shifts_free_caregiver_form.start_hour.html_name}}" onchange="onEdit()" required="required">
                                             <option selected disabled value="">Hour</option>
                                             <option value="00">12 AM</option>
                                             <option value="01">1 AM</option>
@@ -106,7 +106,7 @@
                                             <option value="22">10 PM</option>
                                             <option value="23">11 PM</option>
                                         </select>
-                                        <select name="{{shedule_shifts_free_caregiver_form.start_minute.html_name}}" required="required">
+                                        <select id="start_time_min" name="{{shedule_shifts_free_caregiver_form.start_minute.html_name}}" onchange="onEditMin()" required="required">
                                             <option selected disabled value="">Minute</option>
                                             <option value="00">00</option>
                                             <option value="10">10</option>
@@ -125,7 +125,7 @@
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12">End Time <span class="required">*</span>
                                     </label>
                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <select name="{{shedule_shifts_free_caregiver_form.end_hour.html_name}}" required="required">
+                                        <select id="end_time_hour" name="{{shedule_shifts_free_caregiver_form.end_hour.html_name}}" onchange="onEdit()" required="required">
                                             <option selected disabled value="">Hour</option>
                                             <option value="00">12 AM</option>
                                             <option value="01">1 AM</option>
@@ -152,7 +152,7 @@
                                             <option value="22">10 PM</option>
                                             <option value="23">11 PM</option>
                                         </select>
-                                        <select name="{{shedule_shifts_free_caregiver_form.end_minute.html_name}}" required="required">
+                                        <select id="end_time_min" name="{{shedule_shifts_free_caregiver_form.end_minute.html_name}}" onchange="onEditMin()" required="required">
                                             <option selected disabled value="">Minute</option>
                                             <option value="00">00</option>
                                             <option value="10">10</option>
@@ -267,12 +267,72 @@
         $('#end_date').daterangepicker({
             singleDatePicker: true,
             calender_style: "picker_2",
-            minDate: new Date((new Date()).valueOf() + 1000*3600*24),
+            minDate : new Date,
         }, function (start, end, label) {
             console.log(start.toISOString(), end.toISOString(), label);
         });
     });
 </script>
+
+<script>
+    function clickStartDate(value){
+      console.log("valeue",value)
+      $('#end_date').daterangepicker({
+         singleDatePicker: true,
+         calender_style: "picker_2",
+         minDate :  new Date((value))
+       }, function(start, end, label) {
+         console.log(start.toISOString(), end.toISOString(), label);
+         
+       });
+       // $('#end_date').val(value);
+    }
+   </script>
+
+<script>
+    function onEdit(){
+  
+      console.log("start time hour",$('#start_time_hour :selected').val())
+    
+      var start_time_hour = $('#start_time_hour :selected').val()
+      console.log("start_time_min ",$('#start_time_min :selected').val())
+      var  start_time_min =  $('#start_time_min :selected').val()
+      console.log("end_time_hour ",$('#end_time_hour :selected').val())
+      var end_time_hour = $('#end_time_hour :selected').val()
+      console.log("end_time_min ",$('#end_time_min :selected').val())
+      var end_time_min = $('#end_time_min :selected').val()
+      if($('#end_time_hour :selected').val())
+      if(end_time_hour < start_time_hour){
+        $('#end_time_hour').val('')
+        alert("Please Select correct time")
+        
+      }
+  
+      if(end_time_hour == start_time_hour  && end_time_min && start_time_min && end_time_min <= start_time_min){
+        // $('#start_time_min').val('')
+        $('#end_time_min').val('')
+        alert("Please Select correct time")
+        
+      }
+      
+    }
+  </script>
+  
+  <script>
+    
+    function onEditMin(){ 
+      console.log("ssssssssss",start_time_hour)
+      if( $('#end_time_hour :selected').val() ==  $('#start_time_hour :selected').val() && $('#end_time_hour :selected').val() > 1 && $('#start_time_hour :selected').val() > 1)
+      {
+        if($('#end_time_min :selected').val() <=  $('#start_time_min :selected').val() && $('#end_time_min :selected').val()   && $('#start_time_min :selected').val()){
+          $('#end_time_min').val('')
+        alert("Please Select correct time")
+        }
+        
+      }
+  
+    }
+  </script>
 <!-- /bootstrap-daterangepicker -->
 
 
