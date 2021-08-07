@@ -2161,7 +2161,17 @@ def update_invoice_detail(request):
                 invoice_header.total_cost =  (invoice_header.total_cost * 1) +  float(tax_amt)
             invoice_header.save()
             invoice_line_item.save()
-            messages.success(request,"Invoice updated sucessfully")
+            invoice_line_item = InvoiceLineItem.objects.get(id = invoice_line_id)
+            invoice_header = InvoiceHeader.objects.get(id = invoice_line_item.invoice_header.id)
+            data = {
+                "invoice_line_id" : str(invoice_line_id),
+                "invoice_line_total" :str( invoice_line_item.total),
+                 "invoice_line_hours" : str(invoice_line_item.hours),
+                 "invoice_line_rate" : str(invoice_line_item.rate),
+                 "invoice_rate_type": invoice_line_item.rate_type,
+                 "invoice_header_total_cost": str(invoice_header.total_cost)
+
+            }
           
 
         return HttpResponse(json.dumps(data), content_type="application/json")
@@ -2646,7 +2656,19 @@ def update_payroll_detail(request):
             #     invoice_header.total_cost =  (invoice_header.total_cost * 1) +  float(tax_amt)
             payroll_header.save()
             payroll_line_item.save()
-            messages.success(request,"Payroll Updated successfully")
+            payroll_line_item = PayrollLineItem.objects.get(id = invoice_line_id)
+            payroll_header = PayrollHeader.objects.get(id = payroll_line_item.payroll_header.id)
+            data = {
+                "payroll_line_id" : str(invoice_line_id),
+                "payroll_line_total" :str( payroll_line_item.total),
+                 "payroll_line_hours" : str(payroll_line_item.hours),
+                 "payroll_line_rate" : str(payroll_line_item.rate),
+                 "payroll_rate_type": payroll_line_item.rate_type,
+                 "payroll_header_total_cost": str(payroll_header.total_cost)
+
+            }
+          
+            
           
 
         return HttpResponse(json.dumps(data), content_type="application/json")

@@ -313,8 +313,9 @@
                         {% endif %}
                       </div>
                       <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Total</label>
-                        <span style="margin-left: 20px;"> : {{invoice_header_data.total_cost  }} </span>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Total:</label>
+                      
+                        <span style="margin-left: 20px;" id="total_cost_header"> {{invoice_header_data.total_cost  }} </span>
 
                       </div>
                     </div>
@@ -472,7 +473,6 @@ $(document).ready(function (){
         contentType: "application/json",
         success: function (data) {
           
-          console.log("datadatadata",data)
           window.location.reload()
           alert("Email Sent sucessfully")
           setTimeout(function () {
@@ -483,7 +483,6 @@ $(document).ready(function (){
         },
         error: function (data) {
           
-          console.log("datadatadata",data)
           window.location.reload()
           // window.location = "/billing/invoice/get_pdf";
           
@@ -517,7 +516,6 @@ $(document).ready(function (){
 
 
       if (myTab.rows.length > 1 || $("input[name=invoice_notes]").val() ) {
-        console.log("myTab.rows.length",myTab.rows.length)
         $("#stbutton").attr("disabled", true);
         for (row = 1; row < myTab.rows.length; row++) {
 
@@ -593,7 +591,6 @@ $(document).ready(function (){
     end_date = '{{end_date}}'
     tempfieldclientid = '{{invoice_header_data.client.id}}'
     date = { start_date ,end_date}
-    console.log("end_dateend_date",end_date)
     maplist = new Map(JSON.parse(sessionStorage.getItem("inrowfield")))
     console.log("maplist 0000",maplist)
     console.log("maplist ---",maplist.get())
@@ -772,54 +769,14 @@ $(document).ready(function (){
   });
 </script>
 
-<script>
-  function changeratetype(vel) {
-    console.log(vel)
-    var changerate = vel
 
-    console.log("changerate", changerate)
-
-  }
-
-
-  //  $(document).ready(function () {
-  //     var counter = 0;
-  //     $("#editline").on("click", function () {
-  function oneditline(val) {
-    console.log("invoiceinvoiceinvoice" + $("getAttribute[name=]").val(null))
-
-
-
-
-
-  }
-
-  //     $.ajax({
-  //       url: "{% url 'update_invoice' %}",
-  //       type: "GET",
-
-  //       data: {
-
-
-
-  //       },
-  //       dataType: "json",
-  //       contentType: "application/json",
-  //       success: function (data) {
-  //         location.reload();
-  //       }
-
-  //     });
-  //   });
-  // })
-</script>
 
 <script>
   //  $(document).ready(function () {
   //   var counter = 0;
   //   $("#editline").on("click", function () {
   function editlinitem(x) {
-    
+
     var myTab = document.getElementById('lineitemid');
 
     lineitem = []
@@ -827,9 +784,7 @@ $(document).ready(function (){
 
       if (myTab.rows[row].childNodes[1].value == x) {
         var person = new Object();
-        console.log("elementelementelement", myTab.rows[row].childNodes[1].value)
         var element = myTab.rows.item(row).cells[0].innerText;
-        console.log("elementddddddddd344444", element)
         person["invoic_line_id"] = myTab.rows[row].childNodes[1].value;
 
         person["change_hours"] = myTab.rows.item(row).cells[3].innerText;
@@ -856,10 +811,26 @@ $(document).ready(function (){
       dataType: "json",
       contentType: "application/json",
       success: function (data) {
-        location.reload();
+        alert("Invoice updated sucessfully")
+        $("#total_cost_header")[0].innerText = data.invoice_header_total_cost
+        for (row = 1; row < myTab.rows.length; row++) {
+
+if (myTab.rows[row].childNodes[1].value == data.invoice_line_id) {
+  
+  var element = myTab.rows.item(row).cells[0].innerText;
+
+  myTab.rows.item(row).cells[3].innerText = data.invoice_line_hours;
+   myTab.rows.item(row).cells[4].innerText = data.invoice_rate_type;
+  myTab.rows.item(row).cells[5].innerText = data.invoice_line_rate;
+  myTab.rows.item(row).cells[6].innerText = data.invoice_line_total;
+
+  
+
+
+}
 
       }
-
+    }
     });
 
 
@@ -877,16 +848,14 @@ $(document).ready(function (){
     if(confirm('Do you want to delete?')){
     
     var myTab = document.getElementById('lineitemid');
-    console.log("myTabmyTab --",myTab)
+    
 
     lineitem = []
     for (row = 1; row < myTab.rows.length; row++) {
 
       if (myTab.rows[row].childNodes[1].value == x) {
         var person = new Object();
-        console.log("elementelementelement", myTab.rows[row].childNodes[1].value)
         var element = myTab.rows.item(row).cells[0].innerText;
-        console.log("elementddddddddd344444", element)
         person["invoic_line_id"] = myTab.rows[row].childNodes[1].value;
 
         person["change_hours"] = myTab.rows.item(row).cells[3].innerText;
