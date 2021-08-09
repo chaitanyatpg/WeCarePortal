@@ -148,6 +148,8 @@
                       </select>
                       {% endif %}
                     </div>
+                    <div class="dropdown-state-containerss">
+                    </div>
                   </div>
                   <div class="form-group">
                     <div  id="selectlead" style="display:none"> 
@@ -292,7 +294,8 @@
       $(document).ready(function() {
         $(".select2_single").select2({
           placeholder: "Select a state",
-          allowClear: true
+          allowClear: true,
+          dropdownParent: jQuery('.dropdown-state-containerss')
         });
         $(".select2_group").select2({});
         $(".select2_multiple").select2({

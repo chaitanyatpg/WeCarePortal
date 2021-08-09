@@ -141,6 +141,8 @@
                                                             onclick="update_lead_status()"></i> 
                                                         </span>
                                                     </div>
+                                                    <div class="dropdown-state-containerss">
+                                                    </div>
                                                     </div>
                                                 </div>
                                                 <!-- <div id="sel" style="display:block">
@@ -702,6 +704,14 @@
         });
     }
 }
+</script>
+
+<script>
+       $(document).ready(function() {
+        $(".select2_single").select2({
+          allowClear: true,
+          dropdownParent: jQuery('.dropdown-state-containerss')
+        });
 </script>
 
 

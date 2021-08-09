@@ -183,6 +183,8 @@
                       </select>
                       {% endif %}
                     </div>
+                    <div class="dropdown-state-containerss">
+                    </div>
                   </div>
 
                   <div class="form-group">
@@ -218,13 +220,15 @@
                           {% endfor %}
                         </select>
                       {% else %}
-                      <select required class="select2_single form-control" tabindex="-1" name={{edit_client_form.time_zone.html_name}}>
+                      <select required class="select2_time_zone form-control" tabindex="-1" name={{edit_client_form.time_zone.html_name}}>
                         <option></option>
                         {% for timezone in all_timezones %}
                           <option value='{{timezone}}'>{{timezone}}</option>
                         {% endfor %}
                       </select>
                     {% endif %}
+                    </div>
+                    <div class="dropdown-time-containerss">
                     </div>
                   </div>
                   <div class="form-group">
@@ -892,6 +896,8 @@
                       </select>
                       {% endif %}
                     </div>
+                    <div class="dropdown-relation-containerss">
+                    </div>
                   </div>
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Phone Number <span class="required">*</span> </label>
@@ -937,20 +943,22 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">State<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not family_details_form.state.value is None %}
-                      <select required class="select2_single form-control" style="width: 100%;" id="family_state" onchange="update_family_state()" tabindex="-1" name={{family_details_form.state.html_name}} value={{family_details_form.state.value}}>
+                      <select required class="select2_singlefamily form-control" style="width: 100%;" id="family_state" onchange="update_family_state()" tabindex="-1" name={{family_details_form.state.html_name}} value={{family_details_form.state.value}}>
                             <option selected=selected>{{family_details_form.state.value}}</option>
                             {% for statename in all_state %}
                             <option value='{{statename.state_name}}'>{{statename.state_name}}</option>
                            {% endfor %}
                       </select>
                       {% else %}
-                      <select required class="select2_single form-control" style="width: 100%;" id="family_state" onchange="update_family_state()" tabindex="-1" name={{family_details_form.state.html_name}}>
+                      <select required class="select2_singlefamily form-control" style="width: 100%;" id="family_state" onchange="update_family_state()" tabindex="-1" name={{family_details_form.state.html_name}}>
                             <option></option>
                             {% for statename in all_state %}
                             <option value='{{statename.state_name}}'>{{statename.state_name}}</option>
                           {% endfor %}
                       </select>
                       {% endif %}
+                    </div>
+                    <div class="dropdown-family-state-containerss">
                     </div>
                   </div>
 
@@ -1191,6 +1199,9 @@
                     </select>
                  
                     <span class="fa fa-building form-control-feedback left" aria-hidden="true"></span> </div>
+                    <div class="dropdown-pharms-containerss">
+                    </div>
+
                     <div  id="selectleadpharmacy" style="display:none"> 
                     
                     <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
@@ -1298,6 +1309,9 @@
                           {% endfor %}
                       </select>
                       <span class="fa fa-building form-control-feedback right" aria-hidden="true"></span> </div>
+                      <div class="dropdown-provider-containerss">
+
+                      </div>
                       <div  id="selectleadpayor" style="display:none"> 
                         <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                           <input type="text" id="other_payor_state" class="form-control has-feedback-left" placeholder="Other State Name" name={{payer_details_form.other_state_name.html_name}}>
@@ -1846,7 +1860,8 @@
       $(document).ready(function() {
         $(".select2_time_zone").select2({
           placeholder: "Select a Time Zone",
-          allowClear: true
+          allowClear: true,
+          dropdownParent: jQuery('.dropdown-time-containerss')
         });
       });
     </script>
@@ -1972,7 +1987,8 @@
       $(document).ready(function() {
         $(".select2_single").select2({
           placeholder: "Select a state",
-          allowClear: true
+          allowClear: true,
+          dropdownParent: jQuery('.dropdown-state-containerss')
         });
         $(".select2_group").select2({});
         $(".select2_multiple").select2({
@@ -1988,7 +2004,8 @@
   $(document).ready(function() {
     $(".select2_single_value").select2({
       placeholder: "Select a state",
-      allowClear: true
+      allowClear: true,
+      dropdownParent: jQuery('.dropdown-provider-containerss')
     });
     $(".select2_group").select2({});
     $(".select2_multiple").select2({
@@ -2201,7 +2218,8 @@
   $(document).ready(function() {
     $(".select2_single_relation").select2({
       placeholder: "Select a relation",
-      allowClear: true
+      allowClear: true,
+      dropdownParent: jQuery('.dropdown-relation-containerss')
     });
     $(".select2_group").select2({});
     $(".select2_multiple").select2({
@@ -2216,9 +2234,9 @@
   $(document).ready(function() {
     $(".select2_single_pharmas").select2({
       placeholder:"Select a state",
-      
-      
-      allowClear: true
+      allowClear: true,
+      dropdownParent: jQuery('.dropdown-pharms-containerss')
+
     });
     $(".").css("padding-left"," 43px !important;")
     $(".select2_group").select2({});
@@ -2230,6 +2248,21 @@
   });
 </script>
 
+<script>
+  $(document).ready(function() {
+    $(".select2_singlefamily").select2({
+      placeholder: "Select a state",
+      allowClear: true,
+      dropdownParent: jQuery('.dropdown-family-state-containerss')
+    });
+    $(".select2_group").select2({});
+    $(".select2_multiple").select2({
+      maximumSelectionLength: 4,
+      placeholder: "With Max Selection limit 4",
+      allowClear: true
+    });
+  });
+</script>
 
 
 

@@ -60,12 +60,17 @@
                         {% endfor %}
                       </select>
                     </div>
+                    <div class="activity-master-select">
+
+                    </div>
                   </div>
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Sub-Category<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       <select required id="sub_dropdown" class="select2_single_2 form-control" tabindex="-1" name={{create_task_form.sub_category.html_name}}>
                       </select>
+                    </div>
+                    <div class="activity-subcat-select">
                     </div>
                   </div>
                   <div class="form-group">
@@ -226,7 +231,8 @@ $(document).ready(function(){
       $(document).ready(function() {
         $(".select2_single").select2({
           placeholder: "Select Activity Master",
-          allowClear: true
+          allowClear: true,
+          dropdownParent: jQuery('.activity-master-select')
         });
         $(".select2_group").select2({});
         $(".select2_multiple").select2({
@@ -241,7 +247,8 @@ $(document).ready(function(){
       $(document).ready(function() {
         $(".select2_single_2").select2({
           placeholder: "Select Activity Sub-Category",
-          allowClear: true
+          allowClear: true,
+          dropdownParent: jQuery('.activity-subcat-select')
         });
       });
 </script>
