@@ -763,7 +763,27 @@
       dataType: "json",
       contentType: "application/json",
       success: function (data) {
-        location.reload();
+        console.log("fd ddcdcdcd",data)
+        alert("Payroll Updated Sucessfully")
+        // location.reload();
+        for (row = 1; row < myTab.rows.length; row++) {
+      if (myTab.rows[row].childNodes[1].value == x) {
+        var person = new Object();
+        var element = myTab.rows.item(row).cells[0].innerText;
+        
+        // person["payroll_line_id"] = myTab.rows[row].childNodes[1].value;
+        console.log("myTab.rows.item(row)",myTab.rows.item(row))
+        myTab.rows.item(row).cells[1].innerText = data.payroll_line_hours
+        myTab.rows.item(row).cells[2].innerText = data.payroll_rate_type
+        myTab.rows.item(row).cells[3].innerText = data.payroll_line_rate
+        myTab.rows.item(row).cells[4].innerText = data.payroll_line_total
+        // myTab.rows.item(row).cells[5].innerText;
+
+      }
+
+     
+      
+    }
 
       }
 

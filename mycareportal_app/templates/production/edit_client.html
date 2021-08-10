@@ -18,23 +18,30 @@
 <link href="{% static 'vendors/select2/dist/css/select2.min.css' %}" rel="stylesheet">
 {% endblock %}
 {% block pagecontent %}
+<style>
+  .ids .select2-container--default .select2-selection--single .select2-selection__rendered {
+    padding-left: 43px;
+  }
+</style>
     <!-- page content -->
     <div class="right_col" role="main">
       <div class="">
         <div class="page-title">
           <div class="title_left">
-            <h3>Client Details</h3>
+            <h3>Edit Client Details</h3>
           </div>
         </div>
         <div class="clearfix"></div>
         {{block.super}}
         <!--Patient Personal Details form-->
         <div class="clearfix"></div>
+
+       
         <div class="row">
           <div>
             <div class="x_panel">
               <div class="x_title">
-                <h2>Client Personal Details <small>enter personal details</small></h2>
+                <h2>Client Details </h2>
                 <ul class="nav navbar-right panel_toolbox">
                   <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
                 </ul>
@@ -176,6 +183,8 @@
                       </select>
                       {% endif %}
                     </div>
+                    <div class="dropdown-state-containerss">
+                    </div>
                   </div>
 
                   <div class="form-group">
@@ -211,13 +220,15 @@
                           {% endfor %}
                         </select>
                       {% else %}
-                      <select required class="select2_single form-control" tabindex="-1" name={{edit_client_form.time_zone.html_name}}>
+                      <select required class="select2_time_zone form-control" tabindex="-1" name={{edit_client_form.time_zone.html_name}}>
                         <option></option>
                         {% for timezone in all_timezones %}
                           <option value='{{timezone}}'>{{timezone}}</option>
                         {% endfor %}
                       </select>
                     {% endif %}
+                    </div>
+                    <div class="dropdown-time-containerss">
                     </div>
                   </div>
                   <div class="form-group">
@@ -885,6 +896,8 @@
                       </select>
                       {% endif %}
                     </div>
+                    <div class="dropdown-relation-containerss">
+                    </div>
                   </div>
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Phone Number <span class="required">*</span> </label>
@@ -930,20 +943,22 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">State<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not family_details_form.state.value is None %}
-                      <select required class="select2_single form-control" style="width: 100%;" id="family_state" onchange="update_family_state()" tabindex="-1" name={{family_details_form.state.html_name}} value={{family_details_form.state.value}}>
+                      <select required class="select2_singlefamily form-control" style="width: 100%;" id="family_state" onchange="update_family_state()" tabindex="-1" name={{family_details_form.state.html_name}} value={{family_details_form.state.value}}>
                             <option selected=selected>{{family_details_form.state.value}}</option>
                             {% for statename in all_state %}
                             <option value='{{statename.state_name}}'>{{statename.state_name}}</option>
                            {% endfor %}
                       </select>
                       {% else %}
-                      <select required class="select2_single form-control" style="width: 100%;" id="family_state" onchange="update_family_state()" tabindex="-1" name={{family_details_form.state.html_name}}>
+                      <select required class="select2_singlefamily form-control" style="width: 100%;" id="family_state" onchange="update_family_state()" tabindex="-1" name={{family_details_form.state.html_name}}>
                             <option></option>
                             {% for statename in all_state %}
                             <option value='{{statename.state_name}}'>{{statename.state_name}}</option>
                           {% endfor %}
                       </select>
                       {% endif %}
+                    </div>
+                    <div class="dropdown-family-state-containerss">
                     </div>
                   </div>
 
@@ -1165,28 +1180,35 @@
 
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                     <input type="text" id="pharmacy_address" required class="form-control" placeholder="Address" name={{pharmacy_details_form.address.html_name}}>
-                    <span class="fa fa-fax form-control-feedback right" aria-hidden="true"></span> </div>
+                    <span class="fa fa-building form-control-feedback right" aria-hidden="true"></span> </div>
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                     <input type="text" id="pharmacy_city" required class="form-control has-feedback-left" placeholder="City" name={{pharmacy_details_form.city.html_name}}>
                     <span class="fa fa-building form-control-feedback left" aria-hidden="true"></span> </div>
 
-                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback" onchange="update_pharmacy_state()">
-                    <select required class="select2_single form-control" style="width: 100%;" id = "pharmacy_state"  tabindex="-1" name = "{{pharmacy_details_form.state.html_name}}">
-                          <option selected ></option>
+                    <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                      <input type="text" required id="pharmacy_zip_code" class="form-control has-feedback-right" placeholder="Zip Code" name={{pharmacy_details_form.zip_code.html_name}}>
+                      <span class="fa fa-building form-control-feedback right" aria-hidden="true"></span> </div>
+
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback ids" onchange="update_pharmacy_state()">
+                    <select required class="form-control has-feedback select2_single_pharmas"   style="width: 100%;"  id = "pharmacy_state"  tabindex="-1" name = "{{pharmacy_details_form.state.html_name}}">
+                          <option  disabled selected ></option>
                           {% for statename in all_state %}
                           <option value='{{statename.state_name}}'>{{statename.state_name}}</option>
                           {% endfor %}
+                          
                     </select>
-                    <span class="fa fa-fax form-control-feedback right" aria-hidden="true"></span> </div>
+                 
+                    <span class="fa fa-building form-control-feedback left" aria-hidden="true"></span> </div>
+                    <div class="dropdown-pharms-containerss">
+                    </div>
+
                     <div  id="selectleadpharmacy" style="display:none"> 
                     
                     <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                      <input type="text" id="other_pharmacy_state" class="form-control" placeholder="Other State Name" name={{pharmacy_details_form.other_state_name.html_name}}>
-                      <span class="fa fa-fax form-control-feedback right" aria-hidden="true"></span> </div>
+                      <input type="text" id="other_pharmacy_state" class="form-control has-feedback-right" placeholder="Other State Name" name={{pharmacy_details_form.other_state_name.html_name}}>
+                      <span class="fa fa-building form-control-feedback right" aria-hidden="true"></span> </div>
                     </div>
-                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                    <input type="text" required id="pharmacy_zip_code" class="form-control has-feedback-left" placeholder="Zip Code" name={{pharmacy_details_form.zip_code.html_name}}>
-                    <span class="fa fa-building form-control-feedback left" aria-hidden="true"></span> </div>
+                  
                   <div class="ln_solid"></div>
                   <div class="form-group">
                     <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
@@ -1260,37 +1282,41 @@
 
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                     <input type="text" id="payer_address" class="form-control" required placeholder="Address" name={{payer_details_form.address.html_name}}>
-                    <span class="fa fa-fax form-control-feedback right" aria-hidden="true"></span> </div>
+                    <span class="fa fa-building form-control-feedback right" aria-hidden="true"></span> </div>
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                     <input type="text" id="payer_city" class="form-control has-feedback-left" required placeholder="City" name={{payer_details_form.city.html_name}}>
                     <span class="fa fa-building form-control-feedback left" aria-hidden="true"></span> </div>
 
+                  
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                    <select required class="select2_single_value form-control" style="width: 100%;" id = "payer_state" required tabindex="-1" onchange="update_payor_state()" name = "{{payer_details_form.state.html_name}}">
-                          <option value="" disabled selected>Select State</option>
-                                    
-                          {% for statename in all_state %}
-                          <option value='{{statename.state_name}}'>{{statename.state_name}}</option>
-                        {% endfor %}
-                    </select>
-                    <span class="fa fa-fax form-control-feedback right" aria-hidden="true"></span> </div>
-                    <div  id="selectleadpayor" style="display:none"> 
-                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                        <input type="text" id="other_payor_state" class="form-control" placeholder="Other State Name" name={{payer_details_form.other_state_name.html_name}}>
-                        <span class="fa fa-fax form-control-feedback right" aria-hidden="true"></span> </div>
-                      </div>
+                    <input type="text" id="payer_zip_code" required class="form-control has-feedback-right" placeholder="Zip Code" name={{payer_details_form.zip_code.html_name}}>
+                    <span class="fa fa-building form-control-feedback right" aria-hidden="true"></span> </div>
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                    <input type="text" id="payer_zip_code" required class="form-control has-feedback-left" placeholder="Zip Code" name={{payer_details_form.zip_code.html_name}}>
-                    <span class="fa fa-building form-control-feedback left" aria-hidden="true"></span> </div>
-                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                    <input type="text" class="form-control" required id="payer_start_date" name={{payer_details_form.policy_start_date.html_name}} placeholder="Policy Start Date">
-                    <span class="fa fa-calendar form-control-feedback right" aria-hidden="true"></span> </div>
-                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                    <input type="text" class="form-control has-feedback-left" required id="payer_end_date" name={{payer_details_form.policy_end_date.html_name}} placeholder="Policy End Date">
+                    <input type="text" class="form-control has-feedback-left" required id="payer_start_date" name={{payer_details_form.policy_start_date.html_name}} placeholder="Policy Start Date">
                     <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span> </div>
                   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                    <input type="text" class="form-control" required id="payer_policy_number" name={{payer_details_form.policy_number.html_name}} placeholder="Policy Number">
-                    <span class="fa fa-key form-control-feedback right" aria-hidden="true"></span> </div>
+                    <input type="text" class="form-control has-feedback-right" required id="payer_end_date" name={{payer_details_form.policy_end_date.html_name}} placeholder="Policy End Date">
+                    <span class="fa fa-calendar form-control-feedback right" aria-hidden="true"></span> </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                    <input type="text" class="form-control has-feedback-left" required id="payer_policy_number" name={{payer_details_form.policy_number.html_name}} placeholder="Policy Number">
+                    <span class="fa fa-key form-control-feedback left" aria-hidden="true"></span> </div>
+                    <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                      <select required class="select2_single_value form-control" style="width: 100%;" id = "payer_state" required tabindex="-1" onchange="update_payor_state()" name = "{{payer_details_form.state.html_name}}">
+                            <option value="" disabled selected>Select State</option>
+                                      
+                            {% for statename in all_state %}
+                            <option value='{{statename.state_name}}'>{{statename.state_name}}</option>
+                          {% endfor %}
+                      </select>
+                      <span class="fa fa-building form-control-feedback right" aria-hidden="true"></span> </div>
+                      <div class="dropdown-provider-containerss">
+
+                      </div>
+                      <div  id="selectleadpayor" style="display:none"> 
+                        <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                          <input type="text" id="other_payor_state" class="form-control has-feedback-left" placeholder="Other State Name" name={{payer_details_form.other_state_name.html_name}}>
+                          <span class="fa fa-building form-control-feedback left" aria-hidden="true"></span> </div>
+                        </div>
                   <div class="ln_solid"></div>
                   <div class="form-group">
                     <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
@@ -1834,7 +1860,8 @@
       $(document).ready(function() {
         $(".select2_time_zone").select2({
           placeholder: "Select a Time Zone",
-          allowClear: true
+          allowClear: true,
+          dropdownParent: jQuery('.dropdown-time-containerss')
         });
       });
     </script>
@@ -1960,7 +1987,8 @@
       $(document).ready(function() {
         $(".select2_single").select2({
           placeholder: "Select a state",
-          allowClear: true
+          allowClear: true,
+          dropdownParent: jQuery('.dropdown-state-containerss')
         });
         $(".select2_group").select2({});
         $(".select2_multiple").select2({
@@ -1976,7 +2004,8 @@
   $(document).ready(function() {
     $(".select2_single_value").select2({
       placeholder: "Select a state",
-      allowClear: true
+      allowClear: true,
+      dropdownParent: jQuery('.dropdown-provider-containerss')
     });
     $(".select2_group").select2({});
     $(".select2_multiple").select2({
@@ -2189,7 +2218,8 @@
   $(document).ready(function() {
     $(".select2_single_relation").select2({
       placeholder: "Select a relation",
-      allowClear: true
+      allowClear: true,
+      dropdownParent: jQuery('.dropdown-relation-containerss')
     });
     $(".select2_group").select2({});
     $(".select2_multiple").select2({
@@ -2199,5 +2229,41 @@
     });
   });
 </script>
+
+<script>
+  $(document).ready(function() {
+    $(".select2_single_pharmas").select2({
+      placeholder:"Select a state",
+      allowClear: true,
+      dropdownParent: jQuery('.dropdown-pharms-containerss')
+
+    });
+    $(".").css("padding-left"," 43px !important;")
+    $(".select2_group").select2({});
+    $(".select2_multiple").select2({
+      maximumSelectionLength: 4,
+      placeholder: "With Max Selection limit 4",
+      allowClear: true
+    });
+  });
+</script>
+
+<script>
+  $(document).ready(function() {
+    $(".select2_singlefamily").select2({
+      placeholder: "Select a state",
+      allowClear: true,
+      dropdownParent: jQuery('.dropdown-family-state-containerss')
+    });
+    $(".select2_group").select2({});
+    $(".select2_multiple").select2({
+      maximumSelectionLength: 4,
+      placeholder: "With Max Selection limit 4",
+      allowClear: true
+    });
+  });
+</script>
+
+
 
 {% endblock %}
