@@ -53,6 +53,8 @@
                                   {% endfor %}
     	                          </select>
     	                        </div>
+                              <div class="dropdown-state-containerss">
+                              </div>
                           </div>
                           <div id="client_detail_panel" style='display: none' class="col-md-9 col-sm-9 col-xs-12 profile_details pull-right">
                             <div class="well profile_view">
@@ -129,7 +131,7 @@
                                      
         
                                         <div class="col-md-10 col-sm-10 col-xs-12">
-                                       <select id='client_dropdown_with_task' style="width: 205px;" class="select2_single form-control" tabindex="-1" name={{copy_assign_task_form.clientwithtask.html_name}}>
+                                       <select id='client_dropdown_with_task' style="width: 205px;" class="select2singles form-control" tabindex="-1" name={{copy_assign_task_form.clientwithtask.html_name}}>
                                         <option value=""></option>
                                         {% for client in client_with_task %}
                                         
@@ -137,17 +139,23 @@
                                         {% endfor %}
                                         </select>
                                         </div>
+                                        <div class="dropdown-clientwt-containerss">
+
+                                        </div>
                                       </div>
+                                    
 
                                       <div class="col-md-6">
                                           <label class=""   >Select Client Without Task</label>
                                           <div class="col-md-10 col-sm-10 col-xs-12">
-                                        <select id='client_dropdown_with_out_task' style="width: 205px;" class="select2_single form-control" tabindex="-1" name={{copy_assign_task_form.clientwithouttask.html_name}}> 
+                                        <select id='client_dropdown_with_out_task' style="width: 205px;" class="select2_singles form-control" tabindex="-1" name={{copy_assign_task_form.clientwithouttask.html_name}}> 
                                           <option value=""></option>
                                           {% for client in client_without_task %}
                                                <option value= {{client.email_address}} >{{client.first_name|addstr_space:client.last_name}}</option>
                                               {% endfor %}
                                         </select>
+                                      </div>
+                                      <div class="dropdown-client-containerss">
                                       </div>
                                   </div>
                                   </div>
@@ -386,7 +394,8 @@
       $(document).ready(function() {
         $(".select2_single").select2({
           placeholder: "Select a client",
-          allowClear: true
+          allowClear: true,
+          dropdownParent: jQuery('.dropdown-state-containerss')
         });
         $(".select2_group").select2({});
         $(".select2_multiple").select2({
@@ -397,6 +406,37 @@
       });
     </script>
     <!-- /Select2 -->
+    <script>
+      $(document).ready(function() {
+        $(".select2_singles").select2({
+          placeholder: "Select a client",
+          allowClear: true,
+          dropdownParent: jQuery('.dropdown-client-containerss')
+        });
+        $(".select2_group").select2({});
+        $(".select2_multiple").select2({
+          maximumSelectionLength: 4,
+          placeholder: "Select multiple options",
+          allowClear: true
+        });
+      });
+    </script>
+
+<script>
+  $(document).ready(function() {
+    $(".select2singles").select2({
+      placeholder: "Select a client",
+      allowClear: true,
+      dropdownParent: jQuery('.dropdown-clientwt-containerss')
+    });
+    $(".select2_group").select2({});
+    $(".select2_multiple").select2({
+      maximumSelectionLength: 4,
+      placeholder: "Select multiple options",
+      allowClear: true
+    });
+  });
+</script>
 
     <!-- jQuery Tags Input -->
     <script>

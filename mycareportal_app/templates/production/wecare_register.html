@@ -103,7 +103,8 @@
                 {% endif %}
               </div>
               </br>
-
+              <div class="dropdown-state-containerss">
+              </div>
               <div>
                 <div  id="selectlead" style="display:none"> 
                  <div>
@@ -200,7 +201,8 @@
         $(document).ready(function() {
           $(".select2_single").select2({
             placeholder: "Select a state",
-            allowClear: true
+            allowClear: true,
+            dropdownParent: jQuery('.dropdown-state-containerss')
           });
           $(".select2_time_zone").select2({
             placeholder: "Select a Time Zone",

@@ -55,6 +55,8 @@
                                   {% endfor %}
     	                          </select>
     	                        </div>
+                              <div class="dropdown-state-containerss">
+                              </div>
                           </div>
 
                           <div class="form-group">
@@ -276,7 +278,8 @@
       $(document).ready(function() {
         $(".select2_single").select2({
           placeholder: "Select a client",
-          allowClear: true
+          allowClear: true,
+          dropdownParent: jQuery('.dropdown-state-containerss')
         });
         $(".select2_group").select2({});
         $(".select2_multiple").select2({
