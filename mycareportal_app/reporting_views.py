@@ -57,7 +57,7 @@ class ViewClientsWithoutCaregiver(LoginRequiredMixin, View):
         company = request.user.company
         clients = Client.objects.filter(company=company,caregiver=None).order_by('last_name')
         context['clients'] = clients
-        return render(request, "production/view_all_clients.html", context)
+        return render(request, "production/view_client_without_caregiver.html", context)
 
 class ViewTasks(LoginRequiredMixin, View):
 

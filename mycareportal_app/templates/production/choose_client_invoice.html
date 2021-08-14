@@ -63,6 +63,8 @@
                                   {% endfor %}
     	                          </select>
     	                        </div>
+                              <div class="dropdown-state-containerss">
+                              </div>
                           </div>
                           <div id="client_detail_panel" style='display: none' class="col-md-9 col-sm-9 col-xs-12 profile_details pull-right">
                             <br>
@@ -385,7 +387,8 @@
       $(document).ready(function() {
         $(".select2_single").select2({
           placeholder: "Select a client",
-          allowClear: true
+          allowClear: true,
+          dropdownParent: jQuery('.dropdown-state-containerss')
         });
         $(".select2_group").select2({});
         $(".select2_multiple").select2({

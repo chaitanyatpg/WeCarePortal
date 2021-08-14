@@ -103,7 +103,8 @@
                 {% endif %}
               </div>
               </br>
-
+              <div class="dropdown-state-containerss">
+              </div>
               <div>
                 <div  id="selectlead" style="display:none"> 
                  <div>
@@ -137,6 +138,8 @@
                   {% endfor %}
                 </select>
                 {% endif %}
+                <div class="dropdown-timezone-containerss">
+                </div>
               </div>
               <h2>Care Manager Information</h2>
               <div>
@@ -200,14 +203,13 @@
         $(document).ready(function() {
           $(".select2_single").select2({
             placeholder: "Select a state",
-            allowClear: true
+            allowClear: true,
+            dropdownParent: jQuery('.dropdown-state-containerss')
           });
-          $(".select2_time_zone").select2({
-            placeholder: "Select a Time Zone",
-            allowClear: true
-          });
+
         });
   </script>
+  
   <!-- /Select2 -->
 
 
@@ -257,6 +259,17 @@
        $('#otherstatevalue').removeAttr('required');
      }
   })
+</script>
+
+<script>
+  $(document).ready(function() {
+     $(".select2_time_zone").select2({
+        placeholder: "Select a Time Zone",
+        allowClear: true,
+        dropdownParent: jQuery('.dropdown-timezone-containerss')
+        
+      });
+    });
 </script>
 
 </html>
