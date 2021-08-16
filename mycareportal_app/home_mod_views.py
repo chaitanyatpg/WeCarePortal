@@ -103,10 +103,10 @@ class AddHomeModManager(LoginRequiredMixin, View):
                     new_user, current_site.domain
                     )
                     #Add messages
-                    messages.success(request, "Home Modification Manager {0} {1} successfully added!".format(first_name, last_name))
+                    messages.success(request, "Home modification manager {0} {1} added successfully.".format(first_name, last_name))
                     return redirect('add_home_mod_manager')
             except IntegrityError as e:
-                messages.error(request, "Home Modification user has already been registered. Please enter with a new email address.")
+                messages.error(request, "Home modification user has already been registered. Please enter with a new email address.")
         else:
             form_errors = add_home_mod_manager_form.errors.as_data()
             error_messaging.render_error_messages(request, form_errors)
@@ -203,9 +203,9 @@ class EditHomeModUser(LoginRequiredMixin, View):
                     home_mod_user_auth.save()
                 home_mod_user.save()
                 print("SAVED HMU")
-                messages.success(request, "Home Modification Manager {0} {1} successfully edited!".format(first_name,last_name))
+                messages.success(request, "Home modification manager {0} {1} successfully edited.".format(first_name,last_name))
             except IntegrityError as e:
-                messages.error(request, "Home Modification Manager already exists. Please add a new Home Modification Manager")
+                messages.error(request, "Home modification manager already exists. Please add a new Home Modification Manager")
         return HttpResponseRedirect(reverse('edit_home_mod_user') + "?home_mod_user_email=" + email)
 
     def parse_date(self,caregiver_birthday):
@@ -254,7 +254,7 @@ class Dashboard(LoginRequiredMixin, View):
                                             end_date = end_date,
                                             cost = cost)
             home_mod_task_bid.save()
-            messages.success(request, "Bid sent!")
+            messages.success(request, "Bid sent.")
         else:
             messages.error(request, "Error sending bid")
         return redirect('contractor_dashboard')
@@ -284,7 +284,7 @@ class AcceptBid(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         context={}
         current_company = request.user.company
-        bid_id = self.kwargs['bid_id']
+        bid_id = request.POST['bid_id']
         if HomeModTaskBid.objects.filter(company=current_company, uid=bid_id,bid_live= True).exists():
             bid = HomeModTaskBid.objects.get(company=current_company, uid=bid_id)
             task = bid.home_mod_task
@@ -295,7 +295,7 @@ class AcceptBid(LoginRequiredMixin, View):
             if not HomeModProject.objects.filter(company=current_company,home_mod_task = task).exists():
                 home_mod_project = HomeModProject(company=current_company,home_mod_task = task,estimated_budget = bid.cost,contractor = bid.contractor,client = task.client)
                 home_mod_project.save()
-                messages.success(request, "Accepted Bid from {0} {1} for task {2} and created project".format(bid.contractor.first_name, bid.contractor.last_name, task.task_name))
+                messages.success(request, "Accepted bid from {0} {1} for task {2} and created project".format(bid.contractor.first_name, bid.contractor.last_name, task.task_name))
             else:
                 messages.success(request,"Bid already accepted")
         else:
@@ -394,7 +394,7 @@ class DeleteHomeModTask(LoginRequiredMixin, View):
         task_id = self.kwargs['task_id']
         task = HomeModificationTask.objects.get(company=current_company, uid = task_id)
         task.delete()
-        messages.success(request, "Deleted Home Modification task")
+        messages.success(request, "Deleted home modification task")
         return redirect('home_dashboard')
 
 class ArchiveProject(LoginRequiredMixin, View):
@@ -406,7 +406,7 @@ class ArchiveProject(LoginRequiredMixin, View):
         task = HomeModificationTask.objects.get(company=company, uid=task_id)
         task.archived = True
         task.save()
-        messages.success(request, "Closed Home Modification Project")
+        messages.success(request, "Closed home modification project")
         return redirect('home_dashboard')
 
 @login_required
@@ -562,7 +562,7 @@ class RejectBid(LoginRequiredMixin, View):
             else:
                 bid.bid_live = False
                 bid.save()
-                messages.success(request, "Reject Bid from {0} {1} for task ".format(bid.contractor.first_name, bid.contractor.last_name))
+                messages.success(request, "Bid rejected")
         
         else:
             messages.success(request, "Bid doesn't exist")
@@ -587,10 +587,10 @@ def reject_contractor_bid_task(request):
             for contractor in home_mod_task.chosen_contractors.all():
                 if contractor.email_address == request.user.email:
                     if ContractorRejectTask.objects.filter(company=current_company,contractor=contractor,home_mod_task= home_mod_task,status = True).exists():
-                        messages.success(request, "Reject Bid Request Already sent")
+                        messages.success(request, "Reject bid request already sent")
                     else:
                         contractor_reject_task = ContractorRejectTask(company = current_company,contractor=contractor,home_mod_task =home_mod_task,status = True)
                         contractor_reject_task.save()
-                        messages.success(request, "Reject Bid Request send sucessfully")
+                        messages.success(request, "Reject bid request send sucessfully")
                 
     return redirect('contractor_dashboard')    

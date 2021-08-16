@@ -456,7 +456,7 @@
 $(document).ready(function (){
 
   $("#sendemail").on("click", function () {
-    if (confirm("Do you want to Send Email ?")) {
+    if (confirm("Do you want to send email ?")) {
    $("#sendemail").attr("disabled", true);
     $.ajax({
         url: "{% url 'send_email_invoice' %}",
@@ -474,7 +474,7 @@ $(document).ready(function (){
         success: function (data) {
           
           window.location.reload()
-          alert("Email Sent sucessfully")
+          alert("Email sent successfully")
           setTimeout(function () {
             
             
@@ -811,7 +811,7 @@ $(document).ready(function (){
       dataType: "json",
       contentType: "application/json",
       success: function (data) {
-        alert("Invoice updated sucessfully")
+        alert("Invoice updated successfully")
         $("#total_cost_header")[0].innerText = data.invoice_header_total_cost
         for (row = 1; row < myTab.rows.length; row++) {
 

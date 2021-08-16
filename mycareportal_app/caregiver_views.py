@@ -127,7 +127,7 @@ class AddCaregiver(LoginRequiredMixin, View):
                         )
                     #Add messages
                     if not existing_user_flag:
-                        messages.success(request, "Caregiver {0} {1} successfully added!".format(first_name, last_name))
+                        messages.success(request, "Caregiver {0} {1} successfully added.".format(first_name, last_name))
                     else:
                         messages.success(request, "Caregiver role added to user {0} {1}".format(first_name, last_name))
                     return HttpResponseRedirect(reverse('edit_caregiver') + "?caregiver_email=" + email)

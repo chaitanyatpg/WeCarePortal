@@ -70,14 +70,17 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Client<span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <select name="{{schedule_shift_form.client_id.html_name}}" required="required">
+                                <select name="{{schedule_shift_form.client_id.html_name}}" class="select2_single form-control" required="required">
                                   <option selected disabled value="">Select Client</option>
                                   {% for client in assigned_clients %}
                                     <option value={{client.id}}>{{client.first_name|addstr_space:client.last_name}}</option>
                                   {% endfor %}
                                 </select>
                             </div>
+                            <div class="dropdown-state-containerss"></div>
                           </div>
+                          <br>
+                       
                           <div class="row">
                               <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12">Start Date<span class="required">*</span>
@@ -87,6 +90,7 @@
                                 </div>
                               </div>
                           </div>
+                          <br>
                           <div class="row">
                               <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12">End Date<span class="required">*</span>
@@ -97,6 +101,7 @@
                             </div>
                           </div>
                         </div>
+                        <br>
                         <div class="form-group">
                           <div class="row">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Start Time<span class="required">*</span>
@@ -955,8 +960,9 @@
     <script>
       $(document).ready(function() {
         $(".select2_single").select2({
-          placeholder: "---------- Select a Task ----------",
-          allowClear: true
+          placeholder: " Select a client ",
+          allowClear: true,
+          dropdownParent: jQuery('.dropdown-state-containerss')
         });
       });
     </script>

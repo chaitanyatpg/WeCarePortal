@@ -73,7 +73,7 @@ class ActivateTabletClient(LoginRequiredMixin, View):
                 existing_register = ClientTabletRegister.objects.get(device_id=tablet_id)
                 existing_register.delete()
             client_tablet_register.save()
-            messages.success(request, "Client {0} {1} successfully registered to tablet!".format(client.first_name,client.last_name))
+            messages.success(request, "Client {0} {1} successfully registered to tablet.".format(client.first_name,client.last_name))
         return redirect('activate_tablet_choose_client')
 
 class ActivateTabletChooseClient(LoginRequiredMixin, View):
@@ -203,7 +203,7 @@ class AddClient(LoginRequiredMixin, View):
                         )
                     if not existing_user_flag:
                         new_client.save()
-                        messages.success(request, "Caregiver {0} {1} successfully added!".format(first_name, last_name))
+                        messages.success(request, "Caregiver {0} {1} successfully added.".format(first_name, last_name))
                         assigned_caregiver = Caregiver.objects.get(company=current_company, email_address=email)
                         assigned_client = Client.objects.get(company=current_company, email_address=email)
                         assigned_client.caregiver.add(assigned_caregiver)
@@ -215,7 +215,7 @@ class AddClient(LoginRequiredMixin, View):
                 new_client.profile_picture = profile_picture
                 new_client.save()
                 self.save_client_attachments(company, new_client, attachments, request.user)
-                messages.success(request, "Client successfully added. Add additional Details Below.")
+                messages.success(request, "Client successfully added. Add additional details below.")
                 return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client_email)
             except IntegrityError as e:
                 messages.error(request, "Client already exists. Please enter a new client.")
@@ -369,7 +369,7 @@ class EditClient(LoginRequiredMixin, View):
                     client.profile_picture = edit_client_form.cleaned_data['profile_picture']
                 client.save()
                 self.save_client_attachments(current_company, client, attachments, request.user)
-                messages.success(request, "Client {0} {1} successfully edited!".format(client.first_name,client.last_name))
+                messages.success(request, "Client {0} {1} successfully edited.".format(client.first_name,client.last_name))
             except IntegrityError as e:
                 messages.error(request, "Client already exists. Please enter a new Client.")
         else:
@@ -505,43 +505,51 @@ class AssignTasksChooseClient(LoginRequiredMixin, View):
 
             taskHeader_updated = list(TaskHeader.objects.filter(company=current_company,client = clientwot).order_by('client_id'))
             for header in taskHeader_updated:
+                
                 for taskschedule in task_schedule_client:
-                    task_template_instance = TaskTemplateInstance.objects.get(company=current_company, task_schedule=taskschedule)
                     taskschedule.pk = None
-                    client_vital = taskschedule.client_id = clientwotclientid
+                    taskschedule.client_id = clientwotclientid
                     taskschedule.task_header = header
                     taskschedule.uid = str(uuid.uuid4())
                     taskschedule.pending = True
-
                     taskschedule.save()
+                    
+                task_schedule_clientwot = list(TaskSchedule.objects.filter(company=current_company,client = clientwot).order_by('client_id'))
+                print("task_schedule_clientwottask_schedule_clientwot",task_schedule_clientwot)
 
-                    task_template_subcategory_instance = TaskTemplateSubcategoryInstance.objects.get(company=current_company, task_template_instance=task_template_instance)
-                    task_template_entry_instance = TaskTemplateEntryInstance.objects.filter(company=current_company, task_template_instance= task_template_instance, task_template_subcategory_instance=task_template_subcategory_instance ).order_by("task_template_entry_id")
+                for taskschedules in task_schedule_clientwot:
+                    if TaskTemplateInstance.objects.filter(company = current_company, task_schedule_id = taskschedules.id).exists():
+                        print("taskscheduletaskschedule",taskschedules.id)
+                        task_template_instance = TaskTemplateInstance.objects.filter(company = current_company, task_schedule_id = taskschedule.id)
+                        # task_template_insta = TaskTemplateInstance.objects.filter(company = current_company, id = task_template_instance.id)
+                        print("sssssssssssss 00000000 ---------",task_template_instance)
+                        
+                        
+                        obj= TaskSchedule.objects.filter(company=current_company,client=  clientwot).order_by('-id')[0]
+                        print("obj obj obj",obj)
+                        template = TaskTemplate.objects.get(id =task_template_instance .task_template_id)
+                        template_instance = TaskTemplateInstance(company=current_company,task_template = template,task_schedule = obj)
+                        template_instance.save()
+                        task_template_subcategories = TaskTemplateSubcategory.objects.filter(template_code=template.template_code)
 
-                    task_template_instance.pk = None
-                    task_template_instance.company = current_company
-                    task_template_instance.uid = str(uuid.uuid4())
-                    task_template_instance.task_schedule = taskschedule
-                    task_template_instance.save()
-
-                    task_template_subcategory_instance.pk = None
-                    task_template_subcategory_instance.company = current_company
-                    task_template_subcategory_instance.uid = str(uuid.uuid4())
-                    task_template_subcategory_instance.task_template_instance = task_template_instance
-                    task_template_subcategory_instance.save()
-
-
-
-                    for entry_instance in task_template_entry_instance:
-                        entry_instance.pk = None
-                        entry_instance.uid = str(uuid.uuid4())
-                        entry_instance.company = current_company
-                        entry_instance.task_template_instance = task_template_instance
-                        entry_instance.task_template_subcategory_instance = task_template_subcategory_instance
-
-                        entry_instance.save()
+                        for subcategory in task_template_subcategories:
+                            template_subcategory_instance = TaskTemplateSubcategoryInstance(
+                            company=current_company,
+                            task_template_subcategory=subcategory,
+                            task_template_instance=template_instance)
+                            template_subcategory_instance.save()
+                            task_template_entries = TaskTemplateEntry.objects.filter(task_template_code=template.template_code,
+                                                                        task_template_subcategory_code=subcategory.template_subcategory_code)
 
 
+                            for template_entry in task_template_entries:
+                                template_entry_instance = TaskTemplateEntryInstance(company=header.company,task_template_entry=template_entry,task_template_instance=template_instance,
+                                                                                          task_template_subcategory_instance=template_subcategory_instance)
+                                template_entry_instance.save()
+                    
+ 
+                    
+                    
 
 
             for tasklink in task_link_client:
@@ -594,12 +602,14 @@ class AssignTasksChooseClient(LoginRequiredMixin, View):
             context["client_id"] = client_id
             client_schedule = TaskSchedule.objects.filter(company=current_company,client=current_client)
             context["client_schedule"] = client_schedule
-            return render(request,'production/assign_tasks.html',context)
+            messages.success(request, "Task copied successfully.")
+            
+            return redirect("assign_choose_client")
 
         else:
             context["status_message"] = "Error Adding Task"
             messages.error(request, "Error adding task")
-            return redirect("assign_choose_client")
+            return redirect("")
 
 
 
@@ -655,7 +665,7 @@ class CreateTasks(LoginRequiredMixin, View):
                             activity_category_code = activity_category_code)
             new_task.save()
             context["status_message"] = "Task Added Successfully"
-            messages.success(request, "Task {0} added successfully!".format(task))
+            messages.success(request, "Task {0} added successfully.".format(task))
         else:
             context["status_message"] = "Error Adding Task"
             messages.error(request, "Error adding task")
@@ -1334,10 +1344,10 @@ class DeactivateClient(LoginRequiredMixin, View):
             client = Client.all_objects.get(company=current_company,uid=client_uid)
             if client.deleted_at != None:
                 client.deleted_at = None
-                messages.success(request, "Client Activated")
+                messages.success(request, "Client activated")
             else:
                 client.delete()
-                messages.success(request, "Client Deactivated")
+                messages.success(request, "Client deactivated")
             client.save()
             return HttpResponseRedirect(reverse('deactivate_client') + "?client_email=" + client.email_address)
         else:
@@ -1615,7 +1625,7 @@ def edit_task_with_id(request):
                                                         task_schedule = current_task,
                                                         attachment = uploaded_attachment)
                     new_task_attachment.save()
-                messages.success(request, "Successfully Edited Task!")
+                messages.success(request, "Successfully Edited Task.")
                 return HttpResponseRedirect(reverse('assign_tasks') + "?client_email=" + client_email)
     messages.error(request, "Error Editing Task")
     current_client = Client.objects.get(company=company, id=client_id)
@@ -1708,7 +1718,7 @@ def post_family_details(request):
                             if profile_picture is not None:
                                 existing_family_contact.profile_picture = profile_picture
                             existing_family_contact.save()
-                            messages.success(request, "Successfully added family contact {0} {1}!".format(first_name,last_name))
+                            messages.success(request, "Successfully added family contact {0} {1}.".format(first_name,last_name))
                         else:
                             messages.error(request, "Family member already exists. Please enter new family member.")
                     else:
@@ -1754,7 +1764,7 @@ def post_family_details(request):
                         email_manager.send_verification_email(
                         new_user, current_site.domain
                         )
-                        messages.success(request, "Successfully added family contact {0} {1}!".format(first_name,last_name))
+                        messages.success(request, "Successfully added family contact {0} {1}.".format(first_name,last_name))
                 else:
                     existing_family_member = FamilyContact.objects.get(company=request.user.company,id=family_id)
                     existing_user = existing_family_member.user
@@ -1778,7 +1788,7 @@ def post_family_details(request):
                     if profile_picture is not None:
                         existing_family_member.profile_picture = profile_picture
                     existing_family_member.save()
-                    messages.success(request, "Edited family contact {0} {1}!".format(first_name,last_name))
+                    messages.success(request, "Edited family contact {0} {1}.".format(first_name,last_name))
             except IntegrityError as e:
                 messages.error(request, "Family member already exists. Please enter new family member.")
         else:
@@ -1842,7 +1852,7 @@ def post_provider_details(request):
                             existing_provider.secondary_phone_number = secondary_phone_number
                             existing_provider.is_active = True
                             existing_provider.save()
-                            messages.success(request, "Added provider {0} {1}!".format(first_name,last_name))
+                            messages.success(request, "Added provider {0} {1}.".format(first_name,last_name))
                         else:
                             messages.error(request, "Provider already exists. Please enter new Provider.")
                     elif(existing_user_other_company):
@@ -1871,7 +1881,7 @@ def post_provider_details(request):
                         assigned_client = Client.objects.get(company=company,email_address=client_email)
                         assigned_client.provider.add(provider_user)
                         assigned_client.save()
-                        messages.success(request, "Added provider {0} {1}!".format(first_name,last_name))
+                        messages.success(request, "Added provider {0} {1}.".format(first_name,last_name))
                     else:
                         print("MEEEEE")
                         new_user = User.objects.create_user(username=email,
@@ -1908,7 +1918,7 @@ def post_provider_details(request):
                         email_manager.send_verification_email(
                         new_user, current_site.domain
                         )
-                        messages.success(request, "Added provider {0} {1}!".format(first_name,last_name))
+                        messages.success(request, "Added provider {0} {1}.".format(first_name,last_name))
                 else:
                     existing_provider = Provider.objects.get(company=request.user.company,id=provider_id)
                     existing_user = existing_provider.user
@@ -1926,7 +1936,7 @@ def post_provider_details(request):
                     existing_provider.phone_number = phone_number
                     existing_provider.secondary_phone_number = secondary_phone_number
                     existing_provider.save()
-                    messages.success(request, "Edited provider {0} {1}!".format(first_name,last_name))
+                    messages.success(request, "Edited provider {0} {1}.".format(first_name,last_name))
             except IntegrityError as e:
                 messages.error(request, "Provider already exists. Please enter new Provider.")
         else:
@@ -1985,7 +1995,7 @@ def post_pharmacy_details(request):
                     assigned_client = Client.objects.get(company=company,email_address=client_email)
                     assigned_client.pharmacy.add(pharmacy)
                     assigned_client.save()
-                    messages.success(request, "Added pharmacy {0}!".format(pharmacy_name))
+                    messages.success(request, "Added pharmacy {0}.".format(pharmacy_name))
                 else:
                     existing_pharmacy = Pharmacy.objects.get(company=request.user.company,id=pharmacy_id)
                     #update Provider object
@@ -1999,7 +2009,7 @@ def post_pharmacy_details(request):
                     existing_pharmacy.state = state
                     existing_pharmacy.zip_code = zip_code
                     existing_pharmacy.save()
-                    messages.success(request, "Edited pharmacy {0}!".format(pharmacy_name))
+                    messages.success(request, "Edited pharmacy {0}.".format(pharmacy_name))
             except IntegrityError as e:
                 messages.error(request, "Pharmacy already exists. Please enter new pharmacy.")
         else:
@@ -2062,7 +2072,7 @@ def post_payer_details(request):
                     assigned_client = Client.objects.get(company=company,email_address=client_email)
                     assigned_client.payer.add(payer)
                     assigned_client.save()
-                    messages.success(request, "Added payer {0}!".format(payer_name))
+                    messages.success(request, "Added payer {0}.".format(payer_name))
                 else:
                     existing_payer = Payer.objects.get(company=request.user.company,id=payer_id)
                     #update Provider object
@@ -2079,7 +2089,7 @@ def post_payer_details(request):
                     existing_payer.state = state
                     existing_payer.zip_code = zip_code
                     existing_payer.save()
-                    messages.success(request, "Edited payer {0}!".format(payer_name))
+                    messages.success(request, "Edited payer {0}.".format(payer_name))
             except IntegrityError as e:
                 messages.error(request, "Payer already exists. Please enter new payer.")
         else:

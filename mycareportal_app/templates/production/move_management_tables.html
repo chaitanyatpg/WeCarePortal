@@ -96,7 +96,7 @@
                 
                   {% csrf_token %}
                   <div class="modal-body">
-                    Are you sure you want to assign this move manager?
+                    Do you want to assign this move manager?
                   </div>
                   <div class="modal-footer">
                     <input type="hidden" id="assign_caregiver_email" name="{{assign_move_manager_form.move_manager_email.html_name}}">
@@ -122,7 +122,7 @@
                 <form method="post" action="{% url 'choose_move_contractor'  %}">
                   {% csrf_token %}
                   <div class="modal-body">
-                    Are you sure you want to unassign this move manager? 
+                    Do you want to unassign this move manager? 
 
                   </div>
                   <div class="modal-footer">

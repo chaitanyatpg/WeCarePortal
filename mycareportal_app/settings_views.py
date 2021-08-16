@@ -70,7 +70,7 @@ class EmailSettings(LoginRequiredMixin, View):
             request.user.clock_out_emails = clock_out_emails
             request.user.save()
             #request.user.refresh_from_db()
-            messages.success(request, "Saved Email Settings")
+            messages.success(request, "Saved email settings")
         else:
             messages.error(request, "Error saving email settings")
         return redirect('email_settings')

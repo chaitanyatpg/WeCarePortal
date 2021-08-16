@@ -69,7 +69,7 @@ class CaregiverEditForm(forms.Form):
     email = forms.CharField(max_length=200, required=False)
     ssn = forms.CharField(max_length=20, required=False)
     referrer = forms.CharField(max_length=100, required=False)
-    profile_picture = forms.ImageField(label='Select file', required=False)
+    profile_picture = forms.ImageField(label='Selected file', required=False)
     rating = forms.IntegerField(required=False)
     hourly_rate = forms.IntegerField(required=False)
     attachment = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), label='Select files', required=False)

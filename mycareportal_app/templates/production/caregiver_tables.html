@@ -114,7 +114,7 @@
                   <form method="post" action="{% url 'choose_caregiver' %}">
                     {% csrf_token %}
                     <div class="modal-body">
-                      Are you sure you want to assign this caregiver?
+                      Do you want to assign this caregiver?
                     </div>
                     <div class="modal-footer">
                       <input type="hidden" id="assign_caregiver_email" name="{{assign_caregiver_form.caregiver_email.html_name}}">
@@ -140,7 +140,7 @@
                   <form method="post" action="{% url 'choose_caregiver' %}">
                     {% csrf_token %}
                     <div class="modal-body">
-                      Are you sure you want to unassign this caregiver? All assigned shifts will be deleted.
+                      Do you want to unassign this caregiver? All assigned shifts will be deleted.
 
                     </div>
                     <div class="modal-footer">

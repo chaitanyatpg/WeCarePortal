@@ -70,7 +70,7 @@ class MoveManagerDashboard(LoginRequiredMixin, View):
                                             end_date = end_date,
                                             cost = cost)
             move_manage_task_bid.save()
-            messages.success(request, "Bid sent!")
+            messages.success(request, "Bid sent.")
         else:
             messages.error(request, "Error sending bid")
         return redirect('move_manager_dashboard')
@@ -95,7 +95,7 @@ class AcceptMoveBid(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         context={}
         current_company = request.user.company
-        bid_id = self.kwargs['bid_id']
+        bid_id =  request.POST['bid_id']
         if MoveManageTaskBid.objects.filter(company=current_company, uid=bid_id,bid_live = True).exists():
             bid = MoveManageTaskBid.objects.get(company=current_company, uid=bid_id,bid_live = True)
             task = bid.move_manage_task
@@ -106,7 +106,7 @@ class AcceptMoveBid(LoginRequiredMixin, View):
             if not MoveManagementProject.objects.filter(company=current_company,move_manage_task = task).exists():
                 move_manage_project = MoveManagementProject(company=current_company,move_manage_task = task,estimated_budget = bid.cost,move_manager = bid.move_manager,client = task.client)
                 move_manage_project.save()
-                messages.success(request, "Accepted Bid from {0} {1} and created Move Management project".format(bid.move_manager.first_name, bid.move_manager.last_name))
+                messages.success(request, "Accepted bid from {0} {1} and created Move Management project".format(bid.move_manager.first_name, bid.move_manager.last_name))
             else:
                 messages.success(request,"Bid already accepted")
 
@@ -185,7 +185,7 @@ class AddMoveManager(LoginRequiredMixin, View):
                     new_user, current_site.domain
                     )
                     #Add messages
-                    messages.success(request, "Move Manager {0} {1} successfully added!".format(first_name, last_name))
+                    messages.success(request, "Move manager {0} {1} added successfully.".format(first_name, last_name))
                     return redirect('add_move_manager')
             except IntegrityError as e:
                 messages.error(request, "Move manager has already been registered. Please enter with a new email address.")
@@ -286,9 +286,9 @@ class EditMoveManager(LoginRequiredMixin, View):
                     move_manager_auth.save()
                 move_manager.save()
                 print("SAVED MM")
-                messages.success(request, "Move Manager {0} {1} successfully edited!".format(first_name,last_name))
+                messages.success(request, "Move manager {0} {1} successfully edited.".format(first_name,last_name))
             except IntegrityError as e:
-                messages.error(request, "Move Manager already exists. Please add a new Move Manager")
+                messages.error(request, "Move manager already exists. Please add a new Move Manager")
         return HttpResponseRedirect(reverse('edit_move_manager') + "?move_manager_email=" + email)
 
     def parse_date(self,caregiver_birthday):
@@ -490,7 +490,7 @@ class EditMoveInventory(LoginRequiredMixin, View):
             if item_image is not None:
                 inventory_item.item_image = item_image
             inventory_item.save()
-            messages.success(request, "Saved Inventory Item {0}".format(item))
+            messages.success(request, "Saved inventory Item {0}".format(item))
         else:
             messages.error(request, "Error saving inventory item")
         return redirect('edit_move_inventory', inventory_id=inventory_uid)
@@ -600,7 +600,7 @@ class ArchiveProject(LoginRequiredMixin, View):
         task = MoveManageTask.objects.get(company=company, uid=task_id)
         task.archived = True
         task.save()
-        messages.success(request, "Closed Move Project")
+        messages.success(request, "Closed move project")
         return redirect('home_dashboard')
 
 @login_required
@@ -755,6 +755,7 @@ class RejectMoveBid(LoginRequiredMixin, View):
             else:
                 bid.bid_live = False
                 bid.save()
+                messages.success(request, "Bid rejected")
          
         else:
             messages.success(request, "Bid doesn't exist")
@@ -786,10 +787,10 @@ def reject_mov_manager_bid_task(request):
             for move_manager in move_manage_task.chosen_manager.all():
                 if move_manager.email_address == request.user.email:
                     if MoveManagerRejectTask.objects.filter(company=current_company,move_manager=move_manager,move_manage_task= move_manage_task,status = True).exists():
-                        messages.success(request, "Reject Bid Request Already sent")
+                        messages.success(request, "Reject bid request already sent")
                     else:
                         contractor_reject_task = MoveManagerRejectTask(company = current_company,move_manager=move_manager,move_manage_task =move_manage_task,status = True)
                         contractor_reject_task.save()
-                        messages.success(request, "Reject Bid Request send sucessfully")
+                        messages.success(request, "Reject bid request send successfully")
                 
     return redirect('move_manager_dashboard')  
