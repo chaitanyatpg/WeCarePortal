@@ -150,6 +150,7 @@ class AddCaregiver(LoginRequiredMixin, View):
             caregiver_attachment = CaregiverAttachment(company=company,
                                             caregiver=caregiver,
                                             user=current_user,
+                                            active_status = True,
                                             attachment=uploaded_file)
             caregiver_attachment.save()
 
@@ -398,7 +399,7 @@ class EditCaregiver(LoginRequiredMixin, View):
         return criteria_map
 
     def get_caregiver_attachments(self, company, caregiver):
-        caregiver_attachments = CaregiverAttachment.objects.filter(company=company,caregiver=caregiver)
+        caregiver_attachments = CaregiverAttachment.objects.filter(company=company,caregiver=caregiver, active_status = True)
         return caregiver_attachments
 
     def validate_attachments(self, request, attachments):
@@ -413,6 +414,7 @@ class EditCaregiver(LoginRequiredMixin, View):
             caregiver_attachment = CaregiverAttachment(company=company,
                                             caregiver=caregiver,
                                             user=current_user,
+                                            active_status = True,
                                             attachment=uploaded_file)
             caregiver_attachment.save()
 
@@ -1474,9 +1476,11 @@ def delete_caregiver_attachment(request):
         caregiver_id = request.GET['caregiver_id']
         caregiver = Caregiver.objects.get(id = caregiver_id)
         print("clientclient",caregiver)
-        attachment = CaregiverAttachment.objects.get(id = attachment_id,caregiver = caregiver)
-        attachment.delete()
-        print("attachmentattachment",attachment)
+        attachment = CaregiverAttachment.objects.get(id = attachment_id,caregiver = caregiver,active_status = True)
+
+        attachment.active_status = False
+        attachment.save()
+        
 
     # return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client.email_address)
     return HttpResponse(json.dumps(data), content_type="application/json")

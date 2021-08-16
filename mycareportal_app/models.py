@@ -256,6 +256,7 @@ class CaregiverAttachment(models.Model):
     user = models.ForeignKey(User)
     attachment = models.FileField(upload_to=get_caregiver_attachment_upload_path)
     created = models.DateTimeField(auto_now_add=True)
+    active_status =  models.BooleanField(default=True)
 
 def get_home_mod_user_profile_picture_upload_path(instance, filename):
     return "company_{0}/home_mod/home_mod_{1}/profile_pictures/{2}".format(instance.company.company_id,instance.id,filename)
@@ -450,6 +451,9 @@ class ClientAttachment(models.Model):
     user = models.ForeignKey(User)
     attachment = models.FileField(upload_to=get_client_attachment_upload_path)
     created = models.DateTimeField(auto_now_add=True)
+    active_status =  models.BooleanField(default=True)
+     
+    
 
 class ActivityMaster(models.Model):
 

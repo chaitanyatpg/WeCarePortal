@@ -248,6 +248,7 @@ class AddClient(LoginRequiredMixin, View):
             client_attachment = ClientAttachment(company=company,
                                             client=client,
                                             user=current_user,
+                                            active_status = True,
                                             attachment=uploaded_file)
             client_attachment.save()
 
@@ -425,7 +426,7 @@ class EditClient(LoginRequiredMixin, View):
         return criteria_map
 
     def get_client_attachments(self, company, client):
-        client_attachments = ClientAttachment.objects.filter(company=company,client=client)
+        client_attachments = ClientAttachment.objects.filter(company=company,client=client, active_status = True)
         return client_attachments
 
     def validate_attachments(self, request, attachments):
@@ -440,6 +441,7 @@ class EditClient(LoginRequiredMixin, View):
             client_attachment = ClientAttachment(company=company,
                                             client=client,
                                             user=current_user,
+                                            active_status = True,
                                             attachment=uploaded_file)
             client_attachment.save()
 
@@ -2416,8 +2418,9 @@ def delete_attachment(request):
         attachment_id = request.GET['attachment_id']
         client_id = request.GET['client_id']
         client = Client.objects.get(id = client_id)
-        attachment = ClientAttachment.objects.get(id = attachment_id,client = client)
-        attachment.delete()
+        attachment = ClientAttachment.objects.get(id = attachment_id,client = client,active_status = True)
+        attachment.active_status = False
+        attachment.save()
 
     # return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client.email_address)
     return HttpResponse(json.dumps(data), content_type="application/json")
