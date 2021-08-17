@@ -517,18 +517,14 @@ class AssignTasksChooseClient(LoginRequiredMixin, View):
                     taskschedule.save()
                     
                 task_schedule_clientwot = list(TaskSchedule.objects.filter(company=current_company,client = clientwot).order_by('client_id'))
-                print("task_schedule_clientwottask_schedule_clientwot",task_schedule_clientwot)
 
                 for taskschedules in task_schedule_clientwot:
                     if TaskTemplateInstance.objects.filter(company = current_company, task_schedule_id = taskschedules.id).exists():
-                        print("taskscheduletaskschedule",taskschedules.id)
                         task_template_instance = TaskTemplateInstance.objects.filter(company = current_company, task_schedule_id = taskschedule.id)
                         # task_template_insta = TaskTemplateInstance.objects.filter(company = current_company, id = task_template_instance.id)
-                        print("sssssssssssss 00000000 ---------",task_template_instance)
-                        
                         
                         obj= TaskSchedule.objects.filter(company=current_company,client=  clientwot).order_by('-id')[0]
-                        print("obj obj obj",obj)
+                        
                         template = TaskTemplate.objects.get(id =task_template_instance .task_template_id)
                         template_instance = TaskTemplateInstance(company=current_company,task_template = template,task_schedule = obj)
                         template_instance.save()
@@ -550,8 +546,6 @@ class AssignTasksChooseClient(LoginRequiredMixin, View):
                                 template_entry_instance.save()
                     
  
-                    
-                    
 
 
             for tasklink in task_link_client:
