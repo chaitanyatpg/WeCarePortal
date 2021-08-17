@@ -258,7 +258,7 @@ def register(request):
             new_user = authenticate(username=username,
                                     password=password)
             #auth_login(request, new_user)
-            messages.info(request, "Company {0} and Care Manager {1} {2} successfully Added! Please refer to verification email sent to {3} to complete registration".format(company_name,first_name,last_name,email))
+            messages.info(request, "Company {0} and Care Manager {1} {2} added successfully.     Please refer to verification email sent to {3} to complete registration".format(company_name,first_name,last_name,email))
             return redirect('home')
     return render(request, 'production/wecare_register.html', context)
 
@@ -278,7 +278,7 @@ def activate(request, uidb64, token):
         messages.success(request, "Account successfully activated")
         return redirect('home')
     else:
-        return HttpResponse('Activation link is invalid!')
+        return HttpResponse('Activation link is invalid.')
 
 class PasswordActivate(View):
 
@@ -427,7 +427,7 @@ def pwd_activate_2(request, uidb64, token):
         messages.success(request, "Account successfully activated")
         return redirect('home')
     else:
-        return HttpResponse('Activation link is invalid!')
+        return HttpResponse('Activation link is invalid.')
 
 @login_required
 def dashboard(request):
@@ -532,7 +532,7 @@ class AddCareManager(LoginRequiredMixin, View):
                 email_manager.new_send_verification_email(
                 new_user, current_site.domain
                 )
-                messages.success(request, "Care Manager {0} {1} successfully Added!".format(first_name,last_name))
+                messages.success(request, "Care Manager {0} {1} added successfully".format(first_name,last_name))
             except IntegrityError as e:
                 messages.error(request, "Care Manager already exists. Please enter a different Care Manager")
         context['add_care_manager_form'] = CareManagerRegistrationForm();
@@ -987,7 +987,7 @@ class HomeDashboard(LoginRequiredMixin, View):
                                             task_description=task_description)
 
             new_task.save()
-            messages.success(request, "Task Successfully Added")
+            messages.success(request, "Task successfully added")
         else:
             form_errors = home_mod_task_form.errors.as_data()
             error_messaging.render_error_messages(request, form_errors)
@@ -1938,7 +1938,7 @@ class CompanyHoliday(LoginRequiredMixin, View):
                                               holiday_name = holiday_name,description=description,
                                               date = date)
             company_holiday.save()
-            messages.success(request, "Holiday successfully added")
+            messages.success(request, "Holiday added successfully ")
         return HttpResponseRedirect(reverse('company_holiday'))
 
 
@@ -2114,6 +2114,7 @@ def cancel_invoice(request):
         invoice_header = InvoiceHeader.objects.get(id = invoice_id )
         invoice_header.cancelled = True
         invoice_header.save()
+        messages.success(request,"Invoice deleted successfully")
 
     return HttpResponseRedirect(reverse('choose_client_for_invoice'))
 
@@ -2245,7 +2246,7 @@ class AddCrmLead(LoginRequiredMixin, View):
                                          description = lead_discription)
                                         
                 lead_crm.save()
-                messages.success(request, "Lead successfully added. Add additional Details Below.")
+                messages.success(request, "Lead added successfully. Add additional details below.")
             except IntegrityError as e:
                 messages.error(request, "Lead already exists. Please enter a new Client.")
         return HttpResponseRedirect(reverse('company_crm'))
@@ -2821,6 +2822,7 @@ def cancel_payroll(request):
         payroll_header = PayrollHeader.objects.get(id = payroll_id )
         payroll_header.cancelled = True
         payroll_header.save()
+        messages.success(request,"Payroll deleted successfully")
 
     return HttpResponseRedirect(reverse('caregiverpayroll'))
 
@@ -2877,6 +2879,7 @@ def payroll_line_delete(request):
             payroll_header.total_cost = float(payroll_header.total_cost)- float(payroll_line_item.total)
             payroll_header.save()
             payroll_line_item.delete()
+            
             
     
     return HttpResponse(json.dumps(data), content_type="application/json")

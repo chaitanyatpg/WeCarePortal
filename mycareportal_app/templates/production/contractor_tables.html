@@ -153,7 +153,7 @@
                 
                   {% csrf_token %}
                   <div class="modal-body">
-                    Are you sure you want to assign this contractor?
+                    Do you want to assign this contractor?
                   </div>
                   <div class="modal-footer">
                     <input type="hidden" id="assign_caregiver_email" name="{{assign_contractor_form.contractor_email.html_name}}">
@@ -179,7 +179,7 @@
                 <form method="post" action="{% url 'choose_contractor'  %}">
                   {% csrf_token %}
                   <div class="modal-body">
-                    Are you sure you want to unassign this contractor? 
+                    Do you want to unassign this contractor? 
 
                   </div>
                   <div class="modal-footer">

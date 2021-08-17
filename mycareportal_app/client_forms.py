@@ -83,7 +83,7 @@ class EditClientDetailsForm(forms.Form):
     other_state_name = forms.CharField(max_length=100,required=False)
     zip_code = forms.CharField(max_length=50)
     time_zone = forms.CharField(max_length=50)
-    profile_picture = forms.ImageField(label='Select file', required=False)
+    profile_picture = forms.ImageField(label='Selected file', required=False)
     password = forms.CharField(max_length=30, required=False)
     confirm_password = forms.CharField(max_length=30, required=False)
     referrer = forms.CharField(max_length=100, required=False)

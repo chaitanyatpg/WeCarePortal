@@ -149,7 +149,7 @@ urlpatterns = [
     url(r'^view_bids/(?P<task_id>[0-9a-f-]+)/$', home_mod_views.ViewBids.as_view(), name='view_bids'),
     url(r'^view_bids', home_mod_views.ViewBids.as_view(), name='view_bids'),
     url(r'^modify_bid', home_mod_views.ModifyBid.as_view(), name="modify_bid"),
-    url(r'^accept_bid/(?P<bid_id>[0-9a-f-]+)/$', home_mod_views.AcceptBid.as_view(), name="accept_bid"),
+    url(r'^accept_bid', home_mod_views.AcceptBid.as_view(), name="accept_bid"),
     
     url(r'^update_projects', home_mod_views.UpdateProjects.as_view(), name='update_projects'),
     url(r'^reject_bid', home_mod_views.RejectBid.as_view(), name="reject_bid"),
@@ -177,7 +177,7 @@ urlpatterns = [
     url(r'^move_management/view_move_bids', move_manage_views.ViewMoveBids.as_view(), name='view_move_bids'),
     
     url(r'^move_management/reject_mov_manager_bid_task', move_manage_views.reject_mov_manager_bid_task, name="reject_mov_manager_bid_task"),
-    url(r'^move_management/accept_move_bid/(?P<bid_id>[0-9a-f-]+)/$', move_manage_views.AcceptMoveBid.as_view(), name="accept_move_bid"),
+    url(r'^move_management/accept_move_bid', move_manage_views.AcceptMoveBid.as_view(), name="accept_move_bid"),
     url(r'^move_management/reject_move_bid', move_manage_views.RejectMoveBid.as_view(), name="reject_move_bid"),
     url(r'^move_management/update_move_projects', move_manage_views.UpdateMoveProjects.as_view(), name="update_move_projects"),
     url(r'^move_management/view_move_project/(?P<move_project_id>[0-9a-f-]+)/$', move_manage_views.ViewMoveProject.as_view(), name="view_move_project"),

@@ -163,10 +163,9 @@
                           <input type="hidden" value={{bid.uid}}>
                           <!--<button type="button" class="btn btn-warning">Modify</button>-->
                         </form>
-                        <form method="post" action="{%url 'accept_move_bid' bid_id=bid.uid %}" class="form-horizontal form-label-left input_mask" style="float: left;">
-                          {% csrf_token %}
-                          <button type="submit" class="btn btn-success">Accept</button>
-                        </form>
+                      
+                          <button onclick="acceptmovebid('{{bid.uid}}')" type="submit" class="btn btn-success">Accept</button>
+                      
                       
                           <td><button type="button" onclick="rejectmovebid('{{bid.uid}}');" class="btn btn-danger" >Reject</button></td>
                       
@@ -298,13 +297,41 @@
               
              
                 <div class="modal-body modal-sm"style="margin-left: 34px;">
-                  Do you want to Reject Bid ?
+                  Do you want to reject this bid?
                   
                 </div>
                 <div style="margin-left: 75px;">      
                   <form  method="POST" action="{%url 'reject_move_bid'  %}"  class="form-horizontal form-label-left input_mask" style="float: left;">
                     {% csrf_token %}
                   <input type="hidden" name="bid_id" id="bid_id" >            
+                  <button type="submit" class="btn btn-success antoclose2" >Yes</button>&nbsp;&nbsp;
+                </form>
+                  <!--<button class="btn btn-success">Add new shifts</a>-->
+                  <button type="button" data-dismiss="modal" class="btn btn-danger">No</a>
+                </div>
+            </div>
+            </div>
+          </div>
+        </div>
+
+
+
+        <div id="AcceptMovebidModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+              <div class="modal-header">
+                <!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> -->
+              
+             
+                <div class="modal-body modal-sm"style="margin-left: 34px;">
+                  Do you want to accpet this bid?
+                  
+                </div>
+                <div style="margin-left: 75px;"> 
+                       
+                  <form  method="POST" action="{%url 'accept_move_bid'  %}"  class="form-horizontal form-label-left input_mask" style="float: left;">
+                    {% csrf_token %}
+                  <input type="hidden" name="bid_id" id="bid_id_accept" >            
                   <button type="submit" class="btn btn-success antoclose2" >Yes</button>&nbsp;&nbsp;
                 </form>
                   <!--<button class="btn btn-success">Add new shifts</a>-->
@@ -347,5 +374,14 @@
     $('#RejectMovebidModal').modal()
   };
 </script>
+
+<script type="text/javascript">
+  function acceptmovebid(bid){
+    
+    $('#bid_id_accept').val(bid);
+    $('#AcceptMovebidModal').modal()
+  };
+</script>
+
     <!-- /bootstrap-daterangepicker -->
 {% endblock %}
