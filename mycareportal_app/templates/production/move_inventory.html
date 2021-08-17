@@ -48,7 +48,7 @@
                 <div class="clearfix"></div>
               </div>
               <div class="x_content"> <br />
-                <form enctype="multipart/form-data" method='post' action="{% url 'move_inventory' %}" class="form-horizontal form-label-left">
+                <form  enctype="multipart/form-data" method='post' action="{% url 'move_inventory' %}" class="form-horizontal form-label-left">
                   {% csrf_token %}
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Inventory Item Name<span class="required">*</span> </label>
@@ -89,25 +89,25 @@
                   <input type="hidden" name={{add_move_inventory_form.move_task_uid.html_name}} value="{{move_task.uid}}">
                   <div class="ln_solid"></div>
                   <div class="form-group">
-                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                    <div class="col-md-1 col-sm-1 col-xs-12 col-md-offset-3">
                       <button type="submit" class="btn btn-success">Submit</button>
                     </div>
-                  </div>
-                </form>
-            {% if 'CAREMANAGER' in user_roles %}
-                  <form action="{% url 'home_dashboard' %} ">
-                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                      <button type="submit" class="btn btn-success">Back</button>
+                
+                  {% if 'CAREMANAGER' in user_roles %}
+                  
+                    <div class="col-md-1 col-sm-1 col-xs-12">
+                      <a href={% url 'home_dashboard' %} style="color: white;"><button type="button"    class="btn btn-success">Back</button></a>
                     </div>
-                  </form>
+                  
                 {% elif 'MOVEMANAGER' in user_roles %}
-                  <form action="{% url 'update_move_projects' %} ">
-                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                      <button type="submit" class="btn btn-success">Back</button>
+                  
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <a href={% url 'update_move_projects' %} style="color: white;"><button type="button"    class="btn btn-success">Back</button></a>
                     </div>
-                  </form>
                 {% endif %}
               </div>
+                </form>
+              </div> 
             </div>
           </div>
         </div>
@@ -274,4 +274,6 @@ $(document).ready(function(){
       });
     </script>
 <!-- /bootstrap-daterangepicker -->
+
+
 {% endblock %}
