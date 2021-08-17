@@ -605,7 +605,7 @@ class AssignTasksChooseClient(LoginRequiredMixin, View):
         else:
             context["status_message"] = "Error Adding Task"
             messages.error(request, "Error adding task")
-            return redirect("")
+            return redirect("assign_choose_client")
 
 
 
