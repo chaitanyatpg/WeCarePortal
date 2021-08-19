@@ -189,7 +189,7 @@ def client_signoff_all(request, client_uid):
     tasks = TaskSchedule.get_todays_tasks(company, client)
     for task in tasks:
         task.mark_off(request.user)
-    messages.success(request, "Signed off all tasks")
+    messages.success(request, "Signed out of all tasks")
     return redirect('family_dashboard')
 
 

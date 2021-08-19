@@ -456,7 +456,7 @@
 $(document).ready(function (){
 
   $("#sendemail").on("click", function () {
-    if (confirm("Do you want to send email ?")) {
+    if (confirm("Do you want to send email?")) {
    $("#sendemail").attr("disabled", true);
     $.ajax({
         url: "{% url 'send_email_invoice' %}",

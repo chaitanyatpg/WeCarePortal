@@ -258,7 +258,7 @@ def register(request):
             new_user = authenticate(username=username,
                                     password=password)
             #auth_login(request, new_user)
-            messages.info(request, "Company {0} and Care Manager {1} {2} added successfully.     Please refer to verification email sent to {3} to complete registration".format(company_name,first_name,last_name,email))
+            messages.info(request, "Company {0} and Care Manager {1} {2} added successfully.     Please refer to verification email sent to {3} to complete the registration.".format(company_name,first_name,last_name,email))
             return redirect('home')
     return render(request, 'production/wecare_register.html', context)
 
@@ -275,7 +275,7 @@ def activate(request, uidb64, token):
         auth_login(request, user)
         # return redirect('home')
         # Generate one time message for account activation
-        messages.success(request, "Account successfully activated")
+        messages.success(request, "Account activated successfully")
         return redirect('home')
     else:
         return HttpResponse('Activation link is invalid.')
@@ -424,7 +424,7 @@ def pwd_activate_2(request, uidb64, token):
         auth_login(request, user)
         # return redirect('home')
         # Generate one time message for account activation
-        messages.success(request, "Account successfully activated")
+        messages.success(request, "Account activated successfully.")
         return redirect('home')
     else:
         return HttpResponse('Activation link is invalid.')
@@ -672,7 +672,7 @@ class EditCompany(LoginRequiredMixin, View):
 
                 current_company.save()
                 #send_mail('Test sendgrid', 'Test message', 'info@wecareportal.com', ['dhruv.ranjan@gmail.com'], fail_silently=False)
-                messages.success(request, "Company details successfully edited")
+                messages.success(request, "Company details edited successfully")
             except IntegrityError as e:
                 messages.error(request, "Company with entered name or account number already exists. Please enter a different name or account number.")
         else:
@@ -987,7 +987,7 @@ class HomeDashboard(LoginRequiredMixin, View):
                                             task_description=task_description)
 
             new_task.save()
-            messages.success(request, "Task successfully added")
+            messages.success(request, "Task added successfully")
         else:
             form_errors = home_mod_task_form.errors.as_data()
             error_messaging.render_error_messages(request, form_errors)
@@ -2370,14 +2370,14 @@ def convert_lead(request):
                                 )
             
                 new_client.save()
-                messages.success(request, "Lead {0} {1} successfully Converted To Client!".format( lead_crm.lead_first_name, lead_crm.lead_last_name))
+                messages.success(request, "Lead {0} {1} converted to client.".format( lead_crm.lead_first_name, lead_crm.lead_last_name))
                 lead_crm = CrmClientLead.objects.get(id = lead_id ).delete()
                 return HttpResponseRedirect(reverse('edit_client') + "?client_email=" +  lead_email)
             
             except IntegrityError as e:
                 messages.error(request, "Client already exists. Please enter a new client.")
         else:
-            messages.success(request, "Lead already Converted To Client")
+            messages.success(request, "Lead already converted to client")
             return HttpResponseRedirect(reverse('company_crm'))
     return HttpResponseRedirect(reverse('company_crm'))
 
@@ -2447,7 +2447,7 @@ class EditCrmLead(LoginRequiredMixin, View):
             if lead_client.lead_state == "Other":
                 lead_client.lead_state = other_state_name
             lead_client.save()
-            messages.success(request, "Lead {0} {1} successfully edited!".format(lead_client.lead_first_name,lead_client.lead_last_name))
+            messages.success(request, "Lead {0} {1} edited successfully.".format(lead_client.lead_first_name,lead_client.lead_last_name))
 
         return HttpResponseRedirect(reverse('edit_crm_lead') + "?lead_email=" + lead_client.lead_email_address)
         

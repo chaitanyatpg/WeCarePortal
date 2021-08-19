@@ -69,10 +69,10 @@
                           </ul>
                           <br />-->
 
-                          <div class="text-center mtop20">
+                          <!-- <div class="text-center mtop20">
                             <a href="#" class="btn btn-sm btn-primary">Add files</a>
                             <a href="#" class="btn btn-sm btn-warning">Delete files</a>
-                          </div>
+                          </div> -->
                         </div>
 
                       </section>
@@ -147,19 +147,25 @@
                         <div class="row">
                           <form action="{% url 'move_inventory' task_id=project.move_manage_task.uid %}" style="text-align: center;">
                             <button type="submit" class="btn btn-info">Inventory</button>
+                          
+                            {% if 'CAREMANAGER' in user_roles %}
+                  
+                            
+                              <a href={% url 'home_dashboard' %} style="color: white;"><button type="button"    class="btn btn-success">Back</button></a>
+                            
+                          
+                        {% elif 'MOVEMANAGER' in user_roles %}
+                          
+                            
+                              <a href={% url 'update_move_projects' %} style="color: white;"><button type="button"    class="btn btn-success">Back</button></a>
+                            
+                        {% endif %}
+                          
                           </form>
+
+                          
                         </div>
                       </div>
-                      {% if 'CAREMANAGER' in user_roles %}
-                        <form action="{% url 'home_dashboard' %} " style="text-align: center;">
-                          <button type="submit" class="btn btn-success">Back</button>
-                        </form>
-                      {% elif 'MOVEMANAGER' in user_roles %}
-                        <form action="{% url 'update_move_projects' %} " style="text-align: center;">
-                          <button type="submit" class="btn btn-success">Back</button>
-                        </form>
-                      {% endif %}
-
                       <!--<div>
 
                         <h4>Recent Activity</h4>

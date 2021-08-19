@@ -127,7 +127,7 @@ class AddCaregiver(LoginRequiredMixin, View):
                         )
                     #Add messages
                     if not existing_user_flag:
-                        messages.success(request, "Caregiver {0} {1} successfully added.".format(first_name, last_name))
+                        messages.success(request, "Caregiver {0} {1} added successfully.".format(first_name, last_name))
                     else:
                         messages.success(request, "Caregiver role added to user {0} {1}".format(first_name, last_name))
                     return HttpResponseRedirect(reverse('edit_caregiver') + "?caregiver_email=" + email)
@@ -343,7 +343,7 @@ class EditCaregiver(LoginRequiredMixin, View):
                 caregiver.rating = rating
                 caregiver.save()
                 self.save_caregiver_attachments(current_company, caregiver, attachments, request.user)
-                messages.success(request, "Caregiver {0} {1} successfully edited!".format(first_name,last_name))
+                messages.success(request, "Caregiver {0} {1} edited successfully.".format(first_name,last_name))
             except IntegrityError as e:
                 messages.error(request, "Caregiver already exists. Please add a new Caregiver")
         return HttpResponseRedirect(reverse('edit_caregiver') + "?caregiver_email=" + email)

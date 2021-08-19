@@ -106,7 +106,7 @@ class AcceptMoveBid(LoginRequiredMixin, View):
             if not MoveManagementProject.objects.filter(company=current_company,move_manage_task = task).exists():
                 move_manage_project = MoveManagementProject(company=current_company,move_manage_task = task,estimated_budget = bid.cost,move_manager = bid.move_manager,client = task.client)
                 move_manage_project.save()
-                messages.success(request, "Accepted bid from {0} {1} and created Move Management project".format(bid.move_manager.first_name, bid.move_manager.last_name))
+                messages.success(request, "Accepted bid from {0} {1} and created move management project".format(bid.move_manager.first_name, bid.move_manager.last_name))
             else:
                 messages.success(request,"Bid already accepted")
 
@@ -286,7 +286,7 @@ class EditMoveManager(LoginRequiredMixin, View):
                     move_manager_auth.save()
                 move_manager.save()
                 print("SAVED MM")
-                messages.success(request, "Move manager {0} {1} successfully edited.".format(first_name,last_name))
+                messages.success(request, "Move manager {0} {1} edited successfully.".format(first_name,last_name))
             except IntegrityError as e:
                 messages.error(request, "Move manager already exists. Please add a new Move Manager")
         return HttpResponseRedirect(reverse('edit_move_manager') + "?move_manager_email=" + email)
@@ -490,7 +490,7 @@ class EditMoveInventory(LoginRequiredMixin, View):
             if item_image is not None:
                 inventory_item.item_image = item_image
             inventory_item.save()
-            messages.success(request, "Saved inventory Item {0}".format(item))
+            messages.success(request, "Saved inventory item {0}".format(item))
         else:
             messages.error(request, "Error saving inventory item")
         return redirect('edit_move_inventory', inventory_id=inventory_uid)
@@ -645,9 +645,9 @@ def save_move_project_budget(request):
                                                             move_management_project = project,
                                                             estimated_budget = budget)
             move_budget_log.save()
-            return HttpResponse("Saved Budget")
+            return HttpResponse("Saved budget")
         else:
-            return HttpResponse("Please Enter Budget Amount")
+            return HttpResponse("Please enter budget amount")
 
 @login_required
 @transaction.atomic
@@ -668,7 +668,7 @@ def save_move_project_total_amount_spent(request):
             move_amount_spent_log.save()
             return HttpResponse("Saved total amount spent")
         else:
-            return HttpResponse("Please Enter total amount spent")
+            return HttpResponse("Please enter total amount spent")
 
 @login_required
 @transaction.atomic
@@ -687,9 +687,9 @@ def save_move_project_duration(request):
                                         move_management_project = project,
                                         project_duration = project_duration)
             move_project_duration.save()
-            return HttpResponse("Saved Project Duration")
+            return HttpResponse("Saved project duration")
         else:
-            return HttpResponse("Please Enter Project Duration")
+            return HttpResponse("Please enter project duration")
 
 @login_required
 @transaction.atomic
@@ -708,9 +708,9 @@ def save_move_progress(request):
                                         move_management_project = project,
                                         progress = progress)
             move_project_progress.save()
-            return HttpResponse("Saved Progress")
+            return HttpResponse("Saved progress")
         else:
-            return HttpResponse("Please Enter Progress")
+            return HttpResponse("Please enter progress")
 
 @login_required
 @transaction.atomic
@@ -729,9 +729,9 @@ def save_move_status(request):
                                         move_management_project = project,
                                         status = status)
             move_project_status.save()
-            return HttpResponse("Saved Status")
+            return HttpResponse("Saved status")
         else:
-            return HttpResponse("Please Enter Status")
+            return HttpResponse("Please enter status")
 
 
 
@@ -791,6 +791,6 @@ def reject_mov_manager_bid_task(request):
                     else:
                         contractor_reject_task = MoveManagerRejectTask(company = current_company,move_manager=move_manager,move_manage_task =move_manage_task,status = True)
                         contractor_reject_task.save()
-                        messages.success(request, "Reject bid request send successfully")
+                        messages.success(request, "Reject bid request sent successfully")
                 
     return redirect('move_manager_dashboard')  
