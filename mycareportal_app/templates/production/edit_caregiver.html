@@ -179,9 +179,9 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Date Of Birth <span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not edit_caregiver_form.date_of_birth.value is None %}
-                        <input type="text" id="birthday" readonly="true" class="date-picker form-control col-md-7 col-xs-12" required="required" name={{edit_caregiver_form.date_of_birth.html_name}} value={{edit_caregiver_form.date_of_birth.value}}>
+                        <input type="text" id="birthday" readonly="true" style="background-color: white;" class="date-picker form-control col-md-7 col-xs-12" required="required" name={{edit_caregiver_form.date_of_birth.html_name}} value={{edit_caregiver_form.date_of_birth.value}}>
                       {% else %}
-                        <input type="text" id="birthday" readonly="true" class="date-picker form-control col-md-7 col-xs-12" required="required" name={{edit_caregiver_form.date_of_birth.html_name}}>
+                        <input type="text" id="birthday" readonly="true" style="background-color: white;" class="date-picker form-control col-md-7 col-xs-12" required="required" name={{edit_caregiver_form.date_of_birth.html_name}}>
                       {% endif %}
                     </div>
                   </div>
@@ -209,9 +209,9 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Email Address<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not edit_caregiver_form.email.value is None %}
-                        <input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" class="form-control col-md-7 col-xs-12" required="required" name={{edit_caregiver_form.email.html_name}} value={{edit_caregiver_form.email.value}}>
+                        <input type="email" readonly style="background-color: white;" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" class="form-control col-md-7 col-xs-12" required="required" name={{edit_caregiver_form.email.html_name}} value={{edit_caregiver_form.email.value}}>
                       {% else %}
-                        <input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" class="form-control col-md-7 col-xs-12" required="required" name={{edit_caregiver_form.email.html_name}}>
+                        <input type="email" readonly style="background-color: white;"  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" class="form-control col-md-7 col-xs-12" required="required" name={{edit_caregiver_form.email.html_name}}>
                       {% endif %}
                     </div>
                   </div>
@@ -260,7 +260,10 @@
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Profile Picture<span class="required">*</span> </label>
                       <div class="col-md-6 col-sm-6 col-xs-12">
-                        {{edit_caregiver_form.profile_picture.label_tag}}{{edit_caregiver_form.profile_picture}}
+                        {{edit_caregiver_form.profile_picture.label_tag}}&nbsp;
+                        <a id="provalue">{{ edit_caregiver_form.profile_picture  }}</a>
+                        &nbsp;  &nbsp;
+
                       </div>
                   </div>
                   <div class="form-group">
@@ -350,6 +353,7 @@
                       </select>
                     </div>
                   </div>-->
+                  
                   <div class="ln_solid"></div>
                   <div class="form-group">
                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
@@ -357,6 +361,7 @@
                       <button type="submit" class="btn btn-success">Submit</button>
                     </div>
                   </div>
+                  <h7 style="padding-left: 10px;">Note: Please contact administrator to change the email address</h7>
                 </form>
               </div>
             </div>
@@ -1245,6 +1250,10 @@ success: function (data) {
          document.getElementById('criteriaradio').submit();
        }  
    }
+   </script>
+
+   <script>
+     document.getElementById("profile_picture-clear_id").style.marginLeft  = "12px";
    </script>
 
 {% endblock %}

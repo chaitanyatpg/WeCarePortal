@@ -203,7 +203,7 @@ class AddClient(LoginRequiredMixin, View):
                         )
                     if not existing_user_flag:
                         new_client.save()
-                        messages.success(request, "Caregiver {0} {1} successfully added.".format(first_name, last_name))
+                        messages.success(request, "Caregiver {0} {1} added successfully.".format(first_name, last_name))
                         assigned_caregiver = Caregiver.objects.get(company=current_company, email_address=email)
                         assigned_client = Client.objects.get(company=current_company, email_address=email)
                         assigned_client.caregiver.add(assigned_caregiver)
@@ -215,7 +215,7 @@ class AddClient(LoginRequiredMixin, View):
                 new_client.profile_picture = profile_picture
                 new_client.save()
                 self.save_client_attachments(company, new_client, attachments, request.user)
-                messages.success(request, "Client successfully added. Add additional details below.")
+                messages.success(request, "Client added successfully. Add additional details below.")
                 return HttpResponseRedirect(reverse('edit_client') + "?client_email=" + client_email)
             except IntegrityError as e:
                 messages.error(request, "Client already exists. Please enter a new client.")
@@ -370,7 +370,7 @@ class EditClient(LoginRequiredMixin, View):
                     client.profile_picture = edit_client_form.cleaned_data['profile_picture']
                 client.save()
                 self.save_client_attachments(current_company, client, attachments, request.user)
-                messages.success(request, "Client {0} {1} successfully edited.".format(client.first_name,client.last_name))
+                messages.success(request, "Client {0} {1} edited successfully.".format(client.first_name,client.last_name))
             except IntegrityError as e:
                 messages.error(request, "Client already exists. Please enter a new Client.")
         else:
@@ -490,7 +490,8 @@ class AssignTasksChooseClient(LoginRequiredMixin, View):
 
             task_header_client = list(TaskHeader.objects.filter(company=current_company,client = clientwt).order_by('client_id'))
 
-            task_schedule_client = list(TaskSchedule.objects.filter(company=current_company,client = clientwt).order_by('client_id'))
+            # task_schedule_client = list(TaskSchedule.objects.filter(company=current_company,client = clientwt).order_by('client_id'))
+            # print("task_schedule_clienttask_schedule_client",task_schedule_client)
 
 
             task_link_client = list(TaskLink.objects.filter(company=current_company,client = clientwt).order_by('client_id'))
@@ -498,55 +499,49 @@ class AssignTasksChooseClient(LoginRequiredMixin, View):
             task_attachment_client = list(TaskAttachment.objects.filter(company=current_company,client = clientwt).order_by('client_id'))
 
 
-            for taskheader in task_header_client:
-                taskheader.pk = None
-                taskheader.client_id = clientwotclientid
-                taskheader.uid = str(uuid.uuid4())
-                taskheader.save()
-
-
-            taskHeader_updated = list(TaskHeader.objects.filter(company=current_company,client = clientwot).order_by('client_id'))
-            for header in taskHeader_updated:
+            taskHeader_updated = list(TaskHeader.objects.filter(company=current_company,client = clientwt).order_by('client_id'))
+            for header in task_header_client:
+                task_schedule_client = list(TaskSchedule.objects.filter(company=current_company,client = clientwt,task_header_id = header.id).order_by('client_id'))               
+                header.pk = None
+                header.client_id = clientwotclientid
+                header.uid = str(uuid.uuid4())
+                header.save()
+                
+                
                 
                 for taskschedule in task_schedule_client:
-                    taskschedule.pk = None
-                    taskschedule.client_id = clientwotclientid
-                    taskschedule.task_header = header
-                    taskschedule.uid = str(uuid.uuid4())
-                    taskschedule.pending = True
-                    taskschedule.save()
-                    
-                task_schedule_clientwot = list(TaskSchedule.objects.filter(company=current_company,client = clientwot).order_by('client_id'))
+                    if TaskTemplateInstance.objects.filter(company = current_company, task_schedule_id = taskschedule.id).exists():
+                        task_template_instance = TaskTemplateInstance.objects.get(company = current_company, task_schedule_id = taskschedule.id)
+                        template = TaskTemplate.objects.get(id =task_template_instance.task_template_id)
 
-                for taskschedules in task_schedule_clientwot:
-                    if TaskTemplateInstance.objects.filter(company = current_company, task_schedule_id = taskschedules.id).exists():
-                        task_template_instance = TaskTemplateInstance.objects.filter(company = current_company, task_schedule_id = taskschedule.id)
-                        # task_template_insta = TaskTemplateInstance.objects.filter(company = current_company, id = task_template_instance.id)
-                        
-                        obj= TaskSchedule.objects.filter(company=current_company,client=  clientwot).order_by('-id')[0]
-                        
-                        template = TaskTemplate.objects.get(id =task_template_instance .task_template_id)
-                        template_instance = TaskTemplateInstance(company=current_company,task_template = template,task_schedule = obj)
+                        taskschedule.pk = None
+                        taskschedule.client_id = clientwotclientid
+                        taskschedule.task_header = header
+                        taskschedule.uid = str(uuid.uuid4())
+                        taskschedule.pending = True
+                        taskschedule.save()
+                        template = TaskTemplate.objects.get(id =task_template_instance.task_template_id)
+                        template_instance = TaskTemplateInstance(company=current_company,task_template = template,task_schedule = taskschedule)
                         template_instance.save()
                         task_template_subcategories = TaskTemplateSubcategory.objects.filter(template_code=template.template_code)
-
                         for subcategory in task_template_subcategories:
-                            template_subcategory_instance = TaskTemplateSubcategoryInstance(
-                            company=current_company,
-                            task_template_subcategory=subcategory,
-                            task_template_instance=template_instance)
+                            template_subcategory_instance = TaskTemplateSubcategoryInstance(company=current_company,task_template_subcategory=subcategory,task_template_instance=template_instance)
                             template_subcategory_instance.save()
                             task_template_entries = TaskTemplateEntry.objects.filter(task_template_code=template.template_code,
                                                                         task_template_subcategory_code=subcategory.template_subcategory_code)
 
-
                             for template_entry in task_template_entries:
-                                template_entry_instance = TaskTemplateEntryInstance(company=header.company,task_template_entry=template_entry,task_template_instance=template_instance,
+                                template_entry_instance = TaskTemplateEntryInstance(company=current_company,task_template_entry=template_entry,task_template_instance=template_instance,
                                                                                           task_template_subcategory_instance=template_subcategory_instance)
                                 template_entry_instance.save()
+                    else:
+                        taskschedule.pk = None
+                        taskschedule.client_id = clientwotclientid
+                        taskschedule.task_header = header
+                        taskschedule.uid = str(uuid.uuid4())
+                        taskschedule.pending = True
+                        taskschedule.save()
                     
- 
-
 
             for tasklink in task_link_client:
                 tasklink.pk = None
@@ -660,10 +655,10 @@ class CreateTasks(LoginRequiredMixin, View):
                             activity_task = task,
                             activity_category_code = activity_category_code)
             new_task.save()
-            context["status_message"] = "Task Added Successfully"
+            context["status_message"] = "Task added successfully"
             messages.success(request, "Task {0} added successfully.".format(task))
         else:
-            context["status_message"] = "Error Adding Task"
+            context["status_message"] = "Error adding task"
             messages.error(request, "Error adding task")
         return redirect("create_tasks")
 
@@ -1621,7 +1616,7 @@ def edit_task_with_id(request):
                                                         task_schedule = current_task,
                                                         attachment = uploaded_attachment)
                     new_task_attachment.save()
-                messages.success(request, "Successfully Edited Task.")
+                messages.success(request, "Successfully edited task.")
                 return HttpResponseRedirect(reverse('assign_tasks') + "?client_email=" + client_email)
     messages.error(request, "Error Editing Task")
     current_client = Client.objects.get(company=company, id=client_id)

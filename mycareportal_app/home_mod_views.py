@@ -203,7 +203,7 @@ class EditHomeModUser(LoginRequiredMixin, View):
                     home_mod_user_auth.save()
                 home_mod_user.save()
                 print("SAVED HMU")
-                messages.success(request, "Home modification manager {0} {1} successfully edited.".format(first_name,last_name))
+                messages.success(request, "Home modification manager {0} {1} edited successfully.".format(first_name,last_name))
             except IntegrityError as e:
                 messages.error(request, "Home modification manager already exists. Please add a new Home Modification Manager")
         return HttpResponseRedirect(reverse('edit_home_mod_user') + "?home_mod_user_email=" + email)
@@ -453,9 +453,9 @@ def save_project_budget(request):
                                                             home_mod_project = project,
                                                             estimated_budget = budget)
             home_mod_budget_log.save()
-            return HttpResponse("Saved Budget")
+            return HttpResponse("Saved budget")
         else:
-            return HttpResponse("Please Enter Budget Amount")
+            return HttpResponse("Please enter budget amount")
 
 @login_required
 @transaction.atomic
@@ -476,7 +476,7 @@ def save_project_total_amount_spent(request):
             home_mod_amount_spent_log.save()
             return HttpResponse("Saved total amount spent")
         else:
-            return HttpResponse("Please Enter total amount spent")
+            return HttpResponse("Please enter total amount spent")
 
 @login_required
 @transaction.atomic
@@ -495,9 +495,9 @@ def save_project_duration(request):
                                         home_mod_project = project,
                                         project_duration = project_duration)
             home_mod_project_duration.save()
-            return HttpResponse("Saved Project Duration")
+            return HttpResponse("Saved project duration")
         else:
-            return HttpResponse("Please Enter Project Duration")
+            return HttpResponse("Please enter project duration")
 
 @login_required
 @transaction.atomic
@@ -516,9 +516,9 @@ def save_progress(request):
                                         home_mod_project = project,
                                         progress = progress)
             home_mod_project_progress.save()
-            return HttpResponse("Saved Progress")
+            return HttpResponse("Saved progress")
         else:
-            return HttpResponse("Please Enter Progress")
+            return HttpResponse("Please enter progress")
 
 @login_required
 @transaction.atomic
@@ -537,9 +537,9 @@ def save_status(request):
                                         home_mod_project = project,
                                         status = status)
             home_mod_project_status.save()
-            return HttpResponse("Saved Status")
+            return HttpResponse("Saved status")
         else:
-            return HttpResponse("Please Enter Status")
+            return HttpResponse("Please enter status")
 
 
 
@@ -591,6 +591,6 @@ def reject_contractor_bid_task(request):
                     else:
                         contractor_reject_task = ContractorRejectTask(company = current_company,contractor=contractor,home_mod_task =home_mod_task,status = True)
                         contractor_reject_task.save()
-                        messages.success(request, "Reject bid request send sucessfully")
+                        messages.success(request, "Reject bid request sent sucessfully")
                 
     return redirect('contractor_dashboard')    
