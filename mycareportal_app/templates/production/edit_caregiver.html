@@ -209,9 +209,9 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Email Address<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       {% if not edit_caregiver_form.email.value is None %}
-                        <input type="email" readonly style="background-color: white;" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" class="form-control col-md-7 col-xs-12" required="required" name={{edit_caregiver_form.email.html_name}} value={{edit_caregiver_form.email.value}}>
+                        <input type="email" readonly  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" class="form-control col-md-7 col-xs-12" required="required" name={{edit_caregiver_form.email.html_name}} value={{edit_caregiver_form.email.value}}>
                       {% else %}
-                        <input type="email" readonly style="background-color: white;"  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" class="form-control col-md-7 col-xs-12" required="required" name={{edit_caregiver_form.email.html_name}}>
+                        <input type="email" readonly   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" class="form-control col-md-7 col-xs-12" required="required" name={{edit_caregiver_form.email.html_name}}>
                       {% endif %}
                     </div>
                   </div>
@@ -261,15 +261,24 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Profile Picture<span class="required">*</span> </label>
                       <div class="col-md-6 col-sm-6 col-xs-12">
                         {{edit_caregiver_form.profile_picture.label_tag}}&nbsp;
-                        <a id="provalue">{{ edit_caregiver_form.profile_picture  }}</a>
-                        &nbsp;  &nbsp;
+                        <span onchange="clickPropic(event)">{{edit_caregiver_form.profile_picture}} </span>
+
+                        <!-- <input type="file" name="profile_picture"  id="client_profile_picture"> -->
+                         <div  id="listedProPic" style="display:none"> 
+                        <li   style="list-style-type:none; color:red; cursor: pointer;" onclick="clearProfilePic('id_profile_picture')">Cancel</li>
+                        </div>
+                        
 
                       </div>
                   </div>
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Attachments</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                      {{edit_caregiver_form.attachment.label_tag}}{{edit_caregiver_form.attachment}}
+                      {{edit_caregiver_form.attachment.label_tag}}
+                      <input type="file" onchange="clickAttachment(event)"  id="editcaregiverattach"   name="attachment" multiple/>
+                      <div  id="listedattachment" style="display:none"> 
+                      <li   style="list-style-type:none; color:red; cursor: pointer;" onclick="clearAttachments('editcaregiverattach')">Cancel</li>
+                      </div>
                       <!-- <ul>
                       {% for attachment in caregiver_attachments %}
                           <li>

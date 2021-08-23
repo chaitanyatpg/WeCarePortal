@@ -882,5 +882,57 @@ resetUI();
         }
 }
 </script>
+
+<script>
+  function clearProfilePic(id) {
+    console.log("Profilepic ==",id)
+    var attachments =  $("#"+id);
+    console.log("attachments ==",attachments)
+    attachments.replaceWith( attachments.val('').clone( true ) );
+  }
+</script>
+
+<script>
+  function clearAttachments(id) {
+    console.log("attachment ==",id)
+    var attachments =  $("#"+id);
+    console.log("attachments ==",attachments)
+    attachments.replaceWith( attachments.val('').clone( true ) );
+  }
+</script>
+
+<script>
+  function clickPropic(va){
+
+    
+    console.log("val  ",va)
+    // document.getElementById('listed').innerHTML = "";
+    if(va.target.files.length > 0){
+      console.log("val  ajsjjss",va)
+      listedProPic.style.display = "block";
+      // document.getElementById('listed').innerHTML = "";
+    }
+    else{
+      listed.style.display = "none";
+    }
+  }
+</script>
+
+<script>
+   function clickAttachment(va){
+
+    
+console.log("val  ",va)
+// document.getElementById('listed').innerHTML = "";
+if(va.target.files.length > 0){
+  console.log("val  ajsjjss",va)
+  listedattachment.style.display = "block";
+  // document.getElementById('listed').innerHTML = "";
+}
+else{
+  listedattachment.style.display = "none";
+}
+}
+</script>
 </body>
 </html>
