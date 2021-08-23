@@ -40,11 +40,13 @@
                   </div>
                   <div class="x_content">
                     <br />
+                    <div class="row">
+                      <div class="col-md-10 col-sm-10 col-xs-12">
                     <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
-                    	<div class="form-group" style="padding-right: 23px;">
+                    	<div class="form-group">
                         	<label  class="control-label col-md-2 col-sm-2 col-xs-12">Select Caregiver</label>
-	                        <div class="col-md-9 col-sm-9 col-xs-12" >
-	                          <select id='caregiver_dropdown' class="select2_single form-control"  style="width: 100%; padding-left: 20px;" tabindex="-1">
+	                        <div class="col-md-10 col-sm-10 col-xs-12" >
+	                          <select id='caregiver_dropdown' class="select2_single form-control"  style="width: 100%; " tabindex="-1">
 	                            <option value=""></option>
                               {% for caregiver in all_caregivers %}
                                 <option value= {{caregiver.email_address}}>{{caregiver.first_name|addstr_space:caregiver.last_name}}</option>
@@ -91,6 +93,8 @@
                         </div>
                       </div>
                     </form>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
