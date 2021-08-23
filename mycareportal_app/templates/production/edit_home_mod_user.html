@@ -209,7 +209,13 @@
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Profile Picture<span class="required">*</span> </label>
                       <div class="col-md-5 col-sm-5 col-xs-12">
-                        {{edit_home_mod_user_form.profile_picture.label_tag}}&nbsp;{{edit_home_mod_user_form.profile_picture}}
+                        {{edit_home_mod_user_form.profile_picture.label_tag}}&nbsp;
+                        <span onchange="clickPropic(event)">{{edit_home_mod_user_form.profile_picture}} </span>
+
+                        <!-- <input type="file" name="profile_picture"  id="client_profile_picture"> -->
+                         <div  id="listedProPic" style="display:none"> 
+                        <li   style="list-style-type:none; color:red; cursor: pointer;" onclick="clearProfilePic('id_profile_picture')">Cancel</li>
+                        </div>
                       </div>
                   </div>
 

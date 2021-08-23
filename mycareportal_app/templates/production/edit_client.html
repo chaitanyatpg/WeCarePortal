@@ -234,9 +234,12 @@
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Profile Picture</label>
                       <div class="col-md-6 col-sm-6 col-xs-12">
-                        {{edit_client_form.profile_picture.label_tag}}&nbsp;{{edit_client_form.profile_picture}} 
+                        {{edit_client_form.profile_picture.label_tag}}&nbsp;<span onchange="clickPropic(event)">{{edit_client_form.profile_picture}} </span>
+
                         <!-- <input type="file" name="profile_picture"  id="client_profile_picture"> -->
-                        
+                         <div  id="listedProPic" style="display:none"> 
+                        <li   style="list-style-type:none; color:red; cursor: pointer;" onclick="clearProfilePic('id_profile_picture')">Cancel</li>
+                        </div>
                       </div>
                       
                   </div>
@@ -247,17 +250,14 @@
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Attachments</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                      <div class=" files" id="files1">
-                        <span class="">
+                      
+                      
                           {{edit_client_form.attachment.label_tag}} &nbsp;
-                          
-                             <input type="file"  id="pttach"  name="attachment" multiple/>
-                        </span>
-                        <br />
-
-                      </div>
+                          <input type="file" onchange="clickAttachment(event)"  id="editclientattach"   name="attachment" multiple/>
+                            <div  id="listedattachment" style="display:none"> 
+                            <li   style="list-style-type:none; color:red; cursor: pointer;" onclick="clearAttachments('editclientattach')">Cancel</li>
+                            </div>
                      
-                    
                     </div>
                   </div>
 
