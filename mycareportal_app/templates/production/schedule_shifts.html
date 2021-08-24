@@ -70,7 +70,7 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Client<span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <select name="{{schedule_shift_form.client_id.html_name}}" class="select2_single form-control" required="required">
+                                <select name="{{schedule_shift_form.client_id.html_name}}" class="select2_single form-control" style="width: 100%;" required="required">
                                   <option selected disabled value="">Select Client</option>
                                   {% for client in assigned_clients %}
                                     <option value={{client.id}}>{{client.first_name|addstr_space:client.last_name}}</option>
@@ -305,10 +305,20 @@
                         </div>
                       </div>
                     
-                      <div class="modal-footer">
-                        <input type="hidden" id="assign_caregiver_email" name="{{schedule_shift_form.caregiver_id.html_name}}" value={{caregiver.id}}>
-                        <button type="submit" class="btn btn-success">Assign</a>
-                        <!--<button type="button" class="btn btn-success edit_calendar_submit">Save changes</button>-->
+         
+                      <div class="row">
+                        <div class="">
+        
+                          <div class="form-group">
+                            <div  class="control-label col-md-3 col-sm-3 col-xs-12"></div>     
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="hidden" id="assign_caregiver_email" name="{{schedule_shift_form.caregiver_id.html_name}}" value={{caregiver.id}}>
+                              <button type="submit" class="btn btn-success">Assign</a>
+                              </div>
+                              </div>
+                            </div>
+                          </div>
+                      
                       </div>
                     </form>
                     </div>

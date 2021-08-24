@@ -3,8 +3,18 @@ from mycareportal_app.models import *
 from django.utils.translation import ugettext as _
 import re
 import datetime
+from django.forms.widgets import ClearableFileInput
 
 
+
+class MyClearableFileInput(ClearableFileInput):
+    
+    clear_checkbox_label = 'Delete'
+
+class MyClearableFileAttachmentInput(ClearableFileInput):
+    
+    clear_checkbox_label = 'Delete'
+    multiple = 'True'
 
 class ClientRegistrationForm(forms.Form):
 
@@ -83,11 +93,11 @@ class EditClientDetailsForm(forms.Form):
     other_state_name = forms.CharField(max_length=100,required=False)
     zip_code = forms.CharField(max_length=50)
     time_zone = forms.CharField(max_length=50)
-    profile_picture = forms.ImageField(label='Selected file', required=False)
+    profile_picture = forms.ImageField(label='Selected file', required=False, widget=MyClearableFileInput)
     password = forms.CharField(max_length=30, required=False)
     confirm_password = forms.CharField(max_length=30, required=False)
     referrer = forms.CharField(max_length=100, required=False)
-    attachment = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), label='Select files', required=False)
+    attachment = forms.FileField(widget=MyClearableFileAttachmentInput, label='Select files', required=False)
     notes = forms.CharField(max_length=1000, required=False)
 
     def clean_picture(self):
