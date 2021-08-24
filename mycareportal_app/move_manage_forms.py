@@ -1,6 +1,16 @@
 from django import forms
 from mycareportal_app.models import *
 from django.utils.translation import ugettext as _
+from django.forms.widgets import ClearableFileInput
+
+
+
+
+
+class MyClearableFileInput(ClearableFileInput):
+    
+    clear_checkbox_label = 'Delete'
+
 
 class MoveManagerRegistrationForm(forms.Form):
 
@@ -58,7 +68,7 @@ class MoveManagerEditForm(forms.Form):
     date_of_birth = forms.DateTimeField(required=False)
     phone_number = forms.CharField(max_length=20, required=False)
     email = forms.CharField(max_length=200, required=False)
-    profile_picture = forms.ImageField(label='Selected file', required=False)
+    profile_picture = forms.ImageField(label='Selected file', required=False,widget=MyClearableFileInput)
 
     def clean_picture(self):
         try:

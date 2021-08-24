@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from mycareportal_app.models import *
 from django.utils.translation import ugettext as _
 import re
+from django.forms.widgets import ClearableFileInput
 
 class ManagerRegistrationForm(forms.Form):
     MIN_LENGTH = 8
@@ -56,6 +57,10 @@ class CareManagerRegistrationForm(forms.Form):
         cleaned_data = super(CareManagerRegistrationForm, self).clean()
         return cleaned_data
 
+class MyClearableFileInput(ClearableFileInput):
+    
+    clear_checkbox_label = 'Delete'
+
 class CompanyEditForm(forms.Form):
 
     MAX_UPLOAD_SIZE = 5242880
@@ -70,7 +75,7 @@ class CompanyEditForm(forms.Form):
     time_zone = forms.CharField(max_length=50, required=False)
     default_dashboard = forms.CharField(max_length=100, required=False)
     tax_rate = forms.DecimalField(required=False)
-    logo = forms.ImageField(label='Selected file', required=False)
+    logo = forms.ImageField(label='Selected file', required=False,widget=MyClearableFileInput)
     attorney_email = forms.EmailField(required=False)
     is_parent = forms.BooleanField(required=False)
     mileage_rate= forms.DecimalField( required=False )
@@ -234,3 +239,12 @@ class ChooseCaregiverPayrollForm(forms.Form):
     def clean(self):
         cleaned_data = super(ChooseCaregiverPayrollForm, self).clean()
         return cleaned_data
+
+
+
+
+
+class MyClearableFileAttachmentInput(ClearableFileInput):
+    
+    clear_checkbox_label = 'Delete'
+    multiple = 'True'

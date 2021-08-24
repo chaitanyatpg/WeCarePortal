@@ -238,7 +238,7 @@
 
                         <!-- <input type="file" name="profile_picture"  id="client_profile_picture"> -->
                          <div  id="listedProPic" style="display:none"> 
-                        <li   style="list-style-type:none; color:red; cursor: pointer;" onclick="clearProfilePic('id_profile_picture')">Cancel</li>
+                        <li   style="list-style-type:none; color:red; cursor: pointer;" onclick="clearProfilePic('id_profile_picture')">Remove</li>
                         </div>
                       </div>
                       
@@ -255,7 +255,7 @@
                           {{edit_client_form.attachment.label_tag}} &nbsp;
                           <input type="file" onchange="clickAttachment(event)"  id="editclientattach"   name="attachment" multiple/>
                             <div  id="listedattachment" style="display:none"> 
-                            <li   style="list-style-type:none; color:red; cursor: pointer;" onclick="clearAttachments('editclientattach')">Cancel</li>
+                            <li   style="list-style-type:none; color:red; cursor: pointer;" onclick="clearAttachments('editclientattach')">Remove</li>
                             </div>
                      
                     </div>
@@ -844,7 +844,7 @@
                 <div class="clearfix"></div>
               </div>
               <div class="x_content"> <br />
-                <form enctype="multipart/form-data" method='post'  action="{% url 'post_family_details' %}" class="form-horizontal form-label-left">
+                <form id="familyforms" enctype="multipart/form-data" method='post'  action="{% url 'post_family_details' %}" class="form-horizontal form-label-left">
                   {% csrf_token %}
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">First Name <span class="required">*</span> </label>
@@ -986,19 +986,23 @@
                   </div>
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Power of Attorney</label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-md-6 col-sm-6 col-xs-12" style="padding-top:8px;">
                       {% if not family_details_form.power_of_attorney.value is None %}
-                        <input type="checkbox" id="family_power_of_attorney" class="form-control" name = "{{family_details_form.power_of_attorney.html_name}}" value={{family_details_form.power_of_attorney.value}}/>
+                        <input type="checkbox" id="family_power_of_attorney" class="" name = "{{family_details_form.power_of_attorney.html_name}}" value={{family_details_form.power_of_attorney.value}}/>
                       {% else %}
-                        <input type="checkbox" id="family_power_of_attorney" class="form-control" name = "{{family_details_form.power_of_attorney.html_name}}"/>
+                        <input type="checkbox" id="family_power_of_attorney" class="" name = "{{family_details_form.power_of_attorney.html_name}}"/>
                       {% endif %}
                     </div>
                   </div>
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Profile Picture</label>
                       <div class="col-md-6 col-sm-6 col-xs-12">
-                        {{family_details_form.profile_picture.label_tag}}&nbsp;{{family_details_form.profile_picture}}
+                       
+                        {{family_details_form.profile_picture.label_tag}}&nbsp; <span onchange="clickFamilyPropic(event)">{{family_details_form.profile_picture}} </span>
                         <span class="required">*formats supported jpeg, png, jpg</span>
+                        <div  id="listedFamilyProPic" style="display:none"> 
+                          <li   style="list-style-type:none; color:red; cursor: pointer;" onclick="clearFamilyProfilePic('id_profile_picture')">Remove</li>
+                          </div>
                       </div>
                   </div>
                   <div class="ln_solid"></div>
@@ -1627,7 +1631,9 @@
         }
         $('#family_details_id').val(family_data.family_id);
         $('#delete_family_details_id').val(family_data.family_id);
-        //$('#client_detail_img').html('<img src=' + client_data.profile_picture + ' class="img-circle img-responsive">');
+        // $('#family_profile_picture').val(family_data.profile_picture)
+        // $('#family_detail_img').html(family_data.profile_picture ? '<img alt=' + family_data.profile_picture + ' class="img-circle img-responsive"> ': '');
+        
       },
       failure: function(client_data){
         alert('error fetching client data');
@@ -2267,4 +2273,32 @@
   document.getElementById("profile_picture-clear_id").style.marginLeft  = "12px";
 </script>
 
+
+
+<script>
+  function clearFamilyProfilePic(id) {
+    console.log("Profilepic ==",document.forms["familyforms"][id] )
+    document.forms["familyforms"][id].value = ""
+    // var attachments =  $("#"+id);
+    // console.log("attachments ==",attachments)
+    // attachments.replaceWith( attachments.val('').clone( true ) );
+  }
+</script>
+
+<script>
+  function clickFamilyPropic(va){
+
+    
+    console.log("val  ",va)
+    // document.getElementById('listed').innerHTML = "";
+    if(va.target.files.length > 0){
+      console.log("val  ajsjjss",va)
+      listedFamilyProPic.style.display = "block";
+      // document.getElementById('listed').innerHTML = "";
+    }
+    else{
+      listedFamilyProPic.style.display = "none";
+    }
+  }
+</script>
 {% endblock %}
