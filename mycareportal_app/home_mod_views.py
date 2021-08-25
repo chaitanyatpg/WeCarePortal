@@ -196,6 +196,9 @@ class EditHomeModUser(LoginRequiredMixin, View):
 
                 if profile_picture != None and home_mod_user.profile_picture != profile_picture:
                     home_mod_user.profile_picture = profile_picture
+                    if home_mod_user.profile_picture == False:
+                        home_mod_user.profile_picture = None
+                
                 if home_mod_user.email_address != None and home_mod_user.email_address != email:
                     home_mod_user.email_address = email
                     home_mod_user_auth = User.objects.get(company=current_company,email=email)

@@ -666,6 +666,8 @@ class EditCompany(LoginRequiredMixin, View):
                 current_company.is_parent = company_edit_form.cleaned_data['is_parent']
                 current_company.mileage_rate = company_edit_form.cleaned_data['mileage_rate']
                 other_state_name = company_edit_form.cleaned_data['other_state_name']
+                if current_company.logo == False:
+                    current_company.logo = None
                 if current_company.state == "Other":
                     current_company.state = other_state_name
                 
