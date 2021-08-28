@@ -368,6 +368,10 @@ class EditClient(LoginRequiredMixin, View):
                 
                 if edit_client_form.cleaned_data['profile_picture'] != None and client.profile_picture != edit_client_form.cleaned_data['profile_picture']:
                     client.profile_picture = edit_client_form.cleaned_data['profile_picture']
+                    print("edit_client_form.cleaned_data['profile_picture']",edit_client_form.cleaned_data['profile_picture'])
+                    if client.profile_picture == False:
+                        client.profile_picture = None
+
                 client.save()
                 self.save_client_attachments(current_company, client, attachments, request.user)
                 messages.success(request, "Client {0} {1} edited successfully.".format(client.first_name,client.last_name))

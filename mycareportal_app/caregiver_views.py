@@ -333,6 +333,8 @@ class EditCaregiver(LoginRequiredMixin, View):
                     caregiver.hourly_rate = hourly_rate
                 if self.arg_diff(caregiver.profile_picture, profile_picture):
                     caregiver.profile_picture = profile_picture
+                    if caregiver.profile_picture == False:
+                        caregiver.profile_picture = None
                 if self.arg_diff(caregiver.notes, notes):
                     caregiver.notes = notes
                 if self.arg_diff(caregiver.email_address, email):

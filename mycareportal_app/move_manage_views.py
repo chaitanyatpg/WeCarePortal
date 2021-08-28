@@ -279,6 +279,8 @@ class EditMoveManager(LoginRequiredMixin, View):
                 
                 if profile_picture != None and move_manager.profile_picture != profile_picture:
                     move_manager.profile_picture = profile_picture
+                    if move_manager.profile_picture == False:
+                        move_manager.profile_picture = None
                 if move_manager.email_address != None and move_manager.email_address != email:
                     move_manager.email_address = email
                     move_manager_auth = User.objects.get(company=current_company,email=email)
