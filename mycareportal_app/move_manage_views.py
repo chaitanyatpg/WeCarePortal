@@ -491,6 +491,8 @@ class EditMoveInventory(LoginRequiredMixin, View):
             inventory_item.item_sold = item_sold
             if item_image is not None:
                 inventory_item.item_image = item_image
+                if inventory_item.item_image == False:
+                    inventory_item.item_image = None
             inventory_item.save()
             messages.success(request, "Saved inventory item {0}".format(item))
         else:

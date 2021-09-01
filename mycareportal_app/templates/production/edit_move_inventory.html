@@ -93,7 +93,10 @@
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Item Image</label>
                       <div class="col-md-6 col-sm-6 col-xs-12">
-                        {{edit_inventory_form.item_image.label_tag}}{{edit_inventory_form.item_image}}
+                        {{edit_inventory_form.item_image.label_tag}}&nbsp;<span onchange="clickPropic(event)">{{edit_inventory_form.item_image}}</span>
+                        <div  id="listedProPic" style="display:none"> 
+                          <li   style="list-style-type:none; color:red; cursor: pointer;" onclick="clearProfilePic('id_item_image')">Remove</li>
+                          </div>
                       </div>
                   </div>
                   <div class="form-group">
@@ -141,5 +144,8 @@
 
 {% block scripts %}
 
+<script>
+  document.getElementById("item_image-clear_id").style.marginLeft  = "12px";
+</script>
 
 {% endblock %}

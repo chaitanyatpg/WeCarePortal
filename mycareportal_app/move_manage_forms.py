@@ -171,7 +171,7 @@ class EditMoveInventoryForm(forms.Form):
     item_sale_price = forms.IntegerField(required=False)
     item_destination = forms.CharField(max_length=20, required=False)
     item_sold = forms.BooleanField(required=False)
-    item_image = forms.ImageField(label='Select file', required=False)
+    item_image = forms.ImageField(label='Select file', required=False,widget=MyClearableFileInput)
 
     def clean_picture(self):
         picture = self.cleaned_data['item_image']
