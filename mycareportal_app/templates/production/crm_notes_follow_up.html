@@ -231,14 +231,21 @@
 
                             <div class="clearfix"></div>
                             <div class="ln_solid"></div>
+
                             <div class="form-group">
-                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-6">
-                                    <input type="hidden" name='{{client_invoice_form.client_email.html_name}}'
-                                        value='{{client_email}}'>
-                                    <button type="submit" value="{{lead_details.id}}" class="btn btn-success"
-                                        onclick="saveNotes(this.value)">Save</button>
+                                <div class="row">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                         </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="hidden" name='{{client_invoice_form.client_email.html_name}}'
+                                            value='{{client_email}}'>
+                                        <button type="submit" value="{{lead_details.id}}" class="btn btn-success"
+                                            onclick="saveNotes(this.value)">Save</button>
+                                    </div>
                                 </div>
                             </div>
+
+      
 
 
                         </div>
