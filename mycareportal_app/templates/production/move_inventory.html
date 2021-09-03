@@ -83,28 +83,41 @@
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Item Image</label>
                       <div class="col-md-6 col-sm-6 col-xs-12">
-                        {{add_move_inventory_form.item_image.label_tag}}{{add_move_inventory_form.item_image}}
+                        {{add_move_inventory_form.item_image.label_tag}}&nbsp; <span onchange="clickPropic(event)">{{add_move_inventory_form.item_image}} </span>
+                        <div  id="listedProPic" style="display:none"> 
+                          <li   style="list-style-type:none; color:red; cursor: pointer;" onclick="clearProfilePic('id_item_image')">Remove</li>
+                          </div>
                       </div>
+                
                   </div>
+              
                   <input type="hidden" name={{add_move_inventory_form.move_task_uid.html_name}} value="{{move_task.uid}}">
                   <div class="ln_solid"></div>
-                  <div class="form-group">
-                    <div class="col-md-1 col-sm-1 col-xs-12 col-md-offset-3">
-                      <button type="submit" class="btn btn-success">Submit</button>
-                    </div>
-                
-                  {% if 'CAREMANAGER' in user_roles %}
-                  
-                    <div class="col-md-1 col-sm-1 col-xs-12">
-                      <a href={% url 'home_dashboard' %} style="color: white;"><button type="button"    class="btn btn-success">Back</button></a>
-                    </div>
-                  
-                {% elif 'MOVEMANAGER' in user_roles %}
-                  
+                  <div class="">
+                    <div class="control-label col-md-3 col-sm-3 col-xs-12"></div>
                     <div class="col-md-6 col-sm-6 col-xs-12">
+                      <button type="submit" class="btn btn-success">Submit</button>
+                      {% if 'CAREMANAGER' in user_roles %}
+                      <a href={% url 'home_dashboard' %} style="color: white;"><button type="button"    class="btn btn-success">Back</button></a>
+                      {% elif 'MOVEMANAGER' in user_roles %}
                       <a href={% url 'update_move_projects' %} style="color: white;"><button type="button"    class="btn btn-success">Back</button></a>
+                      {% endif %}
+                  </div>
+                
+                  
+                  <div class="">
+                    <div class="control-label col-md-3 col-sm-3 col-xs-12"></div>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      
                     </div>
-                {% endif %}
+                  </div>
+                
+                  <div class="control-label col-md-3 col-sm-3 col-xs-12">
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                     
+                    </div>
+                  </div>
+                
               </div>
                 </form>
               </div> 
