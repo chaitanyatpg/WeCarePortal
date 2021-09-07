@@ -93,7 +93,7 @@
                             <div class="form-group">
                               <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Client<span class="required">*</span></label>
                               <div class="col-md-6 col-sm-6 col-xs-12">
-                                <select required id='client_dropdown' class="select2_group form-control" name={{create_move_task_form.client_uid.html_name}} tabindex="-1">
+                                <select required id='client_dropdown'  class="select2_group form-control" name={{create_move_task_form.client_uid.html_name}} tabindex="-1">
                                   <option disabled selected value> -- select an option -- </option>
                                   {% for client in all_clients %}
                                     <option value= {{client.uid}}>{{client.first_name|addstr_space:client.last_name}}</option>
@@ -368,7 +368,8 @@
                           }
         else {
         console.log("eeeeeeee",context.toStep)
-        alert("Please fill all the fields")
+        // alert("Please fill all the fields")
+        customAlertBox('Please fill all the fields')
         if(context.toStep == 2 ){
       value = true
                       }
@@ -420,7 +421,8 @@
                            
                           }
                           else{
-                            alert("Please fill all the fields")
+                            // alert("Please fill all the fields")
+                            customAlertBox('Please fill all the fields')
                           }
                         }
                         $("#mincosterror").html("field required").hide();

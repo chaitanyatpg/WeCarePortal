@@ -474,7 +474,7 @@ $(document).ready(function (){
         success: function (data) {
           
           window.location.reload()
-          alert("Email sent successfully")
+          customAlertBox("Email sent successfully")
           setTimeout(function () {
             
             
@@ -573,7 +573,7 @@ $(document).ready(function (){
       })
     } 
     else{
-      alert("Please fill all the fields")
+      customAlertBox("Please fill all the fields")
     }
     });
 
@@ -718,7 +718,7 @@ $(document).ready(function (){
             
             counter++;
         } else {
-          alert("Please fill all the fields")
+          customAlertBox("Please fill all the fields")
         }
 
       }),
@@ -811,7 +811,7 @@ $(document).ready(function (){
       dataType: "json",
       contentType: "application/json",
       success: function (data) {
-        alert("Invoice updated successfully")
+        customAlertBox("Invoice updated successfully")
         $("#total_cost_header")[0].innerText = data.invoice_header_total_cost
         for (row = 1; row < myTab.rows.length; row++) {
 

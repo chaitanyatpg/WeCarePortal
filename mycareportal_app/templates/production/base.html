@@ -462,6 +462,25 @@
   </div>
 </div>
 
+<div id="customalertbox" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div style="padding: 15px;">
+     
+      </div>
+        <div class="modal-body modal-sm"style="">
+          <span id="alertmessage" style="color: black;margin-left: 61px"></span>
+
+        </div>
+        <div  style="padding: 3px; margin-left: 112px">      
+          <button type="button" data-dismiss="modal" class="btn btn-success">OK</a>
+          
+        </div>
+     
+    
+    </div>
+  </div>
+</div>
 
 <!-- jQuery -->
 <script src="{% static 'vendors/jquery/dist/jquery.min.js' %}"></script>
@@ -934,5 +953,18 @@ else{
 }
 }
 </script>
+<script type="text/javascript">
+  function customAlertBox(message){
+    console.log("message",message)
+    document.getElementById("alertmessage").innerHTML = message;
+    $('#customalertbox').modal()
+  };
+</script>
+
+
+
+<!-- custom pop-->
+
+
 </body>
 </html>

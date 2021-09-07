@@ -1271,7 +1271,9 @@ class Invoice(LoginRequiredMixin, View):
                     else:
                         messageslist.append("No active invoice for client {0} {1}".format(client.first_name,client.last_name) )
                         context['messageslist'] = messageslist
-                    
+            else:
+                return redirect('choose_client_for_invoice')
+
                        
        
         return render(request, "production/invoice.html", context)
@@ -1393,7 +1395,8 @@ class ManagerClientDashboard(LoginRequiredMixin, View):
                 client_tasks[client_data] = list(current_client_tasks)
             context["client_tasks"] = client_tasks
             
-       
+        else:
+            return redirect('manager_choose_client')
         return render(request, 'production/manager_client_dashboard.html', context)
 
     def post(self, request):
@@ -2601,9 +2604,11 @@ class Payroll(LoginRequiredMixin, View):
                     
                     for caregiver in caregivers:
                         if getattr(caregiver, "regular_hourly_rate") != None and getattr(caregiver, "weekend_hourly_rate") != None and getattr(caregiver, "holiday_hourly_rate") != None and getattr(caregiver, "weekend_holiday_rate") != None and getattr(caregiver, "live_in_rate") != None and getattr(caregiver, "weekend_live_in_rate") != None and getattr(caregiver, "holiday_live_in_rate") != None and getattr(caregiver, "weekend_holiday_live_in_rate") != None:
+                            print("-----------------------========",caregiver)
                             payroll_header = PayrollHeader.create_payroll(current_company,caregiver,start_date,end_date)
                             payroll_header = list(PayrollHeader.objects.filter(start_date = start_date,end_date = end_date ,  submitted = True,cancelled= False))
                             context['payroll_header'] = payroll_header
+                            print("----------------payroll_header-------========",payroll_header)
                             payroll_line_item = []
                             for i in payroll_header:
                                 payroll_item = PayrollLineItem.objects.filter(payroll_header = i.id)

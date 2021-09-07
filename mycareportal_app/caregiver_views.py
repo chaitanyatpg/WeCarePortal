@@ -266,7 +266,7 @@ class EditCaregiver(LoginRequiredMixin, View):
             context['transfer_map'] = transfer_map
         else:
             form_errors = find_caregiver_form.errors.as_data()
-            error_messaging.render_error_messages(request, form_errors)
+            return redirect('edit_choose_caregiver')
         return render(request,'production/edit_caregiver.html', context)
 
     def post(self, request):
@@ -947,7 +947,6 @@ class ScheduleShifts(LoginRequiredMixin, View):
             print(context['caregiver_shifts'])
             return render(request, 'production/schedule_shifts.html', context)
         else:
-            messages.success(request, "There was an error processing the previous request. Please contact a system administrator")
             return redirect('select_shifts_choose')
 
     def post(self, request, *args, **kwargs):

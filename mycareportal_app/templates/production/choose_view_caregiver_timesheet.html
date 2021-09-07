@@ -40,13 +40,15 @@
                   </div>
                   <div class="x_content">
                     <br />
+                    <form method='get' action="{% url 'view_caregiver_timesheet' %}" class="form-horizontal form-label-left">
                     <div class="row">
                       <div class="col-md-10 col-sm-10 col-xs-12">
-                    <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                   
                     	<div class="form-group">
                         	<label  class="control-label col-md-2 col-sm-2 col-xs-12">Select Caregiver</label>
 	                        <div class="col-md-10 col-sm-10 col-xs-12" >
-	                          <select id='caregiver_dropdown' class="select2_single form-control"  style="width: 100%; " tabindex="-1">
+	                          <select required id='caregiver_dropdown' class="select2_single form-control"  style="width: 100%; " tabindex="-1"
+                            oninvalid="console.log(validity); setCustomValidity('Please select caregiver')"  onchange="setCustomValidity(validity.valueMissing ? 'Please select client' :'')" >
 	                            <option value=""></option>
                               {% for caregiver in all_caregivers %}
                                 <option value= {{caregiver.email_address}}>{{caregiver.first_name|addstr_space:caregiver.last_name}}</option>
@@ -92,25 +94,29 @@
                           </div>
                         </div>
                       </div>
-                    </form>
+                    
                       </div>
                     </div>
+                    <div class="row"></div>
+                    <br />
+                    <div class="row">
+              
+                      <div class="form-group">
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="hidden" id="caregiver_email_hidden" name="{{find_caregiver_form.caregiver_email.html_name}}">
+                          <button type="submit" class="btn btn-success">Find Time Sheet</button>
+                          <a class="btn btn-info" href="{% url 'export_all_caregiver_timesheets' %}">Download All Time Sheets</a>
+                        </div>
+                      </div>
+                
+                </div>
+                    </form>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div class="row">
-              <form method='get' action="{% url 'view_caregiver_timesheet' %}">
-  	              <div class="form-group">
-  	                <div class="col-md-9 col-sm-9 col-xs-12">
-                      <input type="hidden" id="caregiver_email_hidden" name="{{find_caregiver_form.caregiver_email.html_name}}">
-  	                  <button type="submit" class="btn btn-success">Find Time Sheet</button>
-                      <a class="btn btn-info" href="{% url 'export_all_caregiver_timesheets' %}">Download All Time Sheets</a>
-  	                </div>
-  	              </div>
-	          </form>
-            </div>
+           
           </div>
         </div>
         <!-- /page content -->

@@ -41,12 +41,14 @@
                   <div class="x_content">
                     <br />
                     <div class="row">
+                      <form method='get' action="{% url 'schedule_shifts' %}"  class="form-horizontal form-label-left">
                       <div class="col-md-10 col-sm-10 col-xs-12">
-                        <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                        
                         	<div class="form-group">
                             	<label class="control-label col-md-2 col-sm-2 col-xs-12">Select Caregiver</label>
     	                        <div class="col-md-10 col-sm-10 col-xs-12">
-    	                          <select id='caregiver_dropdown' class="select2_single form-control" tabindex="-1">
+    	                          <select required id='caregiver_dropdown' class="select2_single form-control" tabindex="-1"
+                                oninvalid="setCustomValidity('Please select caregiver')"  onchange="setCustomValidity(validity.valueMissing ? 'Please select caregiver' :'')" >
     	                            <option value=""></option>
                                   {% for caregiver in all_caregivers %}
                                     <option value= {{caregiver.email_address}}>{{caregiver.first_name|addstr_space:caregiver.last_name}}</option>
@@ -92,18 +94,16 @@
                               </div>
                             </div>
                           </div>
-                        </form>
+                        
                       </div>
 
                       <div class="col-md-2 col-sm-2">
-                        <form method='get' action="{% url 'schedule_shifts' %}">
             	              <div class="form-group">
                                 <input type="hidden" id="caregiver_email_hidden" name="{{find_caregiver_form.caregiver_email.html_name}}">
             	                  <button type="submit" class="btn btn-success">Schedule Shifts</button>
             	              </div>
-          	            </form>
                       </div>
-
+                    </form>
                     </div>
                   </div>
                 </div>

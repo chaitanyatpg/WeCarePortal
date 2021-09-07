@@ -41,12 +41,14 @@
                   <div class="x_content">
                     <br />
                     <div class="row">
+                      <form method="GET" action="{% url 'deactivate_client' %}" class="form-horizontal form-label-left">
                       <div class="col-md-10 col-sm-10 col-xs-12">
-                        <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                        
                         	<div class="form-group">
                             	<label class="control-label col-md-2 col-sm-2 col-xs-12">Select Client</label>
     	                        <div class="col-md-10 col-sm-10 col-xs-12">
-    	                          <select id='client_dropdown' class="select2_single form-control" tabindex="-1">
+    	                          <select required id='client_dropdown' class="select2_single form-control" tabindex="-1"
+                                oninvalid="setCustomValidity('Please select client')"  onchange="setCustomValidity(validity.valueMissing ? 'Please select client' :'')" >
     	                            <option value=""></option>
                                   {% for client in all_clients %}
                                     <option value= {{client.email_address}}>{{client.first_name|addstr_space:client.last_name}}</option>
@@ -92,16 +94,17 @@
                               </div>
                             </div>
                           </div>
-                        </form>
+                        
                       </div>
                       <div class="col-md-2 col-sm-2">
-                        <form method="GET" action="{% url 'deactivate_client' %}">
+                        
             	              <div class="form-group">
                                 <input type="hidden" id="client_email_hidden" name="{{find_client_form.client_email.html_name}}">
             	                  <button type="submit" class="btn btn-success">Continue</button>
             	              </div>
-          	            </form>
+          	            
                       </div>
+                    </form>
                     </div>
                   </div>
                 </div>

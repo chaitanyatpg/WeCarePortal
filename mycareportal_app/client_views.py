@@ -333,6 +333,8 @@ class EditClient(LoginRequiredMixin, View):
             context['criteria_map'] = criteria_map
             context['certification_map'] = certification_map
             context['transfer_map'] = transfer_map
+        else:
+            return redirect('edit_choose_client')
         return render(request,'production/edit_client.html', context)
 
     def post(self, request):
@@ -709,6 +711,8 @@ class ChooseCaregiver(LoginRequiredMixin, View):
             all_caregivers = Caregiver.objects.filter(company=current_company).order_by('last_name')
             all_caregivers = self.match_client_caregiver_criteria(all_caregivers,client,current_company,assigned_caregivers)
             context['all_caregivers'] = all_caregivers
+        else:
+            return redirect('find_caregiver')
         return render(request,'production/caregiver_tables.html',context)
 
     @transaction.atomic
@@ -1245,6 +1249,9 @@ class ViewIncidentsByClient(LoginRequiredMixin, View):
             for client_incident in client_incidents:
                 client_incident.incident_timestamp = (client_incident.incident_timestamp.astimezone(client_timezone)).replace(tzinfo=None)
             context['client_incidents'] = client_incidents
+        else:
+            messages.error(request, "Please select client")
+            return redirect('choose_view_client_incidents')
         return render(request,'production/view_client_incidents.html', context)
 
 class ChooseViewClientIncidents(LoginRequiredMixin, View):
@@ -1380,7 +1387,9 @@ class ClientEndOfLifeView(LoginRequiredMixin, View):
             context['comments'] = comments
             context['attachments'] = attachments
             context['eol_form'] = EndOfLifeForm()
-            return render(request, 'production/client_end_of_life.html', context)
+        else:
+            return redirect('end_of_life_choose_client')  
+        return render(request, 'production/client_end_of_life.html', context)
 
     def post(self, request):
         context = {}
