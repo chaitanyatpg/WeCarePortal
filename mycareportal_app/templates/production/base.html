@@ -957,7 +957,7 @@ else{
   function customAlertBox(message){
     console.log("message",message)
     document.getElementById("alertmessage").innerHTML = message;
-    $('#customalertbox').modal()
+    $('#customalertbox').modal({backdrop: 'static', keyboard: false})
   };
 </script>
 

@@ -368,6 +368,28 @@
     </div>
   </div>
 </div>
+<div id="customconfirm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div style="padding: 15px;">
+     
+      </div>
+        <div class="modal-body modal-sm"style="">
+          <span id="confirmmessage" style="color: black;margin-left: 61px"></span>
+
+        </div>
+        <div  style="padding: 3px; margin-left: 89px">   
+          <input type="hidden" name="lineno" id="payrolllinenodetail">
+          <input type="hidden" name="bid_id" id="payrollmessage" >     
+          <button type="button" data-dismiss="modal"   class="btn btn-success" onclick="yesClick()">YES</a>
+            <button type="button" data-dismiss="modal" class="btn btn-primary">No</a>
+          
+        </div>
+     
+    
+    </div>
+  </div>
+</div>
 <!-- /page content -->
 {% endblock %}
 {% block footlibs %}
@@ -859,8 +881,29 @@
     //   var counter = 0;
     //   $("#editline").on("click", function () {
     function payroll_line_delete(x) {
+      confirmBoxDeleteLine('Do you want to delete?','deleteline',x)
+    
+  
+    }
+  </script>
 
-      if(confirm('Do you want to delete?')){
+<script type="text/javascript">
+  function confirmBoxDeleteLine(message, value, lineno){
+    console.log("lineno",lineno)
+    $('#payrollmessage').val(value);
+    document.getElementById("confirmmessage").innerHTML = message;
+    $('#payrolllinenodetail').val(lineno);
+    $('#customconfirm').modal({backdrop: 'static', keyboard: false})
+
+  };
+</script>
+
+<script>
+   function yesClick(){
+  
+    value = $('#payrollmessage').val();
+    if(value == 'deleteline'){
+      x = $('#payrolllinenodetail').val()
       var myTab = document.getElementById('lineitemid');
 
       lineitem = []
@@ -901,8 +944,7 @@
   
     }
 
-  
-    }
-  </script>
+   }
+</script>
   
 {% endblock %}

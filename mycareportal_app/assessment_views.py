@@ -49,7 +49,10 @@ class AssessmentTool(LoginRequiredMixin, View):
             client_assessment_map = ClientAssessmentMap.objects.filter(client=client)
             task_map = self.make_task_map(default_assessment_categories, assessment_tasks, client_assessment_map, current_company, client)
             context['task_map'] = task_map
-            return render(request, "production/assessment_tool.html", context)
+        else:
+            return redirect('assessment_choose_client')
+
+        return render(request, "production/assessment_tool.html", context)
 
     def make_task_map(self, default_assessment_categories, assessment_tasks, client_assessment_map, company, client):
 
