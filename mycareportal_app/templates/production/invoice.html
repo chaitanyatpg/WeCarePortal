@@ -381,6 +381,28 @@
     </div>
   </div>
 </div>
+<div id="customconfirm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div style="padding: 15px;">
+     
+      </div>
+        <div class="modal-body modal-sm"style="">
+          <span id="confirmmessage" style="color: black;margin-left: 61px"></span>
+
+        </div>
+        <div  style="padding: 3px; margin-left: 89px">   
+          <input type="hidden" name="lineno" id="linenodetail">
+          <input type="hidden" name="bid_id" id="bid_id_accept" >     
+          <button type="button" data-dismiss="modal"   class="btn btn-success" onclick="yesClick()">YES</a>
+            <button type="button" data-dismiss="modal" class="btn btn-primary">No</a>
+          
+        </div>
+     
+    
+    </div>
+  </div>
+</div>
 <!-- /page content -->
 {% endblock %}
 {% block footlibs %}
@@ -456,45 +478,9 @@
 $(document).ready(function (){
 
   $("#sendemail").on("click", function () {
-    if (confirm("Do you want to send email?")) {
-   $("#sendemail").attr("disabled", true);
-    $.ajax({
-        url: "{% url 'send_email_invoice' %}",
-        type: "GET",
-        data: {
-
-          'start_date': '{{start_date}}',
-          'end_date': '{{end_date}}',
-          "invoice_header_id": '{{ invoice_header_data.id }}'
-
-        },
-
-        dataType: "json",
-        contentType: "application/json",
-        success: function (data) {
-          
-          window.location.reload()
-          alert("Email sent successfully")
-          setTimeout(function () {
-            
-            
-
-          }, 3000);
-        },
-        error: function (data) {
-          
-          window.location.reload()
-          // window.location = "/billing/invoice/get_pdf";
-          
-          setTimeout(function () {
-            // window.location.replace("invoice");
-          }, 3000);
-        }
-      });
-    }
-    else {
-      console.log("---")
-    }
+    confirmBox("Do you want to send email?",'yesemail')
+    
+    
     });
  
 
@@ -573,7 +559,7 @@ $(document).ready(function (){
       })
     } 
     else{
-      alert("Please fill all the fields")
+      customAlertBox("Please fill all the fields")
     }
     });
 
@@ -718,7 +704,7 @@ $(document).ready(function (){
             
             counter++;
         } else {
-          alert("Please fill all the fields")
+          customAlertBox("Please fill all the fields")
         }
 
       }),
@@ -811,7 +797,7 @@ $(document).ready(function (){
       dataType: "json",
       contentType: "application/json",
       success: function (data) {
-        alert("Invoice updated successfully")
+        customAlertBox("Invoice updated successfully")
         $("#total_cost_header")[0].innerText = data.invoice_header_total_cost
         for (row = 1; row < myTab.rows.length; row++) {
 
@@ -844,9 +830,82 @@ if (myTab.rows[row].childNodes[1].value == data.invoice_line_id) {
   //   var counter = 0;
   //   $("#editline").on("click", function () {
   function deletLine(x) {
+    confirmBoxDeleteLine('Do you want to delete?', 'deleteline',x)
 
-    if(confirm('Do you want to delete?')){
+
+  }
+</script>
+
+<script type="text/javascript">
+  function confirmBox(message, value){
+    console.log("message",message)
+    document.getElementById("confirmmessage").innerHTML = message;
+    $('#bid_id_accept').val(value);
+    $('#customconfirm').modal({backdrop: 'static', keyboard: false})
+
+  };
+</script>
+
+<script type="text/javascript">
+  function confirmBoxDeleteLine(message, value, lineno){
+    console.log("lineno",lineno)
+    $('#bid_id_accept').val(value);
+    document.getElementById("confirmmessage").innerHTML = message;
+    $('#linenodetail').val(lineno);
+    $('#customconfirm').modal({backdrop: 'static', keyboard: false})
+
+  };
+</script>
+
+<script>
+  function yesClick(){
+  
     
+  value = $('#bid_id_accept').val();
+console.log("ssssss 9809u8",value)
+  if (value == 'yesemail') {
+      console.log("sssssss 000==")
+   $("#sendemail").attr("disabled", true);
+    $.ajax({
+        url: "{% url 'send_email_invoice' %}",
+        type: "GET",
+        data: {
+
+          'start_date': '{{start_date}}',
+          'end_date': '{{end_date}}',
+          "invoice_header_id": '{{ invoice_header_data.id }}'
+
+        },
+
+        dataType: "json",
+        contentType: "application/json",
+        success: function (data) {
+          
+          customAlertBox("Email sent successfully")
+          
+          setTimeout(function () {
+            
+            location.reload()
+
+          }, 5000);
+          
+        },
+        error: function (data) {
+          
+          window.location.reload()
+          // window.location = "/billing/invoice/get_pdf";
+          
+          setTimeout(function () {
+            // window.location.replace("invoice");
+          }, 3000);
+        }
+      });
+    }
+  
+
+    if(value == 'deleteline'){
+      x = $('#linenodetail').val()
+      console.log("linenodetaillinenodetai  xxx",x)
     var myTab = document.getElementById('lineitemid');
     
 

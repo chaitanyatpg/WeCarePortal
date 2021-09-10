@@ -736,7 +736,7 @@
             $('#client_detail_img').html('<img src=' + client_data.profile_picture + ' class="img-circle img-responsive">');
           },
           failure: function(client_data){
-            alert('error fetching client data');
+            customAlertBox('error fetching client data');
           }
         });
       });
@@ -765,7 +765,7 @@
             });
           },
           failure: function(task_data){
-            alert('error fetching client data');
+            customAlertBox('error fetching client data');
           }
         });
       });
@@ -933,7 +933,7 @@
                     }
                   },
                   failure: function(client_data){
-                    alert('error fetching client data');
+                    customAlertBox('error fetching client data');
                   }
                 });
 
@@ -1472,14 +1472,14 @@
       if($('#end_time_hour :selected').val())
       if(end_time_hour < start_time_hour){
         $('#end_time_hour').val('')
-        alert("Please Select correct time")
+        customAlertBox("Please Select correct time")
         
       }
   
       if(end_time_hour == start_time_hour  && end_time_min && start_time_min && end_time_min <= start_time_min){
         // $('#start_time_min').val('')
         $('#end_time_min').val('')
-        alert("Please Select correct time")
+        customAlertBox("Please Select correct time")
         
       }
       
@@ -1494,7 +1494,7 @@
       {
         if($('#end_time_min :selected').val() <=  $('#start_time_min :selected').val() && $('#end_time_min :selected').val()   && $('#start_time_min :selected').val()){
           $('#end_time_min').val('')
-        alert("Please Select correct time")
+          customAlertBox("Please Select correct time")
         }
         
       }

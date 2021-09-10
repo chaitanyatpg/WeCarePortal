@@ -155,7 +155,8 @@ class EditHomeModUser(LoginRequiredMixin, View):
             context['edit_home_mod_user_form'] = edit_home_mod_user_form
         else:
             form_errors = find_home_mod_user_form.errors.as_data()
-            error_messaging.render_error_messages(request, form_errors)
+            # error_messaging.render_error_messages(request, form_errors)
+            return redirect('edit_choose_home_mod_user')
         return render(request, 'production/edit_home_mod_user.html', context)
 
     def post(self, request):

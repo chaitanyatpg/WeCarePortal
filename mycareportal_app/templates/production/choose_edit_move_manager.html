@@ -41,12 +41,14 @@
                   <div class="x_content">
                     <br />
                     <div class="row">
+                      <form method='get' action="{% url 'edit_move_manager' %}"  class="form-horizontal form-label-left">
                       <div class="col-md-10 col-sm-10 col-xs-12">
-                        <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                        
                         	<div class="form-group">
                             	<label class="control-label col-md-2 col-sm-2 col-xs-12">Select Move Manager</label>
     	                        <div class="col-md-10 col-sm-10 col-xs-12">
-    	                          <select id='move_manager_dropdown' class="select2_single form-control" tabindex="-1">
+    	                          <select required id='move_manager_dropdown' class="select2_single form-control" tabindex="-1"
+                                oninvalid="setCustomValidity('Please select move manager')"  onchange="setCustomValidity(validity.valueMissing ? 'Please select move manager' :'')" >
     	                            <option value=""></option>
                                   {% for move_manager in all_move_managers %}
                                     <option value= {{move_manager.email_address}}>{{move_manager.first_name|addstr_space:move_manager.last_name}}</option>
@@ -92,16 +94,17 @@
                               </div>
                             </div>
                           </div>
-                        </form>
+                        
                       </div>
                       <div class="col-md-2 col-sm-2">
-                        <form method='get' action="{% url 'edit_move_manager' %}">
+                        
             	              <div class="form-group">
                                 <input type="hidden" id="caregiver_email_hidden" name="{{find_move_manager_form.move_manager_email.html_name}}">
             	                  <button type="submit" class="btn btn-success">Edit</button>
             	                </div>
-      	               </form>
+      	               
                      </div>
+                    </form>
                     </div>
                   </div>
                 </div>

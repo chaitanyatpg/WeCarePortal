@@ -66,7 +66,8 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Client<span
                           class="required">*</span></label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          <select required id='client_dropdown' class="select2_group form-control" name={{create_task_form.client_uid.html_name}} tabindex="-1">
+                          <select required id='client_dropdown' class="select2_group form-control" name={{create_task_form.client_uid.html_name}} tabindex="-1"
+                          oninvalid="setCustomValidity('Please select client')"  onchange="setCustomValidity(validity.valueMissing ? 'Please select client' :'')" >
                             <option disabled selected value> -- select an option -- </option>
                             {% for client in all_clients %}
                               <option value= {{client.uid}}>{{client.first_name|addstr_space:client.last_name}}</option>
@@ -154,9 +155,14 @@
                         </div>
                       </div>-->
                       <br />
+                      <div class="row">
                         <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12"></label>
+                          <div class="col-md-9 col-sm-9 col-xs-12">
                           <button type="submit" class="btn btn-success">Create Task</button>
+                          </div>
                         </div>
+                      </div>
                       </form>
                     </div>
                   </div>

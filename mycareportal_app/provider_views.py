@@ -175,6 +175,8 @@ class VitalsReport(LoginRequiredMixin, View):
             context['end_date'] = end_date
             context['x_axis_series'] = x_axis_series
             context['y_axis_series'] = all_y_series
+        else:
+            return redirect('vitals_choose_client')
         return render(request, 'production/vitals_report.html', context)
 
     def get_task_template_objects(self, client_task, company):

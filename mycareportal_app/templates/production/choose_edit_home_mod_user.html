@@ -41,12 +41,14 @@
                   <div class="x_content">
                     <br />
                     <div class="row">
+                      <form method='get' action="{% url 'edit_home_mod_user' %}" class="form-horizontal form-label-left">
                       <div class="col-md-10 col-sm-10 col-xs-12">
-                        <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                        
                         	<div class="form-group">
                             	<label class="control-label col-md-2 col-sm-2 col-xs-12">Select Home Modification Manager</label>
     	                        <div class="col-md-10 col-sm-10 col-xs-12">
-    	                          <select id='home_mod_dropdown' class="select2_single form-control" tabindex="-1">
+    	                          <select required id='home_mod_dropdown' class="select2_single form-control" tabindex="-1"
+                                oninvalid="setCustomValidity('Please select home modification manager')"  onchange="setCustomValidity(validity.valueMissing ? 'Please select home modification manager' :'')" >
     	                            <option value=""></option>
                                   {% for home_mod_manager in all_home_mod_users %}
                                     <option value= {{home_mod_manager.email_address}}>{{home_mod_manager.first_name|addstr_space:home_mod_manager.last_name}}</option>
@@ -92,16 +94,17 @@
                               </div>
                             </div>
                           </div>
-                        </form>
+                        
                       </div>
                       <div class="col-md-2 col-sm-2">
-                        <form method='get' action="{% url 'edit_home_mod_user' %}">
+                        
             	              <div class="form-group">
                                 <input type="hidden" id="caregiver_email_hidden" name="{{find_home_mod_user_form.home_mod_user_email.html_name}}">
             	                  <button type="submit" class="btn btn-success">Edit</button>
             	                </div>
-      	               </form>
+      	               
                      </div>
+                    </form>
                     </div>
                   </div>
                 </div>
