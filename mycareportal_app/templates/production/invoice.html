@@ -882,10 +882,11 @@ console.log("ssssss 9809u8",value)
         success: function (data) {
           
           customAlertBox("Email sent successfully")
+          $("#sendemail").attr("disabled", false);
           
           setTimeout(function () {
             
-            location.reload()
+           
 
           }, 5000);
           
