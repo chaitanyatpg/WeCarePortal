@@ -46,10 +46,10 @@
                       
                     </div>
                     <div style="padding-left:10px">
-                        <form  onSubmit="return confirm('Do you want to Convert?') "  action="{% url 'convert_lead_client' %}" >
+                        
                             <input type="hidden" name="lead_id" value="{{lead_details.id}}">
-                            <button  class="btn btn-success edit_calendar_submit"  >Convert to Client</button>
-                        </form>
+                            <button onclick="confirmBox('Do you want to Convert?')"  class="btn btn-success edit_calendar_submit"  >Convert to Client</button>
+                        
                     </div>
                 </div>
                 <div class="col-md-1 col-sm-3 col-xs-3">
@@ -237,7 +237,7 @@
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12">
                                          </label>
                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <input type="hidden" name='{{client_invoice_form.client_email.html_name}}'
+                                        <input required type="hidden" name='{{client_invoice_form.client_email.html_name}}'
                                             value='{{client_email}}'>
                                         <button type="submit" value="{{lead_details.id}}" class="btn btn-success"
                                             onclick="saveNotes(this.value)">Save</button>
@@ -581,6 +581,31 @@
     </div>
 
 </div>
+<div id="customconfirm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div>
+       
+        </div>
+          <div class="modal-body modal-sm"style="">
+            <span id="confirmmessage" style="color: black;margin-left: 61px"></span>
+  
+          </div>
+          <div  style="padding: 3px; margin-left: 89px"> 
+            <form action="{% url 'convert_lead_client' %}">
+            <input type="hidden" name="lead_id" value="{{lead_details.id}}">     
+            <button    class="btn btn-success" >YES</a>
+                <button type="button" data-dismiss="modal" class="btn btn-primary">No</a>
+                
+           </form>
+              
+            
+          </div>
+       
+      
+      </div>
+    </div>
+  </div>
 {% endblock %} {% block footlibs %}
 <!-- bootstrap-daterangepicker -->
 <script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
@@ -663,7 +688,7 @@
         });
     }
     else{
-        customAlertBox("Fill out this Field")
+        customAlertBox("Please fill out this field")
     //    $('#lead_details_notes').attr('required', 'required');
     }
     }
@@ -713,12 +738,28 @@
 }
 </script>
 
+<script type="text/javascript">
+    function confirmBox(message){
+      console.log("message",message)
+      document.getElementById("confirmmessage").innerHTML = message;
+      $('#customconfirm').modal({backdrop: 'static', keyboard: false})
+  
+    };
+  </script>
+
 <script>
        $(document).ready(function() {
         $(".select2_single").select2({
           allowClear: true,
           dropdownParent: jQuery('.dropdown-state-containerss')
         });
+    });
+</script>
+
+<script>
+    function yesClick(){
+    
+}
 </script>
 
 

@@ -188,10 +188,10 @@
                                   <input type="hidden" name="payroll_id" value="{{payroll.id}}">
                                   <td><button id="download" class="btn btn-success edit_calendar_submit">View</button></td>
                                 </form>
-                                <form onSubmit="return confirm('Do you want to delete?') " method="get"  action="{% url 'cancel_payroll' %}" >
-                                  <input type="hidden" name="payroll_id" value="{{payroll.id}}">
-                                  <td><button  class="btn btn-success edit_calendar_submit"  >Delete</button></td>
-                                </form>
+                                
+                                  <input type="hidden" name="delete_payroll_id" value="{{payroll.id}}">
+                                  <td><button onclick="confirmBox('Do you want to delete?',value)"  value="{{payroll.id}}" class="btn btn-success edit_calendar_submit"  >Delete</button></td>
+                                
                               </tr>
                             {% endfor %}
                         </tbody>
@@ -205,6 +205,30 @@
 
 
           </div>
+          </div>
+        </div>
+
+        <div id="customconfirm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+              <div>
+             
+              </div>
+                <div class="modal-body modal-sm"style="">
+                  <span id="confirmmessage" style="color: black;margin-left: 61px"></span>
+        
+                </div>
+                <div  style="padding: 3px; margin-left: 89px"> 
+                  <form method="get"  action="{% url 'cancel_payroll' %}">
+                      <input type="hidden" name="delete_payroll_id" value="{{delete_payroll_id}}">     
+                  <button    class="btn btn-success" >YES</a>
+                      <button type="button" data-dismiss="modal" class="btn btn-primary">No</a>
+                  </form>
+                  
+                </div>
+             
+            
+            </div>
           </div>
         </div>
         <!-- /page content -->
@@ -719,6 +743,15 @@
       ]
     });
   });
+</script>
+
+<script type="text/javascript">
+  function confirmBox(message,value){
+    $('input[name=delete_payroll_id]').val(value)
+    document.getElementById("confirmmessage").innerHTML = message;
+    $('#customconfirm').modal({backdrop: 'static', keyboard: false})
+
+  };
 </script>
 
 {% endblock %}

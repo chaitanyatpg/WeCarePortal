@@ -2115,7 +2115,7 @@ def cancel_invoice(request):
         current_company = request.user.company
         
         context = request.GET.copy()
-        invoice_id = request.GET.get('invoice_id')
+        invoice_id = request.GET.get('delete_invoice_id')
         invoice_header = InvoiceHeader.objects.get(id = invoice_id )
         invoice_header.cancelled = True
         invoice_header.save()
@@ -2343,7 +2343,8 @@ class LeadDelete(LoginRequiredMixin, View):
     
     def get(self, request,*args, **kwargs):
         context = {}
-        id = kwargs['id']
+        id = request.GET.get('delete_lead_id')
+        print("delete_lead_id",id)
         lead_details = CrmClientLead.objects.get(id = id).delete()
         return HttpResponseRedirect(reverse('company_crm'))
 
@@ -2825,7 +2826,7 @@ def cancel_payroll(request):
         current_company = request.user.company
         
         context = request.GET.copy()
-        payroll_id = request.GET.get('payroll_id')
+        payroll_id = request.GET.get('delete_payroll_id')
         payroll_header = PayrollHeader.objects.get(id = payroll_id )
         payroll_header.cancelled = True
         payroll_header.save()
