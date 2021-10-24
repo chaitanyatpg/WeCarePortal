@@ -900,6 +900,29 @@
         </div>-->
       </div>
     </div>
+    <div id="customconfirm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div>
+         
+          </div>
+            <div class="modal-body modal-sm"style="">
+              <span id="confirmmessage" style="color: black;margin-left: 61px">Do you want to delete?</span>
+    
+            </div>
+            <div  style="padding: 3px; margin-left: 89px"> 
+              
+                  <input type="hidden" name="attachment_id" value="{{attachment_id}}">     
+              <button   onclick="deleteAttachment()" value="{{attachment_id}}"  class="btn btn-success" >YES</a>
+                  <button type="button" data-dismiss="modal" class="btn btn-primary">No</a>
+              </form>
+              
+            </div>
+         
+        
+        </div>
+      </div>
+    </div>
     <!-- /page content -->
     {% endblock %}
 
@@ -1186,33 +1209,11 @@
 
 <script>
   function valueclick(attachmentid){
-
-    if(confirm("Do you want to Delete ?")){
-
-      $.ajax({
-
-url: "{% url 'delete_caregiver_attachment' %}",
-type: "GET",
-
-data: {
-
-  "attachment_id": attachmentid,
-  "caregiver_id" :$("input[name=caregiver_id]").val(),
-
-},
-dataType: "json",
-contentType: "application/json",
-success: function (data) {
-  location.reload();
-
-}
-
-});
-
-    }
-    console.log("attachmentidattachmentid",attachmentid)
-
+    $('input[name=attachment_id]').val(attachmentid)
+    $('#customconfirm').modal({backdrop: 'static', keyboard: false})
+ 
   }
+
 </script>
 
 
@@ -1264,5 +1265,35 @@ success: function (data) {
    <script>
      document.getElementById("profile_picture-clear_id").style.marginLeft  = "12px";
    </script>
+
+<script>
+  function deleteAttachment(){
+    value =$('input[name=attachment_id]').val()
+    if(value){
+      $.ajax({
+      
+      url: "{% url 'delete_caregiver_attachment' %}",
+      type: "GET",
+
+      data: {
+
+      "attachment_id": value,
+      "caregiver_id" :$("input[name=caregiver_id]").val(),
+
+     },
+     dataType: "json",
+     contentType: "application/json",
+     success: function (data) {
+     location.reload();
+
+    }
+
+  });
+
+    }
+
+}
+     
+</script>
 
 {% endblock %}

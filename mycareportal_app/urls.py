@@ -273,7 +273,7 @@ urlpatterns = [
     url(r'^crm_follow_up/(?P<id>[0-9a-f-]+)', views.CrmNotesFollowUP.as_view(),name='crm_follow_up'),    
     url(r'^save_crm_notes',views.savecrm_notes,name='save_crm_notes'),
     url(r'^update_lead_status',views.update_lead_status,name='update_lead_status'),
-    url(r'^delete_lead_client/(?P<id>[0-9a-f-]+)', views.LeadDelete.as_view(),name='delete_lead_client'),    
+    url(r'^delete_lead_client', views.LeadDelete.as_view(),name='delete_lead_client'),    
 
 
     url(r'^viwe_holiday_ids', views.view_company_holiday_id,name='viwe_holiday_ids'),
