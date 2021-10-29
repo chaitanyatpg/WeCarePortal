@@ -133,14 +133,14 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">State<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12" onchange="update_state()">
                       {% if not edit_caregiver_form.state.value is None %}
-                      <select required class="select2_single form-control" tabindex="-1" id="dropDownId" name={{edit_caregiver_form.state.html_name}} value={{edit_caregiver_form.state.value}}>
+                      <select required class="select2_single form-control" tabindex="-1" id="dropDownId" name={{edit_caregiver_form.state.html_name}} value={{edit_caregiver_form.state.value}} style="width: 100%;">
                             <option selected=selected>{{edit_caregiver_form.state.value}}</option>
                             {% for statename in all_state %}
                             <option value='{{statename.state_name}}'>{{statename.state_name}}</option>
                             {% endfor %}
                       </select>
                       {% else %}
-                      <select required class="select2_single form-control" tabindex="-1" id="dropDownId" name={{edit_caregiver_form.state.html_name}}>
+                      <select style="width: 100%;" required class="select2_single form-control" tabindex="-1" id="dropDownId" name={{edit_caregiver_form.state.html_name}}>
                             <option value="" disabled selected>Select State</option>
                             {% for statename in all_state %}
                             <option value='{{statename.state_name}}'>{{statename.state_name}}</option>
@@ -418,24 +418,24 @@
 
                      
                     <div class="form-group">
-                      <label class="col-md-3 col-sm-3 col-xs-3">Regular hourly rate</label>
+                      <label class="col-md-3 col-sm-3 col-xs-12">Regular hourly rate</label>
                       
                      
                       
-                      <div class="col-md-3 col-sm-3 col-xs-3">
-                        <label>
+                      <div class="col-md-3 col-sm-3 col-xs-12">
+                        
                           {% if not caregiver.regular_hourly_rate is None %}
                           <input type="number" name="{{ caregiver_payroll_form.regular_hourly_rate.html_name}}"  min="0" step="any" value="{{caregiver.regular_hourly_rate}}" required> 
                           {% else %}
                           <input type="number" name="{{ caregiver_payroll_form.regular_hourly_rate.html_name}}"  min="0" step="any"  required> 
                           {% endif %}
-                        </label>
+                        
                       </div>
-                      <div class="col-md-3 col-sm-3 col-xs-3">
+                      <div class="col-md-3 col-sm-3 col-xs-12">
                         <label >What % of Hourly Rate to be used for Weekend hourly Rate &nbsp;
                           
                       </div>
-                      <div class="col-md-3 col-sm-3 col-xs-3">
+                      <div class="col-md-3 col-sm-3 col-xs-12">
                         <input  type="number" step="any"
                             placeholder="enter percent" onchange="myFunction(this.value)" name="percent_Weekend_hourly_rate" ></label>
                       </div>
@@ -446,24 +446,24 @@
 
                     <div class="row">
                       <div class="form-group">
-                        <label class="col-md-3 col-sm-3 col-xs-3">Weekend hourly rate
+                        <label class="col-md-3 col-sm-3 col-xs-12">Weekend hourly rate
                           <br>
                         </label>
-                        <div class="col-md-3 col-sm-3 col-xs-3">
-                          <label>
+                        <div class="col-md-3 col-sm-3 col-xs-12">
+                          
                             {% if not caregiver.weekend_hourly_rate is None %}
                             <input type="number" name="{{ caregiver_payroll_form.weekend_hourly_rate.html_name}}" min="0" step="any" value="{{caregiver.weekend_hourly_rate}}" required> 
                             {% else %}
                             <input type="number" name="{{ caregiver_payroll_form.weekend_hourly_rate.html_name}}" min="0" step="any" required> 
                             {% endif %}
-                          </label>
+                          
                         </div>
                       
 
-                      <div class="col-md-3 col-sm-3 col-xs-3"> 
+                      <div class="col-md-3 col-sm-3 col-xs-12"> 
                         <label>What times of Regular Hourly Rate should be used for Holiday hourly rate </label>
                       </div>
-                      <div class="col-md-3 col-sm-3 col-xs-3">
+                      <div class="col-md-3 col-sm-3 col-xs-12">
                          <input type="number" step="any"
                           onchange="myFunctions(this.value)"  name="percent_holiday_hourly_rate" placeholder="enter no of times">
                       </div>
@@ -476,24 +476,24 @@
     
                     <div class="row">
                       <div class="form-group">
-                        <label class="col-md-3 col-sm-3 col-xs-3">Holiday hourly rate
+                        <label class="col-md-3 col-sm-3 col-xs-12">Holiday hourly rate
                           <br>
                         </label>
-                        <div class="col-md-3 col-sm-3 col-xs-3">
-                          <label>
+                        <div class="col-md-3 col-sm-3 col-xs-12">
+                          
                               {% if not caregiver.holiday_hourly_rate is None %}
                             <input type="number" name="{{ caregiver_payroll_form.holiday_hourly_rate.html_name}}" min="0" step="any" value="{{caregiver.holiday_hourly_rate}}" required> {% else %}
                             <input type="number" name="{{ caregiver_payroll_form.holiday_hourly_rate.html_name}}" min="0" step="any"  required>
                              {% endif %}
-                          </label>
+                          
                         </div>
                       
 
-                      <div class="col-md-3 col-sm-3 col-xs-3">
+                      <div class="col-md-3 col-sm-3 col-xs-12">
                         <label>What times of Weekend Hourly Rate should be used for Weekend Holiday hourly rate </label>
                       </div>
 
-                      <div class="col-md-3 col-sm-3 col-xs-3">
+                      <div class="col-md-3 col-sm-3 col-xs-12">
                         <input type="number"  step="any"
                             placeholder="enter no of times" onchange="myweekend_holiday_rate(this.value)" name="percent_weekend_holiday_rate">
                       </div>
@@ -503,16 +503,16 @@
     
                     <div class="row">
                       <div class="form-group">
-                        <label class="col-md-3 col-sm-3 col-xs-3">Weekend holiday rate
+                        <label class="col-md-3 col-sm-3 col-xs-12">Weekend holiday rate
                           <br>
                         </label>
-                        <div class="col-md-3 col-sm-3 col-xs-3">
-                          <label>
+                        <div class="col-md-3 col-sm-3 col-xs-12">
+                          
                             {% if not caregiver.weekend_holiday_rate is None %}
                             <input type="number" name="{{ caregiver_payroll_form.weekend_holiday_rate.html_name}}" min="0" step="any" value="{{caregiver.weekend_holiday_rate}}" required> {% else %}
                             <input type="number" name="{{ caregiver_payroll_form.weekend_holiday_rate.html_name}}" min="0" step="any" required>
                             {% endif %}
-                          </label>
+                          
                         </div>
                       </div>
                       <!-- <div class="col-md-3 col-sm-3 col-xs-3">
@@ -533,20 +533,20 @@
     
                     <div class="row">
                       <div class="form-group">
-                        <label class="col-md-3 col-sm-3 col-xs-3">Live in rate
+                        <label class="col-md-3 col-sm-3 col-xs-12">Live in rate
                           <br>
                         </label>
-                        <div class="col-md-3 col-sm-3 col-xs-3">
-                          <label>
+                        <div class="col-md-3 col-sm-3 col-xs-12">
+                          
                             {% if not caregiver.live_in_rate is None %}
                             <input type="number" name="{{ caregiver_payroll_form.live_in_rate.html_name}}" min="0" step="any" value="{{caregiver.live_in_rate}}" required> {% else %}
                             <input type="number" name="{{ caregiver_payroll_form.live_in_rate.html_name}}" min="0" step="any"  required>
                             {% endif %}
-                          </label>
+                          
                         </div>
                       
 
-                      <div class="col-md-3 col-sm-3 col-xs-3">
+                      <div class="col-md-3 col-sm-3 col-xs-12">
                         <label>What % of Live in Rate to be used for Weekend Live in Rate </label>
                       </div>
 
@@ -559,26 +559,26 @@
     
                     <div class="row">
                       <div class="form-group">
-                        <label class="col-md-3 col-sm-3 col-xs-3">Weekend live in rate
+                        <label class="col-md-3 col-sm-3 col-xs-12">Weekend live in rate
                           <br>
                         </label>
-                        <div class="col-md-3 col-sm-3 col-xs-3">
-                          <label>
+                        <div class="col-md-3 col-sm-3 col-xs-12">
+                          
                             {% if not caregiver.weekend_live_in_rate is None %}
                             <input type="number" name="{{ caregiver_payroll_form.weekend_live_in_rate.html_name}}" min="0" step="any" value="{{caregiver.weekend_live_in_rate}}" required> {% else %}
                             <input type="number" name="{{ caregiver_payroll_form.weekend_live_in_rate.html_name}}" min="0" step="any"  required>
                             {% endif %}
-                          </label>
+                          
                         </div>
                       
 
 
-                      <div class="col-md-3 col-sm-3 col-xs-3">
+                      <div class="col-md-3 col-sm-3 col-xs-12">
                         <label>What times of Regular Live in Rate should be used for Holiday Live in rate
                           </label>
                       </div>
 
-                      <div class="col-md-3 col-sm-3 col-xs-3">
+                      <div class="col-md-3 col-sm-3 col-xs-12">
 
                         <input type="number"  step="any"
                             placeholder="enter no of times" onchange="myHolidayliveinrate(this.value)" name="percent_hoilday_live_in_rate">
@@ -594,24 +594,24 @@
     
                     <div class="row">
                       <div class="form-group">
-                        <label class="col-md-3 col-sm-3 col-xs-3">Holiday live in rate
+                        <label class="col-md-3 col-sm-3 col-xs-12">Holiday live in rate
                           <br>
                         </label>
-                        <div class="col-md-3 col-sm-3 col-xs-3">
-                          <label>
+                        <div class="col-md-3 col-sm-3 col-xs-12">
+                          
                             {% if not caregiver.holiday_live_in_rate is None %}
                             <input type="number" name="{{ caregiver_payroll_form.holiday_live_in_rate.html_name}}" min="0" step="any" value="{{caregiver.holiday_live_in_rate}}" required> {% else %}
                             <input type="number" name="{{ caregiver_payroll_form.holiday_live_in_rate.html_name}}" min="0" step="any" required>
                             {% endif %}
-                          </label>
+                          
                         </div>
                       
 
-                      <div class="col-md-3 col-sm-3 col-xs-3">
+                      <div class="col-md-3 col-sm-3 col-xs-12">
                         <label>What times of Weekend Live in Rate should be used for Weekend Holiday Live in rate</label>
                       </div>
 
-                      <div class="col-md-3 col-sm-3 col-xs-3">
+                      <div class="col-md-3 col-sm-3 col-xs-12">
 
                         <input type="number"  step="any"
                             placeholder="enter no of times" onchange="myWeekendholidayliveinrate(this.value)" name="percent_weekend_holiday_live_in_rate">
@@ -622,16 +622,16 @@
     
                     <div class="row">
                       <div class="form-group">
-                        <label class="col-md-3 col-sm-3 col-xs-3">Weekend holiday live in rate
+                        <label class="col-md-3 col-sm-3 col-xs-12">Weekend holiday live in rate
                           <br>
                         </label>
-                        <div class="col-md-3 col-sm-3 col-xs-3">
-                          <label>
+                        <div class="col-md-3 col-sm-3 col-xs-12">
+                          
                             {% if not caregiver.weekend_holiday_live_in_rate is None %}
                             <input type="number" name="{{ caregiver_payroll_form.weekend_holiday_live_in_rate.html_name}}" min="0" step="any" value="{{caregiver.weekend_holiday_live_in_rate}}" required> {% else %}
                             <input type="number" name="{{ caregiver_payroll_form.weekend_holiday_live_in_rate.html_name}}" min="0" step="any"  required>
                             {% endif %}
-                          </label>
+                          
                         </div>
                       </div>
                     </div>

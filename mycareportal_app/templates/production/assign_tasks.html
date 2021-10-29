@@ -68,7 +68,7 @@
                       <div class="row">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Activity Master<span class="required">*</span> </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <select id="activity_master_dropdown" class="select2_single" tabindex="-1" name="activity_master_dropdown">
+                          <select id="activity_master_dropdown" class="select2_single" style="width: 100%;" tabindex="-1" name="activity_master_dropdown">
                             <option value="" selected></option>
                             {% for activity_master in activity_masters %}
                             <option value="{{activity_master.activity_code}}">{{activity_master.activity_description}}</option>
@@ -81,7 +81,7 @@
                       <div class="row">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Task<span class="required">*</span> </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <select required id="master_dropdown" class="select2_single" tabindex="-1" name="{{assign_task_form.task.html_name}}">
+                          <select required id="master_dropdown" style="width: 100%;" class="select2_single" tabindex="-1" name="{{assign_task_form.task.html_name}}">
                             <option value="" selected></option>
                             {% for task in all_tasks %}
                             <option value="{{ task.activity_task }}">{{task.activity_category_name}} - {{task.activity_task}}</option>
@@ -94,7 +94,7 @@
                       <div class="row">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Task Template</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <select id="template_dropdown" class="select2_single" tabindex="-1" name="{{assign_task_form.template.html_name}}">
+                          <select id="template_dropdown" class="select2_single" style="width: 100%;" tabindex="-1" name="{{assign_task_form.template.html_name}}">
                             <option value="" selected></option>
                             {% for template in task_templates %}
                             <option value="{{ template.uid }}">{{template.name}} - {{template.description}}</option>
