@@ -135,14 +135,14 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">State<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12" onchange="update_state()">
                       {% if not move_manager_form.state_value is None %}
-                      <select required class="select2_single form-control" tabindex="-1" id="dropDownId" name={{move_manager_form.state.html_name}} value={{move_manager_form.state.value}}>
+                      <select required class="select2_single form-control" style="width: 100%;" tabindex="-1" id="dropDownId" name={{move_manager_form.state.html_name}} value={{move_manager_form.state.value}}>
                         <option   selected=selected>{{move_manager_form.state.value}}</option>
                         {% for statename in all_state %}
                         <option value='{{statename.state_name}}'>{{statename.state_name}}</option>
                         {% endfor %}
                       </select>
                       {% else %}
-                      <select required class="select2_single form-control" tabindex="-1" id="dropDownId" name={{move_manager_form.state.html_name}}>
+                      <select required class="select2_single form-control" style="width: 100%;" tabindex="-1" id="dropDownId" name={{move_manager_form.state.html_name}}>
                             <option value="" disabled selected>Select State</option>
                             {% for statename in all_state %}
                             <option value='{{statename.state_name}}'>{{statename.state_name}}</option>

@@ -221,7 +221,7 @@
                                         class="required">*</span> </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12" onchange="update_state()">
                                     {% if not crm_lead_form.state.value is None %}
-                                    <select required class="select2_singlestate form-control" id="dropDownId" tabindex="-1"
+                                    <select required class="select2_singlestate form-control" style="width: 100%;" id="dropDownId" tabindex="-1"
                                         name={{crm_lead_form.state.html_name}} value={{crm_lead_form.state.value}}>
                                         <option  selected>{{crm_lead_form.state.value}}</option>
                                         {% for statename in all_state %}
@@ -229,7 +229,7 @@
                                         {% endfor %}
                                     </select>
                                     {% else %}
-                                    <select required class="select2_singlestate form-control" id="dropDownId" tabindex="-1"
+                                    <select required class="select2_singlestate form-control" style="width: 100%;" id="dropDownId" tabindex="-1"
                                         name={{crm_lead_form.state.html_name}}>
                                         <option value="" disabled selected>Select State</option>
                                         {% for statename in all_state %}
@@ -279,7 +279,7 @@
                                 <label  class="control-label col-md-3 col-sm-3 col-xs-12">Lead Source <span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     {% if not crm_lead_form.lead_source.value is None %}
-                                    <select required required class="select2_singleSource form-control" tabindex="-1"  name={{crm_lead_form.lead_source.html_name}} value={{crm_lead_form.lead_source.value}}>
+                                    <select required required class="select2_singleSource form-control" tabindex="-1" style="width: 100%;" name={{crm_lead_form.lead_source.html_name}} value={{crm_lead_form.lead_source.value}}>
                                         <option value="" disabled selected>{{crm_lead_form.lead_source.value}}</option>
                                        <option value="Advertisement">Advertisement</option>
                                        <option value="Cold Call">Cold Call</option>
@@ -296,7 +296,7 @@
 
                                     </select>
                                     {% else %}
-                                    <select required class="select2_singleSource form-control" tabindex="-1"
+                                    <select required class="select2_singleSource form-control" tabindex="-1" style="width: 100%;"
                                     name={{crm_lead_form.lead_source.html_name}}>
                                     <option value="" disabled selected>Select Source <span class="required">*</span></option>
                                     <option value="Advertisement">Advertisement</option>
@@ -323,7 +323,7 @@
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12">Lead Status <span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     {% if not crm_lead_form.lead_status.value is None %}
-                                    <select required class="select2_singlestatus form-control" tabindex="-1"  name={{crm_lead_form.lead_status.html_name}} value={{crm_lead_form.lead_status.value}}>
+                                    <select required class="select2_singlestatus form-control" style="width: 100%;" tabindex="-1"  name={{crm_lead_form.lead_status.html_name}} value={{crm_lead_form.lead_status.value}}>
                                         <option value="" disabled selected>{{crm_lead_form.lead_status.value}}</option>
                                         <option value="Attempted To Contact">Attempted To Contact</option>
                                         <option value="Contact In Future">Contact In Future</option>
@@ -336,7 +336,7 @@
 
                                     </select>
                                     {% else %}
-                                    <select required class="select2_singlestatus form-control" tabindex="-1"
+                                    <select required class="select2_singlestatus form-control" style="width: 100%;" tabindex="-1"
                                     name={{crm_lead_form.lead_status.html_name}}>
                                     <option value="" disabled selected>Select Status</option>
                                     <option value="Attempted To Contact">Attempted To Contact</option>

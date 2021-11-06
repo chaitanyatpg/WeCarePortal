@@ -143,17 +143,17 @@
                                     {{task.task_description}}
                                   </blockquote>
                                   <div>
-                                    <div class="form-group col-md-4 col-lg-4 col-sm-12">
+                                    <div class="form-group col-md-4 col-lg-4 col-sm-12 col-xs-12">
                                       <label class="control-label">Start Date<span class="required">*</span>
                                       </label>
                                       <input id="project_date" class="date-picker form-control" required="required" name={{bid_form.start_date.html_name}} type="text">
                                     </div>
-                                    <div class="form-group col-md-4 col-lg-4 col-sm-12">
+                                    <div class="form-group col-md-4 col-lg-4 col-sm-12 col-xs-12">
                                       <label class="control-label">End Date<span class="required">*</span>
                                       </label>
                                       <input id="project_date" class="date-picker form-control" required="required" name={{bid_form.end_date.html_name}} type="text">
                                     </div>
-                                    <div class="form-group col-md-4 col-lg-4 col-sm-12">
+                                    <div class="form-group col-md-4 col-lg-4 col-sm-12 col-xs-12">
                                       <label class="control-label">Cost<span class="required">*</span>
                                       </label>
                                       <input type="text" class="form-control" name={{bid_form.cost.html_name}} required="required">
@@ -161,8 +161,6 @@
                                   </div>
                                   <input type="hidden" name={{bid_form.task_uid.html_name}} value={{task.uid}}>
                                   <button type="submit" class="btn btn-success">Place Bid</button>
-                                  
-                                  
                                   <button type="button" onclick="rejectContBidTask('{{task.uid}}')" class="btn btn-danger">Reject Bid</button>
                                   
                                 </form>

@@ -53,7 +53,7 @@
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Activity Master<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                      <select required id="master_dropdown" class="select2_single form-control" tabindex="-1" name={{create_task_form.activity_master.html_name}}>
+                      <select required id="master_dropdown" style="width:100%" class="select2_single form-control" tabindex="-1" name={{create_task_form.activity_master.html_name}}>
                         <option></option>
                         {% for activity_master in activity_masters %}
                           <option value={{activity_master.activity_code}}>{{activity_master.activity_code|addstr_space:'-'|addstr_space:activity_master.activity_description}}</option>
@@ -67,7 +67,7 @@
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Sub-Category<span class="required">*</span> </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                      <select required id="sub_dropdown" class="select2_single_2 form-control" tabindex="-1" name={{create_task_form.sub_category.html_name}}>
+                      <select required id="sub_dropdown" style="width:100%" class="select2_single_2 form-control" tabindex="-1" name={{create_task_form.sub_category.html_name}}>
                       </select>
                     </div>
                     <div class="activity-subcat-select">
