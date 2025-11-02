@@ -198,6 +198,15 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Database timezone settings
+import os
+if 'DATABASE_URL' in os.environ:
+    # Production PostgreSQL settings
+    DATABASES['default']['OPTIONS'] = {
+        'sslmode': 'require',
+    }
+    DATABASES['default']['TIME_ZONE'] = None
+
 LANGUAGES = (
     ('en', 'English'),
     ('mr', 'Marathi'),

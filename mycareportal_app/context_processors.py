@@ -5,7 +5,7 @@ def add_roles_to_context(request):
     context = {}
     all_state = StateField.objects.all()
     context['all_state'] = all_state
-    if request.user.id != None:
+    if hasattr(request, 'user') and request.user.is_authenticated and request.user.id != None:
         user_roles = UserRoles.objects.filter(user=request.user)
         user_roles = [x.role for x in user_roles]
         module_dict = defaultdict(lambda: defaultdict(lambda: defaultdict(bool)))
@@ -128,7 +128,7 @@ def add_roles_to_context(request):
 
 def add_current_user_context(request):
     context = {}
-    if request.user.id != None:
+    if hasattr(request, 'user') and request.user.is_authenticated and request.user.id != None:
         user_roles = UserRoles.objects.filter(user=request.user)
         user_roles = [x.role for x in user_roles]
         if 'CAREGIVER' in user_roles:
