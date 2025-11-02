@@ -42,8 +42,8 @@ ALLOWED_HOSTS = [
 AWS_STORAGE_BUCKET_NAME = 'wecare-media'
 # AWS_ACCESS_KEY_ID = 'AKIAI2SFPXGFAAHZ5XCQ'  # Commented for security - use env vars
 # AWS_SECRET_ACCESS_KEY = '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'  # Commented for security - use env vars
-AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
-AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', '')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', '')
 AWS_S3_FILE_OVERWRITE = False
 
 # Tell django-storages that when coming up with the URL for an item in S3 storage, keep
@@ -64,7 +64,7 @@ AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER = 'apikey'
 # EMAIL_HOST_PASSWORD = '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'  # Commented for security
-EMAIL_HOST_PASSWORD = os.environ['SENDGRID_API_KEY']
+EMAIL_HOST_PASSWORD = os.environ.get('SENDGRID_API_KEY', '')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
