@@ -5,3 +5,4 @@ pillow
 dj-database-url
 pytz
 six
+gunicorn
