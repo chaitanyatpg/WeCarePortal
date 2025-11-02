@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'ylwi3hn#79&v2(%#k&por1szkfssgih4nn)13
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
-ALLOWED_HOSTS = ['192.168.1.64','mycareportal.herokuapp.com','localhost','www.wecareportal.com','www.wecarehealthportal.com','127.0.0.1','*.railway.app']
+ALLOWED_HOSTS = ['192.168.1.64','mycareportal.herokuapp.com','localhost','www.wecareportal.com','www.wecarehealthportal.com','127.0.0.1','*.railway.app','wecareportal-production.up.railway.app']
 #'192.168.2.77'
 
 #AWS SETTINGS
