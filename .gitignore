@@ -7,3 +7,5 @@ we_care
 venv38/
 *.db
 .python-version
+static/
+staticfiles/

@@ -1,0 +1,301 @@
+MYCAREPORTAL - PROJECT STRUCTURE DOCUMENTATION
+=====================================================
+
+This document provides a comprehensive overview of the MyCarePortal project structure,
+explaining the purpose and organization of each directory and major file.
+
+ROOT DIRECTORY
+==============
+mycareportal_app/                    # Main project root directory
+├── .git/                           # Git version control directory
+├── .gitignore                      # Git ignore file
+├── manage.py                       # Django management script (executable)
+├── Procfile                        # Heroku deployment configuration
+├── requirements.txt                # Python dependencies
+├── README.md                       # Project documentation (newly created)
+└── project_structure.txt           # This file
+
+DJANGO PROJECT CONFIGURATION
+============================
+mycareportal/                       # Django project settings directory
+├── __init__.py                     # Python package marker
+├── settings.py                     # Main Django settings
+├── settings_local.py               # Local development settings
+├── settings_local_2.py             # Alternative local settings
+├── settings_production.py          # Production environment settings
+├── urls.py                         # Main URL routing configuration
+└── wsgi.py                         # WSGI application entry point
+
+MAIN DJANGO APPLICATION
+=======================
+mycareportal_app/                   # Primary Django application
+├── __init__.py                     # Python package marker
+├── admin.py                        # Django admin configuration
+├── apps.py                         # Application configuration
+├── backened.py                     # Custom authentication backend
+├── context_processors.py          # Custom template context processors
+├── tests.py                        # Unit tests
+└── urls.py                         # Application URL patterns
+
+MODELS AND DATABASE
+==================
+mycareportal_app/
+├── models.py                       # Database models (88KB - extensive data model)
+└── migrations/                     # Database migration files
+    ├── __init__.py
+    ├── 0001_initial.py             # Initial database schema
+    ├── 0002_auto_20170708_0530.py  # Subsequent migrations
+    ├── ...                         # 130+ migration files
+    └── 0131_auto_20210816_2025.py  # Latest migration
+
+VIEW CONTROLLERS (Business Logic)
+=================================
+mycareportal_app/
+├── views.py                        # Main application views (145KB)
+├── assessment_views.py             # Care assessment functionality (3.6KB)
+├── caregiver_views.py              # Caregiver management (82KB)
+├── client_views.py                 # Client/patient management (132KB)
+├── family_views.py                 # Family member functionality (13KB)
+├── home_mod_views.py               # Home modification management (30KB)
+├── move_manage_views.py            # Move/relocation management (41KB)
+├── provider_views.py               # Healthcare provider views (10KB)
+├── reporting_views.py              # Reports and analytics (8KB)
+└── settings_views.py               # Application settings (3KB)
+
+FORMS AND USER INPUT
+===================
+mycareportal_app/
+├── forms.py                        # Main form definitions (9KB)
+├── assessment_forms.py             # Assessment-specific forms
+├── caregiver_forms.py              # Caregiver management forms (8KB)
+├── client_forms.py                 # Client management forms (17KB)
+├── family_forms.py                 # Family member forms
+├── home_mod_forms.py               # Home modification forms (4KB)
+├── move_manage_forms.py            # Move management forms (7KB)
+├── provider_forms.py               # Provider forms
+└── settings_forms.py               # Settings forms
+
+FRONTEND TEMPLATES
+==================
+mycareportal_app/templates/         # HTML template files
+├── build/                          # Compiled template assets
+│   ├── css/                        # Compiled CSS files
+│   └── js/                         # Compiled JavaScript files
+├── production/                     # Main application templates (107 files)
+│   ├── 500.html                    # Error page
+│   ├── wecare_login.html           # Login page template
+│   ├── activate_tablet_*.html      # Tablet activation templates
+│   ├── add_*.html                  # Creation form templates
+│   ├── admin_*.html                # Admin interface templates
+│   ├── caregiver_*.html            # Caregiver interface templates
+│   ├── client_*.html               # Client interface templates
+│   ├── dashboard*.html             # Dashboard templates
+│   ├── edit_*.html                 # Edit form templates
+│   ├── family_*.html               # Family interface templates
+│   ├── home_mod_*.html             # Home modification templates
+│   ├── incident_*.html             # Incident reporting templates
+│   ├── invoice_*.html              # Billing templates
+│   ├── payroll_*.html              # Payroll management templates
+│   ├── provider_*.html             # Provider interface templates
+│   ├── reporting_*.html            # Report display templates
+│   ├── view_*.html                 # Data viewing templates
+│   └── ...                        # Additional templates
+└── vendors/                        # Third-party template components
+    ├── bootstrap/                  # Bootstrap framework templates
+    ├── Chart.js/                   # Chart.js documentation templates
+    ├── datatables.net/             # DataTables templates
+    └── ...                         # Other vendor templates
+
+STATIC ASSETS
+=============
+mycareportal_app/static/            # Static files (CSS, JS, Images)
+├── build/                          # Compiled/minified assets
+│   ├── css/                        # Compiled CSS
+│   │   ├── custom.min.css          # Main stylesheet
+│   │   └── ...                     # Additional stylesheets
+│   └── js/                         # Compiled JavaScript
+│       ├── custom.min.js           # Main JavaScript
+│       └── ...                     # Additional scripts
+├── pictures/                       # Image assets
+│   ├── logo_32_32.png              # Application favicon
+│   └── ...                         # Other images
+└── vendors/                        # Third-party libraries
+    ├── animate.css/                # Animation library
+    ├── autosize/                   # Text area auto-resize
+    ├── bootstrap/                  # Bootstrap framework
+    ├── bootstrap-daterangepicker/  # Date range picker
+    ├── bootstrap-progressbar/      # Progress bars
+    ├── bootstrap-wysiwyg/          # WYSIWYG editor
+    ├── Chart.js/                   # Chart/graph library
+    ├── cropper/                    # Image cropping
+    ├── datatables.net*/            # DataTables components
+    ├── DateJS/                     # Date manipulation
+    ├── devbridge-autocomplete/     # Autocomplete functionality
+    ├── dropzone/                   # File upload
+    ├── echarts/                    # Advanced charting
+    ├── eve/                        # JavaScript library
+    ├── fastclick/                  # Mobile touch optimization
+    ├── fine-uploader/              # File upload component
+    ├── Flot/                       # Plotting library
+    ├── flot.*/                     # Flot plugins
+    ├── font-awesome/               # Icon font
+    ├── fontawesome/                # Font Awesome icons
+    ├── fullcalendar/               # Calendar component
+    ├── gauge.js/                   # Gauge charts
+    ├── google-code-prettify/       # Code syntax highlighting
+    ├── iCheck/                     # Checkbox/radio styling
+    ├── ion.rangeSlider/            # Range slider component
+    ├── jQuery-Smart-Wizard/        # Multi-step forms
+    ├── jquery/                     # jQuery library
+    ├── jquery.*/                   # jQuery plugins
+    ├── jqvmap/                     # Vector maps
+    ├── jszip/                      # ZIP file handling
+    ├── malihu-custom-scrollbar*/   # Custom scrollbars
+    ├── mjolnic-bootstrap-colorpicker/ # Color picker
+    ├── mocha/                      # Testing framework
+    ├── moment/                     # Date/time library
+    ├── morris.js/                  # Chart library
+    ├── normalize-css/              # CSS reset
+    ├── nprogress/                  # Progress indicators
+    ├── parsleyjs/                  # Form validation
+    ├── pdfmake/                    # PDF generation
+    ├── pnotify/                    # Notification system
+    ├── raphael/                    # Vector graphics
+    ├── requirejs/                  # Module loader
+    ├── select2/                    # Enhanced select boxes
+    ├── skycons/                    # Weather icons
+    ├── starrr/                     # Star rating component
+    ├── switchery/                  # Toggle switches
+    ├── transitionize/              # CSS transitions
+    └── validator/                  # Form validation
+
+EMAIL TEMPLATES
+===============
+mycareportal_app/email/             # Email template organization by role
+├── admin/templates/                # Administrator email templates
+├── care_manager/templates/         # Care manager notifications
+├── caregiver/templates/            # Caregiver communications
+├── client/templates/               # Client notifications
+├── family/templates/               # Family member communications
+├── home_mod_manager/templates/     # Home modification notifications
+├── legal/templates/                # Legal department communications
+├── move_manager/templates/         # Move management notifications
+├── provider/templates/             # Healthcare provider communications
+└── user/templates/                 # General user notifications
+
+UTILITIES AND COMMON CODE
+=========================
+mycareportal_app/common/            # Shared utilities and common code
+├── core/                           # Core utility functions
+│   ├── __init__.py
+│   ├── constants.py                # Application constants
+│   ├── enums.py                    # Enumeration definitions
+│   ├── exceptions.py               # Custom exception classes
+│   └── utils.py                    # Utility functions
+└── enums.py                        # Additional enumerations
+
+SPECIALIZED FEATURES
+===================
+mycareportal_app/download_invoice_pdf/ # PDF invoice generation
+├── __init__.py
+└── generate_pdf.py                 # PDF generation logic
+
+mycareportal_app/templatetags/      # Custom Django template tags
+├── __init__.py
+└── mycareportal_app_extras.py      # Custom template filters and tags
+
+INTERNATIONALIZATION
+===================
+mycareportal_app/locale/            # Multi-language support
+├── es/                             # Spanish translations
+│   └── LC_MESSAGES/
+│       ├── django.po               # Spanish translation file
+│       └── django.mo               # Compiled translation
+└── mr/                             # Marathi translations
+    └── LC_MESSAGES/
+        ├── django.po               # Marathi translation file
+        └── django.mo               # Compiled translation
+
+FIXTURES AND SAMPLE DATA
+========================
+mycareportal_app/fixtures/          # Initial data and sample data
+├── clients.json                    # Sample client data
+├── companies.json                  # Sample company data
+├── default_tasks.json              # Default task templates
+├── incidents.json                  # Sample incident data
+├── initial_data.json               # Core initial data
+└── ...                            # Additional fixture files
+
+MEDIA AND UPLOADS
+================
+mycareportal_app/media/             # User uploaded files
+└── uploads/                        # File upload directory
+    ├── client_documents/           # Client-related documents
+    ├── profile_pictures/           # User profile images
+    └── ...                         # Other uploaded content
+
+KEY FILE SIZES AND COMPLEXITY
+=============================
+Large/Complex Files:
+- models.py (88KB) - Comprehensive data model
+- views.py (145KB) - Main application logic
+- client_views.py (132KB) - Complex client management
+- caregiver_views.py (82KB) - Caregiver functionality
+- move_manage_views.py (41KB) - Move management logic
+- home_mod_views.py (30KB) - Home modification features
+- client_forms.py (17KB) - Client form definitions
+
+Migration Files: 130+ files showing extensive database evolution
+
+Template Files: 100+ HTML templates for comprehensive UI
+
+Vendor Libraries: 60+ third-party JavaScript/CSS libraries
+
+TECHNOLOGY STACK SUMMARY
+========================
+Backend:
+- Django 1.11 (Python web framework)
+- SQLite/PostgreSQL (Database)
+- Custom authentication backend
+- Extensive model relationships
+
+Frontend:
+- Bootstrap 3.x (CSS framework)
+- jQuery (JavaScript library)
+- 60+ specialized JavaScript libraries
+- Chart.js, DataTables, FullCalendar
+- Custom CSS and JavaScript
+
+Third-party Integrations:
+- AWS S3 (File storage)
+- SendGrid (Email service)
+- Stripe (Payment processing)
+- PDF generation libraries
+
+DEPLOYMENT CONFIGURATIONS
+=========================
+Development:
+- SQLite database
+- Local file storage
+- Debug mode enabled
+- Console email backend
+
+Production:
+- PostgreSQL database
+- AWS S3 file storage
+- SSL enabled
+- SendGrid email service
+- Heroku deployment ready
+
+MAINTENANCE NOTES
+================
+1. Database migrations are extensive (130+ files) - be careful with schema changes
+2. Large codebase with complex business logic - thorough testing required
+3. Multiple user roles with different permissions - security considerations important
+4. Extensive third-party dependencies - regular updates needed for security
+5. Multi-language support - translation files need maintenance
+6. File uploads and PDF generation - ensure proper security measures
+
+This structure represents a mature, feature-rich healthcare management system
+with comprehensive functionality for managing caregivers, clients, and
+healthcare operations.
