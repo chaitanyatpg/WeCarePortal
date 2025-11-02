@@ -198,14 +198,14 @@ USE_L10N = True
 
 USE_TZ = True
 
-# Database timezone settings
+# Database timezone settings for PostgreSQL
 import os
 if 'DATABASE_URL' in os.environ:
-    # Production PostgreSQL settings
+    # Production PostgreSQL settings - force UTC timezone
     DATABASES['default']['OPTIONS'] = {
         'sslmode': 'require',
+        'options': '-c timezone=UTC'
     }
-    DATABASES['default']['TIME_ZONE'] = None
 
 LANGUAGES = (
     ('en', 'English'),

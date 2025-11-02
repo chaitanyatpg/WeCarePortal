@@ -153,6 +153,10 @@ def add_current_user_context(request):
 
 def add_tablet_id_context(request):
     context = {}
-    if "tablet_id" in request.session:
-        context["global_tablet_id"] = request.session["tablet_id"]
+    try:
+        if hasattr(request, 'session') and "tablet_id" in request.session:
+            context["global_tablet_id"] = request.session["tablet_id"]
+    except (AttributeError, AssertionError):
+        # Handle session access errors gracefully
+        pass
     return context
