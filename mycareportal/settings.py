@@ -24,20 +24,26 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = 'ylwi3hn#79&v2(%#k&por1szkfssgih4nn)13t4q9v0sz47*eg'  # Commented for security
-SECRET_KEY = os.environ.get('SECRET_KEY', 'ylwi3hn#79&v2(%#k&por1szkfssgih4nn)13t4q9v0sz47*eg')
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
-ALLOWED_HOSTS = ['192.168.1.64','mycareportal.herokuapp.com','localhost','www.wecareportal.com','www.wecarehealthportal.com','127.0.0.1','*.railway.app','wecareportal-production.up.railway.app']
+ALLOWED_HOSTS = [
+    'localhost', '127.0.0.1',
+    'mycareportal.herokuapp.com',
+    'www.wecareportal.com', 'www.wecarehealthportal.com',
+    'wecareportal-production.up.railway.app',
+    '.railway.app',   # covers any subdomain on railway.app
+]
 #'192.168.2.77'
 
 #AWS SETTINGS
 AWS_STORAGE_BUCKET_NAME = 'wecare-media'
 # AWS_ACCESS_KEY_ID = 'AKIAI2SFPXGFAAHZ5XCQ'  # Commented for security - use env vars
 # AWS_SECRET_ACCESS_KEY = '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'  # Commented for security - use env vars
-AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', 'AKIAI2SFPXGFAAHZ5XCQ')
-AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', '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')
+AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
+AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
 AWS_S3_FILE_OVERWRITE = False
 
 # Tell django-storages that when coming up with the URL for an item in S3 storage, keep
@@ -58,7 +64,7 @@ AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER = 'apikey'
 # EMAIL_HOST_PASSWORD = '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'  # Commented for security
-EMAIL_HOST_PASSWORD = os.environ.get('SENDGRID_API_KEY', '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')
+EMAIL_HOST_PASSWORD = os.environ['SENDGRID_API_KEY']
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
@@ -160,7 +166,7 @@ DATABASES = {
     }
 }'''
 
-db_from_env = dj_database_url.config(conn_max_age=500)
+db_from_env = dj_database_url.config(conn_max_age=500, ssl_require=True)
 DATABASES['default'].update(db_from_env)
 
 # Database connection configuration - removed problematic timezone settings
@@ -198,31 +204,10 @@ USE_L10N = True
 
 USE_TZ = True
 
-# Force UTC for all datetime operations
-import os
+# Ensure SSL for Postgres (no monkey patches)
 if 'DATABASE_URL' in os.environ:
-    os.environ['TZ'] = 'UTC'
-    import time
-    time.tzset()
-
-# Database timezone settings for PostgreSQL
-import os
-if 'DATABASE_URL' in os.environ:
-    # Production PostgreSQL settings
-    DATABASES['default']['OPTIONS'] = {
-        'sslmode': 'require',
-    }
-    # Monkey patch to disable UTC assertion for Django 1.11 compatibility
-    try:
-        import django.db.backends.postgresql.utils
-        def bypass_utc_check(offset):
-            import datetime
-            return datetime.timezone.utc if offset == 0 else None
-        django.db.backends.postgresql.utils.utc_tzinfo_factory = bypass_utc_check
-    except ImportError:
-        pass
-    # Override timezone settings for Django 1.11 + PostgreSQL compatibility
-    DATABASES['default']['TIME_ZONE'] = 'UTC'
+    DATABASES['default'].setdefault('OPTIONS', {})
+    DATABASES['default']['OPTIONS']['sslmode'] = 'require'
 
 LANGUAGES = (
     ('en', 'English'),
@@ -238,8 +223,7 @@ LOCALE_PATHS = [
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-# Remove whitenoise storage - use default Django static files
-# STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "mycareportal_app/static")
