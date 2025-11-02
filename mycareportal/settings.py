@@ -100,7 +100,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'mycareportal.urls'
 AUTH_USER_MODEL = 'mycareportal_app.User'
 LOGIN_REDIRECT_URL = 'dashboard'
-AUTHENTICATION_BACKENDS= ('mycareportal_app.backened.CaseInsensitiveModelBackend',)
+AUTHENTICATION_BACKENDS = ('mycareportal_app.backend.CaseInsensitiveModelBackend',)
 
 
 TEMPLATES = [
@@ -166,7 +166,7 @@ DATABASES = {
     }
 }'''
 
-db_from_env = dj_database_url.config(conn_max_age=500, ssl_require=True)
+db_from_env = dj_database_url.config(conn_max_age=0, ssl_require=True)  # Temporarily disable persistent connections
 DATABASES['default'].update(db_from_env)
 
 # Database connection configuration - removed problematic timezone settings
