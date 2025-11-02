@@ -204,10 +204,11 @@ USE_L10N = True
 
 USE_TZ = True
 
-# Ensure SSL for Postgres (no monkey patches)
+# Ensure SSL + UTC at connection level
 if 'DATABASE_URL' in os.environ:
     DATABASES['default'].setdefault('OPTIONS', {})
     DATABASES['default']['OPTIONS']['sslmode'] = 'require'
+    DATABASES['default']['OPTIONS']['options'] = '-c timezone=UTC'
 
 LANGUAGES = (
     ('en', 'English'),
