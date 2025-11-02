@@ -1,1 +1,1 @@
-web: python manage.py migrate && python manage.py collectstatic --noinput && gunicorn mycareportal.wsgi:application --bind 0.0.0.0:$PORT --timeout 120
+web: gunicorn mycareportal.wsgi:application --bind 0.0.0.0:8000
