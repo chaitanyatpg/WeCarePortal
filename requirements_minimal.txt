@@ -1,0 +1,5 @@
+Django==1.11.29
+psycopg2-binary==2.8.6
+whitenoise==3.3.0
+pillow==8.4.0
+dj-database-url==0.4.2

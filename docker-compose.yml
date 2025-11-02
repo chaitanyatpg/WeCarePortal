@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./staticfiles:/app/staticfiles
+      - ./media:/app/media
+    environment:
+      - DEBUG=True
+      - DJANGO_SETTINGS_MODULE=mycareportal.settings
+    depends_on:
+      - db
+    networks:
+      - wecare-network
+
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=mycareportal
+      - POSTGRES_USER=wecare_user
+      - POSTGRES_PASSWORD=wecare_password
+    ports:
+      - "5432:5432"
+    networks:
+      - wecare-network
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./staticfiles:/app/staticfiles
+      - ./media:/app/media
+    depends_on:
+      - web
+    networks:
+      - wecare-network
+
+volumes:
+  postgres_data:
+
+networks:
+  wecare-network:
+    driver: bridge

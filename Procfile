@@ -1,1 +1,1 @@
-web: python manage.py collectstatic --noinput && python manage.py migrate && python create_mock_data.py && gunicorn mycareportal.wsgi:application --bind 0.0.0.0:$PORT
+web: python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic --noinput && python create_mock_data.py && gunicorn mycareportal.wsgi:application --bind 0.0.0.0:$PORT
