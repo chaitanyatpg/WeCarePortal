@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 import dj_database_url
-import sendgrid as sendgrid_backend
+# import sendgrid as sendgrid_backend  # Commented out for initial deployment
 from django.utils.translation import ugettext_lazy as _
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -23,18 +23,21 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'ylwi3hn#79&v2(%#k&por1szkfssgih4nn)13t4q9v0sz47*eg'
+# SECRET_KEY = 'ylwi3hn#79&v2(%#k&por1szkfssgih4nn)13t4q9v0sz47*eg'  # Commented for security
+SECRET_KEY = os.environ.get('SECRET_KEY', 'ylwi3hn#79&v2(%#k&por1szkfssgih4nn)13t4q9v0sz47*eg')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
-ALLOWED_HOSTS = ['192.168.1.64','mycareportal.herokuapp.com','localhost','www.wecareportal.com','www.wecarehealthportal.com','127.0.0.1']
+ALLOWED_HOSTS = ['192.168.1.64','mycareportal.herokuapp.com','localhost','www.wecareportal.com','www.wecarehealthportal.com','127.0.0.1','*.railway.app']
 #'192.168.2.77'
 
 #AWS SETTINGS
 AWS_STORAGE_BUCKET_NAME = 'wecare-media'
-AWS_ACCESS_KEY_ID = 'AKIAI2SFPXGFAAHZ5XCQ'
-AWS_SECRET_ACCESS_KEY = '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'
+# AWS_ACCESS_KEY_ID = 'AKIAI2SFPXGFAAHZ5XCQ'  # Commented for security - use env vars
+# AWS_SECRET_ACCESS_KEY = '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'  # Commented for security - use env vars
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', 'AKIAI2SFPXGFAAHZ5XCQ')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', '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')
 AWS_S3_FILE_OVERWRITE = False
 
 # Tell django-storages that when coming up with the URL for an item in S3 storage, keep
@@ -54,7 +57,8 @@ AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER = 'apikey'
-EMAIL_HOST_PASSWORD = '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'
+# EMAIL_HOST_PASSWORD = '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'  # Commented for security
+EMAIL_HOST_PASSWORD = os.environ.get('SENDGRID_API_KEY', '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')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
