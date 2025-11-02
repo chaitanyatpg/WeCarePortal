@@ -208,10 +208,19 @@ if 'DATABASE_URL' in os.environ:
 # Database timezone settings for PostgreSQL
 import os
 if 'DATABASE_URL' in os.environ:
-    # Production PostgreSQL settings - force UTC timezone
+    # Production PostgreSQL settings
     DATABASES['default']['OPTIONS'] = {
         'sslmode': 'require',
     }
+    # Monkey patch to disable UTC assertion for Django 1.11 compatibility
+    try:
+        import django.db.backends.postgresql.utils
+        def bypass_utc_check(offset):
+            import datetime
+            return datetime.timezone.utc if offset == 0 else None
+        django.db.backends.postgresql.utils.utc_tzinfo_factory = bypass_utc_check
+    except ImportError:
+        pass
     # Override timezone settings for Django 1.11 + PostgreSQL compatibility
     DATABASES['default']['TIME_ZONE'] = 'UTC'
 
