@@ -26,7 +26,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = 'ylwi3hn#79&v2(%#k&por1szkfssgih4nn)13t4q9v0sz47*eg'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['192.168.1.64','mycareportal.herokuapp.com','localhost','www.wecareportal.com','www.wecarehealthportal.com','127.0.0.1']
 #'192.168.2.77'
@@ -88,7 +88,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'mycareportal.urls'
 AUTH_USER_MODEL = 'mycareportal_app.User'
-#LOGIN_REDIRECT_URL = 'dashboard'
+LOGIN_REDIRECT_URL = 'dashboard'
 AUTHENTICATION_BACKENDS= ('mycareportal_app.backened.CaseInsensitiveModelBackend',)
 
 
@@ -212,9 +212,10 @@ LOGIN_URL = 'login'
 MEDIA_ROOT = os.path.join(BASE_DIR, "mycareportal_app/media")
 
 STATIC_URL = '/static/'
-#MEDIA_URL = 'mycareportal_app/media/'
+MEDIA_URL = '/media/'
 
-MEDIA_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
+# For production, use AWS S3
+# MEDIA_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 

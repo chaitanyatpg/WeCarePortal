@@ -4,3 +4,6 @@ venv
 db.sqlite3
 media/
 we_care
+venv38/
+*.db
+.python-version
