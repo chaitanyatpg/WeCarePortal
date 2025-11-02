@@ -198,14 +198,22 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Force UTC for all datetime operations
+import os
+if 'DATABASE_URL' in os.environ:
+    os.environ['TZ'] = 'UTC'
+    import time
+    time.tzset()
+
 # Database timezone settings for PostgreSQL
 import os
 if 'DATABASE_URL' in os.environ:
     # Production PostgreSQL settings - force UTC timezone
     DATABASES['default']['OPTIONS'] = {
         'sslmode': 'require',
-        'options': '-c timezone=UTC'
     }
+    # Override timezone settings for Django 1.11 + PostgreSQL compatibility
+    DATABASES['default']['TIME_ZONE'] = 'UTC'
 
 LANGUAGES = (
     ('en', 'English'),
