@@ -32,17 +32,18 @@ RUN mkdir -p /app/staticfiles /app/media
 # Collect static files
 RUN python manage.py collectstatic --noinput
 
-# Create database and load mock data
-RUN python manage.py migrate
-RUN python create_mock_data.py
+# Skip build-time database operations - will be done at runtime
+
+# Make start script executable
+RUN chmod +x /app/start.sh
 
 # Expose port
-EXPOSE 8000
+EXPOSE 8080
 
 # Create a non-root user
 RUN adduser --disabled-password --gecos '' appuser
 RUN chown -R appuser:appuser /app
 USER appuser
 
-# Run the application
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Run the application using our startup script
+CMD ["./start.sh"]
