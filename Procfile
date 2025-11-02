@@ -1,1 +1,1 @@
-web: gunicorn mycareportal.wsgi:application --bind 0.0.0.0:$PORT
+web: python manage.py migrate && python manage.py collectstatic --noinput && python manage.py loaddata mycareportal_app/fixtures/*.json && gunicorn mycareportal.wsgi:application --bind 0.0.0.0:$PORT
