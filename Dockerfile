@@ -29,8 +29,7 @@ COPY . /app/
 # Create directories for static files and media
 RUN mkdir -p /app/staticfiles /app/media
 
-# Collect static files
-RUN python manage.py collectstatic --noinput
+# Skip collectstatic during build - will be done at runtime when DB is available
 
 # Skip build-time database operations - will be done at runtime
 
