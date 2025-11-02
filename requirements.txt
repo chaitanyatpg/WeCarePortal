@@ -1,7 +1,7 @@
 Django==1.11.29
-psycopg2-binary==2.9.9
-whitenoise==3.3.0
-pillow>=10.0.0
-dj-database-url==0.4.2
-pytz>=2019.3
-six>=1.16.0
+psycopg2-binary
+whitenoise
+pillow
+dj-database-url
+pytz
+six
