@@ -212,8 +212,8 @@ LOCALE_PATHS = [
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-# Whitenoise settings for serving static files - use simple storage to avoid manifest issues
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+# Remove whitenoise storage - use default Django static files
+# STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "mycareportal_app/static")
