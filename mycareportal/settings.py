@@ -248,3 +248,16 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 # End session on browser close
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# TEMPORARY SHIM for Django 1.11 + pooling/psycopg2 edge:
+try:
+    import django
+    if django.VERSION[:2] == (1, 11):
+        import datetime
+        import django.db.backends.postgresql.utils as pg_utils
+        def _force_utc(_offset):
+            # Return UTC regardless of reported offset; Django wants aware UTC datetimes.
+            return datetime.timezone.utc
+        pg_utils.utc_tzinfo_factory = _force_utc
+except Exception:
+    pass
