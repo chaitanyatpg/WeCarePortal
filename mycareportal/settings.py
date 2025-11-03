@@ -166,10 +166,16 @@ DATABASES = {
     }
 }'''
 
-db_from_env = dj_database_url.config(conn_max_age=0, ssl_require=True)  # Temporarily disable persistent connections
-DATABASES['default'].update(db_from_env)
+# -------- DB from env (disable persistence for now) --------
+db_from_env = dj_database_url.config(conn_max_age=0, ssl_require=True)  # ⬅ conn_max_age=0
+DATABASES['default'].update(db_from_env or {})
 
-# Database connection configuration - removed problematic timezone settings
+# -------- Force UTC at connection open (works even with pooling) --------
+if 'DATABASE_URL' in os.environ:
+    DATABASES['default'].setdefault('OPTIONS', {})
+    DATABASES['default']['OPTIONS']['sslmode'] = 'require'
+    # The key line: pass a GUC to libpq so every new session is UTC
+    DATABASES['default']['OPTIONS']['options'] = '-c timezone=UTC'
 
 
 # Password validation
