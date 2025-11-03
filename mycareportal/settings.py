@@ -144,30 +144,9 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-'''DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'mycareportal',
-        'USER': 'mycareportaluser',
-        'PASSWORD': 'mycareportal_user_password',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
-}'''
 
-'''DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ddasri915aj4lm',
-        'USER': 'mddvisgxtlykyp',
-        'PASSWORD': '7992880265d59c28e691c8cc8973c63543bf40f5001919dd487a8b219c98556a',
-        'HOST': 'ec2-23-23-111-171.compute-1.amazonaws.com',
-        'PORT': '5432',
-    }
-}'''
-
-# -------- DB from env (disable persistence for now) --------
-db_from_env = dj_database_url.config(conn_max_age=0, ssl_require=True)  # ⬅ conn_max_age=0
+# -------- DB from env (re-enable persistence now that timezone is stable) --------
+db_from_env = dj_database_url.config(conn_max_age=500, ssl_require=True)
 DATABASES['default'].update(db_from_env or {})
 
 # -------- Force UTC at connection open (works even with pooling) --------
@@ -210,11 +189,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-# Ensure SSL + UTC at connection level
-if 'DATABASE_URL' in os.environ:
-    DATABASES['default'].setdefault('OPTIONS', {})
-    DATABASES['default']['OPTIONS']['sslmode'] = 'require'
-    DATABASES['default']['OPTIONS']['options'] = '-c timezone=UTC'
+# Remove this duplicate - already configured above
 
 LANGUAGES = (
     ('en', 'English'),
@@ -230,7 +205,7 @@ LOCALE_PATHS = [
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "mycareportal_app/static")
