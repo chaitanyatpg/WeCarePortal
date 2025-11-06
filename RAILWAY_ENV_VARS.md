@@ -1,6 +1,6 @@
-# 🚂 Railway Environment Variables Setup
+#  Railway Environment Variables Setup
 
-## 🔐 **REQUIRED Environment Variables**
+## **REQUIRED Environment Variables**
 
 Copy these into your Railway dashboard after deployment:
 
@@ -8,7 +8,7 @@ Copy these into your Railway dashboard after deployment:
 ```
 SECRET_KEY=your-new-super-secret-key-here-make-it-long-and-random
 ```
-**⚠️ Generate a new one:** https://djecrety.ir/
+** Generate a new one:** https://djecrety.ir/
 
 ### **2. Debug Setting**
 ```
@@ -23,7 +23,7 @@ ALLOWED_HOSTS=your-app-name.railway.app,*.railway.app
 
 ---
 
-## 📧 **OPTIONAL: Email Configuration (SendGrid)**
+##  **OPTIONAL: Email Configuration (SendGrid)**
 
 Only add these if you want email functionality:
 
@@ -33,7 +33,7 @@ SENDGRID_API_KEY=SG.your-sendgrid-api-key-here
 
 ---
 
-## ☁️ **OPTIONAL: AWS S3 Configuration**
+##  **OPTIONAL: AWS S3 Configuration**
 
 Only add these if you want to use AWS S3 for file storage:
 
@@ -45,7 +45,7 @@ AWS_STORAGE_BUCKET_NAME=your-bucket-name
 
 ---
 
-## 🎯 **Railway Setup Steps**
+##  **Railway Setup Steps**
 
 ### **Step 1: Initial Deployment**
 ```bash
@@ -80,7 +80,7 @@ In Railway dashboard, go to your app → Variables tab:
 
 ---
 
-## 🧪 **Test Your Deployment**
+##  **Test Your Deployment**
 
 After Railway deploys, test these URLs:
 
@@ -91,7 +91,7 @@ After Railway deploys, test these URLs:
 
 ---
 
-## 🚨 **Important Notes**
+##  **Important Notes**
 
 - **PostgreSQL:** Railway auto-provisions and connects
 - **Static Files:** Automatically served by Django  
@@ -101,13 +101,13 @@ After Railway deploys, test these URLs:
 
 ---
 
-## 🎉 **You're Ready!**
+##  **You're Ready!**
 
 Your Railway environment is configured for:
-✅ **10 test users** ready to login  
-✅ **9 clients** with medical profiles  
-✅ **18 caregiver schedules**  
-✅ **2 healthcare providers**  
-✅ **Full multi-company setup**  
+ **10 test users** ready to login  
+ **9 clients** with medical profiles  
+ **18 caregiver schedules**  
+ **2 healthcare providers**  
+ **Full multi-company setup**  
 
 Just deploy and start testing! 🚀
