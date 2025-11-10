@@ -23,4 +23,4 @@ python manage.py loaddata mycareportal_app/fixtures/task_template_entry.json || 
 python manage.py loaddata mycareportal_app/fixtures/task_template_subcategory.json || echo "❌ Failed: task_template_subcategory"
 
 echo "🌐 Starting gunicorn server..."
-exec gunicorn mycareportal.wsgi:application --bind 0.0.0.0:8080 --workers 2 --timeout 120 --log-level debug
+exec gunicorn mycareportal.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120 --log-level debug
