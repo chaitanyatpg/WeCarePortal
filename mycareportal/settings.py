@@ -15,6 +15,14 @@ import dj_database_url
 # import sendgrid as sendgrid_backend  # Commented out for initial deployment
 from django.utils.translation import ugettext_lazy as _
 
+# Load environment variables from .env file for local development
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    # If python-dotenv is not installed, skip loading .env file
+    pass
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -146,7 +154,7 @@ DATABASES = {
 }
 
 # -------- DB from env (re-enable persistence now that timezone is stable) --------
-db_from_env = dj_database_url.config(conn_max_age=500, ssl_require=True)
+db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env or {})
 
 # -------- Force UTC at connection open (works even with pooling) --------

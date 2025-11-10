@@ -53,12 +53,14 @@ AWS_STORAGE_BUCKET_NAME=your-bucket-name
 # No environment variables needed for initial deployment
 ```
 
-### **Step 2: Add PostgreSQL Database**
+### **Step 2: PostgreSQL Database Configuration**
+**Database URLs for this deployment:**
 ```bash
-# In Railway dashboard:
-# 1. Click "Add Service" 
-# 2. Select "PostgreSQL"
-# 3. Railway auto-connects it to your app
+# Public Database URL (for external connections):
+DATABASE_URL=postgresql://postgres:cGxXsRPAXiFqnzBkHaCLJlTFsRuHpPgY@maglev.proxy.rlwy.net:16226/railway
+
+# Internal Database URL (for Railway services):
+DATABASE_URL=postgresql://postgres:cGxXsRPAXiFqnzBkHaCLJlTFsRuHpPgY@postgres.railway.internal:5432/railway
 ```
 
 ### **Step 3: Set Environment Variables**
