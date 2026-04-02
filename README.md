@@ -29,6 +29,90 @@ The platform serves as a central hub for coordinating care services, tracking pa
 - **Incident Reporting**: Real-time incident tracking and management
 - **Communication Hub**: Messaging system between all stakeholders
 
+## User Roles & Permissions
+
+The system supports six distinct user roles, each with specific capabilities and access levels:
+
+### 🔑 CAREMANAGER (Primary Admin Role)
+**Capabilities**: Full system administration and management
+- ✅ **Dashboard**: Admin dashboard, action logs, company settings
+- ✅ **Client Management**: Add/edit clients, create tasks, assign tasks, deactivate clients
+- ✅ **Staff Management**: Add caregivers, schedule shifts, manage payroll, view timesheets  
+- ✅ **Task Creation**: Create home modification and move management tasks
+- ✅ **Reporting**: View all reports, incidents, location logs, high-risk clients
+- ✅ **System**: Edit company settings, manage holidays, CRM access
+- ✅ **Billing**: Client invoicing and payment management
+
+### 🏠 HOMEMODUSER (Home Modification Contractor)
+**Capabilities**: Home modification project management
+- ✅ **Contractor Dashboard**: View assigned tasks and projects
+- ✅ **Bid Submission**: Submit bids on assigned home modification tasks
+- ✅ **Project Management**: Update project progress, budget, and status
+- ✅ **File Management**: Upload project attachments and documentation
+- ❌ **Task Creation**: Cannot create new tasks (managed by Care Managers)
+
+### 👩‍⚕️ CAREGIVER
+**Capabilities**: Direct patient care and task execution
+- ✅ **Task Execution**: Complete assigned care tasks and activities
+- ✅ **Time Tracking**: Clock in/out functionality and timesheet management
+- ✅ **Incident Reporting**: Report and document care incidents
+- ✅ **Client Communication**: Update care notes and progress reports
+- ✅ **Schedule Management**: View assigned shifts and schedules
+- ❌ **Administrative Functions**: Cannot create tasks or manage other staff
+
+### 👨‍👩‍👧‍👦 FAMILYUSER (Family Member)
+**Capabilities**: Limited client information access
+- ✅ **Client Dashboard**: View assigned client information and progress
+- ✅ **Care Plans**: Access care plans and assessment results  
+- ✅ **Communication**: Send messages to care team
+- ✅ **Reports**: View client-specific reports and updates
+- ❌ **System Administration**: No administrative access
+
+### 🏥 PROVIDERUSER (Healthcare Provider)
+**Capabilities**: Medical provider interface
+- ✅ **Client Access**: View clients under their care
+- ✅ **Medical Records**: Access care plans and medical information
+- ✅ **Communication**: Coordinate with care teams
+- ❌ **System Management**: Limited to medical/care functions
+
+### 🚚 MOVEMANAGER (Move Management Specialist)
+**Capabilities**: Patient relocation and move coordination
+- ✅ **Move Projects**: Manage patient relocations and transitions
+- ✅ **Bid Management**: Submit and manage move-related bids
+- ✅ **Inventory Management**: Track moving items and logistics
+- ✅ **Project Updates**: Update move progress and status
+- ❌ **General Administration**: Limited to move-related functions
+
+## Role Constraints & Limitations
+
+### Multiple Roles
+- **UserRoles Table**: Supports multiple role assignments per user
+- **Profile Constraints**: Each role type requires a unique profile record (OneToOneField)
+- **Practical Limitation**: Users can have multiple role permissions but need separate profile records for each role type
+- **Recommendation**: Use single primary role per user to avoid profile conflicts
+
+### Role Assignment Process
+1. Create user in `mycareportal_app_user` table
+2. Add role(s) in `mycareportal_app_userroles` table  
+3. Create corresponding profile record:
+   - CAREMANAGER → `mycareportal_app_caremanager`
+   - HOMEMODUSER → `mycareportal_app_homemodificationuser`
+   - CAREGIVER → `mycareportal_app_caregiver`
+   - FAMILYUSER → `mycareportal_app_familyuser`
+   - PROVIDERUSER → `mycareportal_app_provideruser`
+   - MOVEMANAGER → `mycareportal_app_movemanager`
+
+### Authentication Flow
+```
+User Login → Check UserRoles → Redirect to appropriate dashboard
+- CAREMANAGER → Admin Dashboard
+- HOMEMODUSER → Contractor Dashboard  
+- CAREGIVER → Caregiver Dashboard
+- FAMILYUSER → Family Dashboard
+- PROVIDERUSER → Provider Dashboard
+- MOVEMANAGER → Move Manager Dashboard
+```
+
 ### Specialized Modules
 - **Home Modifications**: Managing accessibility modifications and equipment installations
 - **Move Management**: Coordinating patient relocations and transitions
@@ -515,4 +599,4 @@ This project is proprietary software. All rights reserved.
 
 ---
 
-**Note**: This is a healthcare management system that may handle sensitive patient information. Ensure compliance with relevant healthcare regulations (HIPAA, GDPR, etc.) in your jurisdiction before deploying to production.
+**Note**: This is a healthcare management system that may handle sensitive patient information. Ensure compliance with relevant healthcare regulations (HIPAA, GDPR, etc.) in your jurisdiction before deploying to production..

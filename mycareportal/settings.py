@@ -52,6 +52,7 @@ AWS_STORAGE_BUCKET_NAME = 'wecare-media'
 # AWS_SECRET_ACCESS_KEY = 'gWdtY8r4unVxfJLj1V6cBEsbCYbD/KemcvJCS0xE'  # Commented for security - use env vars
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', '')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', '')
+AWS_S3_REGION_NAME = 'us-east-1'  # Default region for S3
 AWS_S3_FILE_OVERWRITE = False
 
 # Tell django-storages that when coming up with the URL for an item in S3 storage, keep
@@ -213,19 +214,22 @@ LOCALE_PATHS = [
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+# Keep static files local for now (charts not loading from S3)
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "mycareportal_app/static")
 ]
 LOGIN_URL = 'login'
+
+# Local development fallbacks
 MEDIA_ROOT = os.path.join(BASE_DIR, "mycareportal_app/media")
 
+# URLs - Static files local, Media files on S3
 STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
+MEDIA_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
 
-# For production, use AWS S3
-# MEDIA_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
+# S3 Storage backends
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 
